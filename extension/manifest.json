@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+    "name": "Chat2Print",
+    "version": "1.0",
+    "description": "From chat to print in seconds",
+    "permissions": [
+        "activeTab",
+        "storage",
+        "scripting"
+    ],
+    "icons": {},
+    "content_scripts": [
+        {
+            "matches": [
+                "https://chat.openai.com/*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "host_permissions": [
+        "http://localhost:3000/*"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "popup.html",
+                "styles.css"
+            ],
+            "matches": [
+                "https://chat.openai.com/*"
+            ]
+        }
+    ]
+}
