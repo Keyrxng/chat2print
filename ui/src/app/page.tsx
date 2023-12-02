@@ -1,4 +1,10 @@
 "use client";
+import { FaqSection } from "@/components/FAQ";
+import { FeaturesSection } from "@/components/Features";
+import { HowItWorksSection } from "@/components/HowItWorks";
+import { PricingPlans } from "@/components/Pricing";
+import { ProductGallery } from "@/components/ProductGallery";
+import { CustomerTestimonials } from "@/components/Testimonials";
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -13,20 +19,6 @@ export default function Home() {
     "/next.svg",
   ];
   const [currentX, setCurrentX] = useState(0);
-
-  // useEffect(() => {
-  //   const slideTiles = () => {
-  //     setCurrentX((prevCurrentX) => {
-  //       const newX = prevCurrentX - 10; // 260 width + 10 margin
-
-  //       return newX;
-  //     });
-  //   };
-
-  //   const intervalId = setInterval(slideTiles, 3000); // Slide every 3 seconds
-
-  //   return () => clearInterval(intervalId);
-  // }, [images.length]);
 
   const getTransformStyle = (index) => {
     const translateY = "rotateY(45deg) scale(0.6)";
@@ -146,12 +138,11 @@ export default function Home() {
           ))}
         </div>
         <section className="text-center md:py-24">
-          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">
+          <h1 className="text-4xl text-accent md:text-6xl font-bold  mb-4">
             Chat2Print
           </h1>
-          <p className="text-xl md:text-2xl text-primary mb-8">
-            Print your GPT creations on phone cases, mousepads, hoodies, and
-            more!
+          <p className="text-xl text-white md:text-2xl  mb-8">
+            Transform your ChatGPT art into physical products.
           </p>
           <a
             href="/download"
@@ -163,22 +154,23 @@ export default function Home() {
       </div>
     );
   };
+
   return (
-    <div className="container mx-auto px-4">
+    <div className="mx-auto">
       <SlidingBackground />
-
-      <section className="py-8 md:py-16">
-        <h2 className="text-3xl font-bold text-center text-primary mb-6">
-          Quick and Easy Shift from ChatGPT to Print-on-Demand Designs
-        </h2>
-        <p className="text-primary text-lg md:text-xl text-center mx-auto leading-relaxed max-w-2xl">
-          Transform your creative ChatGPT images into unique physical products
-          with just a few clicks. Our seamless integration with print-on-demand
-          services lets you bring your virtual creations to life, effortlessly.
-        </p>
-      </section>
-
-      {/* Add additional sections with more features, testimonials, etc., as needed */}
+      <div className="grid grid-cols-1 gap-8">
+        <div className="justify-evenly gradientBG items-start">
+          <FeaturesSection />
+          <section className="py-8 rounded-md md:py-16">
+            <h2 className="text-accent text-5xl font-bold text-center mb-6">
+              Go from ChatGPT to Print in 3 Easy Steps
+            </h2>
+          </section>{" "}
+          <HowItWorksSection />
+        </div>
+        <PricingPlans />
+        <ProductGallery images={images} />
+      </div>
     </div>
   );
 }

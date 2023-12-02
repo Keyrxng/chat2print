@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-gray-600 border-t border-gray-800 py-4 bottom-0 left-0 fixed w-full">
+    <footer className="gradientBG text-white py-4 bottom-0 left-0 fixed w-full">
       <div className="container mx-auto text-center">
         <p>
           &copy; {new Date().getFullYear()} Chat2Print. All rights reserved.

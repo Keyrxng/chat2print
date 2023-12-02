@@ -18,6 +18,7 @@ const Container = {
   alignItems: "center",
   justifyContent: "center",
   minHeight: "50vh",
+  width: "100%",
   padding: "0 0.5rem",
   fontSize: "calc(10px + 2vmin)",
   fontFamily: inter.toString(),
@@ -30,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`gradientBG ${inter.className}`}>
         <Header />
         <div style={Container}>{children}</div>
         <Footer />

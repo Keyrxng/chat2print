@@ -35,7 +35,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "1mb", // Adjust the size limit as needed
+      sizeLimit: "1mb",
     },
   },
 };
@@ -93,7 +93,7 @@ async function signIn(req: NextApiRequest, res: NextApiResponse) {
 async function signOut(req: NextApiRequest, res: NextApiResponse) {
   const response = await supabase.signOut();
 
-  return new Response(JSON.stringify(response), {
+  return new Response(JSON.stringify(response?.error), {
     headers: {
       "content-type": "application/json;charset=UTF-8",
     },
