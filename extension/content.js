@@ -19,23 +19,27 @@ function createUIForImage(image) {
   exportButton.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,0.2)";
   exportButton.style.transition = "0.3s";
 
-  exportButton.onclick = function () {
+  exportButton.onclick = () => {
     console.log("Clicked export button");
-    // fetch("http://localhost:3000/api/receiveImage", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ imageUrl: image.src }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("Success:", data);
-    //     // Redirect to the POD
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
+    console.log("Image:", image.src);
+    fetch("http://localhost:3000/api/pod", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "no-cors": "true",
+      },
+      body: JSON.stringify({ imageUrl: image.src }),
+    })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+    console.log("Done");
   };
 
   const exportButtonContainer = document.createElement("div");
