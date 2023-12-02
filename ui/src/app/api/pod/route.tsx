@@ -7,7 +7,6 @@ const podHandler = new PODHandler(process.env.PRINTFUL_API_KEY);
 /**
  *
  * @param req body should contain imageUrl
- * @param res
  */
 export async function handler(req, res) {
   const sponse = {

@@ -3,7 +3,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 class Supabase {
-  supabase: SupabaseClient;
+  public supabase: SupabaseClient;
 
   constructor() {
     if (!supabaseUrl || !supabaseKey) {
