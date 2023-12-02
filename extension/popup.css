@@ -1,0 +1,66 @@
+:root {
+    --background: 0 5% 1%;
+    --foreground: 222.2 84% 4.9%;
+    --accent: 47, 99%, 51%;
+    --primary: 0 0% 0%;
+  }
+  
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 400px; /* Adjust width as needed */
+    height: auto; /* Adjust height as needed */
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--foreground)) 100%);
+    color: hsl(var(--primary));
+  }
+  
+  .extension-dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .logo {
+    width: 30%;
+    height: auto;
+  } 
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: hsl(var(--accent));
+  }
+  
+  .dashboard-main {
+    padding: 10px;
+    color: white;
+    width: fit-content;
+  }
+  
+  .payment-tier {
+    background-color: hsl(var(--background));
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  
+  #login-logout-btn, #upgrade-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    color: hsl(var(--accent));
+    background-color: hsl(var(--primary));
+    cursor: pointer;
+  }
+  
+  .dashboard-footer {
+    text-align: center;
+    padding: 10px;
+    color: grey
+  }
+  
+  /* Add additional styling as needed */
+  

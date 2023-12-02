@@ -15,6 +15,9 @@
 .env
 # production
 /build
+/dist
+/extension/dist
+/extension/node_modules
 
 # misc
 .DS_Store

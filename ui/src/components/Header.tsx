@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import OrderHistory from "./OrderHistory";
+import Image from "next/image";
 
 export default function Header() {
   const [user, setUser] = React.useState(null);
@@ -59,6 +60,12 @@ export default function Header() {
   return (
     <header className="gradientBG text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
+        <Image
+          src="/c2pLogo.png"
+          width={50}
+          height={50}
+          alt="Chat2Print logo"
+        />
         <h1 className="text-xl text-accent font-bold">Chat2Print</h1>
         <nav>
           <ul className="flex space-x-4">

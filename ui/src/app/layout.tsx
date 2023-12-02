@@ -3,11 +3,41 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Chat2Print",
+  icons: [
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      url: "/c2pLogo.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      url: "/c2pLogo.png",
+    },
+    {
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      url: "/c2pLogo.png",
+    },
+    {
+      rel: "manifest",
+      url: "/c2pLogo.png",
+    },
+    {
+      rel: "mask-icon",
+      url: "/c2pLogo.png",
+      color: "#5bbad5",
+    },
+  ],
+
   description:
     "Print your GPT creations on phone cases, mousepads, hoodies and more!",
 };
@@ -31,6 +61,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <link
+        rel="icon"
+        href="/c2pLogo.png"
+        style={{ width: "60px", height: "60px" }}
+      />
       <body className={`gradientBG ${inter.className}`}>
         <Header />
         <div style={Container}>{children}</div>

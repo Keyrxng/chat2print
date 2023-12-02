@@ -32,18 +32,18 @@ export const PricingPlans = () => {
         </div>
         <div className="flex flex-col p-6 gradientBG text-white shadow-md rounded-lg">
           <h3 className="text-3xl font-bold mb-4">Paid Users</h3>
-          <div className="flex justify-betweenflex-shrink-0">
+          <div className="flex justify-between ">
             <ul className="shrink-0">
-              <li className="mb-2 text-md">Store 100-500 designs</li>
-              <li className="mb-2 text-md">Bulk discounts available</li>
-              <li className="mb-2 text-md">Free shipping on all orders</li>
-              <li className="mb-2 text-md">Priority customer support</li>
-              <li className="text-md">Request new products</li>
+              <li className="mb-2 text-xl">Store 100-500 designs</li>
+              <li className="mb-2 text-xl">Bulk discounts available</li>
+              <li className="mb-2 text-xl">Free shipping on all orders</li>
+              <li className="mb-2 text-xl">Priority customer support</li>
+              <li className="text-xl">Request new products</li>
             </ul>
             <div className="flex-1"></div>
-            <div className="flex-col mr-2 items-end hidden min-[400px]:flex">
+            <div className="flex-col mr-2 items-end hidden min-[420px]:flex">
               <div className="m-2 px-4 rounded text-center">
-                <p className="text-md">Gold:</p>
+                <p className="text-xl">Gold:</p>
                 <p className="text-lg font-bold">$20/mo</p>
               </div>
               <div className="m-2 px-4 rounded text-center">

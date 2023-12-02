@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat2Print Extension</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app" class="extension-dashboard">
+    <header class="dashboard-header">
+      <img src="icons/c2pLogo.png" alt="Chat2Print Logo" class="logo">
+      <h1>Chat2Print</h1>
+      <button id="login-logout-btn">Log In</button>
+    </header>
+
+    <main class="dashboard-main">
+      <section class="payment-tier">
+        <h2>Active Plan: <span id="user-plan">Free</span></h2>
+        <button id="upgrade-btn">I want to upgrade!</button>
+      </section>
+    </main>
+
+    <footer class="dashboard-footer">
+      <p>Thank you for using Chat2Print!</p>
+    </footer>
+  </div>
+  <script src="popup.bundle.js"></script>
+</body>
+</html>

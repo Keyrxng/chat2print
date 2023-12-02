@@ -8,14 +8,22 @@
         "storage",
         "scripting"
     ],
-    "icons": {},
+    "icons": {
+        "16": "icons/c2pLogo.png",
+        "48": "icons/c2pLogo.png",
+        "128": "icons/c2pLogo.png"
+    },
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "Chat2Print"
+    },
     "content_scripts": [
         {
             "matches": [
                 "https://chat.openai.com/*"
             ],
             "js": [
-                "content.js"
+                "content.bundle.js"
             ]
         }
     ],
@@ -26,8 +34,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "popup.html",
-                "styles.css"
+                "dist/index.html",
+                "dist/popup.css"
             ],
             "matches": [
                 "https://chat.openai.com/*"
