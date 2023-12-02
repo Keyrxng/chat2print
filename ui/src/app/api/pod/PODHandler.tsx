@@ -68,6 +68,11 @@ class PODHandler {
     }
   }
 
+  /**
+   * Creates a new product in the connected store
+   * @param productData The product to create (using the Product type)
+   * @returns
+   */
   async createProduct(productData: Product) {
     try {
       const response = await this.client.post("/store/products", productData);
