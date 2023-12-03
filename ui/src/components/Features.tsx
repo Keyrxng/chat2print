@@ -1,19 +1,21 @@
+import Image from "next/image";
+
 export const FeaturesSection = () => {
   const features = [
     {
       title: "High Quality Prints",
       description: "We use the highest quality materials for our prints.",
-      icon: "🖨️",
+      icon: "/prints.png",
     },
     {
       title: "Fast Shipping",
       description: "We ship your products as fast as possible.",
-      icon: "🚀",
+      icon: "/shipping.png",
     },
     {
       title: "Easy to Use",
       description: "Import designs from ChatGPT with just a few clicks.",
-      icon: "🖱️",
+      icon: "/easyToUse.png",
     },
   ];
 
@@ -26,7 +28,13 @@ export const FeaturesSection = () => {
               key={index}
               className="feature-card text-center p-6 bg-background rounded-lg transition-shadow hover:shadow-xl"
             >
-              <span className="text-4xl">{feature.icon}</span>
+              <Image
+                src={feature.icon}
+                width={80}
+                height={80}
+                alt={feature.title}
+                className="mx-auto"
+              />
               <h3 className="text-xl text-accent font-semibold mt-5 mb-3">
                 {feature.title}
               </h3>
