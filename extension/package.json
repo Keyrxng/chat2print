@@ -11,5 +11,9 @@
     "style-loader": "^3.3.3",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5"
   }
 }

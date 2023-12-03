@@ -34,12 +34,14 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "dist/index.html",
-                "dist/popup.css"
+                "index.html",
+                "popup.bundle.js",
+                "popup.css"
             ],
             "matches": [
-                "https://chat.openai.com/*"
-            ]
+                "<all_urls>"
+            ],
+            "use_dynamic_url": true
         }
     ]
 }

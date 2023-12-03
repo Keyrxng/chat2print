@@ -27,8 +27,8 @@ export default function Header() {
   const [isConnected, setIsConnected] = React.useState(false);
 
   React.useEffect(() => {
-    const accessT = sessionStorage.getItem("accessT");
-    const refreshT = sessionStorage.getItem("refreshT");
+    const accessT = localStorage.getItem("accessT");
+    const refreshT = localStorage.getItem("refreshT");
 
     if (!accessT) {
       setIsConnected(false);
@@ -68,8 +68,8 @@ export default function Header() {
       .then((response) => response.json())
       .then((data) => {
         if (data.session) {
-          sessionStorage.setItem("accessT", data.session.access_token);
-          sessionStorage.setItem("refreshT", data.session.refresh_token);
+          localStorage.setItem("accessT", data.session.access_token);
+          localStorage.setItem("refreshT", data.session.refresh_token);
         }
         setUser(data.user);
         setIsConnected(true);
@@ -295,8 +295,8 @@ export default function Header() {
                           onClick={() => {
                             fetch("/api/auth?action=signout")
                               .then(() => {
-                                sessionStorage.removeItem("accessT");
-                                sessionStorage.removeItem("refreshT");
+                                localStorage.removeItem("accessT");
+                                localStorage.removeItem("refreshT");
                                 setUser(null);
                                 setIsConnected(false);
                               })

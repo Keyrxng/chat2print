@@ -10,21 +10,36 @@
   <div id="app" class="extension-dashboard">
     <header class="dashboard-header">
       <img src="icons/c2pLogo.png" alt="Chat2Print Logo" class="logo">
-      <h1>Chat2Print</h1>
-      <button id="login-logout-btn">Log In</button>
+      <h1 class="dashboard-main"><a href="https://chat2print.xyz">Chat2Print</a></h1>
+      <img src="icons/c2pLogo.png" alt="Chat2Print Logo" class="logo">
     </header>
 
-    <main class="dashboard-main">
-      <section class="payment-tier">
-        <h2>Active Plan: <span id="user-plan">Free</span></h2>
-        <button id="upgrade-btn">I want to upgrade!</button>
-      </section>
+    <div id="auth-container">
+    <button id="sign-in">Sign In</button>
+    <button id="sign-out" disabled>Sign Out</button>
+    <button id="refresh-token" disabled>Refresh Token</button>
+  </div>
+
+    <main class="dashboard-main" id="main-content">
+      <ul>
+        <li>
+          <h1> Create </h1>
+          <h3>Generate your GPT images</h3>
+          </li>
+        <li>
+          <h1> Upload </h1>
+          <h3>Upload your GPT images direct to Chat2Print</h3>
+        </li>
+        <li>
+          <h1> Print </h1>
+          <h3>View, edit and order in minutes</h3>
+      </ul>
     </main>
 
     <footer class="dashboard-footer">
       <p>Thank you for using Chat2Print!</p>
     </footer>
   </div>
-  <script src="popup.bundle.js"></script>
 </body>
+<script src="popup.bundle.js" type="module"></script>
 </html>

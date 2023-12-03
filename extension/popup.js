@@ -1,122 +1,58 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "YOUR_SUPABASE_URL";
-const supabaseKey = "YOUR_SUPABASE_ANON_KEY";
-const supabase = createClient(supabaseUrl, supabaseKey);
+const SUPABASE_URL = "https://ywaeexoevxxjquwlhfjx.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YWVleG9ldnh4anF1d2xoZmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1MTI0NzAsImV4cCI6MjAxNzA4ODQ3MH0.47_j0Q-nfP1bvG8wUP5RAsrpQKZMuZkv_rPvmjVIXHM";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+console.log("DICKSSSS");
 
-const checkUserPaymentTier = async (userId) => {
-  const { data, error } = await supabase
-    .from("payment_status")
-    .select("tier")
-    .eq("user_id", userId);
-
-  if (error) {
-    console.error("Error fetching payment status:", error);
-    return null;
-  }
-
-  return data;
-};
-
-const login = async (email, password) => {
-  const { user, session, error } = await supabase.auth.signIn({
-    email,
-    password,
-  });
-  // Handle login...
-};
-
-const logout = async () => {
-  const { error } = await supabase.auth.signOut();
-  // Handle logout...
-};
-
-const updatePaymentTierUI = (tier) => {
-  const tierElement = document.getElementById("user-plan");
-  const upgradeButton = document.getElementById("upgrade-btn");
-
-  tierElement.textContent = tier || "Free";
-  upgradeButton.style.display = tier === "Free" ? "block" : "none";
-};
-
-const handleLogin = async (event) => {
-  event.preventDefault();
-
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  await login(email, password);
-};
-
-const handleLogout = async (event) => {
-  event.preventDefault();
-
-  await logout();
-};
-
-const handleUpgrade = async (event) => {
-  event.preventDefault();
-
-  const { error } = await supabase.auth.update({
-    payment_status: "Premium",
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DICKSSS21312S");
+  document.getElementById("sign-out").addEventListener("click", async () => {
+    console.log("sign in clicked");
+    const { error } = await supabase.auth.signOut({ all: true });
+    if (error) console.error("Error signing out:", error);
+    else updateAuthState(null);
   });
 
-  if (error) {
-    console.error("Error upgrading:", error);
-    return;
-  }
-
-  updatePaymentTierUI("Premium");
-};
-
-const handleSignup = async (event) => {
-  event.preventDefault();
-
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { user, session, error } = await supabase.auth.signUp({
-    email,
-    password,
+  document.getElementById("sign-in").addEventListener("click", async () => {
+    console.log("sign in clicked");
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email: "",
+      password: "",
+    });
+    if (error) console.error("Error signing in:", error);
+    else updateAuthState(user);
   });
 
-  if (error) {
-    console.error("Error signing up:", error);
-    return;
-  }
+  document
+    .getElementById("refresh-token")
+    .addEventListener("click", async () => {
+      console.log("sign in clicked");
+      const currentSession = supabase.auth.session();
+      if (currentSession) {
+        const { data, error } = await supabase.auth.refreshSession();
+        if (error) console.error("Error refreshing token:", error);
+      }
+    });
+  updateAuthState({});
+});
 
-  updatePaymentTierUI("Free");
-};
+function updateAuthState(user) {
+  document.getElementById("sign-in").disabled = !!user;
+  document.getElementById("sign-out").disabled = !user;
+  document.getElementById("refresh-token").disabled = !user;
+}
 
-const handlePaymentStatusChange = (event) => {
-  const { data: paymentStatus } = event;
+// On load, update auth state
 
-  if (paymentStatus) {
-    updatePaymentTierUI(paymentStatus.tier);
-  }
-};
+// supabase.auth.onAuthStateChange((_event, session) => {
+//   chrome.storage.local.set({ accessToken: session?.access_token || "" });
+// });
 
-const init = async () => {
-  const user = supabase.auth.user();
-
-  if (user) {
-    const paymentStatus = await checkUserPaymentTier(user.id);
-    updatePaymentTierUI(paymentStatus?.tier);
-  }
-
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN") {
-      const user = supabase.auth.user();
-      checkUserPaymentTier(user.id);
-    } else {
-      updatePaymentTierUI(null);
-    }
-  });
-
-  supabase
-    .from("payment_status")
-    .on("UPDATE", handlePaymentStatusChange)
-    .subscribe();
-};
-
-init();
+// // Whenever the extension is opened, sync the token with the current session
+// chrome.storage.local.get("accessToken", (data) => {
+//   if (data.accessToken) {
+//     supabase.auth.setAuth(data.accessToken);
+//   }
+// });

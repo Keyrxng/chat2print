@@ -22,7 +22,7 @@
     height: 100%;
   }
   .logo {
-    width: 30%;
+    width: 20%;
     height: auto;
   } 
   
@@ -38,6 +38,24 @@
     padding: 10px;
     color: white;
     width: fit-content;
+  }
+  
+  .dashboard-main a {
+    color: hsl(var(--accent)); /* Sets the color of the hyperlink */
+    text-decoration: none; /* Removes the underline */
+    font-style: normal;
+    font-weight: normal;
+  }
+
+  .dashboard-main h1 {
+    color: hsl(var(--accent)); /* Sets the color of the hyperlink */
+    text-decoration: none; /* Removes the underline */
+    font-style: normal;
+    font-weight: normal;
+  }
+  
+  .dashboard-main a:hover, .dashboard-main a:focus {
+    text-decoration: underline; /* Optional: underline on hover for user feedback */
   }
   
   .payment-tier {

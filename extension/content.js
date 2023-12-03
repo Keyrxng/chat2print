@@ -1,14 +1,20 @@
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YWVleG9ldnh4anF1d2xoZmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1MTI0NzAsImV4cCI6MjAxNzA4ODQ3MH0.47_j0Q-nfP1bvG8wUP5RAsrpQKZMuZkv_rPvmjVIXHM";
+const SUPABASE_URL = "https://ywaeexoevxxjquwlhfjx.supabase.co";
+
 function createUIForImage(image) {
   const pd = image.parentElement;
+  const svgInPd = pd.querySelector("svg");
+  const svgParent = svgInPd.parentElement;
+
   const pdd = pd.parentElement;
   const pddd = pdd.parentElement;
   const flexDiv = pddd.parentElement;
   const finalDiv = flexDiv.parentElement;
 
   const exportButton = document.createElement("button");
-  exportButton.innerText = "Chat2Print";
-  exportButton.style.backgroundColor = "white";
-  exportButton.style.color = "black";
+  exportButton.innerText = "Export to Chat2Print";
+  exportButton.style.color = "#fdc80a";
   exportButton.style.padding = "10px";
   exportButton.style.borderRadius = "5px";
   exportButton.style.margin = "10px";
@@ -19,28 +25,7 @@ function createUIForImage(image) {
   exportButton.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,0.2)";
   exportButton.style.transition = "0.3s";
 
-  exportButton.onclick = () => {
-    console.log("Clicked export button");
-    console.log("Image:", image.src);
-    fetch("http://localhost:3000/api/pod", {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "no-cors": "true",
-      },
-      body: JSON.stringify({ imageUrl: image.src }),
-    })
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-
-    console.log("Done");
-  };
+  exportButton.onclick = () => fetchAndConvertImage(image.src);
 
   const exportButtonContainer = document.createElement("div");
   exportButtonContainer.style.display = "flex";
@@ -49,6 +34,22 @@ function createUIForImage(image) {
   exportButtonContainer.appendChild(exportButton);
 
   finalDiv.appendChild(exportButtonContainer);
+}
+async function fetchAndConvertImage(imageUrl) {
+  try {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    let base64data = null;
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      base64data = reader.result;
+    };
+
+    const isSesh = isSessioned();
+  } catch (error) {
+    console.error("Error fetching and converting image:", error);
+  }
 }
 
 function handleMutations(mutations) {
@@ -69,3 +70,55 @@ function handleMutations(mutations) {
 const observer = new MutationObserver(handleMutations);
 
 observer.observe(document.body, { childList: true, subtree: true });
+
+// async function getUserDesigns(userId) {
+//   const { data: designs, error } = await this.supabase
+//     .from("saved_designs")
+//     .select("*")
+//     .eq("user_id", userId);
+
+//   if (error) {
+//     return console.log("Error getting designs:", error);
+//   }
+
+//   return { designs };
+// }
+
+// async function createDesign(userId, name, thumbnail) {
+//   const { data: design, error } = await supabase
+//     .from("saved_designs")
+//     .insert([{ user_id: userId, name }]);
+
+//   if (error) {
+//     return console.log("Error creating design:", error);
+//   }
+
+//   return { design };
+// }
+
+// async function createUserFolder(userId) {
+//   const { data: folder, error } = await supabase.storage
+//     .from("no_reg_designs")
+//     .upload(`user-${userId}/designs/placeholder.jpg`, "", {
+//       cacheControl: "3600",
+//       upsert: false,
+//     });
+
+//   if (error) {
+//     return console.log("Error creating user folder:", error);
+//   }
+
+//   return { folder };
+// }
+
+// async function getUserFolder(userId) {
+//   const { data: folder, error } = await supabase.storage
+//     .from("design_images")
+//     .list(`user-${userId}/designs/`, { limit: 1 });
+
+//   if (error) {
+//     return console.log("Error getting user folder:", error);
+//   }
+
+//   return { folder };
+// }
