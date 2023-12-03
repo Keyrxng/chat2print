@@ -16,12 +16,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return await signIn(req, res);
       case "signout":
         return await signOut(req, res);
+      case "session":
+        return await session(req, res);
       default:
-        return new Response(JSON.stringify({ message: "Invalid action" }), {
-          headers: {
-            "content-type": "application/json;charset=UTF-8",
-          },
-        });
+        return new Response(
+          JSON.stringify({ message: "Invalid action", action: action }),
+          {
+            headers: {
+              "content-type": "application/json;charset=UTF-8",
+            },
+          }
+        );
     }
   } catch (error) {
     return new Response(JSON.stringify({ error: error }), {
@@ -39,6 +44,20 @@ export const config = {
     },
   },
 };
+
+async function session(req: NextApiRequest, res: NextApiResponse) {
+  const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
+  const at = searchParams.get("token");
+  const rt = searchParams.get("rt");
+
+  const session = await supabase.sessionRestore(at, rt);
+
+  return new Response(JSON.stringify(session), {
+    headers: {
+      "content-type": "application/json;charset=UTF-8",
+    },
+  });
+}
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
@@ -82,7 +101,7 @@ async function signIn(req: NextApiRequest, res: NextApiResponse) {
     );
   }
   const response = await supabase.signIn(email, password);
-
+  console.log("response", response);
   return new Response(JSON.stringify(response), {
     headers: {
       "content-type": "application/json;charset=UTF-8",
@@ -93,7 +112,7 @@ async function signIn(req: NextApiRequest, res: NextApiResponse) {
 async function signOut(req: NextApiRequest, res: NextApiResponse) {
   const response = await supabase.signOut();
 
-  return new Response(JSON.stringify(response?.error), {
+  return new Response(JSON.stringify(response), {
     headers: {
       "content-type": "application/json;charset=UTF-8",
     },

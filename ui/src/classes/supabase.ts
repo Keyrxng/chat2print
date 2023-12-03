@@ -9,7 +9,13 @@ class Supabase {
     if (!supabaseUrl || !supabaseKey) {
       throw new Error("DB Credentials not found");
     }
-    this.supabase = createClient(supabaseUrl, supabaseKey);
+    this.supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        // persistSession: false,
+        // autoRefreshToken: false,
+        // detectSessionInUrl: false,
+      },
+    });
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,7 +25,7 @@ class Supabase {
   async errorHandler(error: any) {
     if (error) {
       console.log(error);
-      return { error };
+      return this.errorHandler(error);
     }
   }
 
@@ -36,10 +42,21 @@ class Supabase {
     });
 
     if (error) {
-      return { error };
+      return this.errorHandler(error);
     }
 
-    return { user };
+    return user;
+  }
+
+  async sessionRestore(at, rt) {
+    const { data, error } = await this.supabase.auth.setSession({
+      access_token: at,
+      refresh_token: rt,
+    });
+    if (error) {
+      return this.errorHandler(error);
+    }
+    return data;
   }
 
   /**
@@ -55,10 +72,10 @@ class Supabase {
     });
 
     if (error) {
-      return { error };
+      return this.errorHandler(error);
     }
 
-    return { user };
+    return user;
   }
 
   /**
@@ -67,7 +84,11 @@ class Supabase {
    */
   async signOut() {
     const { error } = await this.supabase.auth.signOut();
-    return this.errorHandler(error);
+    if (error) {
+      return this.errorHandler(error);
+    } else {
+      return true;
+    }
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +106,7 @@ class Supabase {
       .insert([{ ...order, user_id: userId }]);
 
     if (error) {
-      return { error };
+      return this.errorHandler(error);
     }
     return { data };
   }

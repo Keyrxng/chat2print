@@ -6,14 +6,17 @@ const supabase = new Supabase();
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
     const session = await supabase.supabase.auth.getSession();
-    console.log("session", session);
+    const searchParams = new URLSearchParams(req.url?.split("?")[1]);
+    const param = searchParams.get("token");
+    const rt = searchParams.get("rt");
+
     if (session) {
       res.status(200).json({
         message: "User is authenticated",
-        user: session.data.session?.user,
+        user: session,
       });
     } else {
-      res.status(401).json({ message: "User not authenticated" });
+      res.status(401).json({ message: "User not authenticated", user: null });
     }
   } catch (error) {
     res.status(500).json({ error: error });
@@ -22,14 +25,17 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
 export async function FETCH(req: NextApiRequest, res: NextApiResponse) {
   try {
     const session = await supabase.supabase.auth.getSession();
-    console.log("session", session);
+    const searchParams = new URLSearchParams(req.url?.split("?")[1]);
+    const param = searchParams.get("token");
+    const rt = searchParams.get("rt");
+
     if (session) {
       res.status(200).json({
         message: "User is authenticated",
-        user: session.data.session?.user,
+        user: session,
       });
     } else {
-      res.status(401).json({ message: "User not authenticated" });
+      res.status(401).json({ message: "User not authenticated", user: null });
     }
   } catch (error) {
     res.status(500).json({ error: error });
@@ -38,12 +44,15 @@ export async function FETCH(req: NextApiRequest, res: NextApiResponse) {
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
   try {
     const session = await supabase.supabase.auth.getSession();
-    console.log("session", session);
+    const searchParams = new URLSearchParams(req.url?.split("?")[1]);
+    const param = searchParams.get("token");
+    const rt = searchParams.get("rt");
+
     if (session) {
       return new Response(
         JSON.stringify({
           message: "User is authenticated",
-          user: session.data.session?.user,
+          user: session,
         }),
         {
           headers: {
@@ -53,7 +62,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
       );
     } else {
       return new Response(
-        JSON.stringify({ message: "User not authenticated" }),
+        JSON.stringify({ message: "User not authenticated", user: null }),
         {
           headers: {
             "content-type": "application/json;charset=UTF-8",
@@ -69,54 +78,3 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 }
-
-// export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const session = await supabase.supabase.auth.getSession();
-//     console.log("session", session);
-//     if (session) {
-//       res.status(200).json({
-//         message: "User is authenticated",
-//         user: session.data.session?.user,
-//       });
-//     } else {
-//       res.status(401).json({ message: "User not authenticated" });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// }
-
-// export async function PUT(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const session = await supabase.supabase.auth.getSession();
-//     console.log("session", session);
-//     if (session) {
-//       res.status(200).json({
-//         message: "User is authenticated",
-//         user: session.data.session?.user,
-//       });
-//     } else {
-//       res.status(401).json({ message: "User not authenticated" });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// }
-
-// export async function OPTIONS(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const session = await supabase.supabase.auth.getSession();
-//     console.log("session", session);
-//     if (session) {
-//       res.status(200).json({
-//         message: "User is authenticated",
-//         user: session.data.session?.user,
-//       });
-//     } else {
-//       res.status(401).json({ message: "User not authenticated" });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// }

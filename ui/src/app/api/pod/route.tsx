@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import PODHandler from "./PODHandler";
-import { Product } from "@/types/all";
+import PODHandler from "../../../classes/PODHandler";
 
 const podHandler = new PODHandler(process.env.PRINTFUL_API_KEY);
 

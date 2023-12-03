@@ -20,19 +20,42 @@ export default function Header() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const [orderModalIsOpen, setOrderModalIsOpen] = React.useState(false);
+  const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false);
+  const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
+  const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState(false);
+
   React.useEffect(() => {
-    fetch("/api/auth/check")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.user) {
-          console.log("User is authenticated", data.user);
-          setUser(data);
-        } else {
-          console.log("User is not authenticated");
-        }
-      })
-      .catch((error) => console.error("Error:", error));
-  }, []);
+    const accessT = sessionStorage.getItem("accessT");
+    const refreshT = sessionStorage.getItem("refreshT");
+
+    if (!accessT) {
+      setIsConnected(false);
+    } else {
+      fetch("/api/auth?action=session&token=" + accessT + "&rt=" + refreshT)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.user) {
+            setUser(data.user);
+            setIsConnected(true);
+          } else {
+            console.log("User is not session authenticated", data);
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+  }, [isConnected]);
+
+  const ConnectedBlinker = () => {
+    return (
+      <div
+        className={`w-4 h-4 ml-2 mt-1 ${
+          isConnected ? "bg-green-500" : "bg-red-500"
+        } rounded-full animate-pulse`}
+      />
+    );
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,18 +67,15 @@ export default function Header() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
-        setUser(data.user.user);
+        if (data.session) {
+          sessionStorage.setItem("accessT", data.session.access_token);
+          sessionStorage.setItem("refreshT", data.session.refresh_token);
+        }
+        setUser(data.user);
+        setIsConnected(true);
       })
       .catch((error) => console.error("Error:", error));
   };
-
-  console.log("user", user);
-
-  const [orderModalIsOpen, setOrderModalIsOpen] = React.useState(false);
-  const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false);
-  const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
-  const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
 
   return (
     <header className="gradientBG text-white p-4 shadow-md">
@@ -71,8 +91,11 @@ export default function Header() {
           <ul className="flex space-x-4">
             <li>
               <Dialog>
-                <DialogTrigger className="text-accent">Profile</DialogTrigger>
-                {user ? (
+                <DialogTrigger className="text-accent flex ">
+                  Profile <ConnectedBlinker />
+                </DialogTrigger>
+
+                {isConnected ? (
                   <DialogContent>
                     {/* inside account settings for updating details */}
                     {accountModalIsOpen && (
@@ -270,11 +293,12 @@ export default function Header() {
                         <Button
                           className="text-accent"
                           onClick={() => {
-                            fetch("/api/auth/signout")
-                              .then((response) => response.ok)
-                              .then((data) => {
-                                console.log("Success:", data);
+                            fetch("/api/auth?action=signout")
+                              .then(() => {
+                                sessionStorage.removeItem("accessT");
+                                sessionStorage.removeItem("refreshT");
                                 setUser(null);
+                                setIsConnected(false);
                               })
                               .catch((error) => console.error("Error:", error));
                           }}
