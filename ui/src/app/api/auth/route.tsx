@@ -49,6 +49,7 @@ async function session(req: NextApiRequest, res: NextApiResponse) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const at = searchParams.get("token");
   const rt = searchParams.get("rt");
+
   if (!at || !rt)
     return new Response(
       JSON.stringify({ error: "Missing token or refresh token" })
@@ -57,6 +58,7 @@ async function session(req: NextApiRequest, res: NextApiResponse) {
     access_token: at,
     refresh_token: rt,
   });
+
   if (error) {
     return new Response(JSON.stringify({ error: error }), {
       headers: {

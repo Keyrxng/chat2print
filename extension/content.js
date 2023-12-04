@@ -5,7 +5,6 @@ const SUPABASE_URL = "https://ywaeexoevxxjquwlhfjx.supabase.co";
 function createUIForImage(image) {
   const pd = image.parentElement;
   const svgInPd = pd.querySelector("svg");
-  const svgParent = svgInPd.parentElement;
 
   const pdd = pd.parentElement;
   const pddd = pdd.parentElement;
@@ -37,20 +36,10 @@ function createUIForImage(image) {
 }
 async function fetchAndConvertImage(imageUrl) {
   try {
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    let base64data = null;
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = function () {
-      base64data = reader.result;
-    };
-
-    function uploadToUserSpecificFolder(imageData) {
-      chrome.runtime.sendMessage({ message: "getToken" }, async (response) => {
-        const token = response.token;
-      });
-    }
+    chrome.runtime.sendMessage({
+      message: "create",
+      image64: imageUrl,
+    });
   } catch (error) {
     console.error("Error fetching and converting image:", error);
   }
@@ -85,17 +74,12 @@ async function background() {
   if (sat.accessT && srt.refreshT) {
     // background has piped the ext tokens into local
     // let's set them into session for the site
-    console.log("tokens in session storage: Background.js");
     sessionStorage.setItem("accessT", sat.accessT);
     sessionStorage.setItem("refreshT", srt.refreshT);
   } else if (!at || !rt) {
     // not logged in via site
     // let's try get the ext tokens and log them in
-    chrome.runtime.sendMessage({ message: "getToken" }, async (response) => {
-      const at = await chrome.storage.local.get(["accessT"]);
-      const rt = await chrome.storage.local.get(["refreshT"]);
-      console.log("FUCKING A: ", at, rt);
-    });
+    chrome.runtime.sendMessage({ message: "getToken" });
   } else {
     // logged in via site
     // let's send the tokens to the ext
@@ -116,54 +100,3 @@ if (currentUrl === "chat.openai.com") {
   console.log("localhost");
   background();
 }
-// async function getUserDesigns(userId) {
-//   const { data: designs, error } = await this.supabase
-//     .from("saved_designs")
-//     .select("*")
-//     .eq("user_id", userId);
-
-//   if (error) {
-//     return console.log("Error getting designs:", error);
-//   }
-
-//   return { designs };
-// }
-
-// async function createDesign(userId, name, thumbnail) {
-//   const { data: design, error } = await supabase
-//     .from("saved_designs")
-//     .insert([{ user_id: userId, name }]);
-
-//   if (error) {
-//     return console.log("Error creating design:", error);
-//   }
-
-//   return { design };
-// }
-
-// async function createUserFolder(userId) {
-//   const { data: folder, error } = await supabase.storage
-//     .from("no_reg_designs")
-//     .upload(`user-${userId}/designs/placeholder.jpg`, "", {
-//       cacheControl: "3600",
-//       upsert: false,
-//     });
-
-//   if (error) {
-//     return console.log("Error creating user folder:", error);
-//   }
-
-//   return { folder };
-// }
-
-// async function getUserFolder(userId) {
-//   const { data: folder, error } = await supabase.storage
-//     .from("design_images")
-//     .list(`user-${userId}/designs/`, { limit: 1 });
-
-//   if (error) {
-//     return console.log("Error getting user folder:", error);
-//   }
-
-//   return { folder };
-// }

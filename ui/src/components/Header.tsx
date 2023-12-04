@@ -32,14 +32,13 @@ export default function Header() {
     // sessionStorage.removeItem("refreshT");
     const accessT = sessionStorage.getItem("accessT");
     const refreshT = sessionStorage.getItem("refreshT");
-    console.log("session accessT", accessT);
-    console.log("session refreshT", refreshT);
-
+    console.log("accessT", accessT);
+    console.log("refreshT", refreshT);
     if (accessT && refreshT) {
       fetch(`/api/auth?action=session&token=${accessT}&rt=${refreshT}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log("DHSDHASDADDJ DATA: ", data);
+          console.log("SESSION: ", data);
           setUser(data.data.user);
           setIsConnected(true);
         })

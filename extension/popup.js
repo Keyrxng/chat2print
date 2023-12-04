@@ -22,19 +22,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const data = chrome.runtime
+    chrome.runtime
       .sendMessage({
         message: "login",
         email: email,
         password: password,
       })
-
       .then((data) => {
-        console.log("LOGIN DATA: ", data);
         updateAuthState(data);
       });
-
-    console.log("DATA: ", data);
   });
 
   document
@@ -42,8 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", async () => {
       console.log("refresh token clicked");
       chrome.runtime.sendMessage({ message: "getToken" }, async (response) => {
-        const token = response.token;
-        console.log("TOKEN: ", token);
+        // const token = response.token;
+        // console.log("TOKEN: ", token);
       });
     });
 });
