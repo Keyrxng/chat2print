@@ -4,38 +4,48 @@ const SUPABASE_URL = "https://ywaeexoevxxjquwlhfjx.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YWVleG9ldnh4anF1d2xoZmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1MTI0NzAsImV4cCI6MjAxNzA4ODQ3MH0.47_j0Q-nfP1bvG8wUP5RAsrpQKZMuZkv_rPvmjVIXHM";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-console.log("DICKSSSS");
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DICKSSS21312S");
+  chrome.runtime.sendMessage({ message: "getToken" });
+
   document.getElementById("sign-out").addEventListener("click", async () => {
-    console.log("sign in clicked");
-    const { error } = await supabase.auth.signOut({ all: true });
-    if (error) console.error("Error signing out:", error);
-    else updateAuthState(null);
+    console.log("sign out clicked");
+
+    chrome.runtime.sendMessage({ message: "logout" }).then((data) => {
+      console.log("LOGOUT DATA: ", data);
+      updateAuthState(data);
+    });
   });
 
   document.getElementById("sign-in").addEventListener("click", async () => {
     console.log("sign in clicked");
-    const { user, error } = await supabase.auth.signInWithPassword({
-      email: "",
-      password: "",
-    });
-    if (error) console.error("Error signing in:", error);
-    else updateAuthState(user);
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const data = chrome.runtime
+      .sendMessage({
+        message: "login",
+        email: email,
+        password: password,
+      })
+
+      .then((data) => {
+        console.log("LOGIN DATA: ", data);
+        updateAuthState(data);
+      });
+
+    console.log("DATA: ", data);
   });
 
   document
     .getElementById("refresh-token")
     .addEventListener("click", async () => {
-      console.log("sign in clicked");
-      const currentSession = supabase.auth.session();
-      if (currentSession) {
-        const { data, error } = await supabase.auth.refreshSession();
-        if (error) console.error("Error refreshing token:", error);
-      }
+      console.log("refresh token clicked");
+      chrome.runtime.sendMessage({ message: "getToken" }, async (response) => {
+        const token = response.token;
+        console.log("TOKEN: ", token);
+      });
     });
-  updateAuthState({});
 });
 
 function updateAuthState(user) {
@@ -43,7 +53,6 @@ function updateAuthState(user) {
   document.getElementById("sign-out").disabled = !user;
   document.getElementById("refresh-token").disabled = !user;
 }
-
 // On load, update auth state
 
 // supabase.auth.onAuthStateChange((_event, session) => {

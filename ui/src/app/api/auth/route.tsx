@@ -49,22 +49,34 @@ async function session(req: NextApiRequest, res: NextApiResponse) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const at = searchParams.get("token");
   const rt = searchParams.get("rt");
-
-  const session = await supabase.sessionRestore(at, rt);
-
-  return new Response(JSON.stringify(session), {
-    headers: {
-      "content-type": "application/json;charset=UTF-8",
-    },
+  if (!at || !rt)
+    return new Response(
+      JSON.stringify({ error: "Missing token or refresh token" })
+    );
+  const { data, error } = await supabase.supabase.auth.setSession({
+    access_token: at,
+    refresh_token: rt,
   });
+  if (error) {
+    return new Response(JSON.stringify({ error: error }), {
+      headers: {
+        "content-type": "application/json;charset=UTF-8",
+      },
+    });
+  } else {
+    return new Response(JSON.stringify({ data: data }), {
+      headers: {
+        "content-type": "application/json;charset=UTF-8",
+      },
+    });
+  }
 }
 
 async function signUp(req: NextApiRequest, res: NextApiResponse) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const email = searchParams.get("email");
   const password = searchParams.get("password");
-  console.log("email", email);
-  console.log("password", password);
+
   if (!email || !password) {
     return new Response(
       JSON.stringify({ message: "Missing email or password" }),
@@ -88,8 +100,7 @@ async function signIn(req: NextApiRequest, res: NextApiResponse) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const email = searchParams.get("email");
   const password = searchParams.get("password");
-  console.log("email", email);
-  console.log("password", password);
+
   if (!email || !password) {
     return new Response(
       JSON.stringify({ message: "Missing email or password" }),
@@ -101,7 +112,6 @@ async function signIn(req: NextApiRequest, res: NextApiResponse) {
     );
   }
   const response = await supabase.signIn(email, password);
-  console.log("response", response);
   return new Response(JSON.stringify(response), {
     headers: {
       "content-type": "application/json;charset=UTF-8",

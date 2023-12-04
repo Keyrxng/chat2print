@@ -25,7 +25,7 @@ class Supabase {
   async errorHandler(error: any) {
     if (error) {
       console.log(error);
-      return this.errorHandler(error);
+      return error;
     }
   }
 
@@ -42,10 +42,10 @@ class Supabase {
     });
 
     if (error) {
-      return this.errorHandler(error);
+      return await this.errorHandler(error);
     }
 
-    return user;
+    return { user };
   }
 
   async sessionRestore(at, rt) {
@@ -56,7 +56,7 @@ class Supabase {
     if (error) {
       return this.errorHandler(error);
     }
-    return data;
+    return { data };
   }
 
   /**
@@ -87,7 +87,7 @@ class Supabase {
     if (error) {
       return this.errorHandler(error);
     } else {
-      return true;
+      return { user: null };
     }
   }
 

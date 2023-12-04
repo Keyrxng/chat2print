@@ -25,27 +25,29 @@ export default function Header() {
   const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
   const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
   const [isConnected, setIsConnected] = React.useState(false);
+  const [refreshSesh, setRefreshSesh] = React.useState(false);
 
   React.useEffect(() => {
-    const accessT = localStorage.getItem("accessT");
-    const refreshT = localStorage.getItem("refreshT");
+    // sessionStorage.removeItem("accessT");
+    // sessionStorage.removeItem("refreshT");
+    const accessT = sessionStorage.getItem("accessT");
+    const refreshT = sessionStorage.getItem("refreshT");
+    console.log("session accessT", accessT);
+    console.log("session refreshT", refreshT);
 
-    if (!accessT) {
-      setIsConnected(false);
-    } else {
-      fetch("/api/auth?action=session&token=" + accessT + "&rt=" + refreshT)
+    if (accessT && refreshT) {
+      fetch(`/api/auth?action=session&token=${accessT}&rt=${refreshT}`)
         .then((response) => response.json())
         .then((data) => {
-          if (data.user) {
-            setUser(data.user);
-            setIsConnected(true);
-          } else {
-            console.log("User is not session authenticated", data);
-          }
+          console.log("DHSDHASDADDJ DATA: ", data);
+          setUser(data.data.user);
+          setIsConnected(true);
         })
         .catch((error) => console.error("Error:", error));
+    } else {
+      setIsConnected(false);
     }
-  }, [isConnected]);
+  }, [refreshSesh]);
 
   const ConnectedBlinker = () => {
     return (
@@ -57,8 +59,47 @@ export default function Header() {
     );
   };
 
+  const signinValidation = () => {
+    if (email === "") {
+      alert("Please enter your email address");
+      return false;
+    }
+    if (password === "") {
+      alert("Please enter your password");
+      return false;
+    }
+    if (!email.includes("@")) {
+      alert("Please enter a valid email");
+      return false;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return false;
+    }
+    if (password.length >= 255) {
+      alert("Password must be less than 255 characters");
+      return false;
+    }
+
+    if (email.length >= 255) {
+      alert("Email must be less than 255 characters");
+      return false;
+    }
+
+    if (email.length < 6) {
+      alert("Email must be at least 6 characters");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!signinValidation()) {
+      return;
+    }
 
     const target = event.target.action;
     fetch(target, {
@@ -68,14 +109,17 @@ export default function Header() {
       .then((response) => response.json())
       .then((data) => {
         if (data.session) {
-          localStorage.setItem("accessT", data.session.access_token);
-          localStorage.setItem("refreshT", data.session.refresh_token);
+          sessionStorage.setItem("accessT", data.session.access_token);
+          sessionStorage.setItem("refreshT", data.session.refresh_token);
         }
-        setUser(data.user);
+        if (data.user) {
+          setUser(data.user);
+        }
         setIsConnected(true);
       })
       .catch((error) => console.error("Error:", error));
   };
+  console.log("user", user);
 
   return (
     <header className="gradientBG text-white p-4 shadow-md">
@@ -295,10 +339,10 @@ export default function Header() {
                           onClick={() => {
                             fetch("/api/auth?action=signout")
                               .then(() => {
-                                localStorage.removeItem("accessT");
-                                localStorage.removeItem("refreshT");
+                                sessionStorage.removeItem("accessT");
+                                sessionStorage.removeItem("refreshT");
                                 setUser(null);
-                                setIsConnected(false);
+                                setRefreshSesh((prev) => !prev);
                               })
                               .catch((error) => console.error("Error:", error));
                           }}

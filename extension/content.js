@@ -46,12 +46,15 @@ async function fetchAndConvertImage(imageUrl) {
       base64data = reader.result;
     };
 
-    const isSesh = isSessioned();
+    function uploadToUserSpecificFolder(imageData) {
+      chrome.runtime.sendMessage({ message: "getToken" }, async (response) => {
+        const token = response.token;
+      });
+    }
   } catch (error) {
     console.error("Error fetching and converting image:", error);
   }
 }
-
 function handleMutations(mutations) {
   mutations.forEach((mutation) => {
     mutation.addedNodes.forEach((node) => {
@@ -67,10 +70,52 @@ function handleMutations(mutations) {
   });
 }
 
-const observer = new MutationObserver(handleMutations);
+/**
+ * Runs on chat2print and grabs the login tokens from the extension
+ * and fires an event that chat2print can listen for to get the tokens
+ */
+async function background() {
+  // grab tokens from the site login
+  const at = sessionStorage.getItem("accessT");
+  const rt = sessionStorage.getItem("refreshT");
 
-observer.observe(document.body, { childList: true, subtree: true });
+  const sat = await chrome.storage.local.get(["accessT"]);
+  const srt = await chrome.storage.local.get(["refreshT"]);
 
+  if (sat.accessT && srt.refreshT) {
+    // background has piped the ext tokens into local
+    // let's set them into session for the site
+    console.log("tokens in session storage: Background.js");
+    sessionStorage.setItem("accessT", sat.accessT);
+    sessionStorage.setItem("refreshT", srt.refreshT);
+  } else if (!at || !rt) {
+    // not logged in via site
+    // let's try get the ext tokens and log them in
+    chrome.runtime.sendMessage({ message: "getToken" }, async (response) => {
+      const at = await chrome.storage.local.get(["accessT"]);
+      const rt = await chrome.storage.local.get(["refreshT"]);
+      console.log("FUCKING A: ", at, rt);
+    });
+  } else {
+    // logged in via site
+    // let's send the tokens to the ext
+    chrome.runtime.sendMessage({ message: "getToken", at, rt });
+  }
+}
+
+const currentUrl = window.location.hostname;
+
+console.log("currentUrl: ", currentUrl);
+if (currentUrl === "chat.openai.com") {
+  const observer = new MutationObserver(handleMutations);
+
+  observer.observe(document.body, { childList: true, subtree: true });
+} else if (currentUrl === "chat2print.xyz") {
+  background();
+} else if (currentUrl === "localhost") {
+  console.log("localhost");
+  background();
+}
 // async function getUserDesigns(userId) {
 //   const { data: designs, error } = await this.supabase
 //     .from("saved_designs")

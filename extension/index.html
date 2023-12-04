@@ -15,10 +15,12 @@
     </header>
 
     <div id="auth-container">
-    <button id="sign-in">Sign In</button>
-    <button id="sign-out" disabled>Sign Out</button>
-    <button id="refresh-token" disabled>Refresh Token</button>
-  </div>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button id="sign-in">Sign In</button>
+      <button id="sign-out" disabled>Sign Out</button>
+      <button id="refresh-token" disabled>Refresh Token</button>
+    </div>
 
     <main class="dashboard-main" id="main-content">
       <ul>
@@ -42,4 +44,5 @@
   </div>
 </body>
 <script src="popup.bundle.js" type="module"></script>
+<script src="background.bundle.js" type="module"></script>
 </html>

@@ -20,22 +20,27 @@
     "content_scripts": [
         {
             "matches": [
-                "https://chat.openai.com/*"
+                "https://chat.openai.com/*",
+                "https://chat2print.xyz/*",
+                "http://localhost:3000/*"
             ],
             "js": [
                 "content.bundle.js"
             ]
         }
     ],
+    "background": {
+        "service_worker": "background.bundle.js"
+    },
     "host_permissions": [
         "http://localhost:3000/*",
+        "https://chat2print.xyz/*",
         "https://chat.openai.com/*"
     ],
     "web_accessible_resources": [
         {
             "resources": [
                 "index.html",
-                "popup.bundle.js",
                 "popup.css"
             ],
             "matches": [
