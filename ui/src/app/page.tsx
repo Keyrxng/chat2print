@@ -1,11 +1,8 @@
 "use client";
-import { FaqSection } from "@/components/FAQ";
 import { FeaturesSection } from "@/components/Features";
 import { HowItWorksSection } from "@/components/HowItWorks";
 import { PricingPlans } from "@/components/Pricing";
 import { ProductGallery } from "@/components/ProductGallery";
-import { CustomerTestimonials } from "@/components/Testimonials";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -42,19 +39,13 @@ export default function Home() {
   const [currentX, setCurrentX] = useState(0);
 
   const getTransformStyle = (index) => {
-    const translateY = "rotateY(45deg) scale(0.6)";
+    const translateY = "rotateY(9deg) scale(0.6)";
     const translateX = `translateX(${index * currentX}px)`;
     return `${translateY} ${translateX}`;
   };
 
   const SlidingBackground = () => {
     const imageRows = [images];
-
-    // this should randomize each row of image sepearaetly from each other
-    // this is not working as intended
-    // it's returning the same selection of images for each row
-    // where it should be returning 3 rows of random images
-    // not providing 3 rows of the same images
     const returnRows = () => {
       return imageRows.map((row) => {
         const randomImages = [];
@@ -62,7 +53,9 @@ export default function Home() {
           const randomIndex = Math.floor(Math.random() * row.length) + 1;
           randomImages.push(row[randomIndex]);
         }
-        return randomImages;
+        const set = new Set(randomImages);
+        const arr = Array.from(set);
+        return arr;
       });
     };
 
@@ -70,23 +63,22 @@ export default function Home() {
       <div className="relative">
         <div id="sliding-background">
           {returnRows().map((row, index) => (
-            <div key={index} className="grid grid-flow-row">
+            <div key={index} className="grid grid-flow-row py-8">
               <div className="image-row">
                 {row.map((imageUrl, index) => (
                   <div
                     key={index}
-                    className={`shadow-md rounded-lg overflow-hidden m-4`}
+                    className={`shadow-md rounded-lg overflow-hidden m-2`}
                     style={{
                       backgroundImage: `url(${imageUrl})`,
                       transform: getTransformStyle(index),
-                      animation: "slide 20s infinite linear reverse",
+                      animation: "slide 25s infinite linear reverse",
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
-                      width: "120px",
-                      height: "120px",
+                      width: "250px",
+                      height: "250px",
                     }}
                   >
-                    {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-white text-xl font-bold">
                         {index + 1}
@@ -101,18 +93,17 @@ export default function Home() {
                   {row.map((imageUrl, index) => (
                     <div
                       key={index}
-                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
                         transform: getTransformStyle(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
-                        width: "120px",
-                        height: "120px",
+                        width: "250px",
+                        height: "250px",
                       }}
                     >
-                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                         <h3 className="text-white text-xl font-bold">
                           {index + 1}
@@ -128,18 +119,17 @@ export default function Home() {
                   {row.map((imageUrl, index) => (
                     <div
                       key={index}
-                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
                         transform: getTransformStyle(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
-                        width: "120px",
-                        height: "120px",
+                        width: "250px",
+                        height: "250px",
                       }}
                     >
-                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                         <h3 className="text-white text-xl font-bold">
                           {index + 1}
@@ -155,18 +145,17 @@ export default function Home() {
                   {row.map((imageUrl, index) => (
                     <div
                       key={index}
-                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
                         transform: getTransformStyle(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
-                        width: "120px",
-                        height: "120px",
+                        width: "250px",
+                        height: "250px",
                       }}
                     >
-                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                         <h3 className="text-white text-xl font-bold">
                           {index + 1}
@@ -182,18 +171,17 @@ export default function Home() {
                   {row.map((imageUrl, index) => (
                     <div
                       key={index}
-                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
                         transform: getTransformStyle(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
-                        width: "120px",
-                        height: "120px",
+                        width: "250px",
+                        height: "250px",
                       }}
                     >
-                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                         <h3 className="text-white text-xl font-bold">
                           {index + 1}

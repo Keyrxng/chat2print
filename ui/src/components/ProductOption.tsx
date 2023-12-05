@@ -18,7 +18,7 @@ export const ProductOption = ({
     : "";
   return (
     <div
-      className={`cursor-pointer p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105 ${selectedClass}`}
+      className={`cursor-pointer mx-auto p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105 ${selectedClass}`}
       onClick={() => onSelect(design)}
     >
       <Image

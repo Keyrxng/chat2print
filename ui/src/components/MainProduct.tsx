@@ -8,13 +8,13 @@ interface MainProductProps {
 
 export const MainProduct = ({ design }: MainProductProps) => {
   return (
-    <div className="rounded-lg overflow-hidden justify-center text-center align-middle shadow-2xl transition-shadow duration-300 ">
+    <div className="rounded-lg max-w-3xl overflow-hidden justify-center text-center align-middle shadow-2xl transition-shadow duration-300 ">
       <Image
         src={design.imageUrl}
         alt={design.name}
         className="w-full h-full object-cover"
-        width={300}
-        height={300}
+        width={768}
+        height={768}
       />
     </div>
   );

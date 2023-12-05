@@ -120,16 +120,37 @@ export default function Header() {
       <div className="container mx-auto flex justify-between items-center">
         <Image
           src="/c2pLogo.png"
+          className=" cursor-pointer"
           width={50}
           height={50}
           alt="Chat2Print logo"
         />
-        <h1 className="text-xl text-accent font-bold">Chat2Print</h1>
+
+        {/* sale banner */}
+        <div className="hidden md:flex flex-col">
+          <h1 className="text-2xl text-accent font-bold">
+            25% off all orders above $40!
+          </h1>
+          <p className="text-md text-center  text-accent font-bold">
+            Use code: <span className="text-white">C2P25</span>
+          </p>
+        </div>
         <nav>
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-4 self-center text-center justify-center align-middle">
             <li>
               <Dialog>
-                <DialogTrigger className="text-accent flex ">
+                <DialogTrigger
+                  disabled={!isConnected}
+                  onClick={() => (window.location.href = "/app")}
+                  className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg disabled:bg-gray-600 hover:bg-blue-600 transition duration-300 flex"
+                >
+                  Studio
+                </DialogTrigger>
+              </Dialog>
+            </li>
+            <li>
+              <Dialog>
+                <DialogTrigger className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-blue-600 transition duration-300 flex">
                   Profile <ConnectedBlinker />
                 </DialogTrigger>
 
