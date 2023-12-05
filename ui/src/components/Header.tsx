@@ -28,12 +28,8 @@ export default function Header() {
   const [refreshSesh, setRefreshSesh] = React.useState(false);
 
   React.useEffect(() => {
-    // sessionStorage.removeItem("accessT");
-    // sessionStorage.removeItem("refreshT");
     const accessT = sessionStorage.getItem("accessT");
     const refreshT = sessionStorage.getItem("refreshT");
-    console.log("accessT", accessT);
-    console.log("refreshT", refreshT);
     if (accessT && refreshT) {
       fetch(`/api/auth?action=session&token=${accessT}&rt=${refreshT}`)
         .then((response) => response.json())
@@ -118,7 +114,6 @@ export default function Header() {
       })
       .catch((error) => console.error("Error:", error));
   };
-  console.log("user", user);
 
   return (
     <header className="gradientBG text-white p-4 shadow-md">
