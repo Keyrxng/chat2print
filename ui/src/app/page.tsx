@@ -5,18 +5,39 @@ import { HowItWorksSection } from "@/components/HowItWorks";
 import { PricingPlans } from "@/components/Pricing";
 import { ProductGallery } from "@/components/ProductGallery";
 import { CustomerTestimonials } from "@/components/Testimonials";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function Home() {
   const images = [
-    "/next.svg",
-    "/next.svg",
-    "/next.svg",
-    "/next.svg",
-    "/next.svg",
-    "/next.svg",
-    "/next.svg",
-    "/next.svg",
+    "/wfm.webp",
+    "/unitornado.webp",
+    "/unicorn.webp",
+    "/staghead.webp",
+    "/smolgaming.webp",
+    "/redeagle.webp",
+    "/penguinbadge.webp",
+    "/musclecar.webp",
+    "/mid-00-gaming.webp",
+    "/metalspiral.webp",
+    "/metaloptical.webp",
+    "/kingsloth.webp",
+    "/impact.webp",
+    "/horsecar.webp",
+    "/fantasyart.webp",
+    "/darkroads.webp",
+    "/cosmicbirds.webp",
+    "/c2pdigital.webp",
+    "/bullettip.webp",
+    "/betty.webp",
+    "/badge.webp",
+    "/atomdna.webp",
+    "/bullettime.webp",
+    "/animalcinema.webp",
+    "/90-00-gaming.webp",
+    "/10-20-gaming.webp",
+    "/00-10-gaming.webp",
+    "/00-10-gaming-retro.webp",
   ];
   const [currentX, setCurrentX] = useState(0);
 
@@ -25,15 +46,24 @@ export default function Home() {
     const translateX = `translateX(${index * currentX}px)`;
     return `${translateY} ${translateX}`;
   };
+
   const SlidingBackground = () => {
-    const imageRows = Array(8) // Create 3 rows
-      .fill(null)
-      .map(() => [...images, ...images]); // Duplicate the images for each row
+    const imageRows = [images];
 
+    // this should randomize each row of image sepearaetly from each other
+    // this is not working as intended
+    // it's returning the same selection of images for each row
+    // where it should be returning 3 rows of random images
+    // not providing 3 rows of the same images
     const returnRows = () => {
-      const random = Math.floor(Math.random() * 10) + 1;
-
-      return imageRows.slice(0, random);
+      return imageRows.map((row) => {
+        const randomImages = [];
+        for (let i = 0; i < images.length; i++) {
+          const randomIndex = Math.floor(Math.random() * row.length) + 1;
+          randomImages.push(row[randomIndex]);
+        }
+        return randomImages;
+      });
     };
 
     return (
@@ -56,29 +86,7 @@ export default function Home() {
                       height: "120px",
                     }}
                   >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                      <h3 className="text-white text-xl font-bold">
-                        {index + 1}
-                      </h3>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="image-row">
-                {row.map((imageUrl, index) => (
-                  <div
-                    key={index}
-                    className={`shadow-md rounded-lg overflow-hidden m-4`}
-                    style={{
-                      backgroundImage: `url(${imageUrl})`,
-                      transform: getTransformStyle(index),
-                      animation: "slide 20s infinite linear reverse",
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      width: "120px",
-                      height: "120px",
-                    }}
-                  >
+                    {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-white text-xl font-bold">
                         {index + 1}
@@ -88,52 +96,113 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="image-row">
-                {row.map((imageUrl, index) => (
-                  <div
-                    key={index}
-                    className={`shadow-md rounded-lg overflow-hidden m-4`}
-                    style={{
-                      backgroundImage: `url(${imageUrl})`,
-                      transform: getTransformStyle(index),
-                      animation: "slide 20s infinite linear reverse",
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      width: "240px",
-                      height: "240px",
-                    }}
-                  >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                      <h3 className="text-white text-xl font-bold">
-                        {index + 1}
-                      </h3>
+              {returnRows().map((row, index) => (
+                <div key={index} className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: getTransformStyle(index),
+                        animation: "slide 20s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "120px",
+                        height: "120px",
+                      }}
+                    >
+                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                        <h3 className="text-white text-xl font-bold">
+                          {index + 1}
+                        </h3>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              <div className="image-row">
-                {row.map((imageUrl, index) => (
-                  <div
-                    key={index}
-                    className={`shadow-md rounded-lg overflow-hidden m-4`}
-                    style={{
-                      backgroundImage: `url(${imageUrl})`,
-                      transform: getTransformStyle(index),
-                      animation: "slide 20s infinite linear reverse",
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      width: "240px",
-                      height: "240px",
-                    }}
-                  >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                      <h3 className="text-white text-xl font-bold">
-                        {index + 1}
-                      </h3>
+                  ))}
+                </div>
+              ))}
+
+              {returnRows().map((row, index) => (
+                <div key={index} className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: getTransformStyle(index),
+                        animation: "slide 20s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "120px",
+                        height: "120px",
+                      }}
+                    >
+                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                        <h3 className="text-white text-xl font-bold">
+                          {index + 1}
+                        </h3>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ))}
+
+              {returnRows().map((row, index) => (
+                <div key={index} className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: getTransformStyle(index),
+                        animation: "slide 20s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "120px",
+                        height: "120px",
+                      }}
+                    >
+                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                        <h3 className="text-white text-xl font-bold">
+                          {index + 1}
+                        </h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              {returnRows().map((row, index) => (
+                <div key={index} className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-4`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: getTransformStyle(index),
+                        animation: "slide 20s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "120px",
+                        height: "120px",
+                      }}
+                    >
+                      {/* <Image src={imageUrl} width={120} height={120} alt="" /> */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                        <h3 className="text-white text-xl font-bold">
+                          {index + 1}
+                        </h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           ))}
         </div>

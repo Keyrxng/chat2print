@@ -4,13 +4,21 @@ import Image from "next/image";
 
 interface ProductOptionProps {
   design: Design;
+  isSelected: boolean;
   onSelect: (design: Design) => void;
 }
 
-export const ProductOption = ({ design, onSelect }: ProductOptionProps) => {
+export const ProductOption = ({
+  design,
+  isSelected,
+  onSelect,
+}: ProductOptionProps) => {
+  const selectedClass = isSelected
+    ? "ring ring-offset-2 ring-offset-accent ring-accent"
+    : "";
   return (
     <div
-      className="cursor-pointer p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105"
+      className={`cursor-pointer p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105 ${selectedClass}`}
       onClick={() => onSelect(design)}
     >
       <Image

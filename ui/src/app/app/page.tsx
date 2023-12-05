@@ -61,6 +61,7 @@ export default function Page() {
                 <ProductOption
                   key={option.id}
                   design={option}
+                  isSelected={selectedDesign?.id === option.id}
                   onSelect={handleSelectDesign}
                 />
               ))}

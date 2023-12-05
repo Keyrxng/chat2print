@@ -8,7 +8,7 @@ interface MainProductProps {
 
 export const MainProduct = ({ design }: MainProductProps) => {
   return (
-    <div className="rounded-lg overflow-hidden justify-center text-center align-middle shadow-2xl transition-shadow duration-300 border-4 border-yellow-500">
+    <div className="rounded-lg overflow-hidden justify-center text-center align-middle shadow-2xl transition-shadow duration-300 ">
       <Image
         src={design.imageUrl}
         alt={design.name}
