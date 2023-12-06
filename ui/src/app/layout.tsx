@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Head from "next/head";
+import Chatbox from "@/components/Chatbox";
 
 const inter = Inter({ subsets: ["latin"] });
 
