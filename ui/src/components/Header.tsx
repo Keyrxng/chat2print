@@ -139,23 +139,36 @@ export default function Header() {
           <ul className="flex space-x-4 self-center text-center justify-center align-middle">
             <li>
               <Dialog>
-                <DialogTrigger
-                  disabled={!isConnected}
-                  onClick={() => (window.location.href = "/app")}
-                  className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg   transition duration-300 flex"
-                >
-                  Studio
-                </DialogTrigger>
+                {isConnected ? (
+                  <>
+                    <DialogTrigger
+                      onClick={() => (window.location.href = "/app")}
+                      className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg  border border-accent  hover:bg-accent  hover:text-background transition duration-300flex"
+                    >
+                      Studio
+                    </DialogTrigger>
+                  </>
+                ) : (
+                  <>
+                    <DialogTrigger
+                      disabled={!isConnected}
+                      onClick={() => (window.location.href = "/app")}
+                      className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg   transition duration-300 flex"
+                    >
+                      Studio
+                    </DialogTrigger>
+                  </>
+                )}
               </Dialog>
             </li>
             <li>
               <Dialog>
-                <DialogTrigger className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-accent hover:text-background transition duration-300 flex">
+                <DialogTrigger className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-accent border border-accent hover:text-background transition duration-300 flex">
                   Profile <ConnectedBlinker />
                 </DialogTrigger>
 
                 {isConnected ? (
-                  <DialogContent>
+                  <DialogContent className="border-accent border ">
                     {/* inside account settings for updating details */}
                     {accountModalIsOpen && (
                       <>
@@ -171,13 +184,13 @@ export default function Header() {
                           <>
                             <Button
                               onClick={() => setAddressModalIsOpen(true)}
-                              className="text-accent w-full"
+                              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                             >
                               Update Delivery Address
                             </Button>
                             <Button
                               onClick={() => setSecurityModalIsOpen(true)}
-                              className="text-accent w-full"
+                              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                             >
                               Update Security Settings
                             </Button>
@@ -231,14 +244,14 @@ export default function Header() {
                               />
 
                               <Button
-                                className="text-accent w-full"
+                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                                 type="submit"
                               >
                                 Save Changes
                               </Button>
                               <Button
                                 onClick={() => setAddressModalIsOpen(false)}
-                                className="text-accent w-full"
+                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                               >
                                 Go Back
                               </Button>
@@ -281,14 +294,14 @@ export default function Header() {
                               />
 
                               <Button
-                                className="text-accent w-full"
+                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                                 type="submit"
                               >
                                 Save Changes
                               </Button>
                               <Button
                                 onClick={() => setSecurityModalIsOpen(false)}
-                                className="text-accent w-full"
+                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                               >
                                 Go Back
                               </Button>
@@ -297,7 +310,7 @@ export default function Header() {
                         )}
                         <Button
                           onClick={() => setAccountModalIsOpen(false)}
-                          className="text-accent w-full"
+                          className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                         >
                           Main Menu
                         </Button>
@@ -317,7 +330,7 @@ export default function Header() {
                         <OrderHistory />
                         <Button
                           onClick={() => setOrderModalIsOpen(false)}
-                          className="text-accent w-full"
+                          className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                         >
                           Main Menu
                         </Button>
@@ -336,21 +349,21 @@ export default function Header() {
                           </DialogDescription>
                         </DialogHeader>
                         <Button
-                          className="text-accent"
+                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                           type="submit"
                           onClick={() => setOrderModalIsOpen(true)}
                         >
                           Previous Orders
                         </Button>
                         <Button
-                          className="text-accent"
+                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                           type="submit"
                           onClick={() => setAccountModalIsOpen(true)}
                         >
                           Account Settings
                         </Button>
                         <Button
-                          className="text-accent"
+                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                           onClick={() => {
                             fetch("/api/auth?action=signout")
                               .then(() => {
@@ -410,7 +423,7 @@ export default function Header() {
                         }}
                       />
                       <Button
-                        className="text-accent hover:bg-accent hover:text-background transition duration-300 border-[1px] border-accent"
+                        className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                         type="submit"
                       >
                         {!isRegistering ? "Sign In" : "Register"}

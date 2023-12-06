@@ -1,10 +1,10 @@
-"use client";
-import { useEffect, useState } from "react";
-import { ProductOption } from "@/components/ProductOption";
-import { MainProduct } from "@/components/MainProduct";
-import { Design } from "@/types/all";
-import Image from "next/image";
-import { X } from "lucide-react";
+"use client"
+import { useEffect, useState } from "react"
+import { ProductOption } from "@/components/ProductOption"
+import { MainProduct } from "@/components/MainProduct"
+import { Design } from "@/types/all"
+import Image from "next/image"
+import { X } from "lucide-react"
 
 const images = [
   "/wfm.webp",
@@ -35,7 +35,7 @@ const images = [
   "/10-20-gaming.webp",
   "/00-10-gaming.webp",
   "/00-10-gaming-retro.webp",
-];
+]
 
 const userDesigns = [
   {
@@ -80,68 +80,68 @@ const userDesigns = [
     price: 15.99,
     imageUrl: "",
   },
-];
+]
 
 export default function Page() {
-  const [designs, setDesigns] = useState<Design[]>(userDesigns); // Load initial designs
-  const [selectedDesign, setSelectedDesign] = useState<Design>(userDesigns[0]); // Set initial selected design
-  const [userImages, setUserImages] = useState<string[]>([]); // Load initial user images
+  const [designs, setDesigns] = useState<Design[]>(userDesigns) // Load initial designs
+  const [selectedDesign, setSelectedDesign] = useState<Design>(userDesigns[0]) // Set initial selected design
+  const [userImages, setUserImages] = useState<string[]>([]) // Load initial user images
 
   useEffect(() => {
     async function isLoggedIn() {
-      const accessT = sessionStorage.getItem("accessT");
-      const refreshT = sessionStorage.getItem("refreshT");
+      const accessT = sessionStorage.getItem("accessT")
+      const refreshT = sessionStorage.getItem("refreshT")
       if (!accessT || !refreshT) {
-        window.location.href = "/";
+        window.location.href = "/"
       }
     }
 
-    isLoggedIn();
+    isLoggedIn()
 
-    setUserImages(images);
-    setDesigns((prev) => {
+    setUserImages(images)
+    setDesigns(prev => {
       for (const design of prev) {
-        design.imageUrl = images[0];
+        design.imageUrl = images[0]
       }
-      return prev;
-    });
+      return prev
+    })
 
-    setSelectedDesign((prevDesign) => ({
+    setSelectedDesign(prevDesign => ({
       ...prevDesign,
       imageUrl: images[0],
-    }));
-  }, []);
+    }))
+  }, [])
 
   const handleSelectDesign = (design: Design) => {
-    setSelectedDesign(design);
-  };
+    setSelectedDesign(design)
+  }
 
   const handleSelectImage = (image: string) => {
-    setSelectedDesign((prevDesign) => ({
+    setSelectedDesign(prevDesign => ({
       ...prevDesign,
       imageUrl: image,
-    }));
+    }))
     for (const design of userDesigns) {
-      design.imageUrl = image;
+      design.imageUrl = image
     }
-    setDesigns(userDesigns);
-  };
+    setDesigns(userDesigns)
+  }
 
   const handleDeleteImage = (image: string) => {
     for (const img of images) {
       if (img === image) {
-        images.splice(images.indexOf(img), 1);
+        images.splice(images.indexOf(img), 1)
       }
     }
 
-    setUserImages((prev) => prev.filter((img) => img !== image));
-  };
+    setUserImages(prev => prev.filter(img => img !== image))
+  }
 
   const handlePODApi = async () => {
-    const response = await fetch("/api/pod/");
-    const data = await response.json();
-    console.log(data);
-  };
+    const response = await fetch("/api/pod/")
+    const data = await response.json()
+    console.log(data)
+  }
 
   const ImageSlider = () => {
     return (
@@ -177,8 +177,8 @@ export default function Page() {
           <button className="absolute bottom-0 left-0 mt-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none "></button>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <>
@@ -192,7 +192,7 @@ export default function Page() {
               <MainProduct design={selectedDesign} />
             </div>
             <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-3xl max-h-[770px] md:grid-cols-1 gap-4">
-              {designs.map((option) => (
+              {designs.map(option => (
                 <ProductOption
                   key={option.id}
                   design={option}
@@ -209,7 +209,7 @@ export default function Page() {
               <p className="text-xl font-bold">${selectedDesign.price}</p>
             </div>
             <button
-              className="mt-4 md:mt-0 hover:bg-background gradientBG text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:-translate-y-1"
+              className="mt-4 md:mt-0 text-lg hover:bg-accent border border-accent    hover:text-background   text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out    "
               onClick={() => (window.location.href = "/checkout")}
             >
               Buy Now
@@ -218,5 +218,5 @@ export default function Page() {
         </div>
       </div>
     </>
-  );
+  )
 }

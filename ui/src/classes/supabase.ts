@@ -7,6 +7,11 @@ class Supabase {
 
   constructor() {
     if (!supabaseUrl || !supabaseKey) {
+      console.log("supabaseUrl" , supabaseUrl);
+      console.log("supabaseKey" , supabaseKey);
+      
+
+      
       throw new Error("DB Credentials not found");
     }
     this.supabase = createClient(supabaseUrl, supabaseKey, {
