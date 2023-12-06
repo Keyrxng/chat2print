@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import React from "react"
 import OrderHistory from "./OrderHistory"
 import Image from "next/image"
-
+import { motion } from "framer-motion"
 export default function Header() {
   const [user, setUser] = React.useState(null)
   const [isRegistering, setIsRegistering] = React.useState(false)
@@ -116,349 +116,359 @@ export default function Header() {
   }
 
   return (
-    <header className=" bg-background text-white p-4 shadow-md ">
-      <div className="container mx-auto flex justify-between items-center  ">
-        <a href="/">
-          <Image
-            src="/c2pLogo.png"
-            className=" cursor-pointer"
-            width={50}
-            height={50}
-            alt="Chat2Print logo"
-          />
-        </a>
-        <div className="hidden md:flex flex-col lg:ml-[10rem]  ">
-          <h1 className="text-2xl text-accent font-bold">
-            25% off all orders above $40!
-          </h1>
-          <p className="text-md text-center  text-accent font-bold">
-            Use code: <span className="text-white">C2P25</span>
-          </p>
-        </div>
-        <nav>
-          <ul className="flex space-x-4 self-center text-center justify-center align-middle">
-            <li>
-              <Dialog>
-                {isConnected ? (
-                  <>
-                    <DialogTrigger
-                      onClick={() => (window.location.href = "/app")}
-                      className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg  border border-accent  hover:bg-accent  hover:text-background transition duration-300flex"
-                    >
-                      Studio
-                    </DialogTrigger>
-                  </>
-                ) : (
-                  <>
-                    <DialogTrigger
-                      disabled={!isConnected}
-                      onClick={() => (window.location.href = "/app")}
-                      className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg   transition duration-300 flex"
-                    >
-                      Studio
-                    </DialogTrigger>
-                  </>
-                )}
-              </Dialog>
-            </li>
-            <li>
-              <Dialog>
-                <DialogTrigger className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-accent border border-accent hover:text-background transition duration-300 flex">
-                  Profile <ConnectedBlinker />
-                </DialogTrigger>
+    <motion.div
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.5,
+        delay: 1.6,
+      }}
+    >
+      <header className=" bg-background text-white p-4 shadow-md ">
+        <div className="container mx-auto flex justify-between items-center  ">
+          <a href="/">
+            <Image
+              src="/c2pLogo.png"
+              className=" cursor-pointer"
+              width={50}
+              height={50}
+              alt="Chat2Print logo"
+            />
+          </a>
+          <div className="hidden md:flex flex-col lg:ml-[10rem]  ">
+            <h1 className="text-2xl text-accent font-bold">
+              25% off all orders above $40!
+            </h1>
+            <p className="text-md text-center  text-accent font-bold">
+              Use code: <span className="text-white">C2P25</span>
+            </p>
+          </div>
 
-                {isConnected ? (
-                  <DialogContent className="border-accent border ">
-                    {/* inside account settings for updating details */}
-                    {accountModalIsOpen && (
-                      <>
-                        <DialogHeader>
-                          <DialogTitle className="text-white">
-                            Account Details
-                          </DialogTitle>
-                          <DialogDescription>
-                            You are currently signed in as {user?.email}
-                          </DialogDescription>
-                        </DialogHeader>
-                        {!addressModalIsOpen && !securityModalIsOpen && (
-                          <>
-                            <Button
-                              onClick={() => setAddressModalIsOpen(true)}
-                              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                            >
-                              Update Delivery Address
-                            </Button>
-                            <Button
-                              onClick={() => setSecurityModalIsOpen(true)}
-                              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                            >
-                              Update Security Settings
-                            </Button>
-                          </>
-                        )}
-
-                        {/* inside account settings for updating address */}
-                        {addressModalIsOpen && (
-                          <>
-                            <form
-                              method="POST"
-                              action={`/api/auth?action=update&password=${password}&email=${email}`}
-                              className="space-y-4"
-                              onSubmit={handleSubmit}
-                            >
-                              <Input
-                                type="text"
-                                name="1stline"
-                                placeholder="Address Line 1"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="text"
-                                name="2ndline"
-                                placeholder="Address Line 2"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="text"
-                                name="city"
-                                placeholder="City"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="text"
-                                name="state"
-                                placeholder="State"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="text"
-                                name="zip"
-                                placeholder="Zip"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="text"
-                                name="country"
-                                placeholder="Country"
-                                className="text-accent"
-                              />
-
-                              <Button
-                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                                type="submit"
-                              >
-                                Save Changes
-                              </Button>
-                              <Button
-                                onClick={() => setAddressModalIsOpen(false)}
-                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                              >
-                                Go Back
-                              </Button>
-                            </form>
-                          </>
-                        )}
-
-                        {securityModalIsOpen && (
-                          <>
-                            <form
-                              method="POST"
-                              action={`/api/auth?action=update&password=${password}&email=${email}`}
-                              className="space-y-4"
-                              onSubmit={handleSubmit}
-                            >
-                              <Input
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="email"
-                                name="email"
-                                placeholder="confirm email"
-                                className="text-accent"
-                              />
-                              <Input
-                                type="password"
-                                name="password"
-                                placeholder="current password"
-                                className="text-accent"
-                              />
-
-                              <Input
-                                type="password"
-                                name="password"
-                                placeholder="new password"
-                                className="text-accent"
-                              />
-
-                              <Button
-                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                                type="submit"
-                              >
-                                Save Changes
-                              </Button>
-                              <Button
-                                onClick={() => setSecurityModalIsOpen(false)}
-                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                              >
-                                Go Back
-                              </Button>
-                            </form>
-                          </>
-                        )}
-                        <Button
-                          onClick={() => setAccountModalIsOpen(false)}
-                          className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                        >
-                          Main Menu
-                        </Button>
-                      </>
-                    )}
-                    {/* inside previous orders for viewing orders */}
-                    {orderModalIsOpen && (
-                      <>
-                        <DialogHeader>
-                          <DialogTitle className="text-white">
-                            Previous Orders
-                          </DialogTitle>
-                          <DialogDescription>
-                            You are currently signed in as {user?.email}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <OrderHistory />
-                        <Button
-                          onClick={() => setOrderModalIsOpen(false)}
-                          className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                        >
-                          Main Menu
-                        </Button>
-                      </>
-                    )}
-
-                    {/* view orderse acc settings and sign out */}
-                    {!orderModalIsOpen && !accountModalIsOpen && (
-                      <>
-                        <DialogHeader>
-                          <DialogTitle className="text-white">
-                            Account
-                          </DialogTitle>
-                          <DialogDescription>
-                            You are currently signed in as {user?.email}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <Button
-                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                          type="submit"
-                          onClick={() => setOrderModalIsOpen(true)}
-                        >
-                          Previous Orders
-                        </Button>
-                        <Button
-                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                          type="submit"
-                          onClick={() => setAccountModalIsOpen(true)}
-                        >
-                          Account Settings
-                        </Button>
-                        <Button
-                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                          onClick={() => {
-                            fetch("/api/auth?action=signout")
-                              .then(() => {
-                                sessionStorage.removeItem("accessT")
-                                sessionStorage.removeItem("refreshT")
-                                setUser(null)
-                                setRefreshSesh(prev => !prev)
-                              })
-                              .catch(error => console.error("Error:", error))
-                          }}
-                        >
-                          Sign Out
-                        </Button>
-                      </>
-                    )}
-                  </DialogContent>
-                ) : (
-                  <DialogContent className=" border-accent">
-                    <DialogHeader>
-                      <DialogTitle className="text-white">
-                        {!isRegistering ? "Sign In" : "Register"}
-                      </DialogTitle>
-
-                      <DialogDescription>
-                        {!isRegistering
-                          ? "Sign in to your account to continue."
-                          : "Register your account to continue."}
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <form
-                      method="POST"
-                      action={
-                        !isRegistering
-                          ? `/api/auth?action=signin&password=${password}&email=${email}`
-                          : `/api/auth?action=signup&password=${password}&email=${email}`
-                      }
-                      className="space-y-4"
-                      onSubmit={handleSubmit}
-                    >
-                      <Input
-                        type="username"
-                        name="username"
-                        placeholder="Email"
-                        className="text-accent"
-                        onChange={event => {
-                          setEmail(event.target.value)
-                        }}
-                      />
-                      <Input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        className="text-accent"
-                        onChange={event => {
-                          setPassword(event.target.value)
-                        }}
-                      />
-                      <Button
-                        className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                        type="submit"
+          <nav>
+            <ul className="flex space-x-4 self-center text-center justify-center align-middle">
+              <li>
+                <Dialog>
+                  {isConnected ? (
+                    <>
+                      <DialogTrigger
+                        onClick={() => (window.location.href = "/app")}
+                        className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg  border border-accent  hover:bg-accent  hover:text-background transition duration-300flex"
                       >
-                        {!isRegistering ? "Sign In" : "Register"}
-                      </Button>
-                    </form>
+                        Studio
+                      </DialogTrigger>
+                    </>
+                  ) : (
+                    <>
+                      <DialogTrigger
+                        disabled={!isConnected}
+                        onClick={() => (window.location.href = "/app")}
+                        className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg   transition duration-300 flex"
+                      >
+                        Studio
+                      </DialogTrigger>
+                    </>
+                  )}
+                </Dialog>
+              </li>
+              <li>
+                <Dialog>
+                  <DialogTrigger className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-accent border border-accent hover:text-background transition duration-300 flex">
+                    Profile <ConnectedBlinker />
+                  </DialogTrigger>
 
-                    {!isRegistering && (
-                      <p className="text-center text-muted-foreground">
-                        Don&apos;t have an account?{" "}
-                        <button
-                          onClick={() => setIsRegistering(true)}
-                          className="underline"
+                  {isConnected ? (
+                    <DialogContent className="border-accent border ">
+                      {/* inside account settings for updating details */}
+                      {accountModalIsOpen && (
+                        <>
+                          <DialogHeader>
+                            <DialogTitle className="text-white">
+                              Account Details
+                            </DialogTitle>
+                            <DialogDescription>
+                              You are currently signed in as {user?.email}
+                            </DialogDescription>
+                          </DialogHeader>
+                          {!addressModalIsOpen && !securityModalIsOpen && (
+                            <>
+                              <Button
+                                onClick={() => setAddressModalIsOpen(true)}
+                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                              >
+                                Update Delivery Address
+                              </Button>
+                              <Button
+                                onClick={() => setSecurityModalIsOpen(true)}
+                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                              >
+                                Update Security Settings
+                              </Button>
+                            </>
+                          )}
+
+                          {/* inside account settings for updating address */}
+                          {addressModalIsOpen && (
+                            <>
+                              <form
+                                method="POST"
+                                action={`/api/auth?action=update&password=${password}&email=${email}`}
+                                className="space-y-4"
+                                onSubmit={handleSubmit}
+                              >
+                                <Input
+                                  type="text"
+                                  name="1stline"
+                                  placeholder="Address Line 1"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="text"
+                                  name="2ndline"
+                                  placeholder="Address Line 2"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="text"
+                                  name="city"
+                                  placeholder="City"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="text"
+                                  name="state"
+                                  placeholder="State"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="text"
+                                  name="zip"
+                                  placeholder="Zip"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="text"
+                                  name="country"
+                                  placeholder="Country"
+                                  className="text-accent"
+                                />
+
+                                <Button
+                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                                  type="submit"
+                                >
+                                  Save Changes
+                                </Button>
+                                <Button
+                                  onClick={() => setAddressModalIsOpen(false)}
+                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                                >
+                                  Go Back
+                                </Button>
+                              </form>
+                            </>
+                          )}
+
+                          {securityModalIsOpen && (
+                            <>
+                              <form
+                                method="POST"
+                                action={`/api/auth?action=update&password=${password}&email=${email}`}
+                                className="space-y-4"
+                                onSubmit={handleSubmit}
+                              >
+                                <Input
+                                  type="email"
+                                  name="email"
+                                  placeholder="Email"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="email"
+                                  name="email"
+                                  placeholder="confirm email"
+                                  className="text-accent"
+                                />
+                                <Input
+                                  type="password"
+                                  name="password"
+                                  placeholder="current password"
+                                  className="text-accent"
+                                />
+
+                                <Input
+                                  type="password"
+                                  name="password"
+                                  placeholder="new password"
+                                  className="text-accent"
+                                />
+
+                                <Button
+                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                                  type="submit"
+                                >
+                                  Save Changes
+                                </Button>
+                                <Button
+                                  onClick={() => setSecurityModalIsOpen(false)}
+                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                                >
+                                  Go Back
+                                </Button>
+                              </form>
+                            </>
+                          )}
+                          <Button
+                            onClick={() => setAccountModalIsOpen(false)}
+                            className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                          >
+                            Main Menu
+                          </Button>
+                        </>
+                      )}
+                      {/* inside previous orders for viewing orders */}
+                      {orderModalIsOpen && (
+                        <>
+                          <DialogHeader>
+                            <DialogTitle className="text-white">
+                              Previous Orders
+                            </DialogTitle>
+                            <DialogDescription>
+                              You are currently signed in as {user?.email}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <OrderHistory />
+                          <Button
+                            onClick={() => setOrderModalIsOpen(false)}
+                            className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                          >
+                            Main Menu
+                          </Button>
+                        </>
+                      )}
+
+                      {/* view orderse acc settings and sign out */}
+                      {!orderModalIsOpen && !accountModalIsOpen && (
+                        <>
+                          <DialogHeader>
+                            <DialogTitle className="text-white">
+                              Account
+                            </DialogTitle>
+                            <DialogDescription>
+                              You are currently signed in as {user?.email}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <Button
+                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                            type="submit"
+                            onClick={() => setOrderModalIsOpen(true)}
+                          >
+                            Previous Orders
+                          </Button>
+                          <Button
+                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                            type="submit"
+                            onClick={() => setAccountModalIsOpen(true)}
+                          >
+                            Account Settings
+                          </Button>
+                          <Button
+                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                            onClick={() => {
+                              fetch("/api/auth?action=signout")
+                                .then(() => {
+                                  sessionStorage.removeItem("accessT")
+                                  sessionStorage.removeItem("refreshT")
+                                  setUser(null)
+                                  setRefreshSesh(prev => !prev)
+                                })
+                                .catch(error => console.error("Error:", error))
+                            }}
+                          >
+                            Sign Out
+                          </Button>
+                        </>
+                      )}
+                    </DialogContent>
+                  ) : (
+                    <DialogContent className=" border-accent">
+                      <DialogHeader>
+                        <DialogTitle className="text-white">
+                          {!isRegistering ? "Sign In" : "Register"}
+                        </DialogTitle>
+
+                        <DialogDescription>
+                          {!isRegistering
+                            ? "Sign in to your account to continue."
+                            : "Register your account to continue."}
+                        </DialogDescription>
+                      </DialogHeader>
+
+                      <form
+                        method="POST"
+                        action={
+                          !isRegistering
+                            ? `/api/auth?action=signin&password=${password}&email=${email}`
+                            : `/api/auth?action=signup&password=${password}&email=${email}`
+                        }
+                        className="space-y-4"
+                        onSubmit={handleSubmit}
+                      >
+                        <Input
+                          type="username"
+                          name="username"
+                          placeholder="Email"
+                          className="text-accent"
+                          onChange={event => {
+                            setEmail(event.target.value)
+                          }}
+                        />
+                        <Input
+                          type="password"
+                          name="password"
+                          placeholder="Password"
+                          className="text-accent"
+                          onChange={event => {
+                            setPassword(event.target.value)
+                          }}
+                        />
+                        <Button
+                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                          type="submit"
                         >
-                          Sign up
-                        </button>
-                      </p>
-                    )}
-                    {isRegistering && (
-                      <p className="text-center text-muted-foreground">
-                        Already have an account?{" "}
-                        <button
-                          onClick={() => setIsRegistering(false)}
-                          className="underline"
-                        >
-                          Sign in
-                        </button>
-                      </p>
-                    )}
-                  </DialogContent>
-                )}
-              </Dialog>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+                          {!isRegistering ? "Sign In" : "Register"}
+                        </Button>
+                      </form>
+
+                      {!isRegistering && (
+                        <p className="text-center text-muted-foreground">
+                          Don&apos;t have an account?{" "}
+                          <button
+                            onClick={() => setIsRegistering(true)}
+                            className="underline"
+                          >
+                            Sign up
+                          </button>
+                        </p>
+                      )}
+                      {isRegistering && (
+                        <p className="text-center text-muted-foreground">
+                          Already have an account?{" "}
+                          <button
+                            onClick={() => setIsRegistering(false)}
+                            className="underline"
+                          >
+                            Sign in
+                          </button>
+                        </p>
+                      )}
+                    </DialogContent>
+                  )}
+                </Dialog>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+    </motion.div>
   )
 }

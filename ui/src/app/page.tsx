@@ -3,8 +3,9 @@ import { FeaturesSection } from "@/components/Features"
 import { HowItWorksSection } from "@/components/HowItWorks"
 import { PricingPlans } from "@/components/Pricing"
 import { ProductGallery } from "@/components/ProductGallery"
-import { useState } from "react"
-
+import { useState, useRef } from "react"
+import { motion, useInView } from "framer-motion"
+import { Link } from "react-scroll"
 export default function Home() {
   const images = [
     "/wfm.webp",
@@ -37,6 +38,11 @@ export default function Home() {
     "/00-10-gaming-retro.webp",
   ]
   const [currentX, setCurrentX] = useState(0)
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true })
+
+  const ref2 = useRef(null)
+  const isInView2 = useInView(ref2, { once: true })
 
   const translateSliderX = (index: any) => {
     const translateY = "rotateY(9deg) scale(0.6)"
@@ -60,7 +66,14 @@ export default function Home() {
     }
 
     return (
-      <div className="relative">
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.5,
+        }}
+        style={{ position: "relative" }}
+      >
         <div id="sliding-background">
           {returnRows().map((row, index) => (
             <div key={index} className="grid grid-flow-row py-8">
@@ -195,37 +208,88 @@ export default function Home() {
           ))}
         </div>
         <section className="text-center md:py-24">
-          <h1 className="text-4xl text-accent md:text-6xl font-bold  mb-4">
-            Chat2Print
-          </h1>
-          <p className="text-xl text-white md:text-2xl  mb-8">
-            Transform your ChatGPT art into physical products.
-          </p>
-          <a
-            href="/download"
-            className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.5,
+            }}
           >
-            Download Extension
-          </a>
+            <h1 className="text-4xl text-accent md:text-6xl font-bold  mb-4">
+              Chat2Print
+            </h1>
+            <p className="text-xl text-white md:text-2xl  mb-8">
+              Transform your ChatGPT art into physical products.
+            </p>
+            <a
+              href="/download"
+              className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
+            >
+              Download Extension
+            </a>
+          </motion.div>
         </section>
-      </div>
+      </motion.div>
     )
   }
 
   return (
     <div className="mx-auto">
       <SlidingBackground />
+
       <div className="grid grid-cols-1 gap-8">
         <div className="justify-evenly gradientBG2 items-start">
           <FeaturesSection />
-          <section className="py-8 rounded-md md:py-16">
-            <h2 className="text-accent text-5xl font-bold text-center mb-6">
-              Go from ChatGPT to Print in 3 Easy Steps
-            </h2>
-          </section>{" "}
-          <HowItWorksSection />
+          <div className="  flex    bottom-10 w-full   justify-center items-center  relative">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.5,
+                delay: 2,
+              }}
+            >
+              <Link to="about" smooth duration={1000}>
+                <div className="w-[35px] h-[64px] rounded-3xl  scale-75 border-4 border-secondary flex justify-center items-start p-2">
+                  <motion.div
+                    animate={{
+                      y: [0, 24, 0],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      repeatType: "loop",
+                    }}
+                    className="w-3 h-3 rounded-full bg-secondary mb-1"
+                  />
+                </div>
+              </Link>
+            </motion.div>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <section className="py-8 rounded-md md:py-16" id="about">
+              <h2 className="text-accent text-5xl font-bold text-center mb-6">
+                Go from ChatGPT to Print in 3 Easy Steps
+              </h2>
+            </section>{" "}
+            <HowItWorksSection />
+            <div ref={ref} />
+          </motion.div>
         </div>
-        <PricingPlans />
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <PricingPlans />
+          <div ref={ref2} />
+        </motion.div>
+
         <ProductGallery images={images} />
       </div>
     </div>
