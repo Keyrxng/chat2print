@@ -1,5 +1,5 @@
-import { Calendar, CreditCard, InfoIcon, Ship } from "lucide-react";
-import React from "react";
+import { Calendar, CreditCard, InfoIcon, Ship } from "lucide-react"
+import React from "react"
 
 // Mock data for order details
 const orderDetails = {
@@ -20,19 +20,19 @@ const orderDetails = {
     // ... more items
   ],
   status: "Shipped",
-};
+}
 
 export default function OrderDetail({ orderId }) {
-  const order = orderDetails;
+  const order = orderDetails
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container text-gray-500 mx-auto p-4">
       <h2 className="text-2xl text-accent font-bold mb-4">Order Details</h2>
-      <div className="border p-4 rounded shadow-md bg-white">
+      <div className="border p-4 rounded shadow-md bg-zinc-950">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <p className="text-lg font-semibold">Order #{order.id}</p>
-            <p className="flex items-center text-gray-600">
+            <p className="text-lg text-accent font-medium">Order #{order.id}</p>
+            <p className="flex items-center text-gray-500">
               <Calendar className="mr-2" />
               {new Date(order.date).toLocaleDateString()}
             </p>
@@ -42,13 +42,13 @@ export default function OrderDetail({ orderId }) {
             <span className="text-lg">{order.status}</span>
           </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 text-sm ">
           {order.items.map((item, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2"
+              className="grid   grid-cols-1 sm:grid-cols-3 gap-4 mb-2"
             >
-              <span className="font-semibold">{item.name}</span>
+              <span className="font-semibold   w-fit">{item.name}</span>
               <span>Qty: {item.quantity}</span>
               <span>${(item.quantity * item.pricePerItem).toFixed(2)}</span>
             </div>
@@ -69,5 +69,5 @@ export default function OrderDetail({ orderId }) {
         )}
       </div>
     </div>
-  );
+  )
 }

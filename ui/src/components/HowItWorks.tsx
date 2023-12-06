@@ -15,7 +15,7 @@ export const HowItWorksSection = () => {
       description:
         "Place your order and we handle the rest, from printing to shipping.",
     },
-  ];
+  ]
 
   return (
     <section id="how-it-works" className="py-6 md:py-18 rounded-md">
@@ -24,17 +24,17 @@ export const HowItWorksSection = () => {
           {steps.map((step, index) => (
             <div
               key={index}
-              className="step-card p-6 bg-background rounded-lg transition-shadow hover:shadow-xl"
+              className="step-card p-8 bg-background rounded-lg transition-shadow hover:shadow-md hover:border-[1px] border-[1px] hover:border-accent   border-background hover:shadow-accent"
             >
               <div className="step-icon text-4xl mb-4">👉</div>
               <h3 className="text-xl text-accent font-semibold mb-3">
                 {step.title}
               </h3>
-              <p className="text-white">{step.description}</p>
+              <p className="text-white text-xl">{step.description}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

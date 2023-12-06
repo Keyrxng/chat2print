@@ -1,8 +1,8 @@
-"use client";
-import { Calendar, DollarSign, LucidePackageOpen } from "lucide-react";
-import OrderDetail from "./OrderDetails";
-import React, { useState } from "react";
-import { Button } from "./ui/button";
+"use client"
+import { Calendar, DollarSign, LucidePackageOpen } from "lucide-react"
+import OrderDetail from "./OrderDetails"
+import React, { useState } from "react"
+import { Button } from "./ui/button"
 
 const orders = [
   {
@@ -20,16 +20,16 @@ const orders = [
     date: "2021-01-03",
     total: 29.99,
   },
-];
+]
 
 export default function OrderHistory() {
-  const [viewingOrder, setViewingOrder] = useState(false);
-  const [order, setOrder] = useState(null);
+  const [viewingOrder, setViewingOrder] = useState(false)
+  const [order, setOrder] = useState(null)
 
-  const handleClick = (order) => {
-    setOrder(order);
-    setViewingOrder(true);
-  };
+  const handleClick = order => {
+    setOrder(order)
+    setViewingOrder(true)
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -44,24 +44,24 @@ export default function OrderHistory() {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {orders.map((order) => (
+            <div className="space-y-4 text-sm ">
+              {orders.map(order => (
                 <div
                   key={order.id}
-                  className="border bg-white p-4 rounded-md shadow transition duration-300 hover:shadow-lg"
+                  className="border bg-zinc-950  p-4 rounded-md shadow transition duration-300 hover:shadow-lg"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <LucidePackageOpen className="text-accent text-3xl mr-4" />
                       <div>
-                        <p className="text-lg font-semibold">
+                        <p className="text-lg text-accent  font-medium">
                           Order #{order.id}
                         </p>
-                        <p className="flex items-center text-gray-600">
+                        <p className="flex items-center text-gray-500">
                           <Calendar className="mr-2" />
                           {new Date(order.date).toLocaleDateString()}
                         </p>
-                        <p className="flex items-center text-gray-600">
+                        <p className="flex items-center text-gray-500">
                           <DollarSign className="mr-2" />$
                           {order.total.toFixed(2)}
                         </p>
@@ -85,12 +85,12 @@ export default function OrderHistory() {
           <OrderDetail orderId={order.id} />
           <Button
             onClick={() => setViewingOrder(false)}
-            className="text-accent w-full"
+            className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
           >
             Go Back
           </Button>
         </>
       )}
     </div>
-  );
+  )
 }
