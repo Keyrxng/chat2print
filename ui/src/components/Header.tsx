@@ -118,15 +118,15 @@ export default function Header() {
   return (
     <header className="gradientBG text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        <Image
-          src="/c2pLogo.png"
-          className=" cursor-pointer"
-          width={50}
-          height={50}
-          alt="Chat2Print logo"
-        />
-
-        {/* sale banner */}
+        <a href="/">
+          <Image
+            src="/c2pLogo.png"
+            className=" cursor-pointer"
+            width={50}
+            height={50}
+            alt="Chat2Print logo"
+          />
+        </a>
         <div className="hidden md:flex flex-col">
           <h1 className="text-2xl text-accent font-bold">
             25% off all orders above $40!

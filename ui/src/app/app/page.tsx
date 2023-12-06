@@ -137,6 +137,12 @@ export default function Page() {
     setUserImages((prev) => prev.filter((img) => img !== image));
   };
 
+  const handlePODApi = async () => {
+    const response = await fetch("/api/pod/");
+    const data = await response.json();
+    console.log(data);
+  };
+
   const ImageSlider = () => {
     return (
       <div className="flex flex-row justify-center items-center max-w-6xl">
@@ -163,10 +169,7 @@ export default function Page() {
           </div>
         ))}
         <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
-          <button
-            className="m-1"
-            onClick={() => alert("Upgrade for more storage space!")}
-          >
+          <button className="m-1" onClick={() => handlePODApi()}>
             <div className="bg-background rounded-full h-20 w-20 flex items-center justify-center">
               <p className="text-accent self-center text-5xl mb-1">+</p>
             </div>

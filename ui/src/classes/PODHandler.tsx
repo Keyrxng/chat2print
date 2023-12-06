@@ -1,5 +1,6 @@
 import { Product } from "@/types/all";
 import axios, { AxiosInstance } from "axios";
+import probe from "probe-image-size";
 
 class PODHandler {
   private client: AxiosInstance;
@@ -77,6 +78,50 @@ class PODHandler {
     try {
       const response = await this.client.post("/store/products", productData);
       return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  async getTemplateLayout(productID: number) {
+    try {
+      const response = await this.client.get(
+        `/mockup-generator/templates/${productID}`
+      );
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  async createMockupTask(imageUrl: string, variantIDs: number[], top: number) {
+    try {
+      const probed = await probe(imageUrl);
+      const imgHeight = probed.height;
+      const imgWidth = probed.width;
+
+      const widthFull = 1800;
+      const hCalc = (widthFull * imgHeight) / imgWidth;
+      const heightFull = Math.round(hCalc);
+
+      const mockupData = {
+        variant_ids: variantIDs,
+        format: "png",
+        files: [
+          {
+            placement: "default",
+            image_url: imageUrl,
+            position: {
+              area_width: widthFull,
+              area_height: heightFull,
+              width: widthFull,
+              height: heightFull,
+              top: top,
+              left: 0,
+            },
+          },
+        ],
+      };
     } catch (error) {
       return this.handleError(error);
     }

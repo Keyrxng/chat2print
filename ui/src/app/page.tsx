@@ -3,7 +3,7 @@ import { FeaturesSection } from "@/components/Features";
 import { HowItWorksSection } from "@/components/HowItWorks";
 import { PricingPlans } from "@/components/Pricing";
 import { ProductGallery } from "@/components/ProductGallery";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const images = [
@@ -38,7 +38,7 @@ export default function Home() {
   ];
   const [currentX, setCurrentX] = useState(0);
 
-  const getTransformStyle = (index) => {
+  const translateSliderX = (index) => {
     const translateY = "rotateY(9deg) scale(0.6)";
     const translateX = `translateX(${index * currentX}px)`;
     return `${translateY} ${translateX}`;
@@ -71,7 +71,7 @@ export default function Home() {
                     className={`shadow-md rounded-lg overflow-hidden m-2`}
                     style={{
                       backgroundImage: `url(${imageUrl})`,
-                      transform: getTransformStyle(index),
+                      transform: translateSliderX(index),
                       animation: "slide 25s infinite linear reverse",
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
@@ -96,7 +96,7 @@ export default function Home() {
                       className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
-                        transform: getTransformStyle(index),
+                        transform: translateSliderX(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
@@ -122,7 +122,7 @@ export default function Home() {
                       className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
-                        transform: getTransformStyle(index),
+                        transform: translateSliderX(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
@@ -148,7 +148,7 @@ export default function Home() {
                       className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
-                        transform: getTransformStyle(index),
+                        transform: translateSliderX(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
@@ -174,7 +174,7 @@ export default function Home() {
                       className={`shadow-md rounded-lg overflow-hidden m-2`}
                       style={{
                         backgroundImage: `url(${imageUrl})`,
-                        transform: getTransformStyle(index),
+                        transform: translateSliderX(index),
                         animation: "slide 20s infinite linear reverse",
                         backgroundSize: "contain",
                         backgroundRepeat: "no-repeat",
