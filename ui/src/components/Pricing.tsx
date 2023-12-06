@@ -7,6 +7,7 @@ export const PricingPlans = () => {
           Select the best plan that fits your needs.
         </p>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
         <div className="flex flex-col p-6 gradientBG shadow-md rounded-lg">
           <h3 className="text-3xl font-bold mb-4 text-gray-400">Free Users</h3>
@@ -22,10 +23,13 @@ export const PricingPlans = () => {
               <li className="text-xl text-gray-400">
                 Access to basic product catalog
               </li>
+              <li className="mb-2 text-xl text-gray-400 opacity-0">
+                Standard support
+              </li>
             </ul>
           </div>
           <div className="mt-4">
-            <button className="w-full bg-background text-gray-400 font-bold py-2 px-4 rounded hover:bg-gray-100 transition duration-300">
+            <button className="w-fit text-xl bg-background text-gray-400 font-bold py-2 px-4 rounded  hover:bg-accent hover:text-background transition duration-300">
               Sign Up for Free
             </button>
           </div>
@@ -53,12 +57,12 @@ export const PricingPlans = () => {
             </div>
           </div>
           <div className="mt-4">
-            <button className="w-full bg-background text-accent font-bold py-2 px-4 rounded hover:bg-gray-100 transition duration-300">
+            <button className="w-fit text-xl  bg-background text-accent font-bold py-2 px-4 rounded hover:bg-accent hover:text-background transition duration-300">
               Get Started
             </button>
           </div>
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

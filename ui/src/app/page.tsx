@@ -1,9 +1,9 @@
-"use client";
-import { FeaturesSection } from "@/components/Features";
-import { HowItWorksSection } from "@/components/HowItWorks";
-import { PricingPlans } from "@/components/Pricing";
-import { ProductGallery } from "@/components/ProductGallery";
-import { useState } from "react";
+"use client"
+import { FeaturesSection } from "@/components/Features"
+import { HowItWorksSection } from "@/components/HowItWorks"
+import { PricingPlans } from "@/components/Pricing"
+import { ProductGallery } from "@/components/ProductGallery"
+import { useState } from "react"
 
 export default function Home() {
   const images = [
@@ -35,29 +35,29 @@ export default function Home() {
     "/10-20-gaming.webp",
     "/00-10-gaming.webp",
     "/00-10-gaming-retro.webp",
-  ];
-  const [currentX, setCurrentX] = useState(0);
+  ]
+  const [currentX, setCurrentX] = useState(0)
 
-  const translateSliderX = (index) => {
-    const translateY = "rotateY(9deg) scale(0.6)";
-    const translateX = `translateX(${index * currentX}px)`;
-    return `${translateY} ${translateX}`;
-  };
+  const translateSliderX = (index: any) => {
+    const translateY = "rotateY(9deg) scale(0.6)"
+    const translateX = `translateX(${index * currentX}px)`
+    return `${translateY} ${translateX}`
+  }
 
   const SlidingBackground = () => {
-    const imageRows = [images];
+    const imageRows = [images]
     const returnRows = () => {
-      return imageRows.map((row) => {
-        const randomImages = [];
+      return imageRows.map(row => {
+        const randomImages = []
         for (let i = 0; i < images.length; i++) {
-          const randomIndex = Math.floor(Math.random() * row.length) + 1;
-          randomImages.push(row[randomIndex]);
+          const randomIndex = Math.floor(Math.random() * row.length) + 1
+          randomImages.push(row[randomIndex])
         }
-        const set = new Set(randomImages);
-        const arr = Array.from(set);
-        return arr;
-      });
-    };
+        const set = new Set(randomImages)
+        const arr = Array.from(set)
+        return arr
+      })
+    }
 
     return (
       <div className="relative">
@@ -203,20 +203,20 @@ export default function Home() {
           </p>
           <a
             href="/download"
-            className="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-blue-600 transition duration-300"
+            className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
           >
             Download Extension
           </a>
         </section>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className="mx-auto">
       <SlidingBackground />
       <div className="grid grid-cols-1 gap-8">
-        <div className="justify-evenly gradientBG items-start">
+        <div className="justify-evenly gradientBG2 items-start">
           <FeaturesSection />
           <section className="py-8 rounded-md md:py-16">
             <h2 className="text-accent text-5xl font-bold text-center mb-6">
@@ -229,5 +229,5 @@ export default function Home() {
         <ProductGallery images={images} />
       </div>
     </div>
-  );
+  )
 }

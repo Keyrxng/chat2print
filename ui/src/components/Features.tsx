@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/image"
 
 export const FeaturesSection = () => {
   const features = [
@@ -17,7 +17,7 @@ export const FeaturesSection = () => {
       description: "Import designs from ChatGPT with just a few clicks.",
       icon: "/easyToUse.png",
     },
-  ];
+  ]
 
   return (
     <section id="features" className="py-12 md:py-18 rounded-md ">
@@ -26,7 +26,7 @@ export const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="feature-card text-center p-6 bg-background rounded-lg transition-shadow hover:shadow-xl"
+              className="feature-card text-center p-8 bg-background rounded-lg transition-shadow hover:shadow-md hover:border-[1px] border-[1px] hover:border-accent   border-background hover:shadow-accent"
             >
               <Image
                 src={feature.icon}
@@ -38,11 +38,11 @@ export const FeaturesSection = () => {
               <h3 className="text-xl text-accent font-semibold mt-5 mb-3">
                 {feature.title}
               </h3>
-              <p className="text-white">{feature.description}</p>
+              <p className="text-white text-xl">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
