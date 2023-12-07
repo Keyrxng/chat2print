@@ -1,11 +1,9 @@
 export interface _Product {
   name: string;
-  id: number;
 }
 
 export interface Variant {
   variant_id: number;
-  variant_name: string;
   files: File[];
 }
 

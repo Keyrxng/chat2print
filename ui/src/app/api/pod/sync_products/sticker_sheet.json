@@ -1,0 +1,15 @@
+{
+    "sync_product": {
+        "name": "Kiss-Cut Sticker Sheet"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 12917,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/505/12917_1629116996.jpg"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "sync_product": {
+        "name": "Mouse Pad"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 13097,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/518/13097_1629286642.jpg"
+                }
+            ]
+        }
+    ]
+}

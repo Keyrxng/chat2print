@@ -1,0 +1,39 @@
+{
+    "sync_product": {
+        "name": "Kiss-Cut Stickers"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 10163,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/358/10163_1553083889.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 10164,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/358/10164_1553083894.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 10165,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/358/10165_1553083897.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16362,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/358/16362_1671002231.jpg"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "sync_product": {
+        "name": "Laptop Sleeve"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 10984,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/394/10984_1582111641.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 10985,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/394/10985_1582111689.jpg"
+                }
+            ]
+        }
+    ]
+}

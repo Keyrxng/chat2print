@@ -1,0 +1,23 @@
+{
+    "sync_product": {
+        "name": "Gaming Mouse Pad"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 14943,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/583/14943_1649422095.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 14942,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/583/14942_1649422105.jpg"
+                }
+            ]
+        }
+    ]
+}

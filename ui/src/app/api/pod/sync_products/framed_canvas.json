@@ -1,0 +1,151 @@
+{
+    "sync_product": {
+        "name": "Framed Canvas (in)"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 16034,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16034_1660216836.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16035,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16035_1660216838.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16036,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16036_1660216846.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16037,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16037_1660216857.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16038,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16038_1660216858.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16039,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16039_1660216958.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16040,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16040_1660216968.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16041,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16041_1660216975.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16042,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16042_1660216985.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16043,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16043_1660216986.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16044,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16044_1660216989.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 16045,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/16045_1660216999.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15695,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/15695_1660216996.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15696,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/15696_1660217017.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15697,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/15697_1660217018.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15698,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/15698_1660217199.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15699,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/15699_1660217200.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15700,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/614/15700_1660217220.jpg"
+                }
+            ]
+        }
+    ]
+}

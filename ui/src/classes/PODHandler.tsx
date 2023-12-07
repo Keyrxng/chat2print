@@ -83,6 +83,22 @@ class PODHandler {
     }
   }
 
+  /**
+   * Returns the print file (print metadata requirements) for a product variant
+   * @param productID  ID of the product to get print files for
+   * @returns  Returns an array of print files for the product
+   */
+  async getVariantPrintFiles(productID: number) {
+    try {
+      const response = await this.client.get(
+        `/mockup-generator/printfiles/${productID}`
+      );
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   async getTemplateLayout(productID: number) {
     try {
       const response = await this.client.get(

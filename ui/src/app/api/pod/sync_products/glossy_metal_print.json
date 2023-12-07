@@ -1,0 +1,55 @@
+{
+    "sync_product": {
+        "name": "Glossy Metal Print (in)"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 15136,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/588/15136_1652708736.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15135,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/588/15135_1652708737.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15137,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/588/15137_1652708746.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15138,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/588/15138_1652708746.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15139,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/588/15139_1652708747.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 15134,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/588/15134_1652708758.jpg"
+                }
+            ]
+        }
+    ]
+}

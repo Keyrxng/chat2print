@@ -1,0 +1,103 @@
+{
+    "sync_product": {
+        "name": "Premium Luster Photo Paper Poster (in)"
+    },
+    "sync_variants": [
+        {
+            "variant_id": 6872,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6872_1527678721.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 14028,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/14028_1643091633.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6873,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6873_1527678788.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6875,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6875_1527679033.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6876,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6876_1527678805.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6874,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6874_1527678850.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6877,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6877_1527678867.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6878,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6878_1527678915.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6879,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6879_1527678934.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6880,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6880_1527683490.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 7845,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/7845_1527679000.jpg"
+                }
+            ]
+        },
+        {
+            "variant_id": 6871,
+            "files": [
+                {
+                    "url": "https://files.cdn.printful.com/products/171/6871_1527678675.jpg"
+                }
+            ]
+        }
+    ]
+}
