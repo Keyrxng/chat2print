@@ -1,15 +1,19 @@
 // ProductOption.tsx
-import { Design } from "@/types/all";
+import { Design, __Prod } from "@/types/all";
 import Image from "next/image";
 
 interface ProductOptionProps {
-  design: Design;
+  key: number;
+  image: string;
+  product: __Prod;
   isSelected: boolean;
-  onSelect: (design: Design) => void;
+  onSelect: (design: __Prod) => void;
 }
 
 export const ProductOption = ({
-  design,
+  key,
+  image,
+  product,
   isSelected,
   onSelect,
 }: ProductOptionProps) => {
@@ -18,20 +22,22 @@ export const ProductOption = ({
     : "";
   return (
     <div
+      key={key}
       className={`cursor-pointer mx-auto p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105 ${selectedClass}`}
-      onClick={() => onSelect(design)}
+      onClick={() => onSelect(product)}
     >
       <Image
         width={300}
         height={300}
-        src={design.imageUrl}
-        alt={design.name}
+        src={product?.product.image}
+        alt={product?.product.type_name}
         className="rounded-lg"
       />
       <div className="text-center mt-2">
-        <h3 className="text-lg font-bold">{design.name}</h3>
-        <p className="text-sm">{design.description}</p>
-        <p className="text-md font-bold">${design.price}</p>
+        <h3 className="text-sm font-bold">{product?.product.type_name}</h3>
+        <p className="text-sm font-bold">
+          £{product?.priceRange.low} - £{product?.priceRange.high}
+        </p>
       </div>
     </div>
   );

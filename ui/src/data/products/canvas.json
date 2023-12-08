@@ -1,0 +1,308 @@
+{
+  "priceRange": {
+    "low": "23.75",
+    "high": "51.75"
+  },
+  "product": {
+    "id": 3,
+    "main_category_id": 57,
+    "type": "CANVAS",
+    "description": "Looking to add a little flair to your room or office? Look no further - this canvas print has a vivid, fade-resistant print that you're bound to fall in love with.\r\n\r\n• Acid-free, PH-neutral, poly-cotton base\r\n• 20.5 mil (0.5 mm) thick poly-cotton blend canvas\r\n• Canvas fabric weight: 13.9 oz/yd2(470 g/m²)\r\n• Fade-resistant\r\n• Hand-stretched over solid wood stretcher bars\r\n• Matte finish coating\r\n• 1.5″ (3.81 cm) deep\r\n• Mounting brackets included\r\n• Blank product in the EU sourced from Latvia\r\n• Blank product in the US sourced from the US",
+    "type_name": "Canvas (in)",
+    "title": "Canvas (in)",
+    "brand": null,
+    "model": "Canvas (in)",
+    "image": "https://files.cdn.printful.com/o/products/3/product_1613463725.jpg",
+    "variant_count": 6,
+    "currency": "GBP",
+    "options": [],
+    "dimensions": {
+      "12×12": "12×12",
+      "12×16": "12×16",
+      "16x16": "16x16",
+      "16×20": "16×20",
+      "18×24": "18×24",
+      "24×36": "24×36"
+    },
+    "is_discontinued": false,
+    "avg_fulfillment_time": null,
+    "techniques": [
+      {
+        "key": "DIGITAL",
+        "display_name": "Digital printing",
+        "is_default": true
+      }
+    ],
+    "files": [
+      {
+        "id": "default",
+        "type": "default",
+        "title": "Print file",
+        "additional_price": null,
+        "options": []
+      },
+      {
+        "id": "preview",
+        "type": "mockup",
+        "title": "Mockup",
+        "additional_price": null,
+        "options": []
+      }
+    ],
+    "origin_country": null
+  },
+  "variants": [
+    {
+      "id": 823,
+      "product_id": 3,
+      "name": "Canvas 12″×12″",
+      "size": "12″×12″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/3/823_1581583554.jpg",
+      "price": "23.75",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 5,
+      "product_id": 3,
+      "name": "Canvas 12″×16″",
+      "size": "12″×16″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/3/5_1581583580.jpg",
+      "price": "25.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 824,
+      "product_id": 3,
+      "name": "Canvas 16″×16″",
+      "size": "16″×16″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/3/824_1581583604.jpg",
+      "price": "26.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6,
+      "product_id": 3,
+      "name": "Canvas 16″×20″",
+      "size": "16″×20″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/3/6_1581583635.jpg",
+      "price": "28.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 7,
+      "product_id": 3,
+      "name": "Canvas 18″×24″",
+      "size": "18″×24″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/3/7_1581583921.jpg",
+      "price": "35.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 825,
+      "product_id": 3,
+      "name": "Canvas 24″×36″",
+      "size": "24″×36″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/3/825_1581583945.jpg",
+      "price": "51.75",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    }
+  ]
+}

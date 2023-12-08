@@ -1,0 +1,301 @@
+{
+  "priceRange": {
+    "low": "17.95",
+    "high": "46.95"
+  },
+  "product": {
+    "id": 616,
+    "main_category_id": 57,
+    "type": "CANVAS",
+    "description": "Style rooms with this slimmer-than-ever thin canvas! Order it and hang it straight away with built-in wall mounts and rubber pads on the back ready to protect against damage.\n• 0.75″ (19.05 mm) thick canvas\n• Canvas fabric weight: 10.15 +/- 0.74 oz/yd² (344 g/m² +/- 25g/m²)\n• Wall mounts attached\n• Rubber pads on the back to avoid damage\n• Slimmer than regular canvases\n\nImportant: This product is available in the US, Canada, Europe, and the UK only. If your shipping address is outside these regions, please choose a different product.",
+    "type_name": "Thin Canvas (in)",
+    "title": "Thin Canvas (in)",
+    "brand": null,
+    "model": "Thin Canvas (in)",
+    "image": "https://files.cdn.printful.com/o/upload/product-catalog-img/62/62cbc590fd27ad5c88ff36182cb761d3_l",
+    "variant_count": 6,
+    "currency": "GBP",
+    "options": [],
+    "dimensions": null,
+    "is_discontinued": false,
+    "avg_fulfillment_time": null,
+    "techniques": [
+      {
+        "key": "DIGITAL",
+        "display_name": "Digital printing",
+        "is_default": true
+      }
+    ],
+    "files": [
+      {
+        "id": "default",
+        "type": "default",
+        "title": "Print file",
+        "additional_price": null,
+        "options": []
+      },
+      {
+        "id": "preview",
+        "type": "mockup",
+        "title": "Mockup",
+        "additional_price": null,
+        "options": []
+      }
+    ],
+    "origin_country": null
+  },
+  "variants": [
+    {
+      "id": 15701,
+      "product_id": 616,
+      "name": "Thin Canvas (12″×12″)",
+      "size": "12″×12″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/616/15701_1660725254.jpg",
+      "price": "17.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15702,
+      "product_id": 616,
+      "name": "Thin Canvas (12″×16″)",
+      "size": "12″×16″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/616/15702_1660725256.jpg",
+      "price": "18.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15703,
+      "product_id": 616,
+      "name": "Thin Canvas (16″×16″)",
+      "size": "16″×16″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/616/15703_1660725264.jpg",
+      "price": "20.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15704,
+      "product_id": 616,
+      "name": "Thin Canvas (16″×20″)",
+      "size": "16″×20″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/616/15704_1660725266.jpg",
+      "price": "22.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15705,
+      "product_id": 616,
+      "name": "Thin Canvas (18″×24″)",
+      "size": "18″×24″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/616/15705_1660725274.jpg",
+      "price": "26.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15706,
+      "product_id": 616,
+      "name": "Thin Canvas (24″×36″)",
+      "size": "24″×36″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/616/15706_1660725285.jpg",
+      "price": "46.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    }
+  ]
+}

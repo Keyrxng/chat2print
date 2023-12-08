@@ -1,0 +1,105 @@
+{
+    "name": "Laptop Sleeve",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 10984,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 19409
+                    }
+                ]
+            },
+            {
+                "variant_id": 10985,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 19410
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 19409,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/e2/e2612e10ef579b2ca7a46f133afadf94?v=1643284256",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 206,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 728,
+                "print_area_height": 558,
+                "print_area_top": 85,
+                "print_area_left": 0,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 19410,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/39/39f7f8623684acd54eb0c98ca966c167?v=1643284143",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 207,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 728,
+                "print_area_height": 564,
+                "print_area_top": 82,
+                "print_area_left": 0,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 75,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 394,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 206,
+                "width": 2250,
+                "height": 1725,
+                "dpi": 150,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 207,
+                "width": 2325,
+                "height": 1800,
+                "dpi": 150,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 10984,
+                "placements": {
+                    "default": 206
+                }
+            },
+            {
+                "variant_id": 10985,
+                "placements": {
+                    "default": 207
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Lifestyle"
+        ],
+        "options": [
+            "Front"
+        ]
+    }
+}

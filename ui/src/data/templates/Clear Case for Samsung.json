@@ -1,0 +1,451 @@
+{
+    "name": "Clear Case for Samsung®",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 9945,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 10981
+                    }
+                ]
+            },
+            {
+                "variant_id": 9947,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 10985
+                    }
+                ]
+            },
+            {
+                "variant_id": 9946,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 10983
+                    }
+                ]
+            },
+            {
+                "variant_id": 12024,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 56123
+                    }
+                ]
+            },
+            {
+                "variant_id": 11348,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 26603
+                    }
+                ]
+            },
+            {
+                "variant_id": 11349,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 26605
+                    }
+                ]
+            },
+            {
+                "variant_id": 11347,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 26601
+                    }
+                ]
+            },
+            {
+                "variant_id": 12027,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 56153
+                    }
+                ]
+            },
+            {
+                "variant_id": 12026,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 56143
+                    }
+                ]
+            },
+            {
+                "variant_id": 12025,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 56133
+                    }
+                ]
+            },
+            {
+                "variant_id": 14634,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 103529
+                    }
+                ]
+            },
+            {
+                "variant_id": 14635,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 103544
+                    }
+                ]
+            },
+            {
+                "variant_id": 14633,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 103514
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 10981,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s10/05_samsung_s10_overlay.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s10/02_samsung_s10_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 410,
+                "print_area_height": 853,
+                "print_area_top": 99,
+                "print_area_left": 291,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 10985,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s10plus/05_samsung_s10plus_overlay.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s10plus/02_samsung_s10plus_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 435,
+                "print_area_height": 905,
+                "print_area_top": 47,
+                "print_area_left": 279,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 10983,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s10lite/05_samsung_s10lite_overlay.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s10lite/02_samsung_s10lite_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 400,
+                "print_area_height": 830,
+                "print_area_top": 121,
+                "print_area_left": 296,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 56123,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20fe/case_on/05_samsung_s20fe_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20fe/case_on/03_samsung_s20fe_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1252,
+                "print_area_height": 2606,
+                "print_area_top": 264,
+                "print_area_left": 870,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 26603,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20plus/05_samsung_s20plus_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20plus/03_samsung_s20plus_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1251,
+                "print_area_height": 2603,
+                "print_area_top": 226,
+                "print_area_left": 870,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 26605,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20ultra/05_samsung_s20ultra_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20ultra/03_samsung_s20ultra_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1279,
+                "print_area_height": 2661,
+                "print_area_top": 167,
+                "print_area_left": 851,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 26601,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20/05_samsung_s20_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s20/03_samsung_s20_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1226,
+                "print_area_height": 2552,
+                "print_area_top": 287,
+                "print_area_left": 882,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 56153,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s21/case_on/s21plus/05_samsung_s21plus_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s21/case_on/s21plus/03_samsung_s21plus_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1253,
+                "print_area_height": 2608,
+                "print_area_top": 254,
+                "print_area_left": 859,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 56143,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s21/case_on/s21ultra/05_samsung_s21ultra_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s21/case_on/s21ultra/03_samsung_s21ultra_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1282,
+                "print_area_height": 2667,
+                "print_area_top": 210,
+                "print_area_left": 855,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 56133,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s21/case_on/s21/05_samsung_s21_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s21/case_on/s21/03_samsung_s21_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1204,
+                "print_area_height": 2507,
+                "print_area_top": 356,
+                "print_area_left": 884,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 103529,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s22/s22_plus/05_samsung_s22plus_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s22/s22_plus/03_samsung_s22plus_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1260,
+                "print_area_height": 2624,
+                "print_area_top": 259,
+                "print_area_left": 859,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 103544,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s22/S22_ultra/05_samsung_s22ultra_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s22/S22_ultra/03_samsung_s22ultra_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1310,
+                "print_area_height": 2725,
+                "print_area_top": 163,
+                "print_area_left": 835,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 103514,
+                "image_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s22/s22/05_samsung_s22_overlay_whitebg.png?v=1647433821",
+                "background_url": "https://files.cdn.printful.com/m/163-samsung-cases/medium/s22/s22/03_samsung_s22_base.png?v=1647433821",
+                "background_color": null,
+                "printfile_id": 218,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1153,
+                "print_area_height": 2451,
+                "print_area_top": 430,
+                "print_area_left": 911,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 267,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 56,
+                "width": 879,
+                "height": 1830,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 218,
+                "width": 936,
+                "height": 1950,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 9945,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 9947,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 9946,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 12024,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 11348,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 11349,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 11347,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 12027,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 12026,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 12025,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 14634,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 14635,
+                "placements": {
+                    "default": 218
+                }
+            },
+            {
+                "variant_id": 14633,
+                "placements": {
+                    "default": 218
+                }
+            }
+        ],
+        "option_groups": [
+            "Default",
+            "Halloween",
+            "Holiday season",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Spring/summer vibes"
+        ],
+        "options": [
+            "Case on phone",
+            "Case on phone 2",
+            "Case on phone 3",
+            "Case with phone",
+            "Christmas",
+            "Halloween",
+            "Halloween 2",
+            "Lifestyle 1",
+            "Lifestyle 2",
+            "Lifestyle 4",
+            "Spring/Summer",
+            "Spring/Summer 2"
+        ]
+    }
+}

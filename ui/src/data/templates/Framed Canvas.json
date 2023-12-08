@@ -1,0 +1,623 @@
+{
+    "name": "Framed Canvas (in)",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 16034,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134570
+                    }
+                ]
+            },
+            {
+                "variant_id": 16035,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134576
+                    }
+                ]
+            },
+            {
+                "variant_id": 16036,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134579
+                    }
+                ]
+            },
+            {
+                "variant_id": 16037,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134585
+                    }
+                ]
+            },
+            {
+                "variant_id": 16038,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134591
+                    }
+                ]
+            },
+            {
+                "variant_id": 16039,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134597
+                    }
+                ]
+            },
+            {
+                "variant_id": 16040,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134571
+                    }
+                ]
+            },
+            {
+                "variant_id": 16041,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134577
+                    }
+                ]
+            },
+            {
+                "variant_id": 16042,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134580
+                    }
+                ]
+            },
+            {
+                "variant_id": 16043,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134586
+                    }
+                ]
+            },
+            {
+                "variant_id": 16044,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134592
+                    }
+                ]
+            },
+            {
+                "variant_id": 16045,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134598
+                    }
+                ]
+            },
+            {
+                "variant_id": 15695,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134572
+                    }
+                ]
+            },
+            {
+                "variant_id": 15696,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134578
+                    }
+                ]
+            },
+            {
+                "variant_id": 15697,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134581
+                    }
+                ]
+            },
+            {
+                "variant_id": 15698,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134587
+                    }
+                ]
+            },
+            {
+                "variant_id": 15699,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134593
+                    }
+                ]
+            },
+            {
+                "variant_id": 15700,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 134599
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 134570,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/dd/dde88362506b522141fa01b95da94f33?v=1660296625",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 360,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 134576,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/08/08c27a3231e32417bad8ad497bc951a7?v=1660296774",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 367,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 568,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 80,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134579,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/73/73ea6024f2f1462c3def3db6f874cdc0?v=1660296822",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 361,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 134585,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/9f/9faae7fe437145919e310502f4172b93?v=1660296931",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 368,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 594,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 67,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134591,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/a0/a0bc3fc72f1928bcfbc9af0a1d6f8ce1?v=1660297016",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 369,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 560,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 84,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134597,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/20/2051e0e46ecef7af7810b6c882d8956e?v=1660297152",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 371,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 498,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 115,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134571,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/dd/dde88362506b522141fa01b95da94f33?v=1660296625",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 360,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 134577,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/08/08c27a3231e32417bad8ad497bc951a7?v=1660296774",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 367,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 568,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 80,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134580,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/73/73ea6024f2f1462c3def3db6f874cdc0?v=1660296822",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 361,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 134586,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/9f/9faae7fe437145919e310502f4172b93?v=1660296931",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 368,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 594,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 67,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134592,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/a0/a0bc3fc72f1928bcfbc9af0a1d6f8ce1?v=1660297016",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 369,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 560,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 84,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134598,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/20/2051e0e46ecef7af7810b6c882d8956e?v=1660297152",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 371,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 498,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 115,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134572,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/dd/dde88362506b522141fa01b95da94f33?v=1660296625",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 360,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 134578,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/08/08c27a3231e32417bad8ad497bc951a7?v=1660296774",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 367,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 568,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 80,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134581,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/73/73ea6024f2f1462c3def3db6f874cdc0?v=1660296822",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 361,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 134587,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/9f/9faae7fe437145919e310502f4172b93?v=1660296931",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 368,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 594,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 67,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134593,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/a0/a0bc3fc72f1928bcfbc9af0a1d6f8ce1?v=1660297016",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 369,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 560,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 84,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            },
+            {
+                "template_id": 134599,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/20/2051e0e46ecef7af7810b6c882d8956e?v=1660297152",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 371,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 498,
+                "print_area_height": 720,
+                "print_area_top": 4,
+                "print_area_left": 115,
+                "is_template_on_front": true,
+                "orientation": "vertical"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 614,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 360,
+                "width": 4500,
+                "height": 4500,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 361,
+                "width": 5700,
+                "height": 5700,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 362,
+                "width": 5700,
+                "height": 4500,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 363,
+                "width": 6900,
+                "height": 5700,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 364,
+                "width": 8100,
+                "height": 6300,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 366,
+                "width": 11700,
+                "height": 8100,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 16034,
+                "placements": {
+                    "default": 360
+                }
+            },
+            {
+                "variant_id": 16035,
+                "placements": {
+                    "default": 362
+                }
+            },
+            {
+                "variant_id": 16036,
+                "placements": {
+                    "default": 361
+                }
+            },
+            {
+                "variant_id": 16037,
+                "placements": {
+                    "default": 363
+                }
+            },
+            {
+                "variant_id": 16038,
+                "placements": {
+                    "default": 364
+                }
+            },
+            {
+                "variant_id": 16039,
+                "placements": {
+                    "default": 366
+                }
+            },
+            {
+                "variant_id": 16040,
+                "placements": {
+                    "default": 360
+                }
+            },
+            {
+                "variant_id": 16041,
+                "placements": {
+                    "default": 362
+                }
+            },
+            {
+                "variant_id": 16042,
+                "placements": {
+                    "default": 361
+                }
+            },
+            {
+                "variant_id": 16043,
+                "placements": {
+                    "default": 363
+                }
+            },
+            {
+                "variant_id": 16044,
+                "placements": {
+                    "default": 364
+                }
+            },
+            {
+                "variant_id": 16045,
+                "placements": {
+                    "default": 366
+                }
+            },
+            {
+                "variant_id": 15695,
+                "placements": {
+                    "default": 360
+                }
+            },
+            {
+                "variant_id": 15696,
+                "placements": {
+                    "default": 362
+                }
+            },
+            {
+                "variant_id": 15697,
+                "placements": {
+                    "default": 361
+                }
+            },
+            {
+                "variant_id": 15698,
+                "placements": {
+                    "default": 363
+                }
+            },
+            {
+                "variant_id": 15699,
+                "placements": {
+                    "default": 364
+                }
+            },
+            {
+                "variant_id": 15700,
+                "placements": {
+                    "default": 366
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Lifestyle 5",
+            "Product details"
+        ],
+        "options": [
+            "Front",
+            "Product details"
+        ]
+    }
+}

@@ -1,11 +1,4 @@
-"use client"
-import { useEffect, useState } from "react"
-import { ProductOption } from "@/components/ProductOption"
-import { MainProduct } from "@/components/MainProduct"
-import { Design } from "@/types/all"
-import Image from "next/image"
-import { X } from "lucide-react"
-
+"use client";
 const images = [
   "/wfm.webp",
   "/unitornado.webp",
@@ -35,113 +28,70 @@ const images = [
   "/10-20-gaming.webp",
   "/00-10-gaming.webp",
   "/00-10-gaming-retro.webp",
-]
-
-const userDesigns = [
-  {
-    id: 1,
-    name: "T-Shirt",
-    description: "The official T-Shirt",
-    price: 19.99,
-    imageUrl: "",
-  },
-  {
-    id: 2,
-    name: "Hoodie",
-    description: "The official Hoodie",
-    price: 29.99,
-    imageUrl: "",
-  },
-  {
-    id: 3,
-    name: "Poster",
-    description: "The official poster",
-    price: 10.99,
-    imageUrl: "",
-  },
-  {
-    id: 4,
-    name: "Sticker",
-    description: "The official Sticker",
-    price: 1.99,
-    imageUrl: "",
-  },
-  {
-    id: 5,
-    name: "Mug",
-    description: "The official Mug",
-    price: 9.99,
-    imageUrl: "",
-  },
-  {
-    id: 6,
-    name: "Mousemat",
-    description: "The official Mousemat",
-    price: 15.99,
-    imageUrl: "",
-  },
-]
+];
+import { useEffect, useState } from "react";
+import { ProductOption } from "@/components/ProductOption";
+import Image from "next/image";
+import { X } from "lucide-react"
+import products from "@/data/products";
+import { __Prod, __Product, __ProductsList, __Variant, __ProductTemplate, __PrintFiles } from "@/types/all";
+import { MainProduct } from "./MainProduct";
+import { VariantSelection } from "@/components/VariantSelection";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
-  const [designs, setDesigns] = useState<Design[]>(userDesigns) // Load initial designs
-  const [selectedDesign, setSelectedDesign] = useState<Design>(userDesigns[0]) // Set initial selected design
-  const [userImages, setUserImages] = useState<string[]>([]) // Load initial user images
+  const [userImages, setUserImages] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+
+  const [chosenProduct, setChosenProduct] = useState<__Prod>();
+  const [selectedProduct, setSelectedProduct] = useState<__Prod>();
+  const [selectedDesign, setSelectedDesign] = useState<__Product>();
+  const [productOpts, setProductOpts] = useState<__ProductsList>(products);
+  const [selectedVariant, setSelectedVariant] = useState<__Variant>();
 
   useEffect(() => {
     async function isLoggedIn() {
-      const accessT = sessionStorage.getItem("accessT")
-      const refreshT = sessionStorage.getItem("refreshT")
+      const accessT = sessionStorage.getItem("accessT");
+      const refreshT = sessionStorage.getItem("refreshT");
       if (!accessT || !refreshT) {
-        window.location.href = "/"
+        window.location.href = "/";
       }
     }
 
-    isLoggedIn()
+    isLoggedIn();
+    setUserImages(images);
+    setSelectedImage(images[0]);
+    handleChosenProduct(productOpts["canvas"]);
+  }, []);
 
-    setUserImages(images)
-    setDesigns(prev => {
-      for (const design of prev) {
-        design.imageUrl = images[0]
-      }
-      return prev
-    })
-
-    setSelectedDesign(prevDesign => ({
-      ...prevDesign,
-      imageUrl: images[0],
-    }))
-  }, [])
-
-  const handleSelectDesign = (design: Design) => {
-    setSelectedDesign(design)
-  }
+  const handleChosenProduct = (product: __Prod) => {
+    setSelectedDesign(product.product);
+    setSelectedProduct(product);
+    setSelectedVariant(product.variants[0]);
+    setChosenProduct(product);
+  };
 
   const handleSelectImage = (image: string) => {
-    setSelectedDesign(prevDesign => ({
-      ...prevDesign,
-      imageUrl: image,
-    }))
-    for (const design of userDesigns) {
-      design.imageUrl = image
-    }
-    setDesigns(userDesigns)
-  }
+    setSelectedImage(image);
+  };
 
   const handleDeleteImage = (image: string) => {
     for (const img of images) {
       if (img === image) {
-        images.splice(images.indexOf(img), 1)
+        images.splice(images.indexOf(img), 1);
       }
     }
 
-    setUserImages(prev => prev.filter(img => img !== image))
-  }
+    setUserImages((prev) => prev.filter((img) => img !== image));
+  };
 
   const handlePODApi = async () => {
-    const response = await fetch("/api/pod/")
-    const data = await response.json()
-    console.log(data)
-  }
+    const response = await fetch("/api/pod/");
+    const data = await response.json();
+    console.log(data);
+  };
 
   const ImageSlider = () => {
     return (
@@ -177,46 +127,67 @@ export default function Page() {
           <button className="absolute bottom-0 left-0 mt-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none "></button>
         </div>
       </div>
-    )
-  }
+    );
+  };
+ 
+function ProductSwitch() {
+  const [checked, setChecked] = useState(false)
+
+  return (
+    <div className="flex text-accent items-center space-x-2 p-1 border rounded-lg">
+      <h1 className="text-lg" >{!checked ? "Product View" : "Grid View"}</h1>
+      <Switch onClick={() => setChecked(!checked)} id="view-switch" />
+    </div>
+  )
+}
 
   return (
     <>
-      <div className="max-h-[120px]">
-        <ImageSlider />
-      </div>
-      <div className="gradientBG text-white m-14 flex flex-col ">
-        <div className="container  mx-auto p-4">
-          <div className="grid  grid-cols-1 max-h-min md:grid-cols-3 gap-8">
+      <div className="gradientBG text-white m-14 flex flex-col max-w-5xl">
+        <div className="container mx-auto p-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 rounded-lg bg-background text-accent">
+          <VariantSelection variants={selectedProduct?.variants} setSelectedVariant={setSelectedVariant} />
+          <Button>
+            <ProductSwitch />
+          </Button>
+        </div>
+          <div className="grid grid-cols-1 max-h-min md:grid-cols-3 gap-8">
             <div className="col-span-2  max-h-min">
-              <MainProduct design={selectedDesign} />
+              <MainProduct image={selectedImage} product={selectedProduct} variant={selectedVariant}/>
             </div>
-            <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-3xl max-h-[770px] md:grid-cols-1 gap-4">
-              {designs.map(option => (
+            <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-1xl max-h-[550px] md:grid-cols-1 gap-4">
+              {Object.values(productOpts).map((option, index) => (
                 <ProductOption
-                  key={option.id}
-                  design={option}
-                  isSelected={selectedDesign.id === option.id}
-                  onSelect={handleSelectDesign}
+                  key={index}
+                  image={selectedImage}
+                  product={option}
+                  isSelected={selectedDesign?.id === option.product.id}
+                  onSelect={handleChosenProduct}
                 />
               ))}
             </div>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center mt-8 p-4 rounded-lg bg-background text-accent">
+          <div className="max-h-[120px]">
+            <ImageSlider />
+          </div>
+          
+          <div className="flex flex-row justify-between items-center mt-8 p-4 rounded-lg bg-background text-accent">
             <div>
-              <h2 className="text-2xl font-bold ">{selectedDesign.name}</h2>
-              <p className="text-lg">{selectedDesign.description}</p>
-              <p className="text-xl font-bold">${selectedDesign.price}</p>
+              <div className="flex flex-row justify-between items-center">
+                <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
+                <h2 className="text-2xl font-bold ">£{selectedVariant?.price}</h2>
+              </div>
+                <button
+                  className="flex-end right-0 w-full mt-4 md:mt-0 text-lg hover:bg-accent border border-accent    hover:text-background   text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out    "
+                  onClick={() => (window.location.href = "/checkout")}
+                >
+                  Buy Now
+                </button>
+              <p className="text-lg">{selectedDesign?.description}</p>
             </div>
-            <button
-              className="mt-4 md:mt-0 text-lg hover:bg-accent border border-accent    hover:text-background   text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out    "
-              onClick={() => (window.location.href = "/checkout")}
-            >
-              Buy Now
-            </button>
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }

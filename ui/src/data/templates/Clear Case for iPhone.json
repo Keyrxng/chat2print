@@ -1,0 +1,749 @@
+{
+    "name": "Clear Case for iPhone®",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 10996,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 19469
+                    }
+                ]
+            },
+            {
+                "variant_id": 10995,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 19470
+                    }
+                ]
+            },
+            {
+                "variant_id": 10994,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 19468
+                    }
+                ]
+            },
+            {
+                "variant_id": 11703,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 40049
+                    }
+                ]
+            },
+            {
+                "variant_id": 11705,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 40067
+                    }
+                ]
+            },
+            {
+                "variant_id": 11808,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 46270
+                    }
+                ]
+            },
+            {
+                "variant_id": 11704,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 40058
+                    }
+                ]
+            },
+            {
+                "variant_id": 13428,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 86742
+                    }
+                ]
+            },
+            {
+                "variant_id": 13801,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 91889
+                    }
+                ]
+            },
+            {
+                "variant_id": 13800,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 91871
+                    }
+                ]
+            },
+            {
+                "variant_id": 13427,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 86761
+                    }
+                ]
+            },
+            {
+                "variant_id": 16242,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 141375
+                    }
+                ]
+            },
+            {
+                "variant_id": 16243,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 141394
+                    }
+                ]
+            },
+            {
+                "variant_id": 16241,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 141356
+                    }
+                ]
+            },
+            {
+                "variant_id": 16240,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 141337
+                    }
+                ]
+            },
+            {
+                "variant_id": 17617,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208763
+                    }
+                ]
+            },
+            {
+                "variant_id": 17619,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208799
+                    }
+                ]
+            },
+            {
+                "variant_id": 17618,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208781
+                    }
+                ]
+            },
+            {
+                "variant_id": 17616,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208745
+                    }
+                ]
+            },
+            {
+                "variant_id": 7910,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 1632
+                    }
+                ]
+            },
+            {
+                "variant_id": 11452,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 32415
+                    }
+                ]
+            },
+            {
+                "variant_id": 8933,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 4088
+                    }
+                ]
+            },
+            {
+                "variant_id": 9621,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 6991
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 19469,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/11max/05_iphone_11max_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/11max/03_iphone_11max_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1160,
+                "print_area_height": 2414,
+                "print_area_top": 324,
+                "print_area_left": 919,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 19470,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/11r/05_iphone_11r_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/11r/03_iphone_11r_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1107,
+                "print_area_height": 2295,
+                "print_area_top": 387,
+                "print_area_left": 930,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 19468,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/11/05_iphone_11_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/11/03_iphone_11_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1038,
+                "print_area_height": 2163,
+                "print_area_top": 478,
+                "print_area_left": 990,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 40049,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12mini/05_iphone12mini_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12mini/03_iphone12mini_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 963,
+                "print_area_height": 2009,
+                "print_area_top": 659,
+                "print_area_left": 997,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 40067,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12promax/05_iphone12promax_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12promax/03_iphone12promax_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1152,
+                "print_area_height": 2394,
+                "print_area_top": 288,
+                "print_area_left": 907,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 46270,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12pro/05_iphone12pro_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12pro/03_iphone12pro_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1066,
+                "print_area_height": 2224,
+                "print_area_top": 450,
+                "print_area_left": 952,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 40058,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12/05_iphone12_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/iphone12_new/default/case_on/12/03_iphone12_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1066,
+                "print_area_height": 2224,
+                "print_area_top": 450,
+                "print_area_left": 952,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 86742,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13mini/caseon/05_iphone13_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13mini/caseon/03_iphone13_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 954,
+                "print_area_height": 1979,
+                "print_area_top": 665,
+                "print_area_left": 1008,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 91889,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13pro_max/caseon/05_iphone13promax_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13pro_max/caseon/03_iphone13promax_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1161,
+                "print_area_height": 2419,
+                "print_area_top": 246,
+                "print_area_left": 903,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 91871,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13pro/caseon/05_iphone13pro_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13pro/caseon/03_iphone13pro_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1071,
+                "print_area_height": 2229,
+                "print_area_top": 454,
+                "print_area_left": 955,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 86761,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13/caseon/05_iphone13_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/13/caseon/03_iphone13_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1071,
+                "print_area_height": 2229,
+                "print_area_top": 454,
+                "print_area_left": 955,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 141375,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14plus/05_iphone14_plus_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14plus/03_iphone14_plus_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1157,
+                "print_area_height": 2412,
+                "print_area_top": 242,
+                "print_area_left": 919,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 141394,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14promax/05_iphone14_pro_max_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14promax/03_iphone14_pro_max_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1168,
+                "print_area_height": 2431,
+                "print_area_top": 237,
+                "print_area_left": 909,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 141356,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14pro/05_iphone14_pro_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14pro/03_iphone14_pro_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1061,
+                "print_area_height": 2210,
+                "print_area_top": 457,
+                "print_area_left": 968,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 141337,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14/05_iphone14_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/caseon/14/03_iphone14_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1042,
+                "print_area_height": 2170,
+                "print_area_top": 466,
+                "print_area_left": 976,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208763,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15_plus/caseon/05_iphone15_plus_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15_plus/caseon/03_iphone15_plus_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1137,
+                "print_area_height": 2417,
+                "print_area_top": 231,
+                "print_area_left": 926,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208799,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15_promax/caseon/05_iphone15_promax_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15_promax/caseon/03_iphone15_promax_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1137,
+                "print_area_height": 2416,
+                "print_area_top": 236,
+                "print_area_left": 933,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208781,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15_pro/caseon/05_iphone15_pro_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15_pro/caseon/03_iphone15_pro_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1023,
+                "print_area_height": 2175,
+                "print_area_top": 472,
+                "print_area_left": 984,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208745,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15/caseon/05_iphone15_caseon_overlay_whitebg.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/default/iphone_15/15/caseon/03_iphone15_caseon_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 3000,
+                "template_height": 3000,
+                "print_area_width": 1025,
+                "print_area_height": 2168,
+                "print_area_top": 470,
+                "print_area_left": 983,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 1632,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/8/01-iphone-8-preview-overlay-v1.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/8/02-iphone-8-preview-base-v1.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 358,
+                "print_area_height": 746,
+                "print_area_top": 124,
+                "print_area_left": 321,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 32415,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/8/01-iphone-8-preview-overlay-v1.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/se/on/03_iphone_SE_base.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 358,
+                "print_area_height": 746,
+                "print_area_top": 124,
+                "print_area_left": 321,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 4088,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/xs/01-iphone-xs-black-overlay.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/xs/02-iphone-xs-base-black.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 371,
+                "print_area_height": 773,
+                "print_area_top": 113,
+                "print_area_left": 314,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 6991,
+                "image_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/xr/01-iphone-xr-black-overlay.png?v=1694603701",
+                "background_url": "https://files.cdn.printful.com/m/47-iphone-cases/medium/xr/02-iphone-xr-base-black.png?v=1694603701",
+                "background_color": null,
+                "printfile_id": 56,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 369,
+                "print_area_height": 767,
+                "print_area_top": 116,
+                "print_area_left": 316,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 181,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 56,
+                "width": 879,
+                "height": 1830,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 10996,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 10995,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 10994,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 11703,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 11705,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 11808,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 11704,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 13428,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 13801,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 13800,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 13427,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 16242,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 16243,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 16241,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 16240,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 17617,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 17619,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 17618,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 17616,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 7910,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 11452,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 8933,
+                "placements": {
+                    "default": 56
+                }
+            },
+            {
+                "variant_id": 9621,
+                "placements": {
+                    "default": 56
+                }
+            }
+        ],
+        "option_groups": [
+            "Default",
+            "Halloween",
+            "Holiday season",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Red, white & blue",
+            "Spring/summer vibes",
+            "Valentine's Day"
+        ],
+        "options": [
+            "Case on phone",
+            "Case with phone",
+            "Christmas",
+            "Front",
+            "Front 2",
+            "Front 3",
+            "Halloween",
+            "Halloween 2",
+            "Lifestyle 1",
+            "Lifestyle 2",
+            "Lifestyle 4",
+            "Red, white & blue",
+            "Spring/Summer",
+            "Spring/Summer 2",
+            "Valentine's Day",
+            "Valentine's Day 2"
+        ]
+    }
+}

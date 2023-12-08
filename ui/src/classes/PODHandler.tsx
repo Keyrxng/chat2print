@@ -110,7 +110,15 @@ class PODHandler {
     }
   }
 
-  async createMockupTask(imageUrl: string, variantIDs: number[], top: number) {
+  async createMockupTask(
+    imageUrl: string,
+    variantIDs: number[],
+    type: string,
+    top: number,
+    left: number,
+    right: number,
+    bottom: number
+  ) {
     try {
       const probed = await probe(imageUrl);
       const imgHeight = probed.height;
@@ -125,7 +133,7 @@ class PODHandler {
         format: "png",
         files: [
           {
-            placement: "default",
+            type: type,
             image_url: imageUrl,
             position: {
               area_width: widthFull,
@@ -133,11 +141,18 @@ class PODHandler {
               width: widthFull,
               height: heightFull,
               top: top,
-              left: 0,
+              left: left,
+              right: right,
+              bottom: bottom,
             },
           },
         ],
       };
+
+      const response = await this.client.post(
+        "/mockup-generator/create-task",
+        mockupData
+      );
     } catch (error) {
       return this.handleError(error);
     }

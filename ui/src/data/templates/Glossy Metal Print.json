@@ -1,0 +1,262 @@
+{
+    "name": "Glossy Metal Print (in)",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 15134,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 118091
+                    }
+                ]
+            },
+            {
+                "variant_id": 15135,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 118094
+                    }
+                ]
+            },
+            {
+                "variant_id": 15136,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 118100
+                    }
+                ]
+            },
+            {
+                "variant_id": 15137,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 118106
+                    }
+                ]
+            },
+            {
+                "variant_id": 15138,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 118112
+                    }
+                ]
+            },
+            {
+                "variant_id": 15139,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 118118
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 118091,
+                "image_url": "https://files.cdn.printful.com/m/metal_print/medium/templates/8x10/horizontal/10x8.png?v=1669110453",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 317,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 579,
+                "print_area_top": 66,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 118094,
+                "image_url": "https://files.cdn.printful.com/m/metal_print/medium/templates/12x12/12x12.png?v=1669110453",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 318,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 700,
+                "print_area_height": 700,
+                "print_area_top": 14,
+                "print_area_left": 14,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 118100,
+                "image_url": "https://files.cdn.printful.com/m/metal_print/medium/templates/11x14/horizontal/14x11.png?v=1669110453",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 320,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 570,
+                "print_area_top": 79,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 118106,
+                "image_url": "https://files.cdn.printful.com/m/metal_print/medium/templates/16x20/horizontal/20x16.png?v=1669110453",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 322,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 578,
+                "print_area_top": 75,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 118112,
+                "image_url": "https://files.cdn.printful.com/m/metal_print/medium/templates/20x30/horizontal/30x20.png?v=1669110453",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 324,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 482,
+                "print_area_top": 124,
+                "print_area_left": 6,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 118118,
+                "image_url": "https://files.cdn.printful.com/m/metal_print/medium/templates/24x36/horizontal/36x24.png?v=1669110453",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 326,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 482,
+                "print_area_top": 124,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 588,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 317,
+                "width": 3075,
+                "height": 2475,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 318,
+                "width": 3675,
+                "height": 3675,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 320,
+                "width": 4350,
+                "height": 3450,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 322,
+                "width": 6038,
+                "height": 4838,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 324,
+                "width": 9075,
+                "height": 6075,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 326,
+                "width": 10875,
+                "height": 7275,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 15134,
+                "placements": {
+                    "default": 317
+                }
+            },
+            {
+                "variant_id": 15135,
+                "placements": {
+                    "default": 318
+                }
+            },
+            {
+                "variant_id": 15136,
+                "placements": {
+                    "default": 320
+                }
+            },
+            {
+                "variant_id": 15137,
+                "placements": {
+                    "default": 322
+                }
+            },
+            {
+                "variant_id": 15138,
+                "placements": {
+                    "default": 324
+                }
+            },
+            {
+                "variant_id": 15139,
+                "placements": {
+                    "default": 326
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Flat 2",
+            "Lifestyle",
+            "Product details",
+            "Women's"
+        ],
+        "options": [
+            "Front",
+            "Product details",
+            "Product details 2"
+        ]
+    }
+}

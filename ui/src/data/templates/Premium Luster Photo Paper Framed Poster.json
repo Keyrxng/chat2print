@@ -1,0 +1,1228 @@
+{
+    "name": "Premium Luster Photo Paper Framed Poster (in)",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 6882,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214678
+                    }
+                ]
+            },
+            {
+                "variant_id": 6883,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214681
+                    }
+                ]
+            },
+            {
+                "variant_id": 6884,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214684
+                    }
+                ]
+            },
+            {
+                "variant_id": 14290,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 215674
+                    }
+                ]
+            },
+            {
+                "variant_id": 6886,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214660
+                    }
+                ]
+            },
+            {
+                "variant_id": 6887,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214666
+                    }
+                ]
+            },
+            {
+                "variant_id": 6885,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214687
+                    }
+                ]
+            },
+            {
+                "variant_id": 6888,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214690
+                    }
+                ]
+            },
+            {
+                "variant_id": 6889,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214672
+                    }
+                ]
+            },
+            {
+                "variant_id": 6890,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214693
+                    }
+                ]
+            },
+            {
+                "variant_id": 6891,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214648
+                    }
+                ]
+            },
+            {
+                "variant_id": 7846,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214654
+                    }
+                ]
+            },
+            {
+                "variant_id": 15006,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214680
+                    }
+                ]
+            },
+            {
+                "variant_id": 15007,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214683
+                    }
+                ]
+            },
+            {
+                "variant_id": 15009,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214686
+                    }
+                ]
+            },
+            {
+                "variant_id": 15008,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 215676
+                    }
+                ]
+            },
+            {
+                "variant_id": 15010,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214662
+                    }
+                ]
+            },
+            {
+                "variant_id": 15011,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214668
+                    }
+                ]
+            },
+            {
+                "variant_id": 15012,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214689
+                    }
+                ]
+            },
+            {
+                "variant_id": 15013,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214692
+                    }
+                ]
+            },
+            {
+                "variant_id": 15014,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214674
+                    }
+                ]
+            },
+            {
+                "variant_id": 15015,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214695
+                    }
+                ]
+            },
+            {
+                "variant_id": 15017,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214650
+                    }
+                ]
+            },
+            {
+                "variant_id": 15018,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214656
+                    }
+                ]
+            },
+            {
+                "variant_id": 10760,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214679
+                    }
+                ]
+            },
+            {
+                "variant_id": 10761,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214682
+                    }
+                ]
+            },
+            {
+                "variant_id": 10762,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214685
+                    }
+                ]
+            },
+            {
+                "variant_id": 14291,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 215675
+                    }
+                ]
+            },
+            {
+                "variant_id": 10764,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214661
+                    }
+                ]
+            },
+            {
+                "variant_id": 10765,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214667
+                    }
+                ]
+            },
+            {
+                "variant_id": 10763,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214688
+                    }
+                ]
+            },
+            {
+                "variant_id": 10766,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214691
+                    }
+                ]
+            },
+            {
+                "variant_id": 10767,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214673
+                    }
+                ]
+            },
+            {
+                "variant_id": 10768,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214694
+                    }
+                ]
+            },
+            {
+                "variant_id": 10769,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214649
+                    }
+                ]
+            },
+            {
+                "variant_id": 10770,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214655
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 214678,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/8x10/02_poster_8x10_horizontal_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 42,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 603,
+                "print_area_height": 482,
+                "print_area_top": 259,
+                "print_area_left": 199,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214681,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/10x10/02_poster_10x10_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 29,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 603,
+                "print_area_height": 603,
+                "print_area_top": 197,
+                "print_area_left": 199,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214684,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x12/02_poster_12x12_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 12,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 605,
+                "print_area_height": 605,
+                "print_area_top": 196,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 215674,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/11x14/horizontal/05_poster_11x14_black_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 285,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 704,
+                "print_area_height": 552,
+                "print_area_top": 224,
+                "print_area_left": 147,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214660,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x16/02_poster_12x16_horizontal_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 15,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 595,
+                "print_area_height": 447,
+                "print_area_top": 277,
+                "print_area_left": 203,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214666,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x18/02_poster_12x18_horizontal_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 17,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 731,
+                "print_area_height": 488,
+                "print_area_top": 255,
+                "print_area_left": 136,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214687,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/14x14/02_poster_14x14_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 30,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 598,
+                "print_area_height": 598,
+                "print_area_top": 202,
+                "print_area_left": 202,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214690,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/16x16/02_poster_16x16_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 16,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 601,
+                "print_area_height": 601,
+                "print_area_top": 201,
+                "print_area_left": 202,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214672,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/16x20/02_poster_16x20_horizontal_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 41,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 744,
+                "print_area_height": 596,
+                "print_area_top": 203,
+                "print_area_left": 126,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214693,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/18x18/02_poster_18x18_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 31,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 599,
+                "print_area_height": 599,
+                "print_area_top": 200,
+                "print_area_left": 201,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214648,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/18x24/02_poster_18x24_horizontal_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 38,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 797,
+                "print_area_height": 597,
+                "print_area_top": 202,
+                "print_area_left": 101,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214654,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/24x36/02_poster_24x36_horizontal_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 39,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 801,
+                "print_area_height": 535,
+                "print_area_top": 233,
+                "print_area_left": 100,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214680,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/8x10/05_poster_8x10_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 42,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 603,
+                "print_area_height": 482,
+                "print_area_top": 259,
+                "print_area_left": 199,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214683,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/10x10/05_poster_10x10_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 29,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 603,
+                "print_area_height": 603,
+                "print_area_top": 197,
+                "print_area_left": 199,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214686,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x12/05_poster_12x12_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 12,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 605,
+                "print_area_height": 605,
+                "print_area_top": 196,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 215676,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/11x14/05_poster_11x14_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 285,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 704,
+                "print_area_height": 552,
+                "print_area_top": 224,
+                "print_area_left": 147,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214662,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x16/05_poster_12x16_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 15,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 595,
+                "print_area_height": 447,
+                "print_area_top": 277,
+                "print_area_left": 203,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214668,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x18/05_poster_12x18_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 17,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 731,
+                "print_area_height": 488,
+                "print_area_top": 255,
+                "print_area_left": 136,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214689,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/14x14/05_poster_14x14_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 30,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 598,
+                "print_area_height": 598,
+                "print_area_top": 202,
+                "print_area_left": 202,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214692,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/16x16/05_poster_16x16_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 16,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 601,
+                "print_area_height": 601,
+                "print_area_top": 201,
+                "print_area_left": 202,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214674,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/16x20/05_poster_16x20_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 41,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 744,
+                "print_area_height": 596,
+                "print_area_top": 203,
+                "print_area_left": 126,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214695,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/18x18/05_poster_18x18_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 31,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 599,
+                "print_area_height": 599,
+                "print_area_top": 200,
+                "print_area_left": 201,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214650,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/18x24/05_poster_18x24_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 38,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 797,
+                "print_area_height": 597,
+                "print_area_top": 202,
+                "print_area_left": 101,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214656,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/24x36/05_poster_24x36_horizontal_red-oak_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 39,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 801,
+                "print_area_height": 535,
+                "print_area_top": 233,
+                "print_area_left": 100,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214679,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/8x10/02_poster_8x10_horizontal_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 42,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 603,
+                "print_area_height": 482,
+                "print_area_top": 259,
+                "print_area_left": 199,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214682,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/10x10/02_poster_10x10_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 29,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 603,
+                "print_area_height": 603,
+                "print_area_top": 197,
+                "print_area_left": 199,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214685,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x12/02_poster_12x12_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 12,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 605,
+                "print_area_height": 605,
+                "print_area_top": 196,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 215675,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/11x14/horizontal/05_poster_11x14_white_base_whitebg.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 285,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 704,
+                "print_area_height": 552,
+                "print_area_top": 224,
+                "print_area_left": 147,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214661,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x16/02_poster_12x16_horizontal_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 15,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 595,
+                "print_area_height": 447,
+                "print_area_top": 277,
+                "print_area_left": 203,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214667,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/12x18/02_poster_12x18_horizontal_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 17,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 731,
+                "print_area_height": 488,
+                "print_area_top": 255,
+                "print_area_left": 136,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214688,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/14x14/02_poster_14x14_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 30,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 598,
+                "print_area_height": 598,
+                "print_area_top": 202,
+                "print_area_left": 202,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214691,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/16x16/02_poster_16x16_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 16,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 601,
+                "print_area_height": 601,
+                "print_area_top": 201,
+                "print_area_left": 202,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214673,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/16x20/02_poster_16x20_horizontal_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 41,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 744,
+                "print_area_height": 596,
+                "print_area_top": 203,
+                "print_area_left": 126,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214694,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/18x18/02_poster_18x18_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 31,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 599,
+                "print_area_height": 599,
+                "print_area_top": 200,
+                "print_area_left": 201,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214649,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/18x24/02_poster_18x24_horizontal_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 38,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 797,
+                "print_area_height": 597,
+                "print_area_top": 202,
+                "print_area_left": 101,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214655,
+                "image_url": "https://files.cdn.printful.com/m/27-posters-framed-in/medium/transparent/24x36/02_poster_24x36_horizontal_white_base.png?v=1676360564",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 39,
+                "template_width": 1000,
+                "template_height": 1000,
+                "print_area_width": 801,
+                "print_area_height": 535,
+                "print_area_top": 233,
+                "print_area_left": 100,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 172,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 12,
+                "width": 3600,
+                "height": 3600,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 15,
+                "width": 4800,
+                "height": 3600,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 16,
+                "width": 4800,
+                "height": 4800,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 17,
+                "width": 5400,
+                "height": 3600,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 29,
+                "width": 3000,
+                "height": 3000,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 30,
+                "width": 4200,
+                "height": 4200,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 31,
+                "width": 5400,
+                "height": 5400,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 38,
+                "width": 7200,
+                "height": 5400,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 39,
+                "width": 10800,
+                "height": 7200,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 41,
+                "width": 6000,
+                "height": 4800,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 42,
+                "width": 3000,
+                "height": 2400,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 285,
+                "width": 4200,
+                "height": 3300,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 6882,
+                "placements": {
+                    "default": 42
+                }
+            },
+            {
+                "variant_id": 6883,
+                "placements": {
+                    "default": 29
+                }
+            },
+            {
+                "variant_id": 6884,
+                "placements": {
+                    "default": 12
+                }
+            },
+            {
+                "variant_id": 14290,
+                "placements": {
+                    "default": 285
+                }
+            },
+            {
+                "variant_id": 6886,
+                "placements": {
+                    "default": 15
+                }
+            },
+            {
+                "variant_id": 6887,
+                "placements": {
+                    "default": 17
+                }
+            },
+            {
+                "variant_id": 6885,
+                "placements": {
+                    "default": 30
+                }
+            },
+            {
+                "variant_id": 6888,
+                "placements": {
+                    "default": 16
+                }
+            },
+            {
+                "variant_id": 6889,
+                "placements": {
+                    "default": 41
+                }
+            },
+            {
+                "variant_id": 6890,
+                "placements": {
+                    "default": 31
+                }
+            },
+            {
+                "variant_id": 6891,
+                "placements": {
+                    "default": 38
+                }
+            },
+            {
+                "variant_id": 7846,
+                "placements": {
+                    "default": 39
+                }
+            },
+            {
+                "variant_id": 15006,
+                "placements": {
+                    "default": 42
+                }
+            },
+            {
+                "variant_id": 15007,
+                "placements": {
+                    "default": 29
+                }
+            },
+            {
+                "variant_id": 15009,
+                "placements": {
+                    "default": 12
+                }
+            },
+            {
+                "variant_id": 15008,
+                "placements": {
+                    "default": 285
+                }
+            },
+            {
+                "variant_id": 15010,
+                "placements": {
+                    "default": 15
+                }
+            },
+            {
+                "variant_id": 15011,
+                "placements": {
+                    "default": 17
+                }
+            },
+            {
+                "variant_id": 15012,
+                "placements": {
+                    "default": 30
+                }
+            },
+            {
+                "variant_id": 15013,
+                "placements": {
+                    "default": 16
+                }
+            },
+            {
+                "variant_id": 15014,
+                "placements": {
+                    "default": 41
+                }
+            },
+            {
+                "variant_id": 15015,
+                "placements": {
+                    "default": 31
+                }
+            },
+            {
+                "variant_id": 15017,
+                "placements": {
+                    "default": 38
+                }
+            },
+            {
+                "variant_id": 15018,
+                "placements": {
+                    "default": 39
+                }
+            },
+            {
+                "variant_id": 10760,
+                "placements": {
+                    "default": 42
+                }
+            },
+            {
+                "variant_id": 10761,
+                "placements": {
+                    "default": 29
+                }
+            },
+            {
+                "variant_id": 10762,
+                "placements": {
+                    "default": 12
+                }
+            },
+            {
+                "variant_id": 14291,
+                "placements": {
+                    "default": 285
+                }
+            },
+            {
+                "variant_id": 10764,
+                "placements": {
+                    "default": 15
+                }
+            },
+            {
+                "variant_id": 10765,
+                "placements": {
+                    "default": 17
+                }
+            },
+            {
+                "variant_id": 10763,
+                "placements": {
+                    "default": 30
+                }
+            },
+            {
+                "variant_id": 10766,
+                "placements": {
+                    "default": 16
+                }
+            },
+            {
+                "variant_id": 10767,
+                "placements": {
+                    "default": 41
+                }
+            },
+            {
+                "variant_id": 10768,
+                "placements": {
+                    "default": 31
+                }
+            },
+            {
+                "variant_id": 10769,
+                "placements": {
+                    "default": 38
+                }
+            },
+            {
+                "variant_id": 10770,
+                "placements": {
+                    "default": 39
+                }
+            }
+        ],
+        "option_groups": [
+            "Halloween",
+            "Holiday season",
+            "Lifestyle",
+            "Lifestyle 10",
+            "Lifestyle 11",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Lifestyle 5",
+            "Lifestyle 6",
+            "Lifestyle 7",
+            "Lifestyle 8",
+            "Lifestyle 9",
+            "Person",
+            "Spring/summer vibes",
+            "Transparent"
+        ],
+        "options": [
+            "Christmas",
+            "Front",
+            "Halloween",
+            "Lifestyle 1",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Person",
+            "Spring/Summer",
+            "Transparent"
+        ]
+    }
+}

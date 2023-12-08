@@ -1,0 +1,75 @@
+"use client"
+
+import * as React from "react"
+import { Check, ChevronsUpDown } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { __Variant } from "@/types/all"
+
+interface VariantSelectionProps {
+  variants: __Variant[] | undefined
+  setSelectedVariant: React.Dispatch<React.SetStateAction<__Variant | undefined>>
+}
+
+export function VariantSelection({variants, setSelectedVariant}: VariantSelectionProps) {
+  const [open, setOpen] = React.useState(false)
+  const [value, setValue] = React.useState("")
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="VariantSelection"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
+        >
+          {value
+            ? value
+            : "Select style..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="Search styles..." />
+          <CommandEmpty>No style found.</CommandEmpty>
+          <CommandGroup>
+            {variants?.map((variant) => (
+              <CommandItem
+                key={variant.name}
+                value={variant.name}
+                onSelect={(currentValue) => {
+                  setValue(currentValue === value ? "" : currentValue)
+                  setSelectedVariant(variant)
+                  setOpen(false)
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    value === variant.name ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                {variant.name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+}

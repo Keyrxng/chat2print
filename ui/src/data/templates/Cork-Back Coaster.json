@@ -1,0 +1,73 @@
+{
+    "name": "Cork-Back Coaster",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 15662,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 133922
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 133922,
+                "image_url": "https://files.cdn.printful.com/m/cork_back_coaster/medium/template1/coaster_with_bleed.png?v=1685084585",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 358,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 570,
+                "print_area_height": 570,
+                "print_area_top": 79,
+                "print_area_left": 79,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 611,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 358,
+                "width": 1181,
+                "height": 1181,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 15662,
+                "placements": {
+                    "default": 358
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Flat 2",
+            "Flat 3",
+            "Flat 5",
+            "Flat 6",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3"
+        ],
+        "options": [
+            "Front"
+        ]
+    }
+}

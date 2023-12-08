@@ -1,0 +1,513 @@
+{
+    "name": "Premium Luster Photo Paper Poster (in)",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 6872,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214191
+                    }
+                ]
+            },
+            {
+                "variant_id": 14028,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214487
+                    }
+                ]
+            },
+            {
+                "variant_id": 6873,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214192
+                    }
+                ]
+            },
+            {
+                "variant_id": 6875,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214203
+                    }
+                ]
+            },
+            {
+                "variant_id": 6876,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214204
+                    }
+                ]
+            },
+            {
+                "variant_id": 6874,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214193
+                    }
+                ]
+            },
+            {
+                "variant_id": 6877,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214194
+                    }
+                ]
+            },
+            {
+                "variant_id": 6878,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214205
+                    }
+                ]
+            },
+            {
+                "variant_id": 6879,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214195
+                    }
+                ]
+            },
+            {
+                "variant_id": 6880,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214206
+                    }
+                ]
+            },
+            {
+                "variant_id": 7845,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214207
+                    }
+                ]
+            },
+            {
+                "variant_id": 6871,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 214202
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 214191,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/10x10in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 29,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 669,
+                "print_area_height": 670,
+                "print_area_top": 13,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214487,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template/11x14_horizontal.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 285,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 702,
+                "print_area_height": 552,
+                "print_area_top": 70,
+                "print_area_left": 13,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214192,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/12x12in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 12,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 669,
+                "print_area_height": 670,
+                "print_area_top": 13,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214203,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/16x12in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 15,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 502,
+                "print_area_top": 97,
+                "print_area_left": 29,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214204,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/18x12in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 17,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 447,
+                "print_area_top": 125,
+                "print_area_left": 29,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214193,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/14x14in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 30,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 670,
+                "print_area_top": 13,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214194,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/16x16in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 16,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 670,
+                "print_area_top": 13,
+                "print_area_left": 29,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214205,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/20x16in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 41,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 536,
+                "print_area_top": 81,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214195,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/18x18in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 31,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 669,
+                "print_area_height": 670,
+                "print_area_top": 13,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 214206,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/24x18in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 38,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 502,
+                "print_area_top": 97,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214207,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/36x24in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 39,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 446,
+                "print_area_top": 125,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            },
+            {
+                "template_id": 214202,
+                "image_url": "https://files.cdn.printful.com/m/12-posters-in/medium/template1/10x8in_poster_notext.png?v=1676366835",
+                "background_url": null,
+                "background_color": null,
+                "printfile_id": 42,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 670,
+                "print_area_height": 537,
+                "print_area_top": 80,
+                "print_area_left": 30,
+                "is_template_on_front": true,
+                "orientation": "horizontal"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 171,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 3,
+                "width": 5400,
+                "height": 7200,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 4,
+                "width": 7200,
+                "height": 10800,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 11,
+                "width": 2400,
+                "height": 3000,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 12,
+                "width": 3600,
+                "height": 3600,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 13,
+                "width": 3600,
+                "height": 4800,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 14,
+                "width": 3600,
+                "height": 5400,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 16,
+                "width": 4800,
+                "height": 4800,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 29,
+                "width": 3000,
+                "height": 3000,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 30,
+                "width": 4200,
+                "height": 4200,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 31,
+                "width": 5400,
+                "height": 5400,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 40,
+                "width": 4800,
+                "height": 6000,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            },
+            {
+                "printfile_id": 285,
+                "width": 4200,
+                "height": 3300,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": true
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 6872,
+                "placements": {
+                    "default": 29
+                }
+            },
+            {
+                "variant_id": 14028,
+                "placements": {
+                    "default": 285
+                }
+            },
+            {
+                "variant_id": 6873,
+                "placements": {
+                    "default": 12
+                }
+            },
+            {
+                "variant_id": 6875,
+                "placements": {
+                    "default": 13
+                }
+            },
+            {
+                "variant_id": 6876,
+                "placements": {
+                    "default": 14
+                }
+            },
+            {
+                "variant_id": 6874,
+                "placements": {
+                    "default": 30
+                }
+            },
+            {
+                "variant_id": 6877,
+                "placements": {
+                    "default": 16
+                }
+            },
+            {
+                "variant_id": 6878,
+                "placements": {
+                    "default": 40
+                }
+            },
+            {
+                "variant_id": 6879,
+                "placements": {
+                    "default": 31
+                }
+            },
+            {
+                "variant_id": 6880,
+                "placements": {
+                    "default": 3
+                }
+            },
+            {
+                "variant_id": 7845,
+                "placements": {
+                    "default": 4
+                }
+            },
+            {
+                "variant_id": 6871,
+                "placements": {
+                    "default": 11
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Halloween",
+            "Holiday season",
+            "Lifestyle",
+            "Lifestyle 10",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Lifestyle 5",
+            "Lifestyle 6",
+            "Lifestyle 7",
+            "Lifestyle 8",
+            "Lifestyle 9",
+            "Lifestyle, Premium",
+            "Person",
+            "Product details",
+            "Spring/summer vibes",
+            "Transparent",
+            "Women's, Premium"
+        ],
+        "options": [
+            "Christmas",
+            "Front",
+            "Front 2",
+            "Front 3",
+            "Halloween",
+            "Lifestyle 1",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Person",
+            "Product details",
+            "Spring/Summer",
+            "Transparent"
+        ]
+    }
+}

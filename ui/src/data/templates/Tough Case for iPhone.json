@@ -1,0 +1,1184 @@
+{
+    "name": "Tough Case for iPhone®",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 15381,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146439
+                    }
+                ]
+            },
+            {
+                "variant_id": 15392,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146440
+                    }
+                ]
+            },
+            {
+                "variant_id": 15382,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146443
+                    }
+                ]
+            },
+            {
+                "variant_id": 15393,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146444
+                    }
+                ]
+            },
+            {
+                "variant_id": 15383,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146445
+                    }
+                ]
+            },
+            {
+                "variant_id": 15394,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146446
+                    }
+                ]
+            },
+            {
+                "variant_id": 15385,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146447
+                    }
+                ]
+            },
+            {
+                "variant_id": 15396,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146448
+                    }
+                ]
+            },
+            {
+                "variant_id": 15384,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146449
+                    }
+                ]
+            },
+            {
+                "variant_id": 15395,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146450
+                    }
+                ]
+            },
+            {
+                "variant_id": 15386,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146451
+                    }
+                ]
+            },
+            {
+                "variant_id": 15397,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146452
+                    }
+                ]
+            },
+            {
+                "variant_id": 15387,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146453
+                    }
+                ]
+            },
+            {
+                "variant_id": 15398,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146454
+                    }
+                ]
+            },
+            {
+                "variant_id": 15389,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146455
+                    }
+                ]
+            },
+            {
+                "variant_id": 15400,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146456
+                    }
+                ]
+            },
+            {
+                "variant_id": 15388,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146457
+                    }
+                ]
+            },
+            {
+                "variant_id": 15399,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146458
+                    }
+                ]
+            },
+            {
+                "variant_id": 15390,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146459
+                    }
+                ]
+            },
+            {
+                "variant_id": 15401,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146460
+                    }
+                ]
+            },
+            {
+                "variant_id": 15391,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146461
+                    }
+                ]
+            },
+            {
+                "variant_id": 15402,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146462
+                    }
+                ]
+            },
+            {
+                "variant_id": 16124,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146463
+                    }
+                ]
+            },
+            {
+                "variant_id": 16125,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146464
+                    }
+                ]
+            },
+            {
+                "variant_id": 16128,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146467
+                    }
+                ]
+            },
+            {
+                "variant_id": 16129,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146468
+                    }
+                ]
+            },
+            {
+                "variant_id": 16126,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146465
+                    }
+                ]
+            },
+            {
+                "variant_id": 16127,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146466
+                    }
+                ]
+            },
+            {
+                "variant_id": 16130,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146469
+                    }
+                ]
+            },
+            {
+                "variant_id": 16131,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 146470
+                    }
+                ]
+            },
+            {
+                "variant_id": 17714,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209300
+                    }
+                ]
+            },
+            {
+                "variant_id": 17715,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209301
+                    }
+                ]
+            },
+            {
+                "variant_id": 17716,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209318
+                    }
+                ]
+            },
+            {
+                "variant_id": 17717,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209319
+                    }
+                ]
+            },
+            {
+                "variant_id": 17718,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209336
+                    }
+                ]
+            },
+            {
+                "variant_id": 17719,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209337
+                    }
+                ]
+            },
+            {
+                "variant_id": 17720,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209354
+                    }
+                ]
+            },
+            {
+                "variant_id": 17721,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 209355
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 146439,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/b8/b84c3bb8dcac566a876e20213d24e01e?v=1689327786",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146440,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/b8/b84c3bb8dcac566a876e20213d24e01e?v=1689327786",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146443,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/b5/b5e4d319b3e9ebbfb10fcfb23585ec72?v=1689327772",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146444,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/b5/b5e4d319b3e9ebbfb10fcfb23585ec72?v=1689327772",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146445,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/11_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146446,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/11_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146447,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/6e/6e82f60bc295efad2eae4a87ca9e8f19?v=1689327722",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146448,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/6e/6e82f60bc295efad2eae4a87ca9e8f19?v=1689327722",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146449,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/1d/1d5e3a6c0f6c5ccf541797a2d3f9dc48?v=1689327700",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146450,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/1d/1d5e3a6c0f6c5ccf541797a2d3f9dc48?v=1689327700",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146451,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/12_pro.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146452,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/12_pro.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146453,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/12_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146454,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/12_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146455,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/8c/8c961f1c6210a0df656fc6bb4f6d114e?v=1689327541",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146456,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/8c/8c961f1c6210a0df656fc6bb4f6d114e?v=1689327541",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146457,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/c3/c3b57e90e9e04301f104a86714174ea6?v=1689327513",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146458,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/c3/c3b57e90e9e04301f104a86714174ea6?v=1689327513",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146459,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/aa/aa172fdd581d4e4be0bf3e78c8059402?v=1689327497",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146460,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/aa/aa172fdd581d4e4be0bf3e78c8059402?v=1689327497",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146461,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/13_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146462,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/13_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146463,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/65/65dcc80204943c76972288a3473740ec?v=1689327456",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146464,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/65/65dcc80204943c76972288a3473740ec?v=1689327456",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146467,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/9b/9b0bcecd54a418afb26e52a040830644?v=1689327426",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146468,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/9b/9b0bcecd54a418afb26e52a040830644?v=1689327426",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146465,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/b5/b53030cb971fa23565291b32d55ffc6c?v=1689327440",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146466,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/b5/b53030cb971fa23565291b32d55ffc6c?v=1689327440",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146469,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/14_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 146470,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/14_pro_max.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209300,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/15.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209301,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/15.png?v=1694600424",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209318,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/3e/3eee50862addb6c8c4c4611483876e30?v=1694435679",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209319,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/3e/3eee50862addb6c8c4c4611483876e30?v=1694435679",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209336,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/14_pro.png?v=1694601191",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209337,
+                "image_url": "https://files.cdn.printful.com/m/Tough_iPhone_case/medium/template2/14_pro.png?v=1694601191",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209354,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/aa/aa488816852cb2260bffb4426ffc0b7c?v=1694435782",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 209355,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/aa/aa488816852cb2260bffb4426ffc0b7c?v=1694435782",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 331,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 336,
+                "print_area_height": 534,
+                "print_area_top": 97,
+                "print_area_left": 197,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 601,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 331,
+                "width": 1392,
+                "height": 2220,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 15381,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15392,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15382,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15393,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15383,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15394,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15385,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15396,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15384,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15395,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15386,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15397,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15387,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15398,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15389,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15400,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15388,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15399,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15390,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15401,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15391,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 15402,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16124,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16125,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16128,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16129,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16126,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16127,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16130,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 16131,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17714,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17715,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17716,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17717,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17718,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17719,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17720,
+                "placements": {
+                    "default": 331
+                }
+            },
+            {
+                "variant_id": 17721,
+                "placements": {
+                    "default": 331
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Flat 2",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Lifestyle 5",
+            "Product specs"
+        ],
+        "options": [
+            "Front",
+            "Right"
+        ]
+    }
+}

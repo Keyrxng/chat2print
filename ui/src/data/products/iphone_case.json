@@ -1,0 +1,1192 @@
+{
+  "priceRange": {
+    "low": "8.50",
+    "high": "8.50"
+  },
+  "product": {
+    "id": 181,
+    "main_category_id": 244,
+    "type": "PHONE-CASE",
+    "description": "This sleek iPhone® case protects your phone from scratches, dust, oil, and dirt. It has a solid back and flexible sides that make it easy to take on and off, with precisely aligned port openings. \n\n• Solid polycarbonate back\n• Flexible, see-through polyurethane sides\n• .5 mm raised bezel\n• Precisely aligned port openings\n• Easy to take on and off\n• Wireless charging compatible\n• The SE case fits the 2020 iPhone® SE model\n• Blank product sourced from China",
+    "type_name": "iPhone Case",
+    "title": "Clear Case for iPhone®",
+    "brand": null,
+    "model": "iPhone Case",
+    "image": "https://files.cdn.printful.com/o/products/181/product_1570615955.jpg",
+    "variant_count": 23,
+    "currency": "GBP",
+    "options": [],
+    "dimensions": {
+      "default": "2.93x6.1"
+    },
+    "is_discontinued": false,
+    "avg_fulfillment_time": null,
+    "techniques": [
+      {
+        "key": "UV",
+        "display_name": "UV printing",
+        "is_default": true
+      }
+    ],
+    "files": [
+      {
+        "id": "default",
+        "type": "default",
+        "title": "Print file",
+        "additional_price": null,
+        "options": []
+      },
+      {
+        "id": "preview",
+        "type": "mockup",
+        "title": "Mockup",
+        "additional_price": null,
+        "options": []
+      }
+    ],
+    "origin_country": null
+  },
+  "variants": [
+    {
+      "id": 10996,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 11 Pro Max)",
+      "size": "iPhone 11 Pro Max",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/10996_1582202496.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 10995,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 11 Pro)",
+      "size": "iPhone 11 Pro",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/10995_1582202476.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 10994,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 11)",
+      "size": "iPhone 11",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/10994_1582202453.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 11703,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 12 mini)",
+      "size": "iPhone 12 mini",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/11703_1603890456.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 11705,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 12 Pro Max)",
+      "size": "iPhone 12 Pro Max",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/11705_1603890473.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 11808,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 12 Pro)",
+      "size": "iPhone 12 Pro",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/11808_1603890467.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 11704,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 12)",
+      "size": "iPhone 12",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/11704_1603890447.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 13428,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 13 mini)",
+      "size": "iPhone 13 mini",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/13428_1634114663.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 13801,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 13 Pro Max)",
+      "size": "iPhone 13 Pro Max",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/13801_1640167403.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 13800,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 13 Pro)",
+      "size": "iPhone 13 Pro",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/13800_1640167403.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 13427,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 13)",
+      "size": "iPhone 13",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/13427_1634124751.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16242,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 14 Plus)",
+      "size": "iPhone 14 Plus",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/16242_1663736652.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16243,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 14 Pro Max)",
+      "size": "iPhone 14 Pro Max",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/16243_1663736622.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16241,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 14 Pro)",
+      "size": "iPhone 14 Pro",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/16241_1663736618.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16240,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 14)",
+      "size": "iPhone 14",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/16240_1663736639.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 17617,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 15 Plus)",
+      "size": "iPhone 15 Plus",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/17617_1693475846.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "stocked_on_demand"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "stocked_on_demand"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 17619,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 15 Pro Max)",
+      "size": "iPhone 15 Pro Max",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/17619_1693475857.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "stocked_on_demand"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "stocked_on_demand"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 17618,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 15 Pro)",
+      "size": "iPhone 15 Pro",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/17618_1693475847.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "stocked_on_demand"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "stocked_on_demand"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 17616,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 15)",
+      "size": "iPhone 15",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/17616_1693475846.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "stocked_on_demand"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "stocked_on_demand"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 7910,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone 7/8)",
+      "size": "iPhone 7/8",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/7910_1582202405.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 11452,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone SE)",
+      "size": "iPhone SE",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/11452_1663745124.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 8933,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone X/XS)",
+      "size": "iPhone X/XS",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/8933_1582202521.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 9621,
+      "product_id": 181,
+      "name": "Clear Case for iPhone® (iPhone XR)",
+      "size": "iPhone XR",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/181/9621_1582202542.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "AU": "Australia",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    }
+  ]
+}

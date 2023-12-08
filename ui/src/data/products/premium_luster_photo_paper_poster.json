@@ -1,0 +1,733 @@
+{
+  "priceRange": {
+    "low": "7.50",
+    "high": "18.50"
+  },
+  "product": {
+    "id": 171,
+    "main_category_id": 55,
+    "type": "POSTER",
+    "description": "This poster has a partly glossy, partly matte finish and it'll add a touch of sophistication to any room.\n\n• 10 mil (0.25 mm) thick\n• Slightly glossy\n• Fingerprint resistant \n• Paper sourced from Japan",
+    "type_name": "Premium Luster Photo Paper Poster (in)",
+    "title": "Premium Luster Photo Paper Poster (in)",
+    "brand": null,
+    "model": "Premium Luster Photo Paper Poster (in)",
+    "image": "https://files.cdn.printful.com/o/products/171/product_1613463439.jpg",
+    "variant_count": 12,
+    "currency": "GBP",
+    "options": [],
+    "dimensions": null,
+    "is_discontinued": false,
+    "avg_fulfillment_time": null,
+    "techniques": [
+      {
+        "key": "DIGITAL",
+        "display_name": "Digital printing",
+        "is_default": true
+      }
+    ],
+    "files": [
+      {
+        "id": "default",
+        "type": "default",
+        "title": "Print file",
+        "additional_price": null,
+        "options": []
+      },
+      {
+        "id": "preview",
+        "type": "mockup",
+        "title": "Mockup",
+        "additional_price": null,
+        "options": []
+      }
+    ],
+    "origin_country": null
+  },
+  "variants": [
+    {
+      "id": 6872,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 10″×10″",
+      "size": "10″×10″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6872_1527678721.jpg",
+      "price": "8.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 14028,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 11″×14″",
+      "size": "11″×14″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/14028_1643091633.jpg",
+      "price": "10.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6873,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 12″×12″",
+      "size": "12″×12″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6873_1527678788.jpg",
+      "price": "9.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6875,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 12″×16″",
+      "size": "12″×16″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6875_1527679033.jpg",
+      "price": "10.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6876,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 12″×18″",
+      "size": "12″×18″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6876_1527678805.jpg",
+      "price": "11.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6874,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 14″×14″",
+      "size": "14″×14″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6874_1527678850.jpg",
+      "price": "9.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6877,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 16″×16″",
+      "size": "16″×16″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6877_1527678867.jpg",
+      "price": "11.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6878,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 16″×20″",
+      "size": "16″×20″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6878_1527678915.jpg",
+      "price": "11.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6879,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 18″×18″",
+      "size": "18″×18″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6879_1527678934.jpg",
+      "price": "12.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6880,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 18″×24″",
+      "size": "18″×24″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6880_1527683490.jpg",
+      "price": "13.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 7845,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 24″×36″",
+      "size": "24″×36″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/7845_1527679000.jpg",
+      "price": "18.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 6871,
+      "product_id": 171,
+      "name": "Premium Luster Photo Paper Poster 8″×10″",
+      "size": "8″×10″",
+      "color": null,
+      "color_code": null,
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/171/6871_1527678675.jpg",
+      "price": "7.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia",
+        "EU_ES": "Spain",
+        "AU": "Australia",
+        "JP": "Japan",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "AU",
+          "status": "in_stock"
+        },
+        {
+          "region": "JP",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    }
+  ]
+}

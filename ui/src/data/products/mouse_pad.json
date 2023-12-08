@@ -1,0 +1,90 @@
+{
+  "priceRange": {
+    "low": "7.25",
+    "high": "7.25"
+  },
+  "product": {
+    "id": 518,
+    "main_category_id": 251,
+    "type": "SUBLIMATION",
+    "description": "Every mouse needs a good mouse pad! Our mouse pad offers supreme grip and effortless mouse movement, and it does so with style.\n\n• Soft polyester surface \n• Natural rubber base\n• Rounded edges\n• 2.8 oz (79.4 g)\n• Size: 8.7″ × 7.1″ × 0.12″ (220 × 180 × 3 mm) \n• Blank product sourced from China\n\nAttention: Avoid placing the pad under direct sunlight to prevent fading.",
+    "type_name": "Mouse Pad",
+    "title": "Mouse Pad",
+    "brand": null,
+    "model": "Mouse Pad",
+    "image": "https://files.cdn.printful.com/o/upload/product-catalog-img/83/83dfc4934273f68021ef5d0324168e39_l",
+    "variant_count": 1,
+    "currency": "GBP",
+    "options": [
+      {
+        "id": "notes",
+        "title": "Printing notes",
+        "type": "text",
+        "values": null,
+        "additional_price": null,
+        "additional_price_breakdown": []
+      }
+    ],
+    "dimensions": null,
+    "is_discontinued": false,
+    "avg_fulfillment_time": null,
+    "techniques": [
+      {
+        "key": "SUBLIMATION",
+        "display_name": "Sublimation",
+        "is_default": true
+      }
+    ],
+    "files": [
+      {
+        "id": "default",
+        "type": "default",
+        "title": "Print file",
+        "additional_price": null,
+        "options": []
+      },
+      {
+        "id": "preview",
+        "type": "mockup",
+        "title": "Mockup",
+        "additional_price": null,
+        "options": []
+      }
+    ],
+    "origin_country": null
+  },
+  "variants": [
+    {
+      "id": 13097,
+      "product_id": 518,
+      "name": "Mouse Pad (White / 8.7\"x7.1\")",
+      "size": "8.7\"x7.1\"",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/518/13097_1629286642.jpg",
+      "price": "7.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_LV": "Latvia"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_LV",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    }
+  ]
+}

@@ -1,0 +1,775 @@
+{
+  "priceRange": {
+    "low": "41.00",
+    "high": "88.00"
+  },
+  "product": {
+    "id": 614,
+    "main_category_id": 57,
+    "type": "CANVAS",
+    "description": "Spice up your blank walls with this head-turning framed canvas! This high-quality pine tree framed canvas comes with rubber pads on the back corners and wall mount that makes hanging the artwork hassle-free. What’s more, the frame gives the canvas a cool floating effect!\n• Pine tree frame\n• Frame thickness: 1.25″ (3.18 cm)\n• Canvas fabric weight: 10.15 +/- 0.74 oz/yd² (344 g/m² +/- 25g/m²)\n• Open back\n• Comes with rubber pads on the back corners\n• Hanging hardware attached\n• Blank product sourced from the US\n\nImportant: This product is available in the US, Canada, Europe, and the UK only. If your shipping address is outside these regions, please choose a different product.",
+    "type_name": "Framed Canvas (in)",
+    "title": "Framed Canvas (in)",
+    "brand": null,
+    "model": "Framed Canvas (in)",
+    "image": "https://files.cdn.printful.com/o/upload/product-catalog-img/f2/f2edcfc1a6c8e355e2946172ca9ee54b_l",
+    "variant_count": 18,
+    "currency": "GBP",
+    "options": [],
+    "dimensions": null,
+    "is_discontinued": false,
+    "avg_fulfillment_time": null,
+    "techniques": [
+      {
+        "key": "DIGITAL",
+        "display_name": "Digital printing",
+        "is_default": true
+      }
+    ],
+    "files": [
+      {
+        "id": "default",
+        "type": "default",
+        "title": "Print file",
+        "additional_price": null,
+        "options": []
+      },
+      {
+        "id": "preview",
+        "type": "mockup",
+        "title": "Mockup",
+        "additional_price": null,
+        "options": []
+      }
+    ],
+    "origin_country": null
+  },
+  "variants": [
+    {
+      "id": 16034,
+      "product_id": 614,
+      "name": "Framed Canvas (Black / 12″×12″)",
+      "size": "12″×12″",
+      "color": "Black",
+      "color_code": "#000000",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16034_1660216836.jpg",
+      "price": "41.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16035,
+      "product_id": 614,
+      "name": "Framed Canvas (Black / 12″×16″)",
+      "size": "12″×16″",
+      "color": "Black",
+      "color_code": "#000000",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16035_1660216838.jpg",
+      "price": "45.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16036,
+      "product_id": 614,
+      "name": "Framed Canvas (Black / 16″×16″)",
+      "size": "16″×16″",
+      "color": "Black",
+      "color_code": "#000000",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16036_1660216846.jpg",
+      "price": "50.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16037,
+      "product_id": 614,
+      "name": "Framed Canvas (Black / 16″×20″)",
+      "size": "16″×20″",
+      "color": "Black",
+      "color_code": "#000000",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16037_1660216857.jpg",
+      "price": "54.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16038,
+      "product_id": 614,
+      "name": "Framed Canvas (Black / 18″×24″)",
+      "size": "18″×24″",
+      "color": "Black",
+      "color_code": "#000000",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16038_1660216858.jpg",
+      "price": "63.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16039,
+      "product_id": 614,
+      "name": "Framed Canvas (Black / 24″×36″)",
+      "size": "24″×36″",
+      "color": "Black",
+      "color_code": "#000000",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16039_1660216958.jpg",
+      "price": "88.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16040,
+      "product_id": 614,
+      "name": "Framed Canvas (Brown / 12″×12″)",
+      "size": "12″×12″",
+      "color": "Brown",
+      "color_code": "#3b2d22",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16040_1660216968.jpg",
+      "price": "41.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16041,
+      "product_id": 614,
+      "name": "Framed Canvas (Brown / 12″×16″)",
+      "size": "12″×16″",
+      "color": "Brown",
+      "color_code": "#3b2d22",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16041_1660216975.jpg",
+      "price": "44.75",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16042,
+      "product_id": 614,
+      "name": "Framed Canvas (Brown / 16″×16″)",
+      "size": "16″×16″",
+      "color": "Brown",
+      "color_code": "#3b2d22",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16042_1660216985.jpg",
+      "price": "49.95",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16043,
+      "product_id": 614,
+      "name": "Framed Canvas (Brown / 16″×20″)",
+      "size": "16″×20″",
+      "color": "Brown",
+      "color_code": "#3b2d22",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16043_1660216986.jpg",
+      "price": "53.50",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16044,
+      "product_id": 614,
+      "name": "Framed Canvas (Brown / 18″×24″)",
+      "size": "18″×24″",
+      "color": "Brown",
+      "color_code": "#3b2d22",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16044_1660216989.jpg",
+      "price": "62.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 16045,
+      "product_id": 614,
+      "name": "Framed Canvas (Brown / 24″×36″)",
+      "size": "24″×36″",
+      "color": "Brown",
+      "color_code": "#3b2d22",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/16045_1660216999.jpg",
+      "price": "87.25",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15695,
+      "product_id": 614,
+      "name": "Framed Canvas (White / 12″×12″)",
+      "size": "12″×12″",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/15695_1660216996.jpg",
+      "price": "41.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15696,
+      "product_id": 614,
+      "name": "Framed Canvas (White / 12″×16″)",
+      "size": "12″×16″",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/15696_1660217017.jpg",
+      "price": "45.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15697,
+      "product_id": 614,
+      "name": "Framed Canvas (White / 16″×16″)",
+      "size": "16″×16″",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/15697_1660217018.jpg",
+      "price": "50.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15698,
+      "product_id": 614,
+      "name": "Framed Canvas (White / 16″×20″)",
+      "size": "16″×20″",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/15698_1660217199.jpg",
+      "price": "54.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15699,
+      "product_id": 614,
+      "name": "Framed Canvas (White / 18″×24″)",
+      "size": "18″×24″",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/15699_1660217200.jpg",
+      "price": "63.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    },
+    {
+      "id": 15700,
+      "product_id": 614,
+      "name": "Framed Canvas (White / 24″×36″)",
+      "size": "24″×36″",
+      "color": "White",
+      "color_code": "#ffffff",
+      "color_code2": null,
+      "image": "https://files.cdn.printful.com/products/614/15700_1660217220.jpg",
+      "price": "88.00",
+      "in_stock": true,
+      "availability_regions": {
+        "US": "United States",
+        "EU": "Europe",
+        "EU_ES": "Spain",
+        "CA": "Canada",
+        "UK": "United Kingdom"
+      },
+      "availability_status": [
+        {
+          "region": "US",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU",
+          "status": "in_stock"
+        },
+        {
+          "region": "EU_ES",
+          "status": "in_stock"
+        },
+        {
+          "region": "CA",
+          "status": "in_stock"
+        },
+        {
+          "region": "UK",
+          "status": "in_stock"
+        }
+      ],
+      "material": []
+    }
+  ]
+}

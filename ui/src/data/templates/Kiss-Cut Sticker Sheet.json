@@ -1,0 +1,110 @@
+{
+    "name": "Kiss-Cut Sticker Sheet",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 12917,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 71665
+                    },
+                    {
+                        "placement": "background",
+                        "template_id": 71667
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 71665,
+                "image_url": "https://files.cdn.printful.com/m/sticker_sheet/medium/template/sticker_sheet_forsticker.png?v=1649070714",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 256,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 473,
+                "print_area_height": 670,
+                "print_area_top": 29,
+                "print_area_left": 127,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 71667,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/66/66de8ef4db1694b2b760c925a7696922?v=1627563133",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 259,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 505,
+                "print_area_height": 708,
+                "print_area_top": 10,
+                "print_area_left": 111,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 505,
+        "available_placements": {
+            "default": "Print file",
+            "background": "Background"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 256,
+                "width": 1750,
+                "height": 2482,
+                "dpi": 300,
+                "fill_mode": "fit",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 259,
+                "width": 1822,
+                "height": 2554,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 12917,
+                "placements": {
+                    "default": 256,
+                    "background": 259
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Holiday season",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Spring/summer vibes",
+            "Valentine's Day",
+            "template"
+        ],
+        "options": [
+            "Background",
+            "Christmas",
+            "Christmas 2",
+            "Front",
+            "Spring/Summer",
+            "Spring/Summer 2",
+            "Valentine's Day",
+            "Valentine's Day 2"
+        ]
+    }
+}

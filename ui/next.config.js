@@ -1,5 +1,19 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  reactStrictMode: true,
+
+  images: {
+    remotePatterns: [
+      {
+      protocol: 'https',
+      hostname: 'files.cdn.printful.com'
+      },
+      {
+        protocol: 'https',
+        hostname: "printful.com"
+      }
+    ],
+  },
   async headers() {
     return [
       {

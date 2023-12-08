@@ -1,0 +1,1190 @@
+{
+    "name": "Snap Case for iPhone®",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 16888,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185608
+                    }
+                ]
+            },
+            {
+                "variant_id": 16889,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185609
+                    }
+                ]
+            },
+            {
+                "variant_id": 16890,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185612
+                    }
+                ]
+            },
+            {
+                "variant_id": 16891,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185613
+                    }
+                ]
+            },
+            {
+                "variant_id": 16892,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185616
+                    }
+                ]
+            },
+            {
+                "variant_id": 16893,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185617
+                    }
+                ]
+            },
+            {
+                "variant_id": 16894,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185620
+                    }
+                ]
+            },
+            {
+                "variant_id": 16895,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185621
+                    }
+                ]
+            },
+            {
+                "variant_id": 16898,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185624
+                    }
+                ]
+            },
+            {
+                "variant_id": 16899,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185625
+                    }
+                ]
+            },
+            {
+                "variant_id": 16896,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185628
+                    }
+                ]
+            },
+            {
+                "variant_id": 16897,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185629
+                    }
+                ]
+            },
+            {
+                "variant_id": 16900,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185632
+                    }
+                ]
+            },
+            {
+                "variant_id": 16901,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185633
+                    }
+                ]
+            },
+            {
+                "variant_id": 16902,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185636
+                    }
+                ]
+            },
+            {
+                "variant_id": 16903,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185637
+                    }
+                ]
+            },
+            {
+                "variant_id": 16906,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185640
+                    }
+                ]
+            },
+            {
+                "variant_id": 16907,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185641
+                    }
+                ]
+            },
+            {
+                "variant_id": 16904,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185644
+                    }
+                ]
+            },
+            {
+                "variant_id": 16905,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185645
+                    }
+                ]
+            },
+            {
+                "variant_id": 16908,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185648
+                    }
+                ]
+            },
+            {
+                "variant_id": 16909,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185649
+                    }
+                ]
+            },
+            {
+                "variant_id": 16910,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185652
+                    }
+                ]
+            },
+            {
+                "variant_id": 16911,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185653
+                    }
+                ]
+            },
+            {
+                "variant_id": 16914,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185656
+                    }
+                ]
+            },
+            {
+                "variant_id": 16915,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185657
+                    }
+                ]
+            },
+            {
+                "variant_id": 16912,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185660
+                    }
+                ]
+            },
+            {
+                "variant_id": 16913,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185661
+                    }
+                ]
+            },
+            {
+                "variant_id": 16916,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185664
+                    }
+                ]
+            },
+            {
+                "variant_id": 16917,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 185665
+                    }
+                ]
+            },
+            {
+                "variant_id": 17722,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208872
+                    }
+                ]
+            },
+            {
+                "variant_id": 17723,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208873
+                    }
+                ]
+            },
+            {
+                "variant_id": 17724,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208902
+                    }
+                ]
+            },
+            {
+                "variant_id": 17725,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208903
+                    }
+                ]
+            },
+            {
+                "variant_id": 17726,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208932
+                    }
+                ]
+            },
+            {
+                "variant_id": 17727,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208933
+                    }
+                ]
+            },
+            {
+                "variant_id": 17728,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208962
+                    }
+                ]
+            },
+            {
+                "variant_id": 17729,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 208963
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 185608,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/1b/1bee9c34cf0b10de9ace3565074bf3e7?v=1689330126",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185609,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/1b/1bee9c34cf0b10de9ace3565074bf3e7?v=1689330126",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185612,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/11_pro.png?v=1693914391",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185613,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/11_pro.png?v=1693914391",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185616,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/11_promax.png?v=1693914416",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185617,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/11_promax.png?v=1693914416",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185620,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/12_mini.png?v=1693914443",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185621,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/12_mini.png?v=1693914443",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185624,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/1c/1c77b7db9ed08873226af5d1060ca51d?v=1689330043",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185625,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/1c/1c77b7db9ed08873226af5d1060ca51d?v=1689330043",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185628,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/12_pro.png?v=1693914494",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185629,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/12_pro.png?v=1693914494",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185632,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/12_promax.png?v=1693914522",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185633,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/12_promax.png?v=1693914522",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185636,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/13_mini.png?v=1693914551",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185637,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/13_mini.png?v=1693914551",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185640,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/a2/a21c35cfcb28715d7bf9839035caa41b?v=1689328902",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185641,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/a2/a21c35cfcb28715d7bf9839035caa41b?v=1689328902",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185644,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/13_pro.png?v=1693914602",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185645,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/13_pro.png?v=1693914602",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185648,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/13_promax.png?v=1693914633",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185649,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/13_promax.png?v=1693914633",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185652,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/4a/4af4bf17fe86603378d76022407fd3e8?v=1689328200",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185653,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/4a/4af4bf17fe86603378d76022407fd3e8?v=1689328200",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185656,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_plus.png?v=1693914686",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185657,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_plus.png?v=1693914686",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185660,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_pro.png?v=1693914718",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185661,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_pro.png?v=1693914718",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185664,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_promax.png?v=1693914746",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 185665,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_promax.png?v=1693914746",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208872,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/98/98d40526b0f5078b318aced8b6c7a865?v=1693897328",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208873,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/98/98d40526b0f5078b318aced8b6c7a865?v=1693897328",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208902,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_plus.png?v=1693914795",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208903,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_plus.png?v=1693914795",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208932,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_pro.png?v=1693914813",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208933,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_pro.png?v=1693914813",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208962,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_promax.png?v=1693914847",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 208963,
+                "image_url": "https://files.cdn.printful.com/m/snap_case_for_iphone/medium/template3/14_promax.png?v=1693914847",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 438,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 318,
+                "print_area_height": 528,
+                "print_area_top": 100,
+                "print_area_left": 205,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 150,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 683,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 438,
+                "width": 1328,
+                "height": 2197,
+                "dpi": 300,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 16888,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16889,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16890,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16891,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16892,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16893,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16894,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16895,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16898,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16899,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16896,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16897,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16900,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16901,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16902,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16903,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16906,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16907,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16904,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16905,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16908,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16909,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16910,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16911,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16914,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16915,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16912,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16913,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16916,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 16917,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17722,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17723,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17724,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17725,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17726,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17727,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17728,
+                "placements": {
+                    "default": 438
+                }
+            },
+            {
+                "variant_id": 17729,
+                "placements": {
+                    "default": 438
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Flat 2",
+            "Lifestyle",
+            "Lifestyle 10",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Lifestyle 5",
+            "Lifestyle 6",
+            "Lifestyle 7",
+            "Lifestyle 8",
+            "Lifestyle 9"
+        ],
+        "options": [
+            "Front",
+            "Front 2",
+            "Front 3",
+            "Right"
+        ]
+    }
+}

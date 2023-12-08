@@ -1,0 +1,113 @@
+{
+    "name": "Gaming Mouse Pad",
+    "template": {
+        "version": 100,
+        "variant_mapping": [
+            {
+                "variant_id": 14943,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 109754
+                    }
+                ]
+            },
+            {
+                "variant_id": 14942,
+                "templates": [
+                    {
+                        "placement": "default",
+                        "template_id": 109753
+                    }
+                ]
+            }
+        ],
+        "templates": [
+            {
+                "template_id": 109754,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/fe/fee0edfd6ee86131daf1e6a00e9aab1d?v=1649422480",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 294,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 722,
+                "print_area_height": 643,
+                "print_area_top": 43,
+                "print_area_left": 3,
+                "is_template_on_front": true,
+                "orientation": "any"
+            },
+            {
+                "template_id": 109753,
+                "image_url": "https://files.cdn.printful.com/o/upload/api-template/39/3913e649c2f5788e15edbeaa5c10a859?v=1649422453",
+                "background_url": null,
+                "background_color": "#ffffff",
+                "printfile_id": 293,
+                "template_width": 728,
+                "template_height": 728,
+                "print_area_width": 720,
+                "print_area_height": 365,
+                "print_area_top": 182,
+                "print_area_left": 4,
+                "is_template_on_front": true,
+                "orientation": "any"
+            }
+        ],
+        "min_dpi": 75,
+        "conflicting_placements": []
+    },
+    "printFiles": {
+        "product_id": 583,
+        "available_placements": {
+            "default": "Print file"
+        },
+        "printfiles": [
+            {
+                "printfile_id": 293,
+                "width": 5475,
+                "height": 2775,
+                "dpi": 150,
+                "fill_mode": "cover",
+                "can_rotate": false
+            },
+            {
+                "printfile_id": 294,
+                "width": 2775,
+                "height": 2475,
+                "dpi": 150,
+                "fill_mode": "cover",
+                "can_rotate": false
+            }
+        ],
+        "variant_printfiles": [
+            {
+                "variant_id": 14943,
+                "placements": {
+                    "default": 294
+                }
+            },
+            {
+                "variant_id": 14942,
+                "placements": {
+                    "default": 293
+                }
+            }
+        ],
+        "option_groups": [
+            "Flat",
+            "Flat 2",
+            "Lifestyle",
+            "Lifestyle 2",
+            "Lifestyle 3",
+            "Lifestyle 4",
+            "Lifestyle 5",
+            "Lifestyle 6",
+            "Product details"
+        ],
+        "options": [
+            "Front",
+            "Product details"
+        ]
+    }
+}
