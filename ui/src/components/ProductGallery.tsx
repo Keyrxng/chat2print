@@ -19,7 +19,7 @@ export const ProductGallery = ({ images }: { images: string[] }) => {
             <div key={index} className="gallery-item p-4">
               <div className="image-wrapper overflow-hidden rounded shadow">
                 <Image
-                  src={image}
+                  src={`/${image}`}
                   alt={`Product ${index + 1}`}
                   className="w-full h-auto"
                   width={500}
