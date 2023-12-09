@@ -1,6 +1,10 @@
 import Image from "next/image";
 
-export default function ProductCard({ product }) {
+interface Props {
+  product: any;
+}
+
+export default function ProductCard({ product }: Props) {
   return (
     <div className="border hover:shadow-lg transition duration-300 p-4 rounded">
       <Image

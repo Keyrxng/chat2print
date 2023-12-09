@@ -43,9 +43,8 @@ export const metadata: Metadata = {
 
 const Container = {
   display: "flex",
-  flexDirection: "column",
+  // flexDirection: "column",
   alignItems: "center",
-
   justifyContent: "center",
   minHeight: "50vh",
   width: "100%",

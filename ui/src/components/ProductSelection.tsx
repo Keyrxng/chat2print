@@ -17,14 +17,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { __Variant } from "@/types/all"
+import { __Prod, __ProductsList } from "@/types/all"
+import Products from "@/data/products"
 
-interface VariantSelectionProps {
-  variants: __Variant[] | undefined
-  setSelectedVariant: React.Dispatch<React.SetStateAction<__Variant | undefined>>
+interface ProductSelectionProps {
+  product: __Prod | undefined
+  setSelectedProduct: (product: __Prod) => void
 }
 
-export function VariantSelection({variants, setSelectedVariant}: VariantSelectionProps) {
+export function ProductSelection({product, setSelectedProduct}: ProductSelectionProps) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
 
@@ -39,32 +40,32 @@ export function VariantSelection({variants, setSelectedVariant}: VariantSelectio
         >
           {value
             ? value
-            : "Select style..."}
+            : "Select Product..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search styles..." />
-          <CommandEmpty>No style found.</CommandEmpty>
+          <CommandInput placeholder="Search products..." />
+          <CommandEmpty>No products found.</CommandEmpty>
           <CommandGroup>
-            {variants?.map((variant) => (
+            {Object.values(Products)?.map((product) => (
               <CommandItem
-                key={variant.name}
-                value={variant.name}
+                key={product.product.type_name}
+                value={product.product.type_name}
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue)
-                  setSelectedVariant(variant)
+                  setSelectedProduct(product)
                   setOpen(false)
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === variant.name ? "opacity-100" : "opacity-0"
+                    value === product.product.type_name ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {variant.name}
+                {product.product.type_name}
               </CommandItem>
             ))}
           </CommandGroup>

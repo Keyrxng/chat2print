@@ -1,5 +1,4 @@
-export default function UserProfile({ user }) {
-  console.log("user", user);
+export default function UserProfile({ user }: { user: any }) {
   return (
     <div className="container mx-auto p-4">
       <div className="border p-4 rounded shadow-md">

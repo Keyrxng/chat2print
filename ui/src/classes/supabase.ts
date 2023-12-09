@@ -7,11 +7,9 @@ class Supabase {
 
   constructor() {
     if (!supabaseUrl || !supabaseKey) {
-      console.log("supabaseUrl" , supabaseUrl);
-      console.log("supabaseKey" , supabaseKey);
-      
+      console.log("supabaseUrl", supabaseUrl);
+      console.log("supabaseKey", supabaseKey);
 
-      
       throw new Error("DB Credentials not found");
     }
     this.supabase = createClient(supabaseUrl, supabaseKey, {
@@ -53,7 +51,7 @@ class Supabase {
     return { user };
   }
 
-  async sessionRestore(at, rt) {
+  async sessionRestore(at: any, rt: any) {
     const { data, error } = await this.supabase.auth.setSession({
       access_token: at,
       refresh_token: rt,

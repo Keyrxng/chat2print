@@ -1,10 +1,11 @@
-"use client"
-import { useState, useRef } from "react"
-import { motion, useInView } from "framer-motion"
+"use client";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 
-export const ProductGallery = ({ images }) => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+export const ProductGallery = ({ images }: { images: string[] }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   return (
     <motion.div
@@ -14,13 +15,15 @@ export const ProductGallery = ({ images }) => {
     >
       <section id="product-gallery" className="py-12 md:py-24">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4" ref={ref}>
-          {images.map((image, index) => (
+          {images.map((image: string, index: number) => (
             <div key={index} className="gallery-item p-4">
               <div className="image-wrapper overflow-hidden rounded shadow">
-                <img
+                <Image
                   src={image}
                   alt={`Product ${index + 1}`}
                   className="w-full h-auto"
+                  width={500}
+                  height={500}
                 />
               </div>
             </div>
@@ -28,5 +31,5 @@ export const ProductGallery = ({ images }) => {
         </div>
       </section>
     </motion.div>
-  )
-}
+  );
+};

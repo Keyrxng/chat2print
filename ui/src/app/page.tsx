@@ -1,11 +1,11 @@
-"use client"
-import { FeaturesSection } from "@/components/Features"
-import { HowItWorksSection } from "@/components/HowItWorks"
-import { PricingPlans } from "@/components/Pricing"
-import { ProductGallery } from "@/components/ProductGallery"
-import { useState, useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { Link } from "react-scroll"
+"use client";
+import { FeaturesSection } from "@/components/Features";
+import { HowItWorksSection } from "@/components/HowItWorks";
+import { PricingPlans } from "@/components/Pricing";
+import { ProductGallery } from "@/components/ProductGallery";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Link } from "react-scroll";
 export default function Home() {
   const images = [
     "/wfm.webp",
@@ -36,34 +36,33 @@ export default function Home() {
     "/10-20-gaming.webp",
     "/00-10-gaming.webp",
     "/00-10-gaming-retro.webp",
-  ]
-  const [currentX, setCurrentX] = useState(0)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  ];
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
-  const ref2 = useRef(null)
-  const isInView2 = useInView(ref2, { once: true })
+  const ref2 = useRef(null);
+  const isInView2 = useInView(ref2, { once: true });
 
   const translateSliderX = (index: any) => {
-    const translateY = "rotateY(9deg) scale(0.6)"
-    const translateX = `translateX(${index * currentX}px)`
-    return `${translateY} ${translateX}`
-  }
+    const translateY = "rotateY(9deg) scale(0.6)";
+    const translateX = `translateX(${index}px)`;
+    return `${translateY} ${translateX}`;
+  };
 
   const SlidingBackground = () => {
-    const imageRows = [images]
+    const imageRows = [images];
     const returnRows = () => {
-      return imageRows.map(row => {
-        const randomImages = []
+      return imageRows.map((row) => {
+        const randomImages = [];
         for (let i = 0; i < images.length; i++) {
-          const randomIndex = Math.floor(Math.random() * row.length) + 1
-          randomImages.push(row[randomIndex])
+          const randomIndex = Math.floor(Math.random() * row.length) + 1;
+          randomImages.push(row[randomIndex]);
         }
-        const set = new Set(randomImages)
-        const arr = Array.from(set)
-        return arr
-      })
-    }
+        const set = new Set(randomImages);
+        const arr = Array.from(set);
+        return arr;
+      });
+    };
 
     return (
       <motion.div
@@ -231,8 +230,8 @@ export default function Home() {
           </motion.div>
         </section>
       </motion.div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="mx-auto">
@@ -293,5 +292,5 @@ export default function Home() {
         <ProductGallery images={images} />
       </div>
     </div>
-  )
+  );
 }

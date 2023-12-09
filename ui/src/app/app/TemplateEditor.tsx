@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { __Temp, __Template, __VariantMapping } from '@/types/all';
@@ -11,27 +11,45 @@ interface ImagePlacementEditorProps {
 
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({ selectedTemplate, userImage }) => {
   const [position, setPosition] = useState({ x: 0, y: 0, scale: 1 });
-  const [size, setSize] = useState({ width: selectedTemplate?.template_width, height: selectedTemplate?.template_height });
   const [imageSrc, setImageSrc] = useState<string>("");
-  const [templateImg, setTemplateImg] = useState<string>("");
   const editorRef = useRef<HTMLDivElement>(null);
+  const [viewSwitch, setViewSwitch] = useState<HTMLButtonElement | null>(null);
+  let observerRef = useRef<MutationObserver | null>(null);
 
   useEffect(() => {
+    const viewSw = document.getElementById("view-switch");
+    setViewSwitch(viewSw as HTMLButtonElement);
+
+    if (viewSwitch) {
+      observerRef.current = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === "data-state") {
+            const newState = (mutation.target as HTMLElement).getAttribute("data-state");
+            console.log(newState);
+            if (newState === "unchecked") {
+              setImageSrc((prev) => prev = selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? "");
+            } else {
+              setImageSrc((prev) => prev = selectedTemplate?.image_url ?? selectedTemplate?.background_url ?? "");
+            }
+          }
+        });
+      });
+      observerRef.current.observe(viewSwitch, { attributes: true });
+    }
+  }, [imageSrc, selectedTemplate?.background_url, selectedTemplate?.image_url, viewSwitch]);
+
+
+  useEffect(() => {
+    
     const initialPosition = {
       x: selectedTemplate?.print_area_left ?? 100,
       y: selectedTemplate?.print_area_top ?? 100,
       scale: 1
     };
-    const initialSize = {
-      width: selectedTemplate?.print_area_width ?? 700,
-      height: selectedTemplate?.print_area_height ?? 700,
-    };
     setPosition(initialPosition);
-    setSize(initialSize);
-    setTemplateImg(selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? "");
-    setImageSrc(userImage);
+    setImageSrc(selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? "");
   }, [selectedTemplate, userImage]);
-
+  
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
       x: event.clientX - editorRef.current?.offsetLeft!,
@@ -42,7 +60,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({ selectedTem
 
   return (
     <div className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
-      style={{ backgroundImage: `url(${templateImg})` }}
+      style={{ backgroundImage: `url(${imageSrc})` }}
       ref={editorRef}
     >
       <TransformWrapper

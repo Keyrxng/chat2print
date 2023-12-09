@@ -1,23 +1,22 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import Supabase from "../../../classes/supabase";
 import { URLSearchParams } from "url";
 
 const supabase = new Supabase();
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: Request) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const action = searchParams.get("action");
 
   try {
     switch (action) {
       case "signup":
-        return await signUp(req, res);
+        return await signUp(req);
       case "signin":
-        return await signIn(req, res);
+        return await signIn(req);
       case "signout":
-        return await signOut(req, res);
+        return await signOut(req);
       case "session":
-        return await session(req, res);
+        return await session(req);
       default:
         return new Response(
           JSON.stringify({ message: "Invalid action", action: action }),
@@ -37,15 +36,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "1mb",
-    },
-  },
-};
-
-async function session(req: NextApiRequest, res: NextApiResponse) {
+async function session(req: Request) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const at = searchParams.get("token");
   const rt = searchParams.get("rt");
@@ -74,7 +65,7 @@ async function session(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-async function signUp(req: NextApiRequest, res: NextApiResponse) {
+async function signUp(req: Request) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const email = searchParams.get("email");
   const password = searchParams.get("password");
@@ -98,7 +89,7 @@ async function signUp(req: NextApiRequest, res: NextApiResponse) {
   });
 }
 
-async function signIn(req: NextApiRequest, res: NextApiResponse) {
+async function signIn(req: Request) {
   const searchParams = new URLSearchParams(req?.url?.split("?")[1]);
   const email = searchParams.get("email");
   const password = searchParams.get("password");
@@ -121,7 +112,7 @@ async function signIn(req: NextApiRequest, res: NextApiResponse) {
   });
 }
 
-async function signOut(req: NextApiRequest, res: NextApiResponse) {
+async function signOut(req: Request) {
   const response = await supabase.signOut();
 
   return new Response(JSON.stringify(response), {
@@ -131,15 +122,10 @@ async function signOut(req: NextApiRequest, res: NextApiResponse) {
   });
 }
 
-export function GET(req: NextApiRequest, res: NextApiResponse) {
-  return handler(req, res);
+export async function POST(req: Request) {
+  return await handler(req);
 }
-export function POST(req: NextApiRequest, res: NextApiResponse) {
-  return handler(req, res);
-}
-export function PUT(req: NextApiRequest, res: NextApiResponse) {
-  return handler(req, res);
-}
-export function DELETE(req: NextApiRequest, res: NextApiResponse) {
-  return handler(req, res);
+
+export async function GET(req: Request) {
+  return await handler(req);
 }

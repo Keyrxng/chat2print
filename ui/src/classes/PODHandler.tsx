@@ -1,4 +1,4 @@
-import { Product } from "@/types/all";
+import { Product, __Variant } from "@/types/all";
 import axios, { AxiosInstance } from "axios";
 import probe from "probe-image-size";
 
@@ -212,7 +212,7 @@ class PODHandler {
         const productResponse = await this.client.post("/sync/products", {
           name: product.name,
           external_id: product.externalId,
-          variants: product.variants.map((variant) => ({
+          variants: product.variants.map((variant: __Variant) => ({
             ...variant,
             files: [{ id: fileId }],
           })),

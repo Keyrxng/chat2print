@@ -1,8 +1,8 @@
-"use client"
-import { Calendar, DollarSign, LucidePackageOpen } from "lucide-react"
-import OrderDetail from "./OrderDetails"
-import React, { useState } from "react"
-import { Button } from "./ui/button"
+"use client";
+import { Calendar, DollarSign, LucidePackageOpen } from "lucide-react";
+import OrderDetail from "./OrderDetails";
+import React, { useState } from "react";
+import { Button } from "./ui/button";
 
 const orders = [
   {
@@ -20,16 +20,16 @@ const orders = [
     date: "2021-01-03",
     total: 29.99,
   },
-]
+];
 
 export default function OrderHistory() {
-  const [viewingOrder, setViewingOrder] = useState(false)
-  const [order, setOrder] = useState(null)
+  const [viewingOrder, setViewingOrder] = useState(false);
+  const [order, setOrder] = useState<(typeof orders)[number]>();
 
-  const handleClick = order => {
-    setOrder(order)
-    setViewingOrder(true)
-  }
+  const handleClick = (order: (typeof orders)[number]) => {
+    setOrder(order);
+    setViewingOrder(true);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -45,7 +45,7 @@ export default function OrderHistory() {
             </div>
           ) : (
             <div className="space-y-4 text-sm ">
-              {orders.map(order => (
+              {orders.map((order) => (
                 <div
                   key={order.id}
                   className="border bg-zinc-950  p-4 rounded-md shadow transition duration-300 hover:shadow-lg"
@@ -82,7 +82,7 @@ export default function OrderHistory() {
       )}
       {viewingOrder && (
         <>
-          <OrderDetail orderId={order.id} />
+          <OrderDetail orderId={order?.id ?? 0} />
           <Button
             onClick={() => setViewingOrder(false)}
             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
@@ -92,5 +92,5 @@ export default function OrderHistory() {
         </>
       )}
     </div>
-  )
+  );
 }

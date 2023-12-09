@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -7,42 +7,48 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import React from "react"
-import OrderHistory from "./OrderHistory"
-import Image from "next/image"
-import { motion } from "framer-motion"
-export default function Header() {
-  const [user, setUser] = React.useState(null)
-  const [isRegistering, setIsRegistering] = React.useState(false)
-  const [email, setEmail] = React.useState("")
-  const [password, setPassword] = React.useState("")
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import React from "react";
+import OrderHistory from "./OrderHistory";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-  const [orderModalIsOpen, setOrderModalIsOpen] = React.useState(false)
-  const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false)
-  const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false)
-  const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false)
-  const [isConnected, setIsConnected] = React.useState(false)
-  const [refreshSesh, setRefreshSesh] = React.useState(false)
+interface User {
+  email: string;
+  password: string;
+}
+
+export default function Header() {
+  const [user, setUser] = React.useState<User>();
+  const [isRegistering, setIsRegistering] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const [orderModalIsOpen, setOrderModalIsOpen] = React.useState(false);
+  const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false);
+  const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
+  const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState(false);
+  const [refreshSesh, setRefreshSesh] = React.useState(false);
 
   React.useEffect(() => {
-    const accessT = sessionStorage.getItem("accessT")
-    const refreshT = sessionStorage.getItem("refreshT")
+    const accessT = sessionStorage.getItem("accessT");
+    const refreshT = sessionStorage.getItem("refreshT");
     if (accessT && refreshT) {
       fetch(`/api/auth?action=session&token=${accessT}&rt=${refreshT}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log("SESSION: ", data)
-          setUser(data.data.user)
-          setIsConnected(true)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("SESSION: ", data);
+          setUser(data.data.user);
+          setIsConnected(true);
         })
-        .catch(error => console.error("Error:", error))
+        .catch((error) => console.error("Error:", error));
     } else {
-      setIsConnected(false)
+      setIsConnected(false);
     }
-  }, [refreshSesh])
+  }, [refreshSesh]);
 
   const ConnectedBlinker = () => {
     return (
@@ -51,69 +57,69 @@ export default function Header() {
           isConnected ? "bg-green-500" : "bg-red-500"
         } rounded-full animate-pulse`}
       />
-    )
-  }
+    );
+  };
 
   const signinValidation = () => {
     if (email === "") {
-      alert("Please enter your email address")
-      return false
+      alert("Please enter your email address");
+      return false;
     }
     if (password === "") {
-      alert("Please enter your password")
-      return false
+      alert("Please enter your password");
+      return false;
     }
     if (!email.includes("@")) {
-      alert("Please enter a valid email")
-      return false
+      alert("Please enter a valid email");
+      return false;
     }
     if (password.length < 6) {
-      alert("Password must be at least 6 characters")
-      return false
+      alert("Password must be at least 6 characters");
+      return false;
     }
     if (password.length >= 255) {
-      alert("Password must be less than 255 characters")
-      return false
+      alert("Password must be less than 255 characters");
+      return false;
     }
 
     if (email.length >= 255) {
-      alert("Email must be less than 255 characters")
-      return false
+      alert("Email must be less than 255 characters");
+      return false;
     }
 
     if (email.length < 6) {
-      alert("Email must be at least 6 characters")
-      return false
+      alert("Email must be at least 6 characters");
+      return false;
     }
 
-    return true
-  }
+    return true;
+  };
 
   const handleSubmit = (event: any) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!signinValidation()) {
-      return
+      return;
     }
 
-    const target = event.target.action
+    const target = event.target.action;
     fetch(target, {
       method: "POST",
       body: JSON.stringify({ email, password }),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.session) {
-          sessionStorage.setItem("accessT", data.session.access_token)
-          sessionStorage.setItem("refreshT", data.session.refresh_token)
+          sessionStorage.setItem("accessT", data.session.access_token);
+          sessionStorage.setItem("refreshT", data.session.refresh_token);
         }
         if (data.user) {
-          setUser(data.user)
+          setUser(data.user);
         }
-        setIsConnected(true)
+        setIsConnected(true);
       })
-      .catch(error => console.error("Error:", error))
-  }
+      .catch((error) => console.error("Error:", error));
+  };
 
   return (
     <motion.div
@@ -376,12 +382,14 @@ export default function Header() {
                             onClick={() => {
                               fetch("/api/auth?action=signout")
                                 .then(() => {
-                                  sessionStorage.removeItem("accessT")
-                                  sessionStorage.removeItem("refreshT")
-                                  setUser(null)
-                                  setRefreshSesh(prev => !prev)
+                                  sessionStorage.removeItem("accessT");
+                                  sessionStorage.removeItem("refreshT");
+                                  setUser({ email: "", password: "" });
+                                  setRefreshSesh((prev) => !prev);
                                 })
-                                .catch(error => console.error("Error:", error))
+                                .catch((error) =>
+                                  console.error("Error:", error)
+                                );
                             }}
                           >
                             Sign Out
@@ -418,8 +426,8 @@ export default function Header() {
                           name="username"
                           placeholder="Email"
                           className="text-accent"
-                          onChange={event => {
-                            setEmail(event.target.value)
+                          onChange={(event) => {
+                            setEmail(event.target.value);
                           }}
                         />
                         <Input
@@ -427,8 +435,8 @@ export default function Header() {
                           name="password"
                           placeholder="Password"
                           className="text-accent"
-                          onChange={event => {
-                            setPassword(event.target.value)
+                          onChange={(event) => {
+                            setPassword(event.target.value);
                           }}
                         />
                         <Button
@@ -470,5 +478,5 @@ export default function Header() {
         </div>
       </header>
     </motion.div>
-  )
+  );
 }

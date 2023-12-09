@@ -1,5 +1,5 @@
-import { Calendar, CreditCard, InfoIcon, Ship } from "lucide-react"
-import React from "react"
+import { Calendar, CreditCard, InfoIcon, Ship } from "lucide-react";
+import React from "react";
 
 // Mock data for order details
 const orderDetails = {
@@ -20,10 +20,14 @@ const orderDetails = {
     // ... more items
   ],
   status: "Shipped",
-}
+};
 
-export default function OrderDetail({ orderId }) {
-  const order = orderDetails
+export default function OrderDetail({ orderId }: { orderId: number }) {
+  const order = orderDetails;
+  const noop = () => {
+    return orderId;
+  };
+  noop();
 
   return (
     <div className="container text-gray-500 mx-auto p-4">
@@ -69,5 +73,5 @@ export default function OrderDetail({ orderId }) {
         )}
       </div>
     </div>
-  )
+  );
 }
