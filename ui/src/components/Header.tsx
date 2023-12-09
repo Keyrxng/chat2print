@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import OrderHistory from "./OrderHistory";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { motion } from "framer-motion";
 
 interface User {

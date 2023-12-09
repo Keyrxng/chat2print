@@ -1,6 +1,6 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { __Temp, __Template, __VariantMapping } from '@/types/all';
 

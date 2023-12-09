@@ -1,6 +1,6 @@
 // ProductOption.tsx
 import { Design, __Prod } from "@/types/all";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 interface ProductOptionProps {
   key: number;

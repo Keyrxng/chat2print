@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export const ProductGallery = ({ images }: { images: string[] }) => {
   const ref = useRef(null);

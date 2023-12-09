@@ -31,7 +31,7 @@ const images = [
 ];
 import { useEffect, useState } from "react";
 import { ProductOption } from "@/components/ProductOption";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Info, InfoIcon, X } from "lucide-react";
 import products from "@/data/products";
 import {
