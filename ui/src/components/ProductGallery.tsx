@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 export const ProductGallery = ({ images }: { images: string[] }) => {
   const ref = useRef(null);
@@ -24,7 +24,10 @@ export const ProductGallery = ({ images }: { images: string[] }) => {
                   className="w-full h-auto"
                   width={500}
                   height={500}
-                />
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               </div>
             </div>
           ))}

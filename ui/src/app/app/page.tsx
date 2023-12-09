@@ -31,7 +31,7 @@ const images = [
 ];
 import { useEffect, useState } from "react";
 import { ProductOption } from "@/components/ProductOption";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { Info, InfoIcon, X } from "lucide-react";
 import products from "@/data/products";
 import {
@@ -119,9 +119,12 @@ export default function Page() {
                   alt="design"
                   width={100}
                   height={100}
-                  objectFit="cover"
                   className="rounded-full"
-                />
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto",
+                    objectFit: "cover"
+                  }} />
               </button>
               <button
                 onClick={() => handleDeleteImage(image)}

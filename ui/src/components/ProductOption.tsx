@@ -1,6 +1,6 @@
 // ProductOption.tsx
 import { Design, __Prod } from "@/types/all";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 interface ProductOptionProps {
   key: number;
@@ -32,7 +32,10 @@ export const ProductOption = ({
         src={product?.product.image}
         alt={product?.product.type_name}
         className="rounded-lg"
-      />
+        style={{
+          maxWidth: "100%",
+          height: "auto"
+        }} />
       <div className="text-center mt-2">
         <h3 className="text-sm font-bold">{product?.product.type_name}</h3>
         <p className="text-sm font-bold">

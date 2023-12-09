@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { motion } from "framer-motion";
 export const FeaturesSection = () => {
   const features = [
@@ -41,7 +41,10 @@ export const FeaturesSection = () => {
                   height={80}
                   alt={feature.title}
                   className="mx-auto"
-                />
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
                 <h3 className="text-xl text-accent font-semibold mt-5 mb-3">
                   {feature.title}
                 </h3>

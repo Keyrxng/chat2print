@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import OrderHistory from "./OrderHistory";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface User {
@@ -139,7 +139,10 @@ export default function Header() {
               width={50}
               height={50}
               alt="Chat2Print logo"
-            />
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
           </a>
           <div className="hidden md:flex flex-col lg:ml-[10rem]  ">
             <h1 className="text-2xl text-accent font-bold">

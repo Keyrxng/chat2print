@@ -1,6 +1,6 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { __Temp, __Template, __VariantMapping } from '@/types/all';
 
@@ -78,8 +78,17 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({ selectedTem
           <TransformComponent contentClass='w-[600px] h-[600px]' wrapperClass='w-[600px] h-[600px]'>
             <div className="w-[1200px] h-[1200px]">
               <div className='w-[100px] h-[100px]'>
-                <Image onDrag={handleDrag} alt="fuck off" width={1024} height={1024} src={userImage}
-                  className="z-10" />
+                <Image
+                  onDrag={handleDrag}
+                  alt="fuck off"
+                  width={1024}
+                  height={1024}
+                  src={userImage}
+                  className="z-10"
+                  style={{
+                    maxWidth: "100%",
+                    height: "auto"
+                  }} />
               </div>
             </div>
           </TransformComponent>
