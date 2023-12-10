@@ -10,45 +10,49 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { use, useEffect } from "react";
 import OrderHistory from "./OrderHistory";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { Database } from "@/lib/database.types";
 
 interface User {
-  email: string;
-  password: string;
+  email?: string;
 }
 
 export default function Header() {
   const [user, setUser] = React.useState<User>();
   const [isRegistering, setIsRegistering] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
   const [orderModalIsOpen, setOrderModalIsOpen] = React.useState(false);
   const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false);
   const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
   const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
   const [isConnected, setIsConnected] = React.useState(false);
-  const [refreshSesh, setRefreshSesh] = React.useState(false);
 
-  React.useEffect(() => {
-    const accessT = sessionStorage.getItem("accessT");
-    const refreshT = sessionStorage.getItem("refreshT");
-    if (accessT && refreshT) {
-      fetch(`/api/auth?action=session&token=${accessT}&rt=${refreshT}`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("SESSION: ", data);
-          setUser(data.data.user);
-          setIsConnected(true);
-        })
-        .catch((error) => console.error("Error:", error));
-    } else {
-      setIsConnected(false);
+  const router = useRouter();
+  const supabase = createClientComponentClient<Database>({
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  });
+
+  useEffect(() => {
+    async function checkConnection() {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        setIsConnected(false);
+      } else {
+        setIsConnected(true);
+        setUser({
+          email: data?.user.email,
+        });
+      }
     }
-  }, [refreshSesh]);
+    checkConnection();
+  }, []);
 
   const ConnectedBlinker = () => {
     return (
@@ -60,65 +64,153 @@ export default function Header() {
     );
   };
 
-  const signinValidation = () => {
-    if (email === "") {
-      alert("Please enter your email address");
-      return false;
-    }
-    if (password === "") {
-      alert("Please enter your password");
-      return false;
-    }
-    if (!email.includes("@")) {
-      alert("Please enter a valid email");
-      return false;
-    }
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters");
-      return false;
-    }
-    if (password.length >= 255) {
-      alert("Password must be less than 255 characters");
-      return false;
-    }
+  const Login = () => {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
 
-    if (email.length >= 255) {
-      alert("Email must be less than 255 characters");
-      return false;
-    }
+    const signinValidation = () => {
+      if (email === "") {
+        alert("Please enter your email address");
+        return false;
+      }
+      if (password === "") {
+        alert("Please enter your password");
+        return false;
+      }
+      if (!email.includes("@")) {
+        alert("Please enter a valid email");
+        return false;
+      }
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return false;
+      }
+      if (password.length >= 255) {
+        alert("Password must be less than 255 characters");
+        return false;
+      }
 
-    if (email.length < 6) {
-      alert("Email must be at least 6 characters");
-      return false;
-    }
+      if (email.length >= 255) {
+        alert("Email must be less than 255 characters");
+        return false;
+      }
 
-    return true;
-  };
+      if (email.length < 6) {
+        alert("Email must be at least 6 characters");
+        return false;
+      }
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
+      return true;
+    };
 
-    if (!signinValidation()) {
-      return;
-    }
+    const handleSubmit = (event: any) => {
+      event.preventDefault();
 
-    const target = event.target.action;
-    fetch(target, {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.session) {
-          sessionStorage.setItem("accessT", data.session.access_token);
-          sessionStorage.setItem("refreshT", data.session.refresh_token);
-        }
-        if (data.user) {
-          setUser(data.user);
-        }
-        setIsConnected(true);
+      if (!signinValidation()) {
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("email", email);
+      fd.append("password", password);
+
+      const target = event.target.action;
+
+      fetch(target, {
+        method: "POST",
+        body: fd,
       })
-      .catch((error) => console.error("Error:", error));
+        .then(async (data) => {
+          const res = await data.json();
+          console.log("res", res);
+          if (res.user) {
+            setUser({
+              email: res.user.email,
+            });
+            setIsConnected(true);
+          } else {
+            alert(res.message);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+
+    return (
+      <>
+        <form
+          method="POST"
+          action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
+          className="space-y-4"
+          onSubmit={handleSubmit}
+        >
+          <Input
+            type="username"
+            name="username"
+            placeholder="Email"
+            className="text-accent"
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="text-accent"
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          />
+          <Button
+            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+            type="submit"
+          >
+            {!isRegistering ? "Sign In" : "Register"}
+          </Button>
+        </form>
+        {/* provider login google etc */}
+
+        {/* <div className="flex flex-col space-y-4">
+            <Button
+              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+              onClick={() => handleLoginWithProvider("google")}
+            >
+              Sign in with Google
+            </Button>
+            <Button
+              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+              onClick={() => handleLoginWithProvider("github")}
+            >
+              Sign in with Github
+            </Button>
+          </div> */}
+
+        {!isRegistering && (
+          <p className="text-center text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <button
+              onClick={() => setIsRegistering(true)}
+              className="underline"
+            >
+              Sign up
+            </button>
+          </p>
+        )}
+        {isRegistering && (
+          <p className="text-center text-muted-foreground">
+            Already have an account?{" "}
+            <button
+              onClick={() => setIsRegistering(false)}
+              className="underline"
+            >
+              Sign in
+            </button>
+          </p>
+        )}
+      </>
+    );
   };
 
   return (
@@ -141,8 +233,9 @@ export default function Header() {
               alt="Chat2Print logo"
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </a>
           <div className="hidden md:flex flex-col lg:ml-[10rem]  ">
             <h1 className="text-2xl text-accent font-bold">
@@ -367,7 +460,7 @@ export default function Header() {
                             </DialogDescription>
                           </DialogHeader>
                           <Button
-                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border border-accent"
                             type="submit"
                             onClick={() => setOrderModalIsOpen(true)}
                           >
@@ -381,18 +474,12 @@ export default function Header() {
                             Account Settings
                           </Button>
                           <Button
-                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                            onClick={() => {
-                              fetch("/api/auth?action=signout")
-                                .then(() => {
-                                  sessionStorage.removeItem("accessT");
-                                  sessionStorage.removeItem("refreshT");
-                                  setUser({ email: "", password: "" });
-                                  setRefreshSesh((prev) => !prev);
-                                })
-                                .catch((error) =>
-                                  console.error("Error:", error)
-                                );
+                            className="text-accent hover:bg-accent hover:text-background transition duration-300 border border-accent"
+                            onClick={async () => {
+                              await supabase.auth.signOut();
+                              setIsConnected(false);
+                              setUser({});
+                              router.refresh();
                             }}
                           >
                             Sign Out
@@ -414,64 +501,7 @@ export default function Header() {
                         </DialogDescription>
                       </DialogHeader>
 
-                      <form
-                        method="POST"
-                        action={
-                          !isRegistering
-                            ? `/api/auth?action=signin&password=${password}&email=${email}`
-                            : `/api/auth?action=signup&password=${password}&email=${email}`
-                        }
-                        className="space-y-4"
-                        onSubmit={handleSubmit}
-                      >
-                        <Input
-                          type="username"
-                          name="username"
-                          placeholder="Email"
-                          className="text-accent"
-                          onChange={(event) => {
-                            setEmail(event.target.value);
-                          }}
-                        />
-                        <Input
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          className="text-accent"
-                          onChange={(event) => {
-                            setPassword(event.target.value);
-                          }}
-                        />
-                        <Button
-                          className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                          type="submit"
-                        >
-                          {!isRegistering ? "Sign In" : "Register"}
-                        </Button>
-                      </form>
-
-                      {!isRegistering && (
-                        <p className="text-center text-muted-foreground">
-                          Don&apos;t have an account?{" "}
-                          <button
-                            onClick={() => setIsRegistering(true)}
-                            className="underline"
-                          >
-                            Sign up
-                          </button>
-                        </p>
-                      )}
-                      {isRegistering && (
-                        <p className="text-center text-muted-foreground">
-                          Already have an account?{" "}
-                          <button
-                            onClick={() => setIsRegistering(false)}
-                            className="underline"
-                          >
-                            Sign in
-                          </button>
-                        </p>
-                      )}
+                      <Login />
                     </DialogContent>
                   )}
                 </Dialog>
