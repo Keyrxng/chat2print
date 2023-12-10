@@ -111,48 +111,43 @@ class PODHandler {
   }
 
   async createMockupTask(
+    productID: number,
     imageUrl: string,
     variantIDs: number[],
-    type: string,
-    top: number,
-    left: number,
-    right: number,
-    bottom: number
+    scaledWidth: number,
+    scaledHeight: number,
+    offsetX: number,
+    offsetY: number,
+    type?: string
   ) {
     try {
       const probed = await probe(imageUrl);
       const imgHeight = probed.height;
       const imgWidth = probed.width;
 
-      const widthFull = 1800;
-      const hCalc = (widthFull * imgHeight) / imgWidth;
-      const heightFull = Math.round(hCalc);
-
       const mockupData = {
         variant_ids: variantIDs,
-        format: "png",
         files: [
           {
-            type: type,
             image_url: imageUrl,
             position: {
-              area_width: widthFull,
-              area_height: heightFull,
-              width: widthFull,
-              height: heightFull,
-              top: top,
-              left: left,
-              right: right,
-              bottom: bottom,
+              area_width: scaledWidth,
+              area_height: scaledHeight,
+              width: scaledWidth,
+              height: scaledHeight,
+              top: offsetY,
+              left: offsetX,
             },
           },
         ],
       };
 
       const response = await this.client.post(
-        "/mockup-generator/create-task",
+        `/mockup-generator/create-task/${productID}`,
         mockupData
       );
+
+      return response.data;
     } catch (error) {
       return this.handleError(error);
     }

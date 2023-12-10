@@ -15,20 +15,26 @@ export const MainProduct = ({ image, product, variant }: MainProductProps) => {
     .filter((variant) => variant.variant_id === varID)
     .flatMap((variant) => variant.templates);
 
-  const selectedTemps = Object.values(templates).find((template) => 
-    template.template.templates.some((t) => 
+  const selectedTemps = Object.values(templates).find((template) =>
+    template.template.templates.some((t) =>
       selectedVariant.some((selected) => selected.template_id === t.template_id)
     )
   );
 
-  const selectedTemplate = selectedTemps?.template.templates.find((template) => 
-    selectedVariant.some((selected) => selected.template_id === template.template_id)
+  const selectedTemplate = selectedTemps?.template.templates.find((template) =>
+    selectedVariant.some(
+      (selected) => selected.template_id === template.template_id
+    )
   );
 
   return (
     <div className="rounded-lg max-w-3xl overflow-hidden justify-center text-center align-middle shadow-2xl transition-shadow duration-300 ">
-      <ImagePlacementEditor selectedTemplate={selectedTemplate} userImage={image} />
+      <ImagePlacementEditor
+        selectedTemplate={selectedTemplate}
+        selectedVariant={variant}
+        selectedProduct={product}
+        userImage={image}
+      />
     </div>
   );
 };
-

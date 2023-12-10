@@ -1,60 +1,41 @@
 import { NextRequest } from "next/server";
 import PODHandler from "../../../classes/PODHandler";
-import Products from "@/data/products";
-import fs from "fs/promises";
 
 const key = process.env.PRINTFUL_API_KEY;
 if (!key) throw new Error("Missing Printful API Key");
 const podHandler = new PODHandler(key);
 
 export async function POST(req: NextRequest, res: NextRequest) {
-  const templates = [];
-
-  for (const product of Object.values(Products)) {
-    const temp = await podHandler.getTemplateLayout(product.product.id);
-    const printFiles = await podHandler.getVariantPrintFiles(
-      product.product.id
+  const args = JSON.parse(await req.text());
+  console.log(args);
+  try {
+    const response = await podHandler.createMockupTask(
+      args.productId,
+      args.imageUrl,
+      args.variantIDs,
+      args.scaledWidth,
+      args.scaledHeight,
+      args.offsetX,
+      args.offsetY
     );
-
-    const p = {
-      name: product.product.title,
-      template: temp.result,
-      printFiles: printFiles.result,
-    };
-    templates.push(p);
-  }
-
-  for (const template of templates) {
-    await fs.writeFile(
-      `./src/data/templates/${template.name}.json`,
-      JSON.stringify(template)
-    );
+    console.log(response);
+    return new Response(JSON.stringify(response), {
+      headers: { "content-type": "application/json" },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify(err), {
+      status: 500,
+      headers: { "content-type": "application/json" },
+    });
   }
 }
 
 export async function GET(req: any, res: any) {
-  const templates = [];
+  const body = req.body;
+  // const args = JSON.parse(body);
 
-  for (const product of Object.values(Products)) {
-    const temp = await podHandler.getTemplateLayout(product.product.id);
-    const printFiles = await podHandler.getVariantPrintFiles(
-      product.product.id
-    );
-
-    const p = {
-      name: product.product.title,
-      template: temp.result,
-      printFiles: printFiles.result,
-    };
-    templates.push(p);
-  }
-
-  for (const template of templates) {
-    await fs.writeFile(
-      `./src/data/templates/${template.name}.json`,
-      JSON.stringify(template)
-    );
-  }
+  // console.log(args);
+  // console.log(await req.text());
 }
 
 // async function postProductsToStore() {

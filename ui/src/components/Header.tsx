@@ -122,7 +122,6 @@ export default function Header() {
       })
         .then(async (data) => {
           const res = await data.json();
-          console.log("res", res);
           if (res.user) {
             setUser({
               email: res.user.email,
