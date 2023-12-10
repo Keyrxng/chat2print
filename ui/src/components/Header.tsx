@@ -311,9 +311,9 @@ export default function Header() {
                             <>
                               <form
                                 method="POST"
-                                action={`/api/auth?action=update&password=${password}&email=${email}`}
+                                // action={`/api/auth?action=update&password=${password}&email=${email}`}
                                 className="space-y-4"
-                                onSubmit={handleSubmit}
+                                // onSubmit={handleSubmit}
                               >
                                 <Input
                                   type="text"
@@ -372,9 +372,9 @@ export default function Header() {
                             <>
                               <form
                                 method="POST"
-                                action={`/api/auth?action=update&password=${password}&email=${email}`}
+                                // action={`/api/auth?action=update&password=${password}&email=${email}`}
                                 className="space-y-4"
-                                onSubmit={handleSubmit}
+                                // onSubmit={handleSubmit}
                               >
                                 <Input
                                   type="email"

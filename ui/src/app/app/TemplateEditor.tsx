@@ -181,7 +181,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     console.log("client response: ", await ress.json());
   };
 
-  function PricingModal({ isOpen, onClose }) {
+  function PricingModal({
+    isOpen,
+    onClose,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+  }) {
     if (!isOpen) return null;
     const paymentTierOpts = [
       {
