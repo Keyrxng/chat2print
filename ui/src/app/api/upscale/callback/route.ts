@@ -63,9 +63,6 @@ export async function POST(req: Request, res: Response) {
     );
     return new Response("", { status: 200 });
   }
-
-  // await saveToMyDatabase(prediction);
-  // await sendSlackNotification(prediction);
 }
 export async function GET(req: Request, res: Response) {
   console.log("🪝 incoming webhook!");
@@ -105,51 +102,6 @@ export async function GET(req: Request, res: Response) {
     );
     return new Response("", { status: 200 });
   }
-
-  // await saveToMyDatabase(prediction);
-  // await sendSlackNotification(prediction);
-}
-export async function FETCH(req: Request, res: Response) {
-  console.log("🪝 incoming webhook!");
-
-  const data = await req.json();
-  console.log(data);
-
-  const prediction = data as IncomingData;
-  console.log(prediction);
-
-  const { data: userData } = await supabase.supabase.auth.getSession();
-  const finalizedJson = {
-    input: prediction.input,
-    output: prediction.output,
-    created_at: prediction.created_at,
-    started_at: prediction.started_at,
-    completed_at: prediction.completed_at,
-    cancel: prediction.urls.cancel,
-    get: prediction.urls.get,
-    predict_time: prediction.metrics.predict_time,
-  };
-
-  const { error } = await supabase.supabase.from("user-upscales").upsert([
-    {
-      idd: prediction.id,
-      user_id: userData.session?.user.id,
-      finalized: finalizedJson,
-    },
-  ]);
-
-  if (error) {
-    console.error("Error uploading to db: ", error);
-    return new Response("", { status: 500 });
-  } else {
-    console.log(
-      `Upscale ${prediction.id} saved to database for user ${userData.session?.user.email}`
-    );
-    return new Response("", { status: 200 });
-  }
-
-  // await saveToMyDatabase(prediction);
-  // await sendSlackNotification(prediction);
 }
 export async function PUT(req: Request, res: Response) {
   console.log("🪝 incoming webhook!");
@@ -189,18 +141,4 @@ export async function PUT(req: Request, res: Response) {
     );
     return new Response("", { status: 200 });
   }
-
-  // await saveToMyDatabase(prediction);
-  // await sendSlackNotification(prediction);
 }
-
-// async function saveToSupabase(prediction: any) {
-//     const user = supabase.supabase.auth.getUser();
-//   const { data, error } = await supabase
-//     .from("user-upscales")
-//     .match({ user_id: user.id })
-//     .upsert([prediction]);
-//   if (error) {
-//     console.error(error);
-//   }
-// }
