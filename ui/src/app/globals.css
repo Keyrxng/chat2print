@@ -5,6 +5,10 @@
 @layer base {
   :root {
 
+    --angle: 90deg;
+    --gradX: 100%;
+    --gradY: 50%;
+
     --background: 0 5% 1%;
     --foreground: 222.2 84% 4.9%;
 
@@ -177,5 +181,30 @@
   }
   100% {
     transform: translateX(calc(-180px * 8)); /* Move the images by their total width */
+  }
+}
+
+.upscale-button {
+  position: relative;
+  font-size: 16px;
+  cursor: pointer;
+  overflow: hidden; 
+}
+
+.shine-effect {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+  animation: shine 5s infinite;
+  pointer-events: none; 
+}
+
+@keyframes shine {
+  to {
+    left: 100%;
   }
 }
