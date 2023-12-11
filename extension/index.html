@@ -10,39 +10,59 @@
   <div id="app" class="extension-dashboard">
     <header class="dashboard-header">
       <img src="icons/c2pLogo.png" alt="Chat2Print Logo" class="logo">
-      <h1 class="dashboard-main"><a href="https://chat2print.xyz">Chat2Print</a></h1>
-      <img src="icons/c2pLogo.png" alt="Chat2Print Logo" class="logo">
+      <h1 class="dashboard-title">
+        <a href="https://chat2print.xyz" target="_blank" rel="noopener noreferrer">
+          Chat2Print
+        </a>
+      </h1>
     </header>
 
-    <div id="auth-container">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button id="sign-in">Sign In</button>
-      <button id="sign-out" disabled>Sign Out</button>
-      <button id="refresh-token" disabled>Refresh Token</button>
+    <div id="auth-container" class="auth-cont">
     </div>
 
-    <main class="dashboard-main" id="main-content">
-      <ul>
-        <li>
-          <h1> Create </h1>
-          <h3>Generate your GPT images</h3>
-          </li>
-        <li>
-          <h1> Upload </h1>
-          <h3>Upload your GPT images direct to Chat2Print</h3>
-        </li>
-        <li>
-          <h1> Print </h1>
-          <h3>View, edit and order in minutes</h3>
-      </ul>
-    </main>
+    <section class="statistics-container">
+      <div class="statistic">
+        <span class="statistic-icon">🎨</span>
+        <span class="statistic-value" id="designs-pw">0/10 p/w</span>
+        <span class="statistic-label">Designs</span>
+      </div>
+      <div class="statistic">
+        <span class="statistic-icon">💾</span>
+        <span class="statistic-value" id="storage-pm">0/5GB p/m</span>
+        <span class="statistic-label">Storage Limit</span>
+      </div>
+      <div class="statistic">
+        <span class="statistic-icon">🔍</span>
+        <span class="statistic-value" id="upscales-pd">0/50 p/d</span>
+        <span class="statistic-label">Upscales</span>
+      </div>
+      <div class="statistic">
+        <span class="statistic-icon">📐</span>
+        <span class="statistic-value" id="mockups-pd">0/20 p/d</span>
+        <span class="statistic-label">Mockups</span>
+      </div>
+    </section>
+
+    <nav class="navigation-container">
+      <!-- <div class="navigation-item" id="create">
+        <span class="navigation-icon">✨</span>
+        <span class="navigation-label">Create</span>
+      </div>
+      <div class="navigation-item" id="upload">
+        <span class="navigation-icon">⬆️</span>
+        <span class="navigation-label">Upload</span>
+      </div>
+      <div class="navigation-item" id="print">
+        <span class="navigation-icon">🖨️</span>
+        <span class="navigation-label">Print</span>
+      </div> -->
+    </nav>
 
     <footer class="dashboard-footer">
       <p>Thank you for using Chat2Print!</p>
     </footer>
   </div>
+  <script src="popup.bundle.js" type="module"></script>
+  <script src="background.bundle.js" type="module"></script>
 </body>
-<script src="popup.bundle.js" type="module"></script>
-<script src="background.bundle.js" type="module"></script>
 </html>

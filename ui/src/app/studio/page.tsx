@@ -1,34 +1,5 @@
 "use client";
-const images = [
-  "/wfm.webp",
-  "/unitornado.webp",
-  "/unicorn.webp",
-  "/staghead.webp",
-  "/smolgaming.webp",
-  "/redeagle.webp",
-  "/penguinbadge.webp",
-  "/musclecar.webp",
-  "/mid-00-gaming.webp",
-  "/metalspiral.webp",
-  "/metaloptical.webp",
-  "/kingsloth.webp",
-  "/impact.webp",
-  "/horsecar.webp",
-  "/fantasyart.webp",
-  "/darkroads.webp",
-  "/cosmicbirds.webp",
-  "/c2pdigital.webp",
-  "/bullettip.webp",
-  "/betty.webp",
-  "/badge.webp",
-  "/atomdna.webp",
-  "/bullettime.webp",
-  "/animalcinema.webp",
-  "/90-00-gaming.webp",
-  "/10-20-gaming.webp",
-  "/00-10-gaming.webp",
-  "/00-10-gaming-retro.webp",
-];
+
 import { useEffect, useState } from "react";
 import { ProductOption } from "@/components/ProductOption";
 import Image from "next/image";
@@ -96,17 +67,18 @@ export default function Page() {
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();
 
   useEffect(() => {
-    async function isLoggedIn() {
-      const accessT = sessionStorage.getItem("accessT");
-      const refreshT = sessionStorage.getItem("refreshT");
-      if (!accessT || !refreshT) {
-        window.location.href = "/";
-      }
+    async function load() {
+      const imgs = await fetch("/api/designs/fetch");
+      const data = await imgs.json();
+      let { images } = data;
+      images.filter(
+        (img: string) => img !== "" && img !== null && img !== undefined
+      );
+      console.log("images", images);
+      setUserImages(images);
     }
-
-    isLoggedIn();
-    setUserImages(images);
-    setSelectedImage(images[0]);
+    load();
+    setSelectedImage(userImages[0]);
     handleChosenProduct(productOpts["canvas"]);
     setSelectedVariant(productOpts["canvas"].variants[0]);
   }, [productOpts]);
@@ -123,9 +95,9 @@ export default function Page() {
   };
 
   const handleDeleteImage = (image: string) => {
-    for (const img of images) {
+    for (const img of userImages) {
       if (img === image) {
-        images.splice(images.indexOf(img), 1);
+        userImages.splice(userImages.indexOf(img), 1);
       }
     }
 
@@ -133,9 +105,10 @@ export default function Page() {
   };
 
   const handlePODApi = async () => {
-    const response = await fetch("/api/pod/");
+    const response = await fetch("/api/designs/fetch");
     const data = await response.json();
-    console.log(data);
+    const { designs } = data;
+    console.log(designs);
   };
 
   const ImageSlider = () => {

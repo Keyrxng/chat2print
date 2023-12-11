@@ -10,6 +10,10 @@ module.exports = {
       },
       {
         protocol: "https",
+        hostname: "ywaeexoevxxjquwlhfjx.supabase.co",
+      },
+      {
+        protocol: "https",
         hostname: "printful.com",
       },
     ],

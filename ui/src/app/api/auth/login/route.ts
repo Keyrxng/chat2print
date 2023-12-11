@@ -17,6 +17,22 @@ export async function POST(request: Request) {
     password,
   });
 
+  const doesUserHaveStorageFolder = await supabase.storage
+    .from("user_uploads")
+    .list(`${data.user?.id}/`);
+
+  if (doesUserHaveStorageFolder.data?.length === 0) {
+    const { error: folderError } = await supabase.storage
+      .from("user_uploads")
+      .upload(`${data.user?.id}/temp.png`, "temp", {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (folderError)
+      return new Response(JSON.stringify(folderError), { status: 420 });
+  }
+
   if (error) {
     return new Response(JSON.stringify(error), {
       status: 500,
