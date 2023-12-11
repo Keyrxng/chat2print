@@ -1,6 +1,5 @@
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 import type { Database } from "@/lib/database.types";
 
@@ -18,10 +17,9 @@ export async function POST(request: Request) {
     email,
     password,
     options: {
-      emailRedirectTo: `${requestUrl.origin}/auth/callback`,
+      emailRedirectTo: `${requestUrl.origin}/api/auth/callback`,
     },
   });
-  console.log("user: ", user);
 
   if (!user.user?.id) throw new Error("No user ID");
 

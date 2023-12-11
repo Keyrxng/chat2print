@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
 
     const { data: user } = await supabase.auth.getUser(code);
 
+    console.log("user", user);
+
     const { data, error: folderError } = await supabase.storage
       .from("user_uploads")
       .upload(`${user.user?.id}/temp.png`, "temp", {
