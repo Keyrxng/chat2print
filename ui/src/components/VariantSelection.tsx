@@ -1,32 +1,39 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { __Variant } from "@/types/all"
+} from "@/components/ui/popover";
+import { __Variant } from "@/types/all";
 
 interface VariantSelectionProps {
-  variants: __Variant[] | undefined
-  setSelectedVariant: React.Dispatch<React.SetStateAction<__Variant | undefined>>
+  chosen: __Variant | undefined;
+  variants: __Variant[] | undefined;
+  setSelectedVariant: React.Dispatch<
+    React.SetStateAction<__Variant | undefined>
+  >;
 }
 
-export function VariantSelection({variants, setSelectedVariant}: VariantSelectionProps) {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+export function VariantSelection({
+  chosen,
+  variants,
+  setSelectedVariant,
+}: VariantSelectionProps) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -37,9 +44,7 @@ export function VariantSelection({variants, setSelectedVariant}: VariantSelectio
           aria-expanded={open}
           className="w-fit justify-between"
         >
-          {value
-            ? value
-            : "Select style..."}
+          {value ? value : chosen ? chosen.name : "Select a variant"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -53,9 +58,9 @@ export function VariantSelection({variants, setSelectedVariant}: VariantSelectio
                 key={variant.name}
                 value={variant.name}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
-                  setSelectedVariant(variant)
-                  setOpen(false)
+                  setValue(currentValue === value ? "" : currentValue);
+                  setSelectedVariant(variant);
+                  setOpen(false);
                 }}
               >
                 <Check
@@ -71,5 +76,5 @@ export function VariantSelection({variants, setSelectedVariant}: VariantSelectio
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

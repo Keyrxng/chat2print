@@ -15,6 +15,19 @@ export async function GET(request: NextRequest) {
       cookies: () => cookieStore,
     });
     await supabase.auth.exchangeCodeForSession(code);
+
+    const { data: user } = await supabase.auth.getUser(code);
+
+    const { data, error: folderError } = await supabase.storage
+      .from("user_uploads")
+      .upload(`${user.user?.id}/temp.png`, "temp", {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    console.log("upload nfolder", data);
+
+    if (folderError) throw folderError;
   }
 
   return NextResponse.redirect(requestUrl.origin);

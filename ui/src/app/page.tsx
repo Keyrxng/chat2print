@@ -5,7 +5,6 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import SlidingBackground from "@/components/SlidingBackground";
-import { Dialog, DialogContent } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-scroll";
 
@@ -61,50 +60,48 @@ export default function Home() {
     ];
 
     return (
-      <Dialog open={true}>
-        <DialogContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 w-full flex-wrap">
-          <div className="grid md:grid-cols-3 justify-between mx-auto gap-4 p-4">
-            {paymentTierOpts.map((tier) => (
-              <div
-                key={tier.name}
-                className="flex flex-col justify-between p-4 rounded-md "
-              >
-                <div className="flex flex-col items-center">
-                  <h3 className="text-3xl font-bold">{tier.name}</h3>
-                  <h4 className="text-xl font-bold">${tier.price}</h4>
-                  <p className="text-sm text-center">Per Month</p>
-                </div>
-                <div className="flex flex-col items-center">
-                  {tier.isPopular && (
-                    <div className="text-xs font-bold bg-accent text-background p-1 rounded-md">
-                      Popular
-                    </div>
-                  )}
-                  <Button
-                    className="mt-4"
-                    onClick={() => {
-                      window.location.href = "/dashboard";
-                    }}
-                  >
-                    Select
-                  </Button>
-                </div>
-                <div className="flex flex-col items-center">
-                  {tier.features.map((feature) => (
-                    <div
-                      key={feature.value}
-                      className="flex justify-between w-full"
-                    >
-                      <p className="text-lg">{feature.label}</p>
-                      <p className="text-lg">{feature.value}</p>
-                    </div>
-                  ))}
-                </div>
+      <div className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 w-full flex-wrap">
+        <div className="grid md:grid-cols-3 justify-between mx-auto gap-4 p-4">
+          {paymentTierOpts.map((tier) => (
+            <div
+              key={tier.name}
+              className="flex flex-col justify-between p-4 rounded-md "
+            >
+              <div className="flex flex-col items-center">
+                <h3 className="text-3xl font-bold">{tier.name}</h3>
+                <h4 className="text-xl font-bold">${tier.price}</h4>
+                <p className="text-sm text-center">Per Month</p>
               </div>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+              <div className="flex flex-col items-center">
+                {tier.isPopular && (
+                  <div className="text-xs font-bold bg-accent text-background p-1 rounded-md">
+                    Popular
+                  </div>
+                )}
+                <Button
+                  className="mt-4"
+                  onClick={() => {
+                    window.location.href = "/";
+                  }}
+                >
+                  Select
+                </Button>
+              </div>
+              <div className="flex flex-col items-center">
+                {tier.features.map((feature) => (
+                  <div
+                    key={feature.value}
+                    className="flex justify-between w-full"
+                  >
+                    <p className="text-lg">{feature.label}</p>
+                    <p className="text-lg">{feature.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     );
   };
 
@@ -159,6 +156,7 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
+          className="-z-100"
         >
           <Tiers />
           <div ref={ref2} />

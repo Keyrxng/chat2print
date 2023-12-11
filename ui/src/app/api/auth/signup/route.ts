@@ -14,27 +14,21 @@ export async function POST(request: Request) {
     cookies: () => cookieStore,
   });
 
-  const { data, error } = await supabase.auth.signUp({
+  const { data: user } = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${requestUrl.origin}/auth/callback`,
     },
   });
+  console.log("user: ", user);
 
-  if (error) {
-    return new Response(JSON.stringify(error), {
-      status: 500,
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-  } else {
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-  }
+  if (!user.user?.id) throw new Error("No user ID");
+
+  return new Response(JSON.stringify({ user }), {
+    status: 200,
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 }

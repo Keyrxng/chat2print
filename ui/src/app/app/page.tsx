@@ -45,7 +45,6 @@ import {
 import { MainProduct } from "./MainProduct";
 import { VariantSelection } from "@/components/VariantSelection";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -54,6 +53,37 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ProductSelection } from "@/components/ProductSelection";
+
+function formatTextToHTML(text: string) {
+  const lines = text?.split("\n");
+
+  let htmlLines = [];
+  let inList = false;
+
+  lines?.forEach((line: string) => {
+    if (line.startsWith("•")) {
+      if (!inList) {
+        htmlLines.push("<ul>");
+        inList = true;
+      }
+      htmlLines.push(`<li>${line.substring(2)}</li>`);
+    } else {
+      if (inList) {
+        htmlLines.push("</ul>");
+        inList = false;
+      }
+      if (line.trim() !== "") {
+        htmlLines.push(`${line}`);
+      }
+    }
+  });
+
+  if (inList) {
+    htmlLines.push("</ul>");
+  }
+
+  return htmlLines;
+}
 
 export default function Page() {
   const [userImages, setUserImages] = useState<string[]>([]);
@@ -78,6 +108,7 @@ export default function Page() {
     setUserImages(images);
     setSelectedImage(images[0]);
     handleChosenProduct(productOpts["canvas"]);
+    setSelectedVariant(productOpts["canvas"].variants[0]);
   }, [productOpts]);
 
   const handleChosenProduct = (product: __Prod) => {
@@ -123,8 +154,9 @@ export default function Page() {
                   style={{
                     maxWidth: "100%",
                     height: "auto",
-                    objectFit: "cover"
-                  }} />
+                    objectFit: "cover",
+                  }}
+                />
               </button>
               <button
                 onClick={() => handleDeleteImage(image)}
@@ -177,37 +209,6 @@ export default function Page() {
     );
   }
 
-  function formatTextToHTML(text: string) {
-    const lines = text?.split("\n");
-
-    let htmlLines = [];
-    let inList = false;
-
-    lines?.forEach((line: string) => {
-      if (line.startsWith("•")) {
-        if (!inList) {
-          htmlLines.push("<ul>");
-          inList = true;
-        }
-        htmlLines.push(`<li>${line.substring(2)}</li>`);
-      } else {
-        if (inList) {
-          htmlLines.push("</ul>");
-          inList = false;
-        }
-        if (line.trim() !== "") {
-          htmlLines.push(`${line}`);
-        }
-      }
-    });
-
-    if (inList) {
-      htmlLines.push("</ul>");
-    }
-
-    return htmlLines;
-  }
-
   return (
     <div className="flex flex-row max-[1780px]:flex-col min-w-max text-center">
       <div className="gradientBG text-white m-8 flex flex-col max-w-5xl">
@@ -218,6 +219,7 @@ export default function Page() {
               setSelectedProduct={handleChosenProduct}
             />
             <VariantSelection
+              chosen={selectedVariant}
               variants={selectedProduct?.variants}
               setSelectedVariant={setSelectedVariant}
             />

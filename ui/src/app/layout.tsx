@@ -65,7 +65,7 @@ export default function RootLayout({
         href="/c2pLogo.png"
         style={{ width: "60px", height: "60px" }}
       />
-      <body className={` bg-background ${inter.className}`}>
+      <body className={`bg-background ${inter.className}`}>
         <Header />
         <div style={Container}>{children}</div>
         <Footer />
