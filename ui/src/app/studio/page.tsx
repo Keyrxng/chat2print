@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { ProductOption } from "@/components/ProductOption";
 import Image from "next/image";
 import { Info, InfoIcon, X } from "lucide-react";
@@ -71,14 +71,12 @@ export default function Page() {
       const imgs = await fetch("/api/designs/fetch");
       const data = await imgs.json();
       let { images } = data;
-      images.filter(
-        (img: string) => img !== "" && img !== null && img !== undefined
-      );
-      console.log("images", images);
+      images = images.filter((img: string) => img !== null);
+
       setUserImages(images);
+      setSelectedImage(images[0]);
     }
     load();
-    setSelectedImage(userImages[0]);
     handleChosenProduct(productOpts["canvas"]);
     setSelectedVariant(productOpts["canvas"].variants[0]);
   }, [productOpts]);
@@ -108,7 +106,6 @@ export default function Page() {
     const response = await fetch("/api/designs/fetch");
     const data = await response.json();
     const { designs } = data;
-    console.log(designs);
   };
 
   const ImageSlider = () => {
@@ -184,72 +181,74 @@ export default function Page() {
 
   return (
     <div className="flex flex-row max-[1780px]:flex-col min-w-max text-center">
-      <div className="gradientBG text-white m-8 flex flex-col max-w-5xl">
-        <div className="container mx-auto p-4">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 rounded-lg bg-background text-accent">
-            <ProductSelection
-              product={chosenProduct}
-              setSelectedProduct={handleChosenProduct}
-            />
-            <VariantSelection
-              chosen={selectedVariant}
-              variants={selectedProduct?.variants}
-              setSelectedVariant={setSelectedVariant}
-            />
-            <Button>
-              <ProductSwitch />
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 max-h-min md:grid-cols-3 gap-8">
-            <div className="col-span-2  max-h-min">
-              <MainProduct
-                image={selectedImage}
-                product={selectedProduct}
-                variant={selectedVariant}
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="gradientBG text-white m-8 flex flex-col max-w-5xl">
+          <div className="container mx-auto p-4">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 rounded-lg bg-background text-accent">
+              <ProductSelection
+                product={chosenProduct}
+                setSelectedProduct={handleChosenProduct}
               />
+              <VariantSelection
+                chosen={selectedVariant}
+                variants={selectedProduct?.variants}
+                setSelectedVariant={setSelectedVariant}
+              />
+              <Button>
+                <ProductSwitch />
+              </Button>
             </div>
-            <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-1xl max-h-[650px] md:grid-cols-1 gap-4">
-              {Object.values(productOpts).map((option, index) => (
-                <ProductOption
-                  key={index}
+            <div className="grid grid-cols-1 max-h-min md:grid-cols-3 gap-8">
+              <div className="col-span-2  max-h-min">
+                <MainProduct
                   image={selectedImage}
-                  product={option}
-                  isSelected={selectedDesign?.id === option.product.id}
-                  onSelect={handleChosenProduct}
+                  product={selectedProduct}
+                  variant={selectedVariant}
                 />
-              ))}
+              </div>
+              <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-1xl max-h-[650px] md:grid-cols-1 gap-4">
+                {Object.values(productOpts).map((option, index) => (
+                  <ProductOption
+                    key={index}
+                    image={selectedImage}
+                    product={option}
+                    isSelected={selectedDesign?.id === option.product.id}
+                    onSelect={handleChosenProduct}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="max-h-[120px]">
+              <ImageSlider />
             </div>
           </div>
-          <div className="max-h-[120px]">
-            <ImageSlider />
+        </div>
+        <div className="flex flex-row max-w-lg self-center  max-[1780px]:max-w-5xl items-center rounded-lg bg-background text-accent">
+          <div>
+            <div className="flex flex-row my-2 gap-4 justify-between items-center">
+              <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
+              <h2 className="text-2xl font-bold ">£{selectedVariant?.price}</h2>
+            </div>
+            <button
+              className="flex-end right-0 w-full mt-4 md:mt-0 text-lg hover:bg-accent border border-accent    hover:text-background   text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out    "
+              onClick={() => (window.location.href = "/checkout")}
+            >
+              Buy Now
+            </button>
+            <div className="justify-between pb-0 max-[1780px]:pb-16 items-center h-fit text-lg">
+              {formatTextToHTML(selectedDesign?.description ?? "").map(
+                (line, index) => (
+                  <p
+                    key={index}
+                    className="p-2"
+                    dangerouslySetInnerHTML={{ __html: line }}
+                  />
+                )
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row max-w-lg self-center  max-[1780px]:max-w-5xl items-center rounded-lg bg-background text-accent">
-        <div>
-          <div className="flex flex-row my-2 gap-4 justify-between items-center">
-            <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
-            <h2 className="text-2xl font-bold ">£{selectedVariant?.price}</h2>
-          </div>
-          <button
-            className="flex-end right-0 w-full mt-4 md:mt-0 text-lg hover:bg-accent border border-accent    hover:text-background   text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out    "
-            onClick={() => (window.location.href = "/checkout")}
-          >
-            Buy Now
-          </button>
-          <div className="justify-between pb-0 max-[1780px]:pb-16 items-center h-fit text-lg">
-            {formatTextToHTML(selectedDesign?.description ?? "").map(
-              (line, index) => (
-                <p
-                  key={index}
-                  className="p-2"
-                  dangerouslySetInnerHTML={{ __html: line }}
-                />
-              )
-            )}
-          </div>
-        </div>
-      </div>
+      </Suspense>
     </div>
   );
 }

@@ -251,7 +251,7 @@ export default function Header() {
                   {isConnected ? (
                     <>
                       <DialogTrigger
-                        onClick={() => (window.location.href = "/app")}
+                        onClick={() => (window.location.href = "/studio")}
                         className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg  border border-accent  hover:bg-accent  hover:text-background transition duration-300flex"
                       >
                         Studio
@@ -261,7 +261,7 @@ export default function Header() {
                     <>
                       <DialogTrigger
                         disabled={!isConnected}
-                        onClick={() => (window.location.href = "/app")}
+                        onClick={() => (window.location.href = "/studio")}
                         className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg   transition duration-300 flex"
                       >
                         Studio

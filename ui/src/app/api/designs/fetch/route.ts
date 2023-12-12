@@ -3,8 +3,7 @@ import { cookies } from "next/headers";
 
 import type { Database } from "@/lib/database.types";
 
-export async function POST(request: Request) {
-  const requestUrl = new URL(request.url);
+export async function POST() {
   const cookieStore = cookies();
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
@@ -33,8 +32,7 @@ export async function POST(request: Request) {
   });
 }
 
-export async function GET(request: Request) {
-  const requestUrl = new URL(request.url);
+export async function GET() {
   const cookieStore = cookies();
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
@@ -44,13 +42,23 @@ export async function GET(request: Request) {
 
   if (!data.session?.user?.id) throw new Error("No user ID");
 
-  const { data: designs, error: designsError } = await supabase.storage
+  const { data: designs } = await supabase.storage
     .from("user_uploads")
     .list(`${data.session?.user?.id}/`);
+
+  const handleUpscaled = async () => {
+    const { data: image } = await supabase.storage
+      .from("user_uploads")
+      .list(`${data.session?.user?.id}/upscaled/`);
+  };
+  console.log("designs IN FETCH: ", designs);
 
   const images = await Promise.all(
     designs!.map(async (design) => {
       if (design.name === "temp.png") return;
+      if (design.name === "upscaled") return;
+      if (design.name === null || design.name === undefined) return;
+      console.log("design: ", design);
       const { data: image } = supabase.storage
         .from("user_uploads")
         .getPublicUrl(`${data.session?.user?.id}/${design.name}`);
@@ -58,7 +66,7 @@ export async function GET(request: Request) {
     })
   );
 
-  images.pop();
+  images.filter((image) => image !== undefined && image !== null);
 
   if (error) {
     return new Response(JSON.stringify(error), {

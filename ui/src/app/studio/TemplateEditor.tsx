@@ -28,6 +28,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Supabase from "@/classes/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 interface ImagePlacementEditorProps {
   selectedTemplate: __Template | undefined;
   selectedVariant: __Variant | undefined;
@@ -51,6 +53,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     positionY: 0,
   });
   let observerRef = useRef<MutationObserver | null>(null);
+
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
     const viewSw = document.getElementById("view-switch");
@@ -135,40 +139,30 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const offsetY = transform.positionY;
     const selectTemplateId = selectedTemplate?.template_id;
 
-    const preffixedImageUrl =
-      "https://ywaeexoevxxjquwlhfjx.supabase.co/storage/v1/object/public/no_reg_designs/" +
-      userImage.split("/").pop();
     const res = await fetch("/api/upscale", {
       method: "POST",
       body: JSON.stringify({
-        url: preffixedImageUrl,
+        url: userImage,
       }),
     });
 
     const data = await res.json();
-    console.log(data);
+    console.log("upscale res json:", data);
     const upscaledImage = data.output[data.output.length - 1];
-    console.log(upscaledImage);
-
-    const imageUrl = userImage;
-    const varMap = Object.values(templates).flatMap((template) => template);
-
-    const t = varMap.filter(({ template }) =>
-      template.templates.find((t) => t.template_id === selectTemplateId)
-    );
+    console.log("upscaledImage: ", upscaledImage);
 
     const prodID = selectedVariant?.product_id;
     const variantID = selectedVariant?.id;
-    console.log("slected variant: ", selectedVariant);
+
     if (!prodID || !variantID) {
-      return;
+      throw new Error("No product or variant IDs found");
     }
 
     const ress = await fetch("/api/pod/", {
       method: "POST",
       body: JSON.stringify({
         productId: prodID,
-        imageUrl: preffixedImageUrl,
+        imageUrl: userImage,
         variantIDs: [variantID],
         scaledWidth,
         scaledHeight,
@@ -176,7 +170,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         offsetY,
       }),
     });
-    console.log(imageUrl);
 
     console.log("client response: ", await ress.json());
   };
@@ -309,26 +302,69 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       </Dialog>
     );
   }
-  const [isSubbed, setIsSubbed] = useState<boolean>(false);
+  const [isSubbed, setIsSubbed] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [enhancing, setEnhancing] = useState<boolean>(false);
 
-  const handleUpscale = async () => {
-    // return new Promise((resolve, reject) => {
-    //   const preffixedImageUrl =
-    //     "https://ywaeexoevxxjquwlhfjx.supabase.co/storage/v1/object/public/no_reg_designs/" +
-    //     userImage.split("/").pop();
-    //   const res = fetch("/api/upscale", {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       url: preffixedImageUrl,
-    //     }),
-    //   });
-    //   resolve(res);
-    // });
+  const handleEnhanceUpscale = async () => {
+    if (!isSubbed) {
+      setIsOpen(true);
+      return;
+    } else {
+      setIsOpen(false);
+    }
+
+    setEnhancing(true);
+    const res = await fetch("/api/upscale", {
+      method: "POST",
+      body: JSON.stringify({
+        url: userImage,
+      }),
+    });
+
+    setEnhancing(false);
   };
 
   return (
     <>
+      {enhancing && (
+        <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div
+              className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-headline"
+            >
+              <div className="flex flex-col justify-center items-center p-6">
+                <div className="flex flex-col justify-center items-center">
+                  <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                  <p className="text-accent text-2xl mt-4">
+                    Enhancing your image...
+                  </p>
+                  <p className="text-accent text-center text-sm mt-2">
+                    The enhanced image will be applied to any future mockups and
+                    of course, your final product.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <TransformWrapper
         initialScale={position.scale}
         initialPositionX={-position.x}
@@ -387,7 +423,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 <>
                   <div className="upscale-button">
                     <Button
-                      onClick={() => setIsOpen(!isOpen)}
+                      onClick={() => handleEnhanceUpscale()}
                       className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                     >
                       Enhanced AI Upscale

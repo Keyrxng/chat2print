@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useChat } from "ai/react";
-import { Bot, Speech, SpeechIcon, X } from "lucide-react";
+import { SpeechIcon, X } from "lucide-react";
 
 const Chatbox = () => {
   const [isOpen, setIsOpen] = useState(false);
