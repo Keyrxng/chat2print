@@ -51,14 +51,12 @@ export async function GET() {
       .from("user_uploads")
       .list(`${data.session?.user?.id}/upscaled/`);
   };
-  console.log("designs IN FETCH: ", designs);
 
   const images = await Promise.all(
     designs!.map(async (design) => {
       if (design.name === "temp.png") return;
       if (design.name === "upscaled") return;
       if (design.name === null || design.name === undefined) return;
-      console.log("design: ", design);
       const { data: image } = supabase.storage
         .from("user_uploads")
         .getPublicUrl(`${data.session?.user?.id}/${design.name}`);

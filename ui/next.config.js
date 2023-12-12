@@ -16,6 +16,10 @@ module.exports = {
         protocol: "https",
         hostname: "printful.com",
       },
+      {
+        protocol: "https",
+        hostname: "printful-upload.s3-accelerate.amazonaws.com",
+      },
     ],
   },
   // async headers() {

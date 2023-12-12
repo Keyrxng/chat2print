@@ -7,7 +7,6 @@ const podHandler = new PODHandler(key);
 
 export async function POST(req: NextRequest, res: NextRequest) {
   const args = JSON.parse(await req.text());
-  console.log(args);
   try {
     const response = await podHandler.createMockupTask(
       args.productId,
@@ -18,7 +17,6 @@ export async function POST(req: NextRequest, res: NextRequest) {
       args.offsetX,
       args.offsetY
     );
-    console.log(response);
     return new Response(JSON.stringify(response), {
       headers: { "content-type": "application/json" },
     });

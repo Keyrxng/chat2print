@@ -120,15 +120,13 @@ class PODHandler {
     offsetY: number,
     type?: string
   ) {
+    console.log("imageUrl: ", imageUrl);
     try {
-      const probed = await probe(imageUrl);
-      const imgHeight = probed.height;
-      const imgWidth = probed.width;
-
       const mockupData = {
         variant_ids: variantIDs,
         files: [
           {
+            type: type || "default",
             image_url: imageUrl,
             position: {
               area_width: scaledWidth,
@@ -142,11 +140,24 @@ class PODHandler {
         ],
       };
 
+      console.log("Creating mockup task: ", mockupData);
+
       const response = await this.client.post(
         `/mockup-generator/create-task/${productID}`,
         mockupData
       );
 
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  async getMockupTaskStatus(taskKey: string) {
+    try {
+      const response = await this.client.get(
+        `/mockup-generator/task?task_key=${taskKey}`
+      );
       return response.data;
     } catch (error) {
       return this.handleError(error);

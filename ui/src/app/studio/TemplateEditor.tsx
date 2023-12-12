@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import {
@@ -47,6 +47,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [imageSrc, setImageSrc] = useState<string>("");
   const editorRef = useRef<HTMLDivElement>(null);
   const [viewSwitch, setViewSwitch] = useState<HTMLButtonElement | null>(null);
+  const [isSubbed, setIsSubbed] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [enhancing, setEnhancing] = useState<boolean>(false);
+  const [isMockingUp, setIsMockingUp] = useState<boolean>(false);
+  const [upscaledImage, setUpscaledImage] = useState<string>("");
+  const [mocks, setMocks] = useState<any[]>([]);
+  const [viewingMocks, setViewingMocks] = useState<boolean>(false);
+
   const [transform, setTransform] = useState({
     scale: 1,
     positionX: 0,
@@ -130,48 +138,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       positionX: positionX,
       positionY: positionY,
     });
-  };
-
-  const handleCreateMockup = async () => {
-    const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
-    const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
-    const offsetX = transform.positionX;
-    const offsetY = transform.positionY;
-    const selectTemplateId = selectedTemplate?.template_id;
-
-    const res = await fetch("/api/upscale", {
-      method: "POST",
-      body: JSON.stringify({
-        url: userImage,
-      }),
-    });
-
-    const data = await res.json();
-    console.log("upscale res json:", data);
-    const upscaledImage = data.output[data.output.length - 1];
-    console.log("upscaledImage: ", upscaledImage);
-
-    const prodID = selectedVariant?.product_id;
-    const variantID = selectedVariant?.id;
-
-    if (!prodID || !variantID) {
-      throw new Error("No product or variant IDs found");
-    }
-
-    const ress = await fetch("/api/pod/", {
-      method: "POST",
-      body: JSON.stringify({
-        productId: prodID,
-        imageUrl: userImage,
-        variantIDs: [variantID],
-        scaledWidth,
-        scaledHeight,
-        offsetX,
-        offsetY,
-      }),
-    });
-
-    console.log("client response: ", await ress.json());
   };
 
   function PricingModal({
@@ -302,9 +268,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       </Dialog>
     );
   }
-  const [isSubbed, setIsSubbed] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [enhancing, setEnhancing] = useState<boolean>(false);
 
   const handleEnhanceUpscale = async () => {
     if (!isSubbed) {
@@ -322,8 +285,148 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }),
     });
 
+    console.log("Upscale responded with: ", res);
+
+    const data = await res.json();
+
+    setUpscaledImage(data);
+
+    await handleCreateMockup(data);
+
     setEnhancing(false);
   };
+
+  const handleCreateMockup = async (imageData: string) => {
+    console.log("Creating mockup with: ", imageData);
+    setIsMockingUp(true);
+    const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
+    const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
+    const offsetX = transform.positionX;
+    const offsetY = transform.positionY;
+    const selectTemplateId = selectedTemplate?.template_id;
+
+    const prodID = selectedVariant?.product_id;
+    const variantID = selectedVariant?.id;
+
+    if (!prodID || !variantID) {
+      throw new Error("No product or variant IDs found");
+    }
+
+    console.log("Hitting POD API...");
+    console.log("iageData: ", imageData);
+    const ress = await fetch("/api/pod/", {
+      method: "POST",
+      body: JSON.stringify({
+        productId: prodID,
+        imageUrl: imageData,
+        variantIDs: [variantID],
+        scaledWidth,
+        scaledHeight,
+        offsetX,
+        offsetY,
+      }),
+    });
+
+    const data = await ress.json();
+
+    const taskKey = data.result.task_key;
+    saveTaskKeyToSupa(taskKey);
+    setIsMockingUp(false);
+  };
+
+  const saveTaskKeyToSupa = async (taskKey: string) => {
+    const { data: error } = await supabase.from("mockups").insert({
+      status: "pending",
+      task_key: taskKey,
+    });
+
+    if (error) {
+      console.log(error);
+    } else {
+    }
+  };
+
+  /**
+   * 
+   * {
+  "task_key": "gt-609145289",
+  "status": "completed",
+  "mockups": [
+    {
+      "placement": "default",
+      "variant_ids": [
+        6883
+      ],
+      "mockup_url": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/a49421e1948f99fa5d8a9e08ccea9737/premium-luster-photo-paper-framed-poster-(in)-black-10x10-transparent-657893e58f591.png"
+    }
+  ],
+  "printfiles": [
+    {
+      "variant_ids": [
+        6883
+      ],
+      "placement": "default",
+      "url": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/0cd2c115f4788472a1141ab2f425ee76/printfile_default.png"
+    }
+  ]
+}
+
+
+   */
+
+  const fetchMockups = async () => {
+    const { data } = await supabase.auth.getUser();
+    const user_id = data?.user?.id;
+
+    console.log("user_id: ", user_id);
+    const { data: mockups, error } = await supabase
+      .from("mockups")
+      .select("*")
+      .eq("user_id", user_id);
+
+    if (error) {
+      console.log(error);
+    }
+
+    const completed = [];
+    for (const mockup of mockups!) {
+      const res = await fetch("/api/pod/fetch-mocks", {
+        method: "POST",
+        body: JSON.stringify({
+          taskKey: mockup.task_key,
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("asda data: ", data);
+
+      if (data.result.status === "completed") {
+        completed.push(data.result);
+        const { error: editError } = await supabase
+          .from("mockups")
+          .update({ status: "completed" })
+          .eq("task_key", mockup.task_key);
+
+        if (editError) {
+          console.log("editError: ", editError);
+        }
+      }
+    }
+    setMocks(completed);
+
+    return completed;
+  };
+
+  useEffect(() => {
+    async function load() {
+      const completed = await fetchMockups();
+      console.log("completed: ", completed);
+
+      setMocks((prev) => (prev = completed));
+    }
+    load();
+  }, []);
 
   return (
     <>
@@ -365,56 +468,105 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           </div>
         </div>
       )}
-      <TransformWrapper
-        initialScale={position.scale}
-        initialPositionX={-position.x}
-        initialPositionY={-position.y}
-        centerOnInit={true}
-        limitToBounds={false}
-        maxPositionX={Infinity}
-        maxPositionY={Infinity}
-        minPositionX={-Infinity}
-        minPositionY={-Infinity}
-        onZoom={({ state }) =>
-          onTransformChange(state.scale, state.positionX, state.positionY)
-        }
-        onPanning={({ state }) =>
-          onTransformChange(state.scale, state.positionX, state.positionY)
-        }
-        onPinching={({ state }) =>
-          onTransformChange(state.scale, state.positionX, state.positionY)
-        }
-        onZoomStop={({ state }) =>
-          onTransformChange(state.scale, state.positionX, state.positionY)
-        }
-        onPanningStop={({ state }) =>
-          onTransformChange(state.scale, state.positionX, state.positionY)
-        }
-      >
-        <div
-          className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
-          style={{ backgroundImage: `url(${imageSrc})` }}
-          ref={editorRef}
-        >
-          <TransformComponent wrapperClass="relative h-auto w-auto fill">
-            <div className="relative w-[650px] h-[650px]">
-              <Image
-                onDrag={handleDrag}
-                alt="user image"
-                width={1024}
-                height={1024}
-                src={userImage}
-                className="z-10"
-                style={{
-                  maxWidth: "100%",
-                  width: "15%",
-                  height: "15%",
-                }}
-              />
+      {isMockingUp && (
+        <div className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-          </TransformComponent>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div
+              className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-headline"
+            >
+              <div className="flex flex-col justify-center items-center p-6">
+                <div className="flex flex-col justify-center items-center">
+                  <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                  <p className="text-accent text-2xl mt-4">
+                    Creating your mockup...
+                  </p>
+                  <p className="text-accent text-center text-sm mt-2">
+                    This may take a minute or two. Future updates will improve
+                    this process.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </TransformWrapper>
+      )}
+      {viewingMocks ? (
+        <Suspense fallback={<div>Loading...</div>}>
+          <Image
+            src={mocks?.[0].mockups?.[0].mockup_url}
+            width={1024}
+            height={1024}
+            alt="mockup"
+          />
+        </Suspense>
+      ) : (
+        <TransformWrapper
+          initialScale={position.scale}
+          initialPositionX={-position.x}
+          initialPositionY={-position.y}
+          centerOnInit={true}
+          limitToBounds={false}
+          maxPositionX={Infinity}
+          maxPositionY={Infinity}
+          minPositionX={-Infinity}
+          minPositionY={-Infinity}
+          onZoom={({ state }) =>
+            onTransformChange(state.scale, state.positionX, state.positionY)
+          }
+          onPanning={({ state }) =>
+            onTransformChange(state.scale, state.positionX, state.positionY)
+          }
+          onPinching={({ state }) =>
+            onTransformChange(state.scale, state.positionX, state.positionY)
+          }
+          onZoomStop={({ state }) =>
+            onTransformChange(state.scale, state.positionX, state.positionY)
+          }
+          onPanningStop={({ state }) =>
+            onTransformChange(state.scale, state.positionX, state.positionY)
+          }
+        >
+          <div
+            className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
+            style={{ backgroundImage: `url(${imageSrc})` }}
+            ref={editorRef}
+          >
+            <TransformComponent wrapperClass="relative h-auto w-auto fill">
+              <div className="relative w-[650px] h-[650px]">
+                <Image
+                  onDrag={handleDrag}
+                  alt="user image"
+                  width={1024}
+                  height={1024}
+                  src={userImage}
+                  className="z-10"
+                  style={{
+                    maxWidth: "100%",
+                    width: "15%",
+                    height: "15%",
+                  }}
+                />
+              </div>
+            </TransformComponent>
+          </div>
+        </TransformWrapper>
+      )}
       <div className="flex mx-8 mt-1 justify-between ">
         <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
           <TooltipProvider>
@@ -451,7 +603,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  onClick={() => handleCreateMockup()}
+                  onClick={() => handleEnhanceUpscale()}
                   className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                 >
                   Generate Mockup
@@ -471,30 +623,27 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             </Tooltip>
           </TooltipProvider>
         </div>
-
-        {/* <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-          <div className="upscale-button shine-effect"></div>
-
+        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  onClick={() => handleCreateMockup()}
+                  onClick={() => setViewingMocks(!viewingMocks)}
                   className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                 >
-                  Generate Mockup
+                  View Mockups
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-sm flex-wrap">
+              <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
                 <p className="text-accent text-sm">
-                  This feature uses a state of the art AI upscaling model to
-                  enhance your image. This results in 4x print quality increase
-                  over the original ChatGPT image.
+                  This feature will switch the editor to view your generated
+                  mockups.
                 </p>
+                <p className="text-accent text-sm"></p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </div> */}
+        </div>
       </div>
     </>
   );
