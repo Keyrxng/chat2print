@@ -7,6 +7,7 @@ import { motion, useInView } from "framer-motion";
 import SlidingBackground from "@/components/SlidingBackground";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-scroll";
+import { FaqSection } from "@/components/FAQ";
 
 export default function Home() {
   const ref = useRef(null);
@@ -107,12 +108,12 @@ export default function Home() {
 
   return (
     <div className="mx-auto">
-      <SlidingBackground />
-
       <div className="grid grid-cols-1 gap-8">
+        <SlidingBackground />
+
         <div className="justify-evenly gradientBG2 items-start">
           <FeaturesSection />
-          <div className="  flex    bottom-10 w-full   justify-center items-center  relative">
+          <div className="flex bottom-2 w-full justify-center items-center relative">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -139,13 +140,13 @@ export default function Home() {
             </motion.div>
           </div>
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 0 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <section className="py-8 rounded-md md:py-16" id="about">
+            <section className="py-2 rounded-md md:py-">
               <h2 className="text-accent text-5xl font-bold text-center mb-6">
-                Go from ChatGPT to Print in 3 Easy Steps
+                Prompt to Print in 3 Steps
               </h2>
             </section>{" "}
             <HowItWorksSection />
@@ -153,16 +154,17 @@ export default function Home() {
           </motion.div>
         </div>
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 0 }}
+          animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: -60 }}
           transition={{ duration: 0.5 }}
           className="-z-100"
         >
-          <Tiers />
-          <div ref={ref2} />
-        </motion.div>
+          <FaqSection id="about" />
 
-        <ProductGallery />
+          {/* <Tiers /> */}
+          <div ref={ref2} />
+          <ProductGallery />
+        </motion.div>
       </div>
     </div>
   );

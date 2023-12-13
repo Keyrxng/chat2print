@@ -66,11 +66,14 @@ export default function SlidingBackground() {
     return [images].map((row) => {
       const randomImages = [];
       for (let i = 0; i < images.length; i++) {
-        const randomIndex = Math.floor(Math.random() * row!.length) + 1;
+        const randomIndex =
+          Math.floor(Math.random() * row!.length) % row!.length;
         randomImages.push(row![randomIndex]);
       }
       const set = new Set(randomImages);
       const arr = Array.from(set);
+
+      arr.filter((image) => image !== undefined && image !== null);
       return arr;
     });
   };
@@ -102,11 +105,11 @@ export default function SlidingBackground() {
                     height: "250px",
                   }}
                 >
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                  {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                     <h3 className="text-white text-xl font-bold">
                       {index + 1}
                     </h3>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>
@@ -127,11 +130,11 @@ export default function SlidingBackground() {
                       height: "250px",
                     }}
                   >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-white text-xl font-bold">
                         {index + 1}
                       </h3>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
@@ -153,11 +156,11 @@ export default function SlidingBackground() {
                       height: "250px",
                     }}
                   >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-white text-xl font-bold">
                         {index + 1}
                       </h3>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
@@ -179,11 +182,11 @@ export default function SlidingBackground() {
                       height: "250px",
                     }}
                   >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-white text-xl font-bold">
                         {index + 1}
                       </h3>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
@@ -205,11 +208,11 @@ export default function SlidingBackground() {
                       height: "250px",
                     }}
                   >
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-white text-xl font-bold">
                         {index + 1}
                       </h3>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
@@ -226,14 +229,19 @@ export default function SlidingBackground() {
             delay: 0.5,
           }}
         >
-          <h1 className="text-4xl text-accent md:text-6xl font-bold  mb-4">
-            Chat2Print
-          </h1>
+          <div className="relative inline-block mb-4">
+            <h1 className="text-4xl text-accent md:text-6xl font-bold">
+              Chat2Print
+            </h1>
+            <span className="absolute top-0 -right-3 md:-right-6 bg-red-600 text-white text-xs md:text-sm px-2 py-1 rounded-full transform translate-x-1/2 -translate-y-1/2">
+              <a href="/#about">Beta</a>
+            </span>
+          </div>
           <p className="text-xl text-white md:text-2xl  mb-8">
             Transform your ChatGPT art into physical products.
           </p>
           <a
-            href="/download"
+            href="/#about"
             className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
           >
             Download Extension

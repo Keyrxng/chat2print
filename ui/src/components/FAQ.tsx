@@ -1,45 +1,95 @@
+import { useState } from "react";
+
 const faqs = [
   {
-    question: "What is the difference between a mentor and a mentee?",
-    answer:
-      "A mentor is an experienced individual who provides guidance and support to a mentee. A mentee is an individual who is looking for guidance and support from a mentor.",
+    question: "What is Chat2Print?",
+    answer: `Chat2Print is a generative art print-on-demand service. We provide the convenience of direct integration with ChatGPT, allowing you to upload your art directly from the ChatGPT UI, have the image enhanced to ensure the highest quality print, and have mockups generated from prompt to print in less than 2 minutes.`,
   },
   {
-    question: "What is the time commitment?",
-    answer:
-      "The time commitment is up to you! We recommend meeting with your mentor/mentee at least once a month for 1 hour.",
+    question: "What does it mean to be in beta?",
+    answer: `Being in beta means we are currently refining our service and are not charging for our services; all costs are covered out of pocket. Although we are limited in terms of storage space and other resources, we are offering our services to the public and welcome any feedback you can provide.`,
   },
   {
-    question: "How long is the program?",
-    answer:
-      "The program is 6 months long. We will match mentors and mentees in October 2021 and the program will end in March 2022.",
+    question: "So products are free?",
+    answer: `No, products are not free but they are priced at cost, meaning we do not profit from their sale while in beta. We cover all associated costs, such as hosting, storage, third-party APIs, and image enhancement.`,
   },
   {
-    question: "What if I don’t like my mentor/mentee?",
-    answer:
-      "We will do our best to match you with someone who has similar interests and goals. However, if you do not like your mentor/mentee, you can contact us and we will try to find you a new match.",
+    question: "How do I get started?",
+    answer: `To get started, sign up for an account. Once registered, you can upload your ChatGPT art, design your product, view mockups, and have it printed on a variety of items. Manual upload is required until the extension is released.`,
   },
   {
-    question: "Can I be both a mentor and a mentee?",
-    answer:
-      "Yes! You can be both a mentor and a mentee. Please fill out both forms.",
+    question: "What is the difference between AI Enhance and AI Upscale?",
+    answer: `AI Enhance improves the quality of your image by reducing noise, sharpening details, and correcting colors. AI Upscale increases your image's resolution. These combined ensure that your design is printed in the highest quality possible.`,
+  },
+  {
+    question: "What is the difference between a design and a product?",
+    answer: `A design is an image you upload to Chat2Print. A product is a tangible item that features your design, which you can purchase. Visit the studio to upload your design and create your product.`,
+  },
+  {
+    question: "How does the extension work?",
+    answer: `Once available, you can install the extension to upload your ChatGPT-generated art into your Chat2Print account directly from the official ChatGPT UI. The extension adds a convenient upload button under each new image.`,
+  },
+  {
+    question: "How does the studio work?",
+    answer: `The studio enables you to adjust your design on the product with drag, pinch, pan, and zoom functions. We utilize advanced image processing technology to ensure your design is printed in the highest quality.`,
+  },
+  {
+    question: "What products do you offer?",
+    answer: `During our beta phase, we offer a limited selection of popular products from our print-on-demand partner, Printful. These include Metal Prints, Posters, Canvas Prints, Phone Cases, Laptop Sleeves, Mouse Pads, and various types of Stickers.`,
   },
 ];
 
-export const FaqSection = () => {
+export const FaqSection = ({ id }: { id: string }) => {
+  const faqStates = () => faqs.map((faq) => false);
+  const [openFaqs, setOpenFaqs] = useState(faqStates());
+
+  const toggleFaq = (index) => {
+    setOpenFaqs((currentOpenFaqs) =>
+      currentOpenFaqs.map((isOpen, i) => (i === index ? !isOpen : isOpen))
+    );
+  };
+
   return (
-    <section id="faq" className="py-12 md:py-24 bg-gray-200">
-      <h2 className="text-3xl font-bold text-center mb-6">
-        Frequently Asked Questions
-      </h2>
-      <div className="max-w-2xl mx-auto">
-        {faqs.map((faq, index) => (
-          <div key={index} className="faq-item my-4">
-            <div className="faq-question font-semibold">{faq.question}</div>
-            <div className="faq-answer mt-2">{faq.answer}</div>
+    <div id={id} className="bg-gradient-to-b gradientBG rounded-lg">
+      <div className="max-w-7xl mx-auto py-6 px-4">
+        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+          <div>
+            <h2 className="text-3xl font-extrabold text-accent">
+              Frequently asked questions
+            </h2>
+            <p className="mt-4 text-lg text-gray-300">
+              Can’t find the answer you’re looking for? Reach out to us{" "}
+              <a
+                href="mailto:support@chat2print.xyz"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                here
+              </a>
+              .
+            </p>
           </div>
-        ))}
+          <div className="mt-2 lg:mt-0 lg:col-span-2">
+            <dl className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div
+                  key={faq.question}
+                  onClick={() => toggleFaq(index)}
+                  className="cursor-pointer w-full border border-gray-700 rounded-lg shadow-lg p-6"
+                >
+                  <dt className="text-lg leading-6 font-medium text-accent">
+                    {faq.question}
+                  </dt>
+                  {openFaqs[index] && (
+                    <dd className="mt-2 text-base text-gray-300">
+                      {faq.answer}
+                    </dd>
+                  )}
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };

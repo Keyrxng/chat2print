@@ -4,7 +4,8 @@
 
 @layer base {
   :root {
-
+    --slide-duration: calc(250px * 52 * 0.1s - 1);
+    
     --angle: 90deg;
     --gradX: 100%;
     --gradY: 50%;
@@ -73,38 +74,33 @@
   }
 }
 
-/* Scrollbar Track */
 ::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
+  width: 12px; 
 }
 
-/* Scrollbar Thumb */
 ::-webkit-scrollbar-thumb {
-  background-color: #fdc80a; /* Color of the thumb */
-  border-radius: 6px; /* Rounded corners */
+  background-color: #fdc80a; 
+  border-radius: 6px; 
 }
 
-/* Scrollbar Track when hovered */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #c7a119; /* Color of the thumb on hover */
+  background-color: #c7a119; 
 }
 
-/* Scrollbar Track Background */
 ::-webkit-scrollbar-track {
-  background-color: #0f0f0f; /* Color of the track */
-  border-radius: 6px; /* Rounded corners */
+  background-color: #0f0f0f; 
+  border-radius: 6px; 
  
 }
 
-/* Scrollbar Track Background when hovered */
 ::-webkit-scrollbar-track:hover {
-  background-color: #181818; /* Color of the track on hover */
+  background-color: #181818; 
  
 }
 
 
 .bg-dark-800 {
-  background-color: #161B22; /* Slightly lighter for card backgrounds */
+  background-color: #161B22; 
 }
 
 .text-white {
@@ -112,16 +108,9 @@
 }
 
 .border-blue-400 {
-  border-color: #1D4ED8; /* Blue border for highlighting */
+  border-color: #1D4ED8; 
 }
 
-.shadow-xl {
-  /* Ensure the shadows are strong enough to be visible on a dark background */
-}
-
-.hover\:shadow-2xl:hover {
-  /* Hover state with a larger shadow for interactive elements */
-}
 
 .gradientBG {
   background: linear-gradient(90deg, hsl(var(--background)) 0%, hsl(var(--foreground)) 100%);
@@ -140,11 +129,9 @@
   background: conic-gradient(from 0deg at 50% 50%, hsl(var(--foreground)) 0deg, hsl(var(--background)) 360deg);
 }
 
-/* background: conic-gradient(from 90deg at 60% 55%, rgba(3, 9, 24, 1) 0%, rgba(254, 254, 254, 1) 100%); */
-
 #sliding-background {
   position: absolute;
-  width: calc(180px * 24); /* Assuming you want to show 6 images at a time */
+  width: calc(180px * 52); 
   height: 400px;
   max-height: 400px;
   width: 100%;
@@ -153,7 +140,7 @@
   flex-wrap: nowrap;
   opacity: 0.5;
   animation: slide linear infinite alternate-reverse;
-  animation-duration: calc(180px * 24 * 0.03s); /* Duration based on number of images */
+  animation-duration: calc(250px * 53 * 0.03s); 
   border-radius: 10px;
   z-index: -1;
 }
@@ -161,27 +148,21 @@
 .image-row {
   display: flex;
   animation: slide linear;
-  animation-duration: calc(180px * 24 * 0.03s); /* Duration based on number of images */
+  will-change: transform;
+  animation-duration: calc(250px * 53 * 0.03s); 
   transform: rotateX(55deg) rotateZ(20deg) translateZ(-200px);  
 }
 
-.image-tile {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 180px;
-  height: 180px;
-  background-position: center;
-  transform: rotateY(45deg) scale(0.6);
-}
 
 @keyframes slide {
   0% {
-    transform: translateX(calc(-180px * 0)); /* Move the images by their total width */
-  }
+    transform: translateX(calc(-50px * 0));  }
   100% {
-    transform: translateX(calc(-180px * 8)); /* Move the images by their total width */
-  }
+    transform: translateX(calc(-50px * 52));  }
+}
+
+.image-row {
+  animation: slide infinite linear;
 }
 
 .upscale-button {

@@ -30,10 +30,12 @@ import {
 } from "@/components/ui/dialog";
 import Supabase from "@/classes/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { OptionsSelection } from "@/components/OptionsSelection";
 interface ImagePlacementEditorProps {
-  selectedTemplate: __Template | undefined;
+  selectedTemplate: __Temp | undefined;
   selectedVariant: __Variant | undefined;
   selectedProduct: __Prod | undefined;
+  selectedTemp: __PrintFiles | undefined;
   userImage: string;
 }
 
@@ -54,13 +56,15 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [upscaledImage, setUpscaledImage] = useState<string>("");
   const [mocks, setMocks] = useState<any[]>([]);
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
+  const [placements, setPlacements] = useState<string[]>();
+  const [tempIds, setTempIds] = useState<number[]>();
 
   const [transform, setTransform] = useState({
     scale: 1,
     positionX: 0,
     positionY: 0,
   });
-  let observerRef = useRef<MutationObserver | null>(null);
+  const observerRef = useRef<MutationObserver | null>(null);
 
   const supabase = createClientComponentClient();
 
@@ -77,45 +81,34 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             );
             console.log(newState);
             if (newState === "unchecked") {
-              setImageSrc(
-                (prev) =>
-                  (prev =
-                    selectedTemplate?.background_url ??
-                    selectedTemplate?.image_url ??
-                    "")
-              );
+              setImageSrc((prev) => (prev = ""));
             } else {
-              setImageSrc(
-                (prev) =>
-                  (prev =
-                    selectedTemplate?.image_url ??
-                    selectedTemplate?.background_url ??
-                    "")
-              );
+              setImageSrc((prev) => (prev = ""));
             }
           }
         });
       });
       observerRef.current.observe(viewSwitch, { attributes: true });
     }
-  }, [
-    imageSrc,
-    selectedTemplate?.background_url,
-    selectedTemplate?.image_url,
-    viewSwitch,
-  ]);
+  }, []);
 
   useEffect(() => {
-    const initialPosition = {
-      x: selectedTemplate?.print_area_left ?? 100,
-      y: selectedTemplate?.print_area_top ?? 100,
-      scale: 1,
-    };
-    setPosition(initialPosition);
-    setImageSrc(
-      selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? ""
-    );
-  }, [selectedTemplate, userImage]);
+    const svID = selectedVariant?.id;
+    const k = selectedTemplate?.template?.variant_mapping
+      ?.filter((v) => v.variant_id == svID)
+      .flatMap((v) => v.templates);
+
+    const temps = k?.map((v) => v.template_id);
+    setTempIds(temps);
+    const placement = k?.map((v) => v.placement);
+    setPlacements(placement);
+
+    async function load() {
+      const completed = await fetchMockups();
+      setMocks((prev) => (prev = completed));
+    }
+    load();
+  }, []);
 
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
@@ -285,8 +278,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }),
     });
 
-    console.log("Upscale responded with: ", res);
-
     const data = await res.json();
 
     setUpscaledImage(data);
@@ -297,13 +288,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const handleCreateMockup = async (imageData: string) => {
-    console.log("Creating mockup with: ", imageData);
     setIsMockingUp(true);
     const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
     const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
     const offsetX = transform.positionX;
     const offsetY = transform.positionY;
-    const selectTemplateId = selectedTemplate?.template_id;
 
     const prodID = selectedVariant?.product_id;
     const variantID = selectedVariant?.id;
@@ -312,8 +301,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       throw new Error("No product or variant IDs found");
     }
 
-    console.log("Hitting POD API...");
-    console.log("iageData: ", imageData);
     const ress = await fetch("/api/pod/", {
       method: "POST",
       body: JSON.stringify({
@@ -346,39 +333,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
   };
 
-  /**
-   * 
-   * {
-  "task_key": "gt-609145289",
-  "status": "completed",
-  "mockups": [
-    {
-      "placement": "default",
-      "variant_ids": [
-        6883
-      ],
-      "mockup_url": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/a49421e1948f99fa5d8a9e08ccea9737/premium-luster-photo-paper-framed-poster-(in)-black-10x10-transparent-657893e58f591.png"
-    }
-  ],
-  "printfiles": [
-    {
-      "variant_ids": [
-        6883
-      ],
-      "placement": "default",
-      "url": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/0cd2c115f4788472a1141ab2f425ee76/printfile_default.png"
-    }
-  ]
-}
-
-
-   */
-
   const fetchMockups = async () => {
     const { data } = await supabase.auth.getUser();
     const user_id = data?.user?.id;
 
-    console.log("user_id: ", user_id);
     const { data: mockups, error } = await supabase
       .from("mockups")
       .select("*")
@@ -399,8 +357,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
       const data = await res.json();
 
-      console.log("asda data: ", data);
-
       if (data.result.status === "completed") {
         completed.push(data.result);
         const { error: editError } = await supabase
@@ -419,14 +375,19 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   useEffect(() => {
-    async function load() {
-      const completed = await fetchMockups();
-      console.log("completed: ", completed);
+    const demoTemplate = selectedTemplate?.template?.templates.find(
+      (t) => t.template_id === tempIds?.[0]
+    );
 
-      setMocks((prev) => (prev = completed));
-    }
-    load();
-  }, []);
+    const initialPosition = {
+      x: demoTemplate?.print_area_left ?? 100,
+      y: demoTemplate?.print_area_top ?? 100,
+      scale: 1,
+    };
+
+    setPosition(initialPosition);
+    setImageSrc(demoTemplate?.background_url ?? demoTemplate?.image_url ?? "");
+  }, [selectedTemplate, tempIds]);
 
   return (
     <>
@@ -468,6 +429,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           </div>
         </div>
       )}
+
       {isMockingUp && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -506,6 +468,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           </div>
         </div>
       )}
+
       {viewingMocks ? (
         <Suspense fallback={<div>Loading...</div>}>
           <Image
@@ -550,6 +513,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             <TransformComponent wrapperClass="relative h-auto w-auto fill">
               <div className="relative w-[650px] h-[650px]">
                 <Image
+                  priority
                   onDrag={handleDrag}
                   alt="user image"
                   width={1024}
@@ -567,7 +531,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           </div>
         </TransformWrapper>
       )}
-      <div className="flex mx-8 mt-1 justify-between ">
+
+      <div className="flex mx-8 mt-1 justify-between">
+        {isOpen && (
+          <PricingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        )}
         <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
           <TooltipProvider>
             <Tooltip>
@@ -594,9 +562,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             </Tooltip>
           </TooltipProvider>
         </div>
-        {isOpen && (
-          <PricingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        )}
 
         <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
           <TooltipProvider>

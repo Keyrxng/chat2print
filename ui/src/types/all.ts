@@ -40,6 +40,5 @@ export type __Temp = typeof Templates extends { [key: string]: infer U }
   : never;
 export type __ProductTemplate = __Temp["template"];
 export type __VariantMapping = __ProductTemplate["variant_mapping"];
-export type __Template = __Temp["template"]["templates"][number]
+export type __Template = __Temp["template"]["templates"][number];
 export type __PrintFiles = __Temp["printFiles"];
-

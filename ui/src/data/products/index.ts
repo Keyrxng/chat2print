@@ -9,7 +9,7 @@ import holographic_stickers from "./kiss-cut_holographic_stickers.json";
 import kiss_cut_stickers from "./kiss_cut_stickers.json";
 import laptop_sleeve from "./laptop_sleeve.json";
 import mouse_pad from "./mouse_pad.json";
-import pin_buttons from "./set_of_pin_buttons.json";
+// import pin_buttons from "./set_of_pin_buttons.json";
 import premium_luster_photo_paper_framed_poster from "./premium_luster_photo_paper_framed_poster.json";
 import premium_luster_photo_paper_poster from "./premium_luster_photo_paper_poster.json";
 import snap_iphone_case from "./snap_case_for_iphone.json";
@@ -31,7 +31,7 @@ const syncProducts = {
   kiss_cut_stickers,
   laptop_sleeve,
   mouse_pad,
-  pin_buttons,
+  // pin_buttons,
   premium_luster_photo_paper_framed_poster,
   premium_luster_photo_paper_poster,
   snap_iphone_case,

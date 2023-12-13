@@ -68,8 +68,8 @@ export function ProductGallery() {
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: 1 }}
     >
-      <section id="product-gallery" className="py-12 md:py-24">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4" ref={ref}>
+      <section id="" className="ml-12">
+        <div className="grid grid-cols-2 gap-4 m-12 md:grid-cols-5" ref={ref}>
           {images.map((imageUrl, index) => (
             <div
               key={index}

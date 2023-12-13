@@ -12,7 +12,6 @@ export async function POST(req: NextRequest, res: NextRequest) {
 
   try {
     const response = await podHandler.getMockupTaskStatus(taskKey);
-    // console.log(response);
     return new Response(JSON.stringify(response), {
       headers: { "content-type": "application/json" },
     });

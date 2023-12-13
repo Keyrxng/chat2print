@@ -235,12 +235,9 @@ export default function Header() {
               }}
             />
           </a>
-          <div className="hidden md:flex flex-col lg:ml-[10rem]  ">
-            <h1 className="text-2xl text-accent font-bold">
-              25% off all orders above $40!
-            </h1>
-            <p className="text-md text-center  text-accent font-bold">
-              Use code: <span className="text-white">C2P25</span>
+          <div className="hidden md:flex flex-col lg:ml-[10rem]">
+            <p className="text-accent text-sm text-center">
+              <a href="/#about">Beta?</a>
             </p>
           </div>
 
