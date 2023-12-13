@@ -27,7 +27,14 @@ import {
 } from "@/components/ui/tooltip";
 import { ProductSelection } from "@/components/ProductSelection";
 import ImagePlacementEditor from "./TemplateEditor";
-
+const noUserImages = [
+  "/revolverblueprint.webp",
+  "/felineeye.webp",
+  "/c2pTemp1.webp",
+  "/c2pTemp2.webp",
+  "/c2pdigital.webp",
+  "/fantasyart.webp",
+];
 function formatTextToHTML(text: string) {
   const lines = text?.split("\n");
 
@@ -66,7 +73,6 @@ export default function Page() {
   const [selectedProduct, setSelectedProduct] = useState<__Prod>();
   const [selectedDesign, setSelectedDesign] = useState<__Product>();
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();
-  const [printFiles, setPrintFiles] = useState<__Temp>();
   const [template, setTemplate] = useState<__Template>();
   const [isChecked, setIsChecked] = useState(false);
 
@@ -76,13 +82,18 @@ export default function Page() {
     handleChosenProduct(products["canvas"]);
 
     async function load() {
-      const imgs = await fetch("/api/designs/fetch");
-      const data = await imgs.json();
-      let { images } = data;
-      images = images.filter((img: string) => img !== null);
-
-      setUserImages(images);
-      setSelectedImage(images[0]);
+      try {
+        const imgs = await fetch("/api/designs/fetch");
+        const data = await imgs.json();
+        let { images } = data;
+        images = images.filter((img: string) => img !== null);
+        const ne = [...images, ...noUserImages];
+        setUserImages(ne);
+        setSelectedImage(ne[0]);
+      } catch (err) {
+        setUserImages(noUserImages);
+        setSelectedImage(noUserImages[0]);
+      }
     }
     load();
   }, []);
@@ -237,11 +248,8 @@ export default function Page() {
               <div className="col-span-2 max-h-min">
                 <ImagePlacementEditor
                   selectedTemplate={template}
-                  printFiles={printFiles}
                   selectedVariant={selectedVariant}
-                  selectedProduct={selectedProduct}
                   userImage={selectedImage}
-                  action={handleChosenProduct}
                 />
               </div>
 
@@ -275,7 +283,9 @@ export default function Page() {
           <div>
             <div className="flex flex-row my-2 gap-4 justify-between items-center">
               <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
-              <h2 className="text-2xl font-bold ">£{selectedVariant?.price}</h2>
+              <h2 className="text-2xl font-bold ">
+                £{Math.round(Number(selectedVariant?.price) * 2)}
+              </h2>
             </div>
             <button
               className="flex-end right-0 w-full mt-4 md:mt-0 text-lg hover:bg-accent border border-accent    hover:text-background   text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out    "

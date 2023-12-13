@@ -18,13 +18,20 @@ import {
 } from "@radix-ui/react-tooltip";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import React from "react";
 interface ImagePlacementEditorProps {
   selectedTemplate: __Template | undefined;
   selectedVariant: __Variant | undefined;
-  selectedProduct: __Prod | undefined;
-  printFiles: __Temp | undefined;
   userImage: string;
-  action: (product: __Prod) => void;
 }
 
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
@@ -38,21 +45,19 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   );
   const editorRef = useRef<HTMLDivElement>(null);
   const [viewSwitch, setViewSwitch] = useState<HTMLButtonElement | null>(null);
-  const [isSubbed, setIsSubbed] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [enhancing, setEnhancing] = useState<boolean>(false);
   const [isMockingUp, setIsMockingUp] = useState<boolean>(false);
   const [upscaledImage, setUpscaledImage] = useState<string>("");
   const [mocks, setMocks] = useState<any[]>([]);
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
-  console.log("mocks: ", mocks);
-
+  const [needAccount, setNeedAccount] = useState<boolean>(false);
+  const [signing, setSigning] = useState<boolean>(false);
+  const observerRef = useRef<MutationObserver | null>(null);
   const [transform, setTransform] = useState({
     scale: 1,
     positionX: 0,
     positionY: 0,
   });
-  const observerRef = useRef<MutationObserver | null>(null);
 
   const supabase = createClientComponentClient();
 
@@ -121,14 +126,19 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const handleEnhanceUpscale = async () => {
-    if (!isSubbed) {
-      setIsOpen(true);
+    const { data: userData } = await supabase.auth.getUser();
+
+    if (!userData?.user?.id) {
+      setNeedAccount(true);
       return;
-    } else {
-      setIsOpen(false);
     }
 
     setEnhancing(true);
+    if (!userImage) {
+      alert("Please upload an image first");
+      setEnhancing(false);
+      return;
+    }
     const res = await fetch("/api/upscale", {
       method: "POST",
       body: JSON.stringify({
@@ -147,8 +157,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   const handleCreateMockup = async (imageData: string) => {
     setIsMockingUp(true);
-    console.log("creating mockup");
-    console.log(imageData);
     const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
     const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
     const offsetX = transform.positionX;
@@ -177,15 +185,21 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const data = await ress.json();
 
     const taskKey = data.result.task_key;
-    saveTaskKeyToSupa(taskKey);
+    const supaToSave = {
+      product: selectedVariant.name,
+      task_key: taskKey,
+      status: "pending",
+    };
+    saveTaskKeyToSupa(supaToSave);
     setIsMockingUp(false);
   };
 
-  const saveTaskKeyToSupa = async (taskKey: string) => {
-    const { data: error } = await supabase.from("mockups").insert({
-      status: "pending",
-      task_key: taskKey,
-    });
+  const saveTaskKeyToSupa = async (supaToSave: {
+    product: string;
+    task_key: string;
+    status: string;
+  }) => {
+    const { data: error } = await supabase.from("mockups").insert(supaToSave);
 
     if (error) {
       console.log(error);
@@ -203,7 +217,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       .eq("user_id", user_id);
 
     if (error) {
-      console.log(error);
+      return [];
     }
 
     const completed = [];
@@ -254,8 +268,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     console.log("activeMock: ", activeMock);
     return (
       <Suspense fallback={<div>Loading...</div>}>
-        {/* need to display all of the user mocks bnicely and selectable  */}
-        <div className="flex flex-row justify-center items-center">
+        <div className="grid grid-cols-3 gap-3 justify-center items-center">
           {mocks.map((mock, index) => (
             <>
               {!activeMock && (
@@ -273,11 +286,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     alt="mockup"
                     className="rounded-lg"
                   />
+                  <p className="text-accent text-sm mt-2">{mock.product}</p>
                 </button>
               )}
 
-              {activeMock &&
-                activeMock.printFiles.map((mockup, index) => (
+              {/* {activeMock &&
+                activeMock.mockups.map((mockup, index) => (
                   <button
                     key={index}
                     className="flex flex-col justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
@@ -293,7 +307,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       className="rounded-lg"
                     />
                   </button>
-                ))}
+                ))} */}
             </>
           ))}
         </div>
@@ -338,6 +352,150 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           </div>
         </div>
       </Suspense>
+    );
+  };
+
+  const Login = () => {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [isRegistering, setIsRegistering] = React.useState(true);
+
+    const signinValidation = () => {
+      if (email === "") {
+        alert("Please enter your email address");
+        return false;
+      }
+      if (password === "") {
+        alert("Please enter your password");
+        return false;
+      }
+      if (!email.includes("@")) {
+        alert("Please enter a valid email");
+        return false;
+      }
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return false;
+      }
+      if (password.length >= 255) {
+        alert("Password must be less than 255 characters");
+        return false;
+      }
+
+      if (email.length >= 255) {
+        alert("Email must be less than 255 characters");
+        return false;
+      }
+
+      if (email.length < 6) {
+        alert("Email must be at least 6 characters");
+        return false;
+      }
+
+      return true;
+    };
+
+    const handleSubmit = (event: any) => {
+      event.preventDefault();
+
+      if (!signinValidation()) {
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("email", email);
+      fd.append("password", password);
+
+      const target = event.target.action;
+
+      fetch(target, {
+        method: "POST",
+        body: fd,
+      }).then(async (data) => {
+        const res = await data.json();
+        console.log(res);
+        if (res.error) {
+          alert(res.error);
+        } else {
+          window.location.reload();
+        }
+      });
+    };
+
+    return (
+      <>
+        <form
+          method="POST"
+          action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
+          className="space-y-4"
+          onSubmit={handleSubmit}
+          id="login"
+        >
+          <Input
+            type="username"
+            name="username"
+            placeholder="Email"
+            className="text-accent"
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="text-accent"
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          />
+          <Button
+            className="text-accent hover:bg-accent hover:text-background transition duration-300 border border-accent"
+            type="submit"
+          >
+            {!isRegistering ? "Sign In" : "Register"}
+          </Button>
+        </form>
+        {/* provider login google etc */}
+
+        {/* <div className="flex flex-col space-y-4">
+            <Button
+              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+              onClick={() => handleLoginWithProvider("google")}
+            >
+              Sign in with Google
+            </Button>
+            <Button
+              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+              onClick={() => handleLoginWithProvider("github")}
+            >
+              Sign in with Github
+            </Button>
+          </div> */}
+
+        {!isRegistering && (
+          <p className="text-center text-sm m-2 text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <button
+              onClick={() => setIsRegistering(true)}
+              className="underline"
+            >
+              Sign up
+            </button>
+          </p>
+        )}
+        {isRegistering && (
+          <p className="text-center text-sm m-2 text-muted-foreground">
+            Already have an account?{" "}
+            <button
+              onClick={() => setIsRegistering(false)}
+              className="underline"
+            >
+              Sign in
+            </button>
+          </p>
+        )}
+      </>
     );
   };
 
@@ -416,6 +574,41 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                         This may take a minute or two. Future updates will
                         improve this process.
                       </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {needAccount && (
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div
+                  className="fixed inset-0 transition-opacity"
+                  aria-hidden="true"
+                >
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span
+                  className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                  aria-hidden="true"
+                >
+                  &#8203;
+                </span>
+
+                <div
+                  className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="modal-headline"
+                >
+                  <div className="flex flex-col justify-center items-center p-6">
+                    <div className="flex flex-col justify-center items-center">
+                      <h1 className="text-accent text-lg m-4">
+                        Sign in or create an account to continue
+                      </h1>
+                      <Login />
                     </div>
                   </div>
                 </div>

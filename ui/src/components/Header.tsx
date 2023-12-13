@@ -142,6 +142,7 @@ export default function Header() {
           action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
           className="space-y-4"
           onSubmit={handleSubmit}
+          id="login"
         >
           <Input
             type="username"
@@ -245,31 +246,22 @@ export default function Header() {
             <ul className="flex space-x-4 self-center text-center justify-center align-middle">
               <li>
                 <Dialog>
-                  {isConnected ? (
-                    <>
-                      <DialogTrigger
-                        onClick={() => (window.location.href = "/studio")}
-                        className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg  border border-accent  hover:bg-accent  hover:text-background transition duration-300flex"
-                      >
-                        Studio
-                      </DialogTrigger>
-                    </>
-                  ) : (
-                    <>
-                      <DialogTrigger
-                        disabled={!isConnected}
-                        onClick={() => (window.location.href = "/studio")}
-                        className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg   transition duration-300 flex"
-                      >
-                        Studio
-                      </DialogTrigger>
-                    </>
-                  )}
+                  <>
+                    <DialogTrigger
+                      onClick={() => (window.location.href = "/studio")}
+                      className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg  border border-accent  hover:bg-accent  hover:text-background transition duration-300flex"
+                    >
+                      Studio
+                    </DialogTrigger>
+                  </>
                 </Dialog>
               </li>
               <li>
                 <Dialog>
-                  <DialogTrigger className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-accent border border-accent hover:text-background transition duration-300 flex">
+                  <DialogTrigger
+                    id="login"
+                    className="bg-background text-accent font-bold py-2 px-3 rounded-lg text-lg hover:bg-accent border border-accent hover:text-background transition duration-300 flex"
+                  >
                     Profile <ConnectedBlinker />
                   </DialogTrigger>
 

@@ -138,16 +138,16 @@ class PODHandler {
 
     let { placementType, options, optionGroups } = await load();
 
-    const maxLengthForOptions = 3;
-    const maxLengthForOptionGroups = 3;
+    // const maxLengthForOptions = 3;
+    // const maxLengthForOptionGroups = 3;
 
-    if (options!.length > maxLengthForOptions) {
-      options = options!.slice(0, maxLengthForOptions);
-    }
+    // if (options!.length > maxLengthForOptions) {
+    //   options = options!.slice(0, maxLengthForOptions);
+    // }
 
-    if (optionGroups!.length > maxLengthForOptionGroups) {
-      optionGroups = optionGroups!.slice(0, maxLengthForOptionGroups);
-    }
+    // if (optionGroups!.length > maxLengthForOptionGroups) {
+    //   optionGroups = optionGroups!.slice(0, maxLengthForOptionGroups);
+    // }
 
     try {
       const mockupData = {

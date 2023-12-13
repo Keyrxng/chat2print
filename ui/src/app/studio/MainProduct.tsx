@@ -48,11 +48,8 @@ export const MainProduct = ({
       <Suspense fallback={<div>Loading...</div>}>
         <ImagePlacementEditor
           selectedTemplate={selectedTemplate}
-          printFiles={printFiles}
           selectedVariant={variant}
-          selectedProduct={product}
           userImage={image}
-          action={action}
         />
       </Suspense>
     </div>
