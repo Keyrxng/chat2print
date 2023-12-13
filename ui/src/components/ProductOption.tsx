@@ -11,7 +11,6 @@ interface ProductOptionProps {
 }
 
 export const ProductOption = ({
-  key,
   image,
   product,
   isSelected,
@@ -22,7 +21,6 @@ export const ProductOption = ({
     : "";
   return (
     <div
-      key={key}
       className={`cursor-pointer mx-auto p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105 ${selectedClass}`}
       onClick={() => onSelect(product)}
     >
@@ -34,8 +32,9 @@ export const ProductOption = ({
         className="rounded-lg"
         style={{
           maxWidth: "100%",
-          height: "auto"
-        }} />
+          height: "auto",
+        }}
+      />
       <div className="text-center mt-2">
         <h3 className="text-sm font-bold">{product?.product.type_name}</h3>
         <p className="text-sm font-bold">

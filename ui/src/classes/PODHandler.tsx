@@ -1,6 +1,7 @@
 import { Product, __Variant } from "@/types/all";
 import axios, { AxiosInstance } from "axios";
 import probe from "probe-image-size";
+import templates from "@/data/templates";
 
 class PODHandler {
   private client: AxiosInstance;
@@ -117,16 +118,43 @@ class PODHandler {
     scaledWidth: number,
     scaledHeight: number,
     offsetX: number,
-    offsetY: number,
-    type?: string
+    offsetY: number
   ) {
-    console.log("imageUrl: ", imageUrl);
+    async function load() {
+      const arr = Object.values(templates);
+      const template = arr.find(
+        (template) => template.printFiles.product_id === productID
+      );
+      const options = template?.printFiles.options;
+      const optionGroups = template?.printFiles.option_groups;
+      const placementType = template?.template.variant_mapping[0].templates[0];
+
+      if (!template) {
+        throw new Error("Template not found");
+      }
+
+      return { placementType, options, optionGroups };
+    }
+
+    let { placementType, options, optionGroups } = await load();
+
+    const maxLengthForOptions = 3;
+    const maxLengthForOptionGroups = 3;
+
+    if (options!.length > maxLengthForOptions) {
+      options = options!.slice(0, maxLengthForOptions);
+    }
+
+    if (optionGroups!.length > maxLengthForOptionGroups) {
+      optionGroups = optionGroups!.slice(0, maxLengthForOptionGroups);
+    }
+
     try {
       const mockupData = {
         variant_ids: variantIDs,
         files: [
           {
-            type: type || "default",
+            type: placementType?.placement || "default",
             image_url: imageUrl,
             position: {
               area_width: scaledWidth,
@@ -138,6 +166,8 @@ class PODHandler {
             },
           },
         ],
+        options,
+        optionGroups,
       };
 
       console.log("Creating mockup task: ", mockupData);

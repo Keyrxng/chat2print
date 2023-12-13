@@ -1,6 +1,6 @@
 import canvas from "./canvas.json";
-import clear_iphone_case from "./iphone_case.json";
-import clear_samsung_case from "./samsung_case.json";
+// import clear_iphone_case from "./iphone_case.json";
+// import clear_samsung_case from "./samsung_case.json";
 import cork_coaster from "./coaster.json";
 import framed_canvas from "./framed_canvas.json";
 import gaming_mouse_pad from "./gaming_mouse_pad.json";
@@ -21,8 +21,8 @@ import tough_samsung_case from "./tough_case_for_samsung.json";
 
 const syncProducts = {
   canvas,
-  clear_iphone_case,
-  clear_samsung_case,
+  // clear_iphone_case,
+  // clear_samsung_case,
   cork_coaster,
   framed_canvas,
   gaming_mouse_pad,

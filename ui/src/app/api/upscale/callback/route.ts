@@ -30,16 +30,16 @@ export async function POST(req: Request, res) {
 
   const prediction = data as IncomingData;
 
+  if (prediction.status === "succeeded") {
+    return new Response(JSON.stringify(prediction), { status: 201 });
+  }
+
   const userIdFromInput = prediction.input.image.split("/")[8];
   const imageUrl = prediction.output;
   const image = await fetch(imageUrl);
-  console.log("image: ", image);
 
   const blob = await image.blob();
 
-  console.log("blob: ", blob);
-
-  // just uploaded to their bucket
   const { data: uploadData, error: uploadError } =
     await supabase.supabase.storage
       .from("user_uploads")
@@ -64,7 +64,6 @@ export async function POST(req: Request, res) {
     predict_time: prediction.metrics.predict_time,
   };
 
-  // pinning to the upscales table
   const { error } = await supabase.supabase.from("upscales").upsert([
     {
       idd: prediction.id,
@@ -81,8 +80,7 @@ export async function POST(req: Request, res) {
     console.log(
       `Upscale ${prediction.id} saved to database for user ${userIdFromInput}`
     );
-    res.statusCode = 200;
-    res.end(JSON.stringify(prediction));
+    return new Response(JSON.stringify(prediction), { status: 201 });
   }
 }
 export async function GET(req: Request, res) {

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, Suspense } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import {
@@ -10,9 +10,6 @@ import {
   __VariantMapping,
 } from "@/types/all";
 import { Button } from "@/components/ui/button";
-import PODHandler from "@/classes/PODHandler";
-import templates from "@/data/templates";
-import { HelpCircle, InfoIcon } from "lucide-react";
 import {
   TooltipProvider,
   Tooltip,
@@ -20,33 +17,25 @@ import {
   TooltipContent,
 } from "@radix-ui/react-tooltip";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import Supabase from "@/classes/supabase";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { OptionsSelection } from "@/components/OptionsSelection";
 interface ImagePlacementEditorProps {
-  selectedTemplate: __Temp | undefined;
+  selectedTemplate: __Template | undefined;
   selectedVariant: __Variant | undefined;
   selectedProduct: __Prod | undefined;
-  selectedTemp: __PrintFiles | undefined;
+  printFiles: __Temp | undefined;
   userImage: string;
+  action: (product: __Prod) => void;
 }
 
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   selectedTemplate,
   selectedVariant,
-  selectedProduct,
   userImage,
 }) => {
   const [position, setPosition] = useState({ x: 0, y: 0, scale: 1 });
-  const [imageSrc, setImageSrc] = useState<string>("");
+  const [imageSrc, setImageSrc] = useState<string>(
+    selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? ""
+  );
   const editorRef = useRef<HTMLDivElement>(null);
   const [viewSwitch, setViewSwitch] = useState<HTMLButtonElement | null>(null);
   const [isSubbed, setIsSubbed] = useState<boolean>(true);
@@ -56,8 +45,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [upscaledImage, setUpscaledImage] = useState<string>("");
   const [mocks, setMocks] = useState<any[]>([]);
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
-  const [placements, setPlacements] = useState<string[]>();
-  const [tempIds, setTempIds] = useState<number[]>();
+  console.log("mocks: ", mocks);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -69,9 +57,26 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const supabase = createClientComponentClient();
 
   useEffect(() => {
+    const intitalPosition = {
+      x: selectedTemplate?.print_area_left ?? 100,
+      y: selectedTemplate?.print_area_top ?? 100,
+      scale: 1,
+    };
+    setPosition((prev) => (prev = intitalPosition));
+    async function load() {
+      const completed = await fetchMockups();
+      setMocks((prev) => (prev = completed));
+
+      setImageSrc(
+        selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? ""
+      );
+    }
+    load();
+  }, [selectedTemplate]);
+
+  useEffect(() => {
     const viewSw = document.getElementById("view-switch");
     setViewSwitch(viewSw as HTMLButtonElement);
-
     if (viewSwitch) {
       observerRef.current = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
@@ -81,34 +86,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             );
             console.log(newState);
             if (newState === "unchecked") {
-              setImageSrc((prev) => (prev = ""));
+              setImageSrc((prev) => (prev = selectedTemplate?.image_url!));
             } else {
-              setImageSrc((prev) => (prev = ""));
+              setImageSrc((prev) => (prev = selectedTemplate?.background_url!));
             }
           }
         });
       });
       observerRef.current.observe(viewSwitch, { attributes: true });
     }
-  }, []);
-
-  useEffect(() => {
-    const svID = selectedVariant?.id;
-    const k = selectedTemplate?.template?.variant_mapping
-      ?.filter((v) => v.variant_id == svID)
-      .flatMap((v) => v.templates);
-
-    const temps = k?.map((v) => v.template_id);
-    setTempIds(temps);
-    const placement = k?.map((v) => v.placement);
-    setPlacements(placement);
-
-    async function load() {
-      const completed = await fetchMockups();
-      setMocks((prev) => (prev = completed));
-    }
-    load();
-  }, []);
+  }, [selectedTemplate, viewSwitch]);
 
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
@@ -133,7 +120,505 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     });
   };
 
-  function PricingModal({
+  const handleEnhanceUpscale = async () => {
+    if (!isSubbed) {
+      setIsOpen(true);
+      return;
+    } else {
+      setIsOpen(false);
+    }
+
+    setEnhancing(true);
+    const res = await fetch("/api/upscale", {
+      method: "POST",
+      body: JSON.stringify({
+        url: userImage,
+      }),
+    });
+
+    const data = await res.json();
+
+    setUpscaledImage(data);
+
+    await handleCreateMockup(data);
+
+    setEnhancing(false);
+  };
+
+  const handleCreateMockup = async (imageData: string) => {
+    setIsMockingUp(true);
+    console.log("creating mockup");
+    console.log(imageData);
+    const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
+    const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
+    const offsetX = transform.positionX;
+    const offsetY = transform.positionY;
+
+    const prodID = selectedVariant?.product_id;
+    const variantID = selectedVariant?.id;
+
+    if (!prodID || !variantID) {
+      throw new Error("No product or variant IDs found");
+    }
+
+    const ress = await fetch("/api/pod/", {
+      method: "POST",
+      body: JSON.stringify({
+        productId: prodID,
+        imageUrl: imageData,
+        variantIDs: [variantID],
+        scaledWidth,
+        scaledHeight,
+        offsetX,
+        offsetY,
+      }),
+    });
+
+    const data = await ress.json();
+
+    const taskKey = data.result.task_key;
+    saveTaskKeyToSupa(taskKey);
+    setIsMockingUp(false);
+  };
+
+  const saveTaskKeyToSupa = async (taskKey: string) => {
+    const { data: error } = await supabase.from("mockups").insert({
+      status: "pending",
+      task_key: taskKey,
+    });
+
+    if (error) {
+      console.log(error);
+    } else {
+    }
+  };
+
+  const fetchMockups = async () => {
+    const { data } = await supabase.auth.getUser();
+    const user_id = data?.user?.id;
+
+    const { data: mockups, error } = await supabase
+      .from("mockups")
+      .select("*")
+      .eq("user_id", user_id);
+
+    if (error) {
+      console.log(error);
+    }
+
+    const completed = [];
+    for (const mockup of mockups!) {
+      if (mockup.status === "completed") {
+        completed.push(mockup);
+        continue;
+      }
+      const res = await fetch("/api/pod/fetch-mocks", {
+        method: "POST",
+        body: JSON.stringify({
+          taskKey: mockup.task_key,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.result.status === "completed" && mockup.status !== "completed") {
+        completed.push(data.result);
+
+        const { data: statusData, error: editError } = await supabase
+          .from("mockups")
+          .upsert({
+            status: "completed",
+            task_key: mockup.task_key,
+            mockups: data.result.mockups,
+            printFiles: data.result.printfiles,
+          })
+          .eq("task_key", mockup.task_key);
+
+        console.log("posting to supa: ", mockup.task_key);
+        console.log("statusData: ", statusData);
+
+        if (editError) {
+          console.log("editError: ", editError);
+        }
+      }
+    }
+    setMocks(completed);
+
+    return completed;
+  };
+
+  const Mockup = () => {
+    const [activeMock, setActiveMock] = useState<any>();
+    const [activeMockup, setActiveMockup] = useState<any>();
+
+    console.log("activeMock: ", activeMock);
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        {/* need to display all of the user mocks bnicely and selectable  */}
+        <div className="flex flex-row justify-center items-center">
+          {mocks.map((mock, index) => (
+            <>
+              {!activeMock && (
+                <button
+                  key={index}
+                  className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
+                  onClick={() => {
+                    setActiveMock(mock);
+                  }}
+                >
+                  <Image
+                    src={mock.mockups[0].mockup_url}
+                    width={500}
+                    height={500}
+                    alt="mockup"
+                    className="rounded-lg"
+                  />
+                </button>
+              )}
+
+              {activeMock &&
+                activeMock.printFiles.map((mockup, index) => (
+                  <button
+                    key={index}
+                    className="flex flex-col justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
+                    onClick={() => {
+                      setActiveMockup(mockup.url);
+                    }}
+                  >
+                    <Image
+                      src={mockup.url}
+                      width={500}
+                      height={500}
+                      alt="mockup"
+                      className="rounded-lg"
+                    />
+                  </button>
+                ))}
+            </>
+          ))}
+        </div>
+        <div className="bottom-0 justify-between h-full flex">
+          <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:text-accent rounded-lg">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setViewingMocks(!viewingMocks)}
+                    className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                  >
+                    Go back to editor
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
+                  <p className="text-accent text-sm">Go back to the editor.</p>
+                  <p className="text-accent text-sm"></p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:text-accent rounded-lg">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => setActiveMock(null)}
+                    className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                  >
+                    Go back to mockups
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
+                  <p className="text-accent text-sm">
+                    Go back to your collection of mockups.
+                  </p>
+                  <p className="text-accent text-sm"></p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
+      </Suspense>
+    );
+  };
+
+  return (
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <>
+          {enhancing && (
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div
+                  className="fixed inset-0 transition-opacity"
+                  aria-hidden="true"
+                >
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span
+                  className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                  aria-hidden="true"
+                >
+                  &#8203;
+                </span>
+
+                <div
+                  className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="modal-headline"
+                >
+                  <div className="flex flex-col justify-center items-center p-6">
+                    <div className="flex flex-col justify-center items-center">
+                      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                      <p className="text-accent text-2xl mt-4">
+                        Enhancing your image...
+                      </p>
+                      <p className="text-accent text-center text-sm mt-2">
+                        The enhanced image will be applied to any future mockups
+                        and of course, your final product.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isMockingUp && (
+            <div className="fixed z-50 inset-0 overflow-y-auto">
+              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div
+                  className="fixed inset-0 transition-opacity"
+                  aria-hidden="true"
+                >
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span
+                  className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                  aria-hidden="true"
+                >
+                  &#8203;
+                </span>
+
+                <div
+                  className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="modal-headline"
+                >
+                  <div className="flex flex-col justify-center items-center p-6">
+                    <div className="flex flex-col justify-center items-center">
+                      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                      <p className="text-accent text-2xl mt-4">
+                        Creating your mockup...
+                      </p>
+                      <p className="text-accent text-center text-sm mt-2">
+                        This may take a minute or two. Future updates will
+                        improve this process.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {viewingMocks ? (
+            <Mockup />
+          ) : (
+            <>
+              <TransformWrapper
+                initialScale={position.scale}
+                initialPositionX={-position.x}
+                initialPositionY={-position.y}
+                centerOnInit={true}
+                limitToBounds={false}
+                maxPositionX={Infinity}
+                maxPositionY={Infinity}
+                minPositionX={-Infinity}
+                minPositionY={-Infinity}
+                onZoom={({ state }) =>
+                  onTransformChange(
+                    state.scale,
+                    state.positionX,
+                    state.positionY
+                  )
+                }
+                onPanning={({ state }) =>
+                  onTransformChange(
+                    state.scale,
+                    state.positionX,
+                    state.positionY
+                  )
+                }
+                onPinching={({ state }) =>
+                  onTransformChange(
+                    state.scale,
+                    state.positionX,
+                    state.positionY
+                  )
+                }
+                onZoomStop={({ state }) =>
+                  onTransformChange(
+                    state.scale,
+                    state.positionX,
+                    state.positionY
+                  )
+                }
+                onPanningStop={({ state }) =>
+                  onTransformChange(
+                    state.scale,
+                    state.positionX,
+                    state.positionY
+                  )
+                }
+              >
+                {imageSrc ? (
+                  <div
+                    className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
+                    style={{ backgroundImage: `url(${imageSrc})` }}
+                    ref={editorRef}
+                  >
+                    <TransformComponent wrapperClass="relative h-auto w-auto fill">
+                      <div className="relative w-[650px] h-[650px]">
+                        <Suspense fallback={<div>Loading...</div>}>
+                          <Image
+                            onDrag={handleDrag}
+                            alt="user image"
+                            width={1024}
+                            height={1024}
+                            src={userImage}
+                            className="z-10"
+                            style={{
+                              maxWidth: "100%",
+                              width: "15%",
+                              height: "15%",
+                            }}
+                          />
+                        </Suspense>
+                      </div>
+                    </TransformComponent>
+                  </div>
+                ) : (
+                  <div
+                    className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
+                    style={{}}
+                    ref={editorRef}
+                  >
+                    <TransformComponent wrapperClass="relative h-auto w-auto fill">
+                      <div className="relative w-[650px] h-[650px]">
+                        <Suspense fallback={<div>Loading...</div>}>
+                          <Image
+                            onDrag={handleDrag}
+                            alt="user image"
+                            width={1024}
+                            height={1024}
+                            src={userImage}
+                            className="z-10"
+                            style={{
+                              maxWidth: "100%",
+                              width: "15%",
+                              height: "15%",
+                            }}
+                          />
+                        </Suspense>
+                      </div>
+                    </TransformComponent>
+                  </div>
+                )}
+              </TransformWrapper>
+              <div className="flex mx-8 mt-1 justify-between">
+                {/* {isOpen && (
+      <PricingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    )} */}
+                <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <>
+                          <div className="upscale-button">
+                            <Button
+                              onClick={() => handleEnhanceUpscale()}
+                              className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                            >
+                              Generate Mockup
+                            </Button>
+                            <div className="shine-effect"></div>
+                          </div>
+                        </>
+                      </TooltipTrigger>
+                      <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-xs rounded-md flex-wrap">
+                        <p className="text-accent text-sm">
+                          This feature uses a state of the art AI upscaling
+                          model to enhance your image. This results in 4x print
+                          quality increase over the original ChatGPT image.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+
+                {/* <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={() => handleEnhanceUpscale()}
+                          className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                        >
+                          Generate Mockup
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
+                        <p className="text-accent text-sm">
+                          This feature will generate a mockup of your image on
+                          the selected product. Whether or not you have access
+                          to AI upscaling, this feature will always be
+                          available.
+                        </p>
+                        <p className="text-accent text-sm">
+                          Note: Lower quality images will result in lower
+                          quality end products and may not appear as expected.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div> */}
+
+                <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={() => setViewingMocks(!viewingMocks)}
+                          className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                        >
+                          View Mockups
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
+                        <p className="text-accent text-sm">
+                          This feature will switch the editor to view your
+                          generated mockups.
+                        </p>
+                        <p className="text-accent text-sm"></p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      </Suspense>
+    </>
+  );
+};
+
+export default ImagePlacementEditor;
+
+/**
+ *   function PricingModal({
     isOpen,
     onClose,
   }: {
@@ -261,357 +746,4 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       </Dialog>
     );
   }
-
-  const handleEnhanceUpscale = async () => {
-    if (!isSubbed) {
-      setIsOpen(true);
-      return;
-    } else {
-      setIsOpen(false);
-    }
-
-    setEnhancing(true);
-    const res = await fetch("/api/upscale", {
-      method: "POST",
-      body: JSON.stringify({
-        url: userImage,
-      }),
-    });
-
-    const data = await res.json();
-
-    setUpscaledImage(data);
-
-    await handleCreateMockup(data);
-
-    setEnhancing(false);
-  };
-
-  const handleCreateMockup = async (imageData: string) => {
-    setIsMockingUp(true);
-    const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
-    const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
-    const offsetX = transform.positionX;
-    const offsetY = transform.positionY;
-
-    const prodID = selectedVariant?.product_id;
-    const variantID = selectedVariant?.id;
-
-    if (!prodID || !variantID) {
-      throw new Error("No product or variant IDs found");
-    }
-
-    const ress = await fetch("/api/pod/", {
-      method: "POST",
-      body: JSON.stringify({
-        productId: prodID,
-        imageUrl: imageData,
-        variantIDs: [variantID],
-        scaledWidth,
-        scaledHeight,
-        offsetX,
-        offsetY,
-      }),
-    });
-
-    const data = await ress.json();
-
-    const taskKey = data.result.task_key;
-    saveTaskKeyToSupa(taskKey);
-    setIsMockingUp(false);
-  };
-
-  const saveTaskKeyToSupa = async (taskKey: string) => {
-    const { data: error } = await supabase.from("mockups").insert({
-      status: "pending",
-      task_key: taskKey,
-    });
-
-    if (error) {
-      console.log(error);
-    } else {
-    }
-  };
-
-  const fetchMockups = async () => {
-    const { data } = await supabase.auth.getUser();
-    const user_id = data?.user?.id;
-
-    const { data: mockups, error } = await supabase
-      .from("mockups")
-      .select("*")
-      .eq("user_id", user_id);
-
-    if (error) {
-      console.log(error);
-    }
-
-    const completed = [];
-    for (const mockup of mockups!) {
-      const res = await fetch("/api/pod/fetch-mocks", {
-        method: "POST",
-        body: JSON.stringify({
-          taskKey: mockup.task_key,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.result.status === "completed") {
-        completed.push(data.result);
-        const { error: editError } = await supabase
-          .from("mockups")
-          .update({ status: "completed" })
-          .eq("task_key", mockup.task_key);
-
-        if (editError) {
-          console.log("editError: ", editError);
-        }
-      }
-    }
-    setMocks(completed);
-
-    return completed;
-  };
-
-  useEffect(() => {
-    const demoTemplate = selectedTemplate?.template?.templates.find(
-      (t) => t.template_id === tempIds?.[0]
-    );
-
-    const initialPosition = {
-      x: demoTemplate?.print_area_left ?? 100,
-      y: demoTemplate?.print_area_top ?? 100,
-      scale: 1,
-    };
-
-    setPosition(initialPosition);
-    setImageSrc(demoTemplate?.background_url ?? demoTemplate?.image_url ?? "");
-  }, [selectedTemplate, tempIds]);
-
-  return (
-    <>
-      {enhancing && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-
-            <div
-              className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              <div className="flex flex-col justify-center items-center p-6">
-                <div className="flex flex-col justify-center items-center">
-                  <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                  <p className="text-accent text-2xl mt-4">
-                    Enhancing your image...
-                  </p>
-                  <p className="text-accent text-center text-sm mt-2">
-                    The enhanced image will be applied to any future mockups and
-                    of course, your final product.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isMockingUp && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-
-            <div
-              className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              <div className="flex flex-col justify-center items-center p-6">
-                <div className="flex flex-col justify-center items-center">
-                  <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                  <p className="text-accent text-2xl mt-4">
-                    Creating your mockup...
-                  </p>
-                  <p className="text-accent text-center text-sm mt-2">
-                    This may take a minute or two. Future updates will improve
-                    this process.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {viewingMocks ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Image
-            src={mocks?.[0].mockups?.[0].mockup_url}
-            width={1024}
-            height={1024}
-            alt="mockup"
-          />
-        </Suspense>
-      ) : (
-        <TransformWrapper
-          initialScale={position.scale}
-          initialPositionX={-position.x}
-          initialPositionY={-position.y}
-          centerOnInit={true}
-          limitToBounds={false}
-          maxPositionX={Infinity}
-          maxPositionY={Infinity}
-          minPositionX={-Infinity}
-          minPositionY={-Infinity}
-          onZoom={({ state }) =>
-            onTransformChange(state.scale, state.positionX, state.positionY)
-          }
-          onPanning={({ state }) =>
-            onTransformChange(state.scale, state.positionX, state.positionY)
-          }
-          onPinching={({ state }) =>
-            onTransformChange(state.scale, state.positionX, state.positionY)
-          }
-          onZoomStop={({ state }) =>
-            onTransformChange(state.scale, state.positionX, state.positionY)
-          }
-          onPanningStop={({ state }) =>
-            onTransformChange(state.scale, state.positionX, state.positionY)
-          }
-        >
-          <div
-            className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
-            style={{ backgroundImage: `url(${imageSrc})` }}
-            ref={editorRef}
-          >
-            <TransformComponent wrapperClass="relative h-auto w-auto fill">
-              <div className="relative w-[650px] h-[650px]">
-                <Image
-                  priority
-                  onDrag={handleDrag}
-                  alt="user image"
-                  width={1024}
-                  height={1024}
-                  src={userImage}
-                  className="z-10"
-                  style={{
-                    maxWidth: "100%",
-                    width: "15%",
-                    height: "15%",
-                  }}
-                />
-              </div>
-            </TransformComponent>
-          </div>
-        </TransformWrapper>
-      )}
-
-      <div className="flex mx-8 mt-1 justify-between">
-        {isOpen && (
-          <PricingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        )}
-        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <>
-                  <div className="upscale-button">
-                    <Button
-                      onClick={() => handleEnhanceUpscale()}
-                      className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                    >
-                      Enhanced AI Upscale
-                    </Button>
-                    <div className="shine-effect"></div>
-                  </div>
-                </>
-              </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-xs rounded-md flex-wrap">
-                <p className="text-accent text-sm">
-                  This feature uses a state of the art AI upscaling model to
-                  enhance your image. This results in 4x print quality increase
-                  over the original ChatGPT image.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
-        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={() => handleEnhanceUpscale()}
-                  className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                >
-                  Generate Mockup
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                <p className="text-accent text-sm">
-                  This feature will generate a mockup of your image on the
-                  selected product. Whether or not you have access to AI
-                  upscaling, this feature will always be available.
-                </p>
-                <p className="text-accent text-sm">
-                  Note: Lower quality images will result in lower quality end
-                  products and may not appear as expected.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={() => setViewingMocks(!viewingMocks)}
-                  className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                >
-                  View Mockups
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                <p className="text-accent text-sm">
-                  This feature will switch the editor to view your generated
-                  mockups.
-                </p>
-                <p className="text-accent text-sm"></p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default ImagePlacementEditor;
+ */

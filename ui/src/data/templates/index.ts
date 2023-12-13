@@ -1,6 +1,6 @@
 import canvasTemplate from "./Canvas.json";
-import clearSamsungTemplate from "./Clear Case for Samsung.json";
-import clearIphoneTemplate from "./Clear Case for iPhone.json";
+// import clearSamsungTemplate from "./Clear Case for Samsung.json";
+// import clearIphoneTemplate from "./Clear Case for iPhone.json";
 import coasterTemplate from "./Cork-Back Coaster.json";
 import framedCanvasTemplate from "./Framed Canvas.json";
 import gamingMousepadTemplate from "./Gaming Mouse Pad.json";
@@ -21,8 +21,8 @@ import toughCaseSamsungTemplate from "./Tough Case for Samsung.json";
 
 const templates = {
   canvasTemplate,
-  clearSamsungTemplate,
-  clearIphoneTemplate,
+  // clearSamsungTemplate,
+  // clearIphoneTemplate,
   coasterTemplate,
   framedCanvasTemplate,
   gamingMousepadTemplate,
