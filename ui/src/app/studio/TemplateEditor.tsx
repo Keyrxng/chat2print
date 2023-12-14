@@ -24,6 +24,7 @@ import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
+
 interface ImagePlacementEditorProps {
   selectedTemplate: __Template | undefined;
   selectedVariant: __Variant | undefined;
@@ -32,6 +33,7 @@ interface ImagePlacementEditorProps {
   setSelectedImage: (image: string) => void;
   selectedProduct: __Prod | undefined;
   setSelectedVariant: (variant: __Variant) => void;
+  setViewingMock: (viewing: boolean) => void;
 }
 
 import { loadStripe } from "@stripe/stripe-js";
@@ -53,6 +55,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   setSelectedImage,
   selectedProduct,
   setSelectedVariant,
+  setViewingMock,
 }) => {
   const [position, setPosition] = useState({ x: 0, y: 0, scale: 1 });
   const editorRef = useRef<HTMLDivElement>(null);
@@ -270,7 +273,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     quantity: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
-    const itemPrice = Math.round(Number(selectedVariant?.price) * 1.4);
+    const itemPrice = Math.round(Number(selectedVariant?.price) * 1.5);
 
     useEffect(() => {
       fetch("/api/checkout_sessions", {
@@ -285,8 +288,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }),
       })
         .then((res) => res.json())
-        .then((data) => setClientSecret(data.clientSecret))
-        .catch((err) => console.log(err));
+        .then((data) => setClientSecret(data.clientSecret));
     }, []);
 
     return (
@@ -322,8 +324,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       setMockImg(mock.mockups?.[0].mockup_url);
     };
 
+    const handleCheckout = () => {
+      setCheckout(true);
+    };
+
     return (
       <>
+        <h1 className="text-accent text-2xl my-4">Your Mockups</h1>
+
         {!activeMock ? (
           <div className="grid grid-cols-3 gap-3 mx-4 justify-center items-center">
             {mocks.map((mock, index) => (
@@ -333,6 +341,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 onClick={() => handleSet(mock)}
               >
                 <Image
+                  priority={true}
                   src={mockImg ?? mock.mockups[0].mockup_url}
                   width={500}
                   height={500}
@@ -344,28 +353,69 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             ))}
           </div>
         ) : (
-          <div className="text-center justify-center ">
-            <p className="text-accent text-sm ">{activeMock.product}</p>
-            <button
-              className="flex-end right-0 w-full text-lg hover:bg-accent border border-accent hover:text-background text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
-              onClick={() => setCheckout(true)}
-            >
-              Buy Now
-            </button>
-            <div className="relative justify-center w-[900px] h-[900px]">
-              <Image
-                src={mockImg}
-                width={4094}
-                height={4094}
-                alt="mockup"
-                style={{ willChange: "transform" }}
-                className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
-              />
-            </div>
+          <div>
+            {!checkout && (
+              <>
+                <p className="text-accent text-sm ">{activeMock.product}</p>
+                <button
+                  className="flex-end right-0 w-full text-lg hover:bg-accent border border-accent hover:text-background text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+                  onClick={() => handleCheckout()}
+                >
+                  Buy Now
+                </button>
+                <div className="relative justify-center w-[900px] h-[900px]">
+                  <Image
+                    priority={true}
+                    src={mockImg}
+                    width={4094}
+                    height={4094}
+                    alt="mockup"
+                    style={{ willChange: "transform" }}
+                    className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
+                  />
+                </div>
+              </>
+            )}
+
+            {checkout && (
+              <div className="flex">
+                <div className="relative justify-center w-[900px] h-[900px]">
+                  <Image
+                    priority={true}
+                    src={mockImg}
+                    width={4094}
+                    height={4094}
+                    alt="mockup"
+                    style={{ willChange: "transform" }}
+                    className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
+                  />
+                </div>
+                <HandleSale mockup={activeMock} quantity={quantity} />
+              </div>
+            )}
           </div>
         )}
 
-        {checkout && <HandleSale mockup={activeMock} quantity={quantity} />}
+        <div className="flex text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => handleSetViewingMocks()}
+                  className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                >
+                  Back to Editor
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
+                <p className="text-accent text-sm">
+                  This will take you back to the product editor.
+                </p>
+                <p className="text-accent text-sm"></p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </>
     );
   };
@@ -514,38 +564,36 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
-  const MockupLoader = (title, body) => {
-    return (
-      <div className="fixed z-50 inset-0 overflow-y-auto">
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-          </div>
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span>
+  const MockupLoader = (title, body) => (
+    <div className="fixed z-50 inset-0 overflow-y-auto">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span
+          className="hidden sm:inline-block sm:align-middle sm:h-screen"
+          aria-hidden="true"
+        >
+          &#8203;
+        </span>
 
-          <div
-            className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-headline"
-          >
-            <div className="flex flex-col justify-center items-center p-6">
-              <div className="flex flex-col justify-center items-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                <p className="text-accent text-2xl mt-4">{title}</p>
-                <p className="text-accent text-center text-sm mt-2">{body}</p>
-              </div>
+        <div
+          className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-headline"
+        >
+          <div className="flex flex-col justify-center items-center p-6">
+            <div className="flex flex-col justify-center items-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+              <p className="text-accent text-2xl mt-4">{title}</p>
+              <p className="text-accent text-center text-sm mt-2">{body}</p>
             </div>
           </div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
   const NeedAccountLoader = () => (
     <div className="fixed z-50 inset-0 overflow-y-auto">
@@ -578,6 +626,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       </div>
     </div>
   );
+
+  const handleSetViewingMocks = () => {
+    setViewingMock(!viewingMocks);
+    setViewingMocks(!viewingMocks);
+  };
 
   return (
     <>
@@ -696,14 +749,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   }
                 >
                   {imageSrc ? (
-                    <div
-                      className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
-                      style={{ backgroundImage: `url(${imageSrc})` }}
-                      ref={editorRef}
-                    >
-                      <TransformComponent wrapperClass="relative h-auto w-auto fill">
-                        <div className="relative w-[650px] h-[650px]">
-                          <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <div
+                        className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
+                        style={{ backgroundImage: `url(${imageSrc})` }}
+                        ref={editorRef}
+                      >
+                        <TransformComponent wrapperClass="relative h-auto w-auto fill">
+                          <div className="relative w-[650px] h-[650px]">
                             <Image
                               onDrag={handleDrag}
                               alt="user image"
@@ -717,10 +770,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 height: "15%",
                               }}
                             />
-                          </Suspense>
-                        </div>
-                      </TransformComponent>
-                    </div>
+                          </div>
+                        </TransformComponent>
+                      </div>
+                    </Suspense>
                   ) : (
                     <div
                       className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
@@ -795,7 +848,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          onClick={() => setViewingMocks(!viewingMocks)}
+                          onClick={() => handleSetViewingMocks()}
                           className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                         >
                           View Mockups

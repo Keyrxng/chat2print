@@ -15,37 +15,7 @@ import {
   __Template,
 } from "@/types/all";
 import ImagePlacementEditor from "./TemplateEditor";
-
-function formatTextToHTML(text: string) {
-  const lines = text?.split("\n");
-
-  let htmlLines = [];
-  let inList = false;
-
-  lines?.forEach((line: string) => {
-    if (line.startsWith("•")) {
-      if (!inList) {
-        htmlLines.push("<ul>");
-        inList = true;
-      }
-      htmlLines.push(`<li>${line.substring(2)}</li>`);
-    } else {
-      if (inList) {
-        htmlLines.push("</ul>");
-        inList = false;
-      }
-      if (line.trim() !== "") {
-        htmlLines.push(`${line}`);
-      }
-    }
-  });
-
-  if (inList) {
-    htmlLines.push("</ul>");
-  }
-
-  return htmlLines;
-}
+import { formatTextToHTML } from "@/utils/formatToHtml";
 
 export default function Page() {
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -54,7 +24,7 @@ export default function Page() {
   const [selectedDesign, setSelectedDesign] = useState<__Product>();
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();
   const [template, setTemplate] = useState<__Template>();
-  const [isChecked, setIsChecked] = useState(false);
+  const [viewingMock, setViewingMock] = useState<boolean>(false);
 
   useEffect(() => {
     loadForEditor(products["canvas"].variants[0]);
@@ -71,7 +41,7 @@ export default function Page() {
 
   const handleChosenProduct = (product: __Prod) => {
     setSelectedDesign(product.product);
-    setSelectedProduct(product);
+    setSelectedProduct((prev) => (prev = product));
     setSelectedVariant(product.variants[0]);
     loadForEditor(product.variants[0]);
   };
@@ -103,8 +73,8 @@ export default function Page() {
   return (
     <div className="flex flex-row max-[1780px]:flex-col min-w-max text-center">
       <Suspense fallback={<div>Loading...</div>}>
-        <div className="gradientBG text-white m-8 flex flex-col max-w-5xl">
-          <div className="container text-accent mx-auto p-4">
+        <div className="gradientBG m-8 flex flex-col max-w-7xl">
+          <div className="text-accent mx-auto p-4">
             <ImagePlacementEditor
               selectedTemplate={template}
               selectedVariant={selectedVariant}
@@ -113,59 +83,63 @@ export default function Page() {
               onSelect={handleChosenProduct}
               setSelectedImage={setSelectedImage}
               setSelectedVariant={setSelectedVariant}
+              setViewingMock={setViewingMock}
             />
           </div>
         </div>
-        <div className="flex flex-row max-w-lg self-center  max-[1780px]:max-w-5xl items-center rounded-lg bg-background text-accent">
-          <div>
-            <div className="flex flex-row my-2 gap-4 justify-between items-center">
-              <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
-              <h2 className="text-2xl font-bold ">
-                ${Math.round(Number(selectedVariant?.price) * 1.4)}
-              </h2>
-            </div>
 
-            <div className="justify-between pb-0 max-[1780px]:pb-16 items-center h-fit text-lg">
-              <div className="flex justify-center text-center mx-4">
-                <div>
-                  <p className="text-sm">Stock Checker</p>
-                  <select
-                    className="border bg-background text-accent rounded-lg p-2"
-                    onChange={(e) =>
-                      setSelectedVariant(
-                        selectedProduct?.variants.find(
-                          (variant) => e.target.value === variant.name
-                        )
-                      )
-                    }
-                  >
-                    {selectedVariant?.availability_status?.map((status) => (
-                      <option key={status.region} value={status.region}>
-                        {status.region} - {status.status}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+        {!viewingMock && (
+          <div className="flex flex-row max-w-lg self-center max-[1780px]:max-w-5xl items-center rounded-lg bg-background text-accent">
+            <div>
+              <div className="flex flex-row my-2 gap-4 justify-between items-center">
+                <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
+                <h2 className="text-2xl font-bold ">
+                  ${Math.round(Number(selectedVariant?.price) * 1.5)}
+                </h2>
               </div>
 
-              {formatTextToHTML(selectedDesign?.description ?? "").map(
-                (line, index) => (
+              <div className="justify-between pb-0 max-[1780px]:pb-16 items-center h-fit text-lg">
+                <div className="flex justify-center text-center mx-4">
+                  <div>
+                    <p className="text-sm">Stock Checker</p>
+                    <select
+                      className="border bg-background text-accent rounded-lg p-2"
+                      onChange={(e) =>
+                        setSelectedVariant(
+                          selectedProduct?.variants.find(
+                            (variant) => e.target.value === variant.name
+                          )
+                        )
+                      }
+                    >
+                      {selectedVariant?.availability_status?.map((status) => (
+                        <option key={status.region} value={status.region}>
+                          {status.region} - {status.status}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {formatTextToHTML(
+                  selectedProduct?.product.description ?? ""
+                ).map((line, index) => (
                   <p
                     key={index}
                     className="p-2"
                     dangerouslySetInnerHTML={{ __html: line }}
                   />
-                )
-              )}
-            </div>
+                ))}
+              </div>
 
-            <div className="flex flex-col gap-4 justify-between items-center">
-              <h1 className="text-2xl font-bold">
-                Purchase it using the mockup viewer.
-              </h1>
+              <div className="flex flex-col gap-4 justify-between items-center">
+                <h1 className="text-2xl font-bold">
+                  Purchase it using the mockup viewer.
+                </h1>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </Suspense>
     </div>
   );

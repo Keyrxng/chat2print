@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import PODHandler from "../../../classes/PODHandler";
+import PODHandler from "../../../../classes/PODHandler";
 
 const key = process.env.PRINTFUL_API_KEY;
 if (!key) throw new Error("Missing Printful API Key");

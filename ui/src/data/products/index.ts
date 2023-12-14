@@ -8,7 +8,7 @@ import snap_samsung_case from "./snap_case_for_samsung.json";
 import thin_canvas from "./thin_canvas.json";
 import tough_iphone_case from "./tough_iphone_case.json";
 import tough_samsung_case from "./tough_case_for_samsung.json";
-import cork_coaster from "./coaster.json";
+// import cork_coaster from "./coaster.json";
 import framed_canvas from "./framed_canvas.json";
 import gaming_mouse_pad from "./gaming_mouse_pad.json";
 import glossy_metal_print from "./glossy_metal_print.json";
@@ -27,7 +27,7 @@ const syncProducts = {
   // pin_buttons,
   // sticker_sheet,
   canvas,
-  cork_coaster,
+  // cork_coaster,
   framed_canvas,
   gaming_mouse_pad,
   glossy_metal_print,

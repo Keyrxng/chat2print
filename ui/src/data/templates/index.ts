@@ -1,5 +1,5 @@
 import canvasTemplate from "./Canvas.json";
-import coasterTemplate from "./Cork-Back Coaster.json";
+// import coasterTemplate from "./Cork-Back Coaster.json";
 import framedCanvasTemplate from "./Framed Canvas.json";
 import gamingMousepadTemplate from "./Gaming Mouse Pad.json";
 import metalPrintTemplate from "./Glossy Metal Print.json";
@@ -27,7 +27,7 @@ const templates = {
   // stickerTemplate,
   // pinButtonsTemplate,
   canvasTemplate,
-  coasterTemplate,
+  // coasterTemplate,
   framedCanvasTemplate,
   gamingMousepadTemplate,
   metalPrintTemplate,

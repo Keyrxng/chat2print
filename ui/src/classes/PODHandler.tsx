@@ -136,18 +136,7 @@ class PODHandler {
       return { placementType, options, optionGroups };
     }
 
-    let { placementType, options, optionGroups } = await load();
-
-    // const maxLengthForOptions = 3;
-    // const maxLengthForOptionGroups = 3;
-
-    // if (options!.length > maxLengthForOptions) {
-    //   options = options!.slice(0, maxLengthForOptions);
-    // }
-
-    // if (optionGroups!.length > maxLengthForOptionGroups) {
-    //   optionGroups = optionGroups!.slice(0, maxLengthForOptionGroups);
-    // }
+    const { placementType, options, optionGroups } = await load();
 
     try {
       const mockupData = {
@@ -211,6 +200,23 @@ class PODHandler {
       return this.handleError(error);
     }
   }
+
+  async getOrders() {
+    try {
+      const response = await this.client.get("/orders");
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  // will setup billing but just leave them as draft orders and fulfill manually for now
+  // async shipOrder(orderId: number) {
+  //   try {
+  //     const response = await this.client.post(`/orders/${orderId}/confirm`);
+  //     return response.data;
+  //   } catch (error) {}
+  // }
 
   async uploadDesign(designFileName: string, url: string) {
     try {
