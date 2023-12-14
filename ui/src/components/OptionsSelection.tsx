@@ -55,7 +55,7 @@ export function OptionsSelection({
           <CommandInput placeholder="Search styles..." />
           <CommandEmpty>No style found.</CommandEmpty>
           <CommandGroup>
-            {options?.option_groups?.map((variant) => (
+            {options?.option_groups?.map((variant: any) => (
               <CommandItem
                 key={variant}
                 value={variant}

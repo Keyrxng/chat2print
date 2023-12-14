@@ -43,7 +43,7 @@ export const FaqSection = ({ id }: { id: string }) => {
   const faqStates = () => faqs.map((faq) => false);
   const [openFaqs, setOpenFaqs] = useState(faqStates());
 
-  const toggleFaq = (index) => {
+  const toggleFaq = (index: any) => {
     setOpenFaqs((currentOpenFaqs) =>
       currentOpenFaqs.map((isOpen, i) => (i === index ? !isOpen : isOpen))
     );

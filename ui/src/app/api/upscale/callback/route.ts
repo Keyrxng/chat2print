@@ -23,7 +23,7 @@ interface IncomingData {
     predict_time: number;
   };
 }
-export async function POST(req: Request, res) {
+export async function POST(req: Request, res: any) {
   console.log("🪝 incoming webhook!");
 
   const data = await req.json();
@@ -83,7 +83,7 @@ export async function POST(req: Request, res) {
     return new Response(JSON.stringify(prediction), { status: 201 });
   }
 }
-export async function GET(req: Request, res) {
+export async function GET(req: Request, res: any) {
   console.log("🪝 incoming webhook!");
 
   const data = await req.json();
@@ -144,7 +144,7 @@ export async function GET(req: Request, res) {
     return new Response("", { status: 201 });
   }
 }
-export async function PUT(req: Request, res) {
+export async function PUT(req: Request, res: any) {
   console.log("🪝 incoming webhook!");
 
   const data = await req.json();

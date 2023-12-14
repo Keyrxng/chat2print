@@ -1,9 +1,9 @@
 import templates from "@/data/templates";
 
-export async function POST(req, res) {
+export async function POST(req: any, res: any) {
   const product = await req.text();
 
-  async function getTemplate(product) {
+  async function getTemplate(product: any) {
     const template = Object.values(templates).map((template) => {
       if (template.name === product) {
         return template;

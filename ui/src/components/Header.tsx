@@ -66,6 +66,7 @@ export default function Header() {
   const Login = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [waitingForConfirm, setWaitingForConfirm] = React.useState(false);
 
     const signinValidation = () => {
       if (email === "") {
@@ -114,6 +115,7 @@ export default function Header() {
       fd.append("password", password);
 
       const target = event.target.action;
+      setWaitingForConfirm(true);
 
       fetch(target, {
         method: "POST",
@@ -122,10 +124,8 @@ export default function Header() {
         .then(async (data) => {
           const res = await data.json();
           if (res.user) {
-            setUser({
-              email: res.user.email,
-            });
-            setIsConnected(true);
+            console.log(res.user);
+            setUser(res.user);
           } else {
             alert(res.message);
           }
@@ -137,38 +137,40 @@ export default function Header() {
 
     return (
       <>
-        <form
-          method="POST"
-          action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
-          className="space-y-4"
-          onSubmit={handleSubmit}
-          id="login"
-        >
-          <Input
-            type="username"
-            name="username"
-            placeholder="Email"
-            className="text-accent"
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
-          />
-          <Input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="text-accent"
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button
-            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-            type="submit"
+        {!waitingForConfirm && (
+          <form
+            method="POST"
+            action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
+            className="space-y-4"
+            onSubmit={handleSubmit}
+            id="login"
           >
-            {!isRegistering ? "Sign In" : "Register"}
-          </Button>
-        </form>
+            <Input
+              type="username"
+              name="username"
+              placeholder="Email"
+              className="text-accent"
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+            />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="text-accent"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <Button
+              className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+              type="submit"
+            >
+              {!isRegistering ? "Sign In" : "Register"}
+            </Button>
+          </form>
+        )}
         {/* provider login google etc */}
 
         {/* <div className="flex flex-col space-y-4">
@@ -185,6 +187,43 @@ export default function Header() {
               Sign in with Github
             </Button>
           </div> */}
+
+        {waitingForConfirm && (
+          <div className="z-50 inset-0 overflow-y-auto">
+            <div className="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div
+                className="inset-0 transition-opacity"
+                aria-hidden="true"
+              ></div>
+              <span
+                className="hidden sm:inline-block sm:align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+
+              <div
+                className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-headline"
+              >
+                <div className="flex flex-col justify-center items-center p-6">
+                  <div className="flex flex-col justify-center items-center">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                    <p className="text-accent text-2xl mt-4">
+                      A confirmation email has been sent to {email}
+                    </p>
+                    <p className="text-accent text-center text-sm mt-2">
+                      Please check your inbox and click the link to verify your
+                      account.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {!isRegistering && (
           <p className="text-center text-muted-foreground">
@@ -477,11 +516,11 @@ export default function Header() {
                   ) : (
                     <DialogContent className=" border-accent">
                       <DialogHeader>
-                        <DialogTitle className="text-white">
+                        <DialogTitle className="text-center justify-center text-white">
                           {!isRegistering ? "Sign In" : "Register"}
                         </DialogTitle>
 
-                        <DialogDescription>
+                        <DialogDescription className="text-center justify-center">
                           {!isRegistering
                             ? "Sign in to your account to continue."
                             : "Register your account to continue."}
