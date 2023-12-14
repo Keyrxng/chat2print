@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { InfoIcon, X } from "lucide-react";
 import products from "@/data/products";
 import templates from "@/data/templates";
 
@@ -15,15 +14,6 @@ import {
   __Temp,
   __Template,
 } from "@/types/all";
-import { VariantSelection } from "@/components/VariantSelection";
-import { Switch } from "@/components/ui/switch";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ProductSelection } from "@/components/ProductSelection";
 import ImagePlacementEditor from "./TemplateEditor";
 
 function formatTextToHTML(text: string) {
@@ -86,64 +76,29 @@ export default function Page() {
     loadForEditor(product.variants[0]);
   };
 
-  function ProductSwitch() {
-    const [checked, setChecked] = useState(false);
-
-    const handleSwitch = () => {
-      setChecked(!checked);
-      setIsChecked(!isChecked);
-    };
-
-    return (
-      <>
-        <div className="flex text-accent items-center space-x-4 px-2 py-1 border rounded-lg">
-          <h1 className="text-sm">Change View</h1>
-          <Switch onClick={() => handleSwitch} id="view-switch" />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <InfoIcon />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Not all products have alternative views.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </>
-    );
-  }
-
   const loadForEditor = async (variant: __Variant) => {
     const varID = variant?.id;
+
     const selectedVariant = Object.values(templates)
       .flatMap((template) => template.template.variant_mapping)
       .filter((variant) => variant.variant_id === varID)
       .flatMap((variant) => variant.templates);
 
-    const selectedTemps = Object.values(templates).find((template) =>
-      template.template.templates.some((t) =>
-        selectedVariant.some(
-          (selected) => selected.template_id === t.template_id
-        )
-      )
-    );
-
-    const selectedTemplate = selectedTemps?.template.templates.find(
-      (template) =>
-        selectedVariant.some(
-          (selected) => selected.template_id === template.template_id
-        )
-    );
+    const selectedTemplate = selectedVariant
+      .map((selected) => {
+        const template = Object.values(templates).find((t) =>
+          t.template.templates.some(
+            (t) => t.template_id === selected.template_id
+          )
+        );
+        return template?.template.templates.find(
+          (t) => t.template_id === selected.template_id
+        );
+      })
+      .find((template) => template !== undefined);
 
     setTemplate(selectedTemplate);
   };
-
-  /**
-   * In the context of mockup generation options, generally speaking, refer to the part of the product being displayed.
-   * option_groups refers to the "style" of the mockup.
-   * For example "Front" refers to an option but "Wrinkled" or "On Hanger" are option_groups.
-   */
 
   return (
     <div className="flex flex-row max-[1780px]:flex-col min-w-max text-center">
@@ -166,11 +121,33 @@ export default function Page() {
             <div className="flex flex-row my-2 gap-4 justify-between items-center">
               <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
               <h2 className="text-2xl font-bold ">
-                £{Math.round(Number(selectedVariant?.price) * 2)}
+                ${Math.round(Number(selectedVariant?.price) * 1.4)}
               </h2>
             </div>
 
             <div className="justify-between pb-0 max-[1780px]:pb-16 items-center h-fit text-lg">
+              <div className="flex justify-center text-center mx-4">
+                <div>
+                  <p className="text-sm">Stock Checker</p>
+                  <select
+                    className="border bg-background text-accent rounded-lg p-2"
+                    onChange={(e) =>
+                      setSelectedVariant(
+                        selectedProduct?.variants.find(
+                          (variant) => e.target.value === variant.name
+                        )
+                      )
+                    }
+                  >
+                    {selectedVariant?.availability_status?.map((status) => (
+                      <option key={status.region} value={status.region}>
+                        {status.region} - {status.status}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               {formatTextToHTML(selectedDesign?.description ?? "").map(
                 (line, index) => (
                   <p
@@ -180,6 +157,12 @@ export default function Page() {
                   />
                 )
               )}
+            </div>
+
+            <div className="flex flex-col gap-4 justify-between items-center">
+              <h1 className="text-2xl font-bold">
+                Purchase it using the mockup viewer.
+              </h1>
             </div>
           </div>
         </div>

@@ -55,20 +55,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   setSelectedVariant,
 }) => {
   const [position, setPosition] = useState({ x: 0, y: 0, scale: 1 });
-  const [imageSrc, setImageSrc] = useState<string>(
-    selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? ""
-  );
   const editorRef = useRef<HTMLDivElement>(null);
-  const [viewSwitch, setViewSwitch] = useState<HTMLButtonElement | null>(null);
   const [enhancing, setEnhancing] = useState<boolean>(false);
   const [isMockingUp, setIsMockingUp] = useState<boolean>(false);
-  const [upscaledImage, setUpscaledImage] = useState<string>("");
   const [mocks, setMocks] = useState<any[]>([]);
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
   const [needAccount, setNeedAccount] = useState<boolean>(false);
-  const observerRef = useRef<MutationObserver | null>(null);
   const [userImages, setUserImages] = useState<string[]>([]);
-
+  const [imageSrc, setImageSrc] = useState<string>(
+    selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? ""
+  );
   const [transform, setTransform] = useState({
     scale: 1,
     positionX: 0,
@@ -106,29 +102,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
     set();
   }, [selectedTemplate]);
-
-  useEffect(() => {
-    const viewSw = document.getElementById("view-switch");
-    setViewSwitch(viewSw as HTMLButtonElement);
-    if (viewSwitch) {
-      observerRef.current = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === "data-state") {
-            const newState = (mutation.target as HTMLElement).getAttribute(
-              "data-state"
-            );
-            console.log(newState);
-            if (newState === "unchecked") {
-              setImageSrc((prev) => (prev = selectedTemplate?.image_url!));
-            } else {
-              setImageSrc((prev) => (prev = selectedTemplate?.background_url!));
-            }
-          }
-        });
-      });
-      observerRef.current.observe(viewSwitch, { attributes: true });
-    }
-  }, [selectedTemplate, viewSwitch]);
 
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
@@ -177,8 +150,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     });
 
     const data = await res.json();
-
-    setUpscaledImage(data);
 
     await handleCreateMockup(data);
 
@@ -299,7 +270,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     quantity: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
-    const itemPrice = selectedVariant?.price;
+    const itemPrice = Math.round(Number(selectedVariant?.price) * 1.4);
 
     useEffect(() => {
       fetch("/api/checkout_sessions", {
@@ -665,7 +636,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
               <VariantSelection
                 chosen={selectedVariant}
                 variants={selectedProduct?.variants}
-                setSelectedVariant={() => setSelectedVariant}
+                setSelectedVariant={setSelectedVariant}
               />
               <ProductSelection
                 product={selectedProduct}
@@ -792,7 +763,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   ))}{" "}
                 </div>
               </div>
-              <div className="flex mx-8 mt-1 justify-between">
+              <div className="flex mx-8 mt-4 justify-between">
                 <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
                   <TooltipProvider>
                     <Tooltip>

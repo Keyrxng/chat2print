@@ -1,17 +1,14 @@
-// ProductOption.tsx
-import { Design, __Prod } from "@/types/all";
+import { __Prod } from "@/types/all";
 import Image from "next/image";
 
 interface ProductOptionProps {
   key: number;
-  image: string;
   product: __Prod;
   isSelected: boolean;
   onSelect: (design: __Prod) => void;
 }
 
 export const ProductOption = ({
-  image,
   product,
   isSelected,
   onSelect,
@@ -38,7 +35,8 @@ export const ProductOption = ({
       <div className="text-center mt-2">
         <h3 className="text-sm font-bold">{product?.product.type_name}</h3>
         <p className="text-sm font-bold">
-          £{product?.priceRange.low} - £{product?.priceRange.high}
+          ${Math.round(Number(product?.priceRange.low) * 1.4)} - $
+          {Math.round(Number(product?.priceRange.high) * 1.4)}
         </p>
       </div>
     </div>
