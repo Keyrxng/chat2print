@@ -5,6 +5,16 @@ if (!key) throw new Error("Missing Stripe Key");
 const stripe = new Stripe(key);
 
 export async function POST(req: Request, res: any) {
+  const args = await req.json();
+
+  const name = args.mockup.product;
+  const price = Math.round(Number(args.itemPrice));
+  const quantity = args.quantity.toString();
+
+  const currency = "usd";
+
+  console.log("Creating checkout session for:", name, price, quantity);
+
   try {
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
@@ -12,13 +22,13 @@ export async function POST(req: Request, res: any) {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency,
             product_data: {
-              name: "T-shirt",
+              name: name,
             },
-            unit_amount: 2000,
+            unit_amount: price * 100,
           },
-          quantity: 1,
+          quantity: quantity,
         },
       ],
       mode: "payment",
@@ -31,6 +41,7 @@ export async function POST(req: Request, res: any) {
       JSON.stringify({ clientSecret: session.client_secret })
     );
   } catch (err: any) {
+    console.log("Error creating checkout session:", err.message);
     return new Response(err.message, { status: err.statusCode || 500 });
   }
 }

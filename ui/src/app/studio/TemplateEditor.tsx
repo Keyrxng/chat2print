@@ -18,26 +18,41 @@ import {
 } from "@radix-ui/react-tooltip";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js";
 interface ImagePlacementEditorProps {
   selectedTemplate: __Template | undefined;
   selectedVariant: __Variant | undefined;
   userImage: string;
+  onSelect: (design: __Prod) => void;
+  setSelectedImage: (image: string) => void;
+  selectedProduct: __Prod | undefined;
+  setSelectedVariant: (variant: __Variant) => void;
 }
+
+import { loadStripe } from "@stripe/stripe-js";
+import { ProductOption } from "@/components/ProductOption";
+import products from "@/data/products";
+import { ImageSlider } from "@/components/ImageSlider";
+import { ProductSelection } from "@/components/ProductSelection";
+import { VariantSelection } from "@/components/VariantSelection";
+
+const stripePromise = loadStripe(
+  "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
+);
 
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   selectedTemplate,
   selectedVariant,
   userImage,
+  onSelect,
+  setSelectedImage,
+  selectedProduct,
+  setSelectedVariant,
 }) => {
   const [position, setPosition] = useState({ x: 0, y: 0, scale: 1 });
   const [imageSrc, setImageSrc] = useState<string>(
@@ -51,8 +66,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [mocks, setMocks] = useState<any[]>([]);
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
   const [needAccount, setNeedAccount] = useState<boolean>(false);
-  const [signing, setSigning] = useState<boolean>(false);
   const observerRef = useRef<MutationObserver | null>(null);
+  const [userImages, setUserImages] = useState<string[]>([]);
+
   const [transform, setTransform] = useState({
     scale: 1,
     positionX: 0,
@@ -77,6 +93,18 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       );
     }
     load();
+
+    async function set() {
+      try {
+        const imgs = await fetch("/api/designs/fetch");
+        const data = await imgs.json();
+        let { images } = data;
+        images = images.filter((img: string) => img !== null);
+        setUserImages(images);
+        setSelectedImage(images[0]);
+      } catch (err) {}
+    }
+    set();
   }, [selectedTemplate]);
 
   useEffect(() => {
@@ -134,11 +162,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     setEnhancing(true);
+    console.log("userImage: ", userImage);
     if (!userImage) {
       alert("Please upload an image first");
       setEnhancing(false);
       return;
     }
+
     const res = await fetch("/api/upscale", {
       method: "POST",
       body: JSON.stringify({
@@ -261,97 +291,111 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     return completed;
   };
 
-  const Mockup = () => {
-    const [activeMock, setActiveMock] = useState<any>();
-    const [activeMockup, setActiveMockup] = useState<any>();
+  const HandleSale = async ({
+    mockup,
+    quantity,
+  }: {
+    mockup: any;
+    quantity: number;
+  }) => {
+    const [clientSecret, setClientSecret] = useState<string>("");
+    const itemPrice = selectedVariant?.price;
 
-    console.log("activeMock: ", activeMock);
+    useEffect(() => {
+      fetch("/api/checkout_sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mockup,
+          quantity,
+          itemPrice,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => setClientSecret(data.clientSecret))
+        .catch((err) => console.log(err));
+    }, []);
+
     return (
-      <Suspense fallback={<div>Loading...</div>}>
-        <div className="grid grid-cols-3 gap-3 justify-center items-center">
-          {mocks.map((mock, index) => (
-            <>
-              {!activeMock && (
-                <button
-                  key={index}
-                  className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
-                  onClick={() => {
-                    setActiveMock(mock);
-                  }}
-                >
-                  <Image
-                    src={mock.mockups[0].mockup_url}
-                    width={500}
-                    height={500}
-                    alt="mockup"
-                    className="rounded-lg"
-                  />
-                  <p className="text-accent text-sm mt-2">{mock.product}</p>
-                </button>
-              )}
+      <>
+        <div id="checkout">
+          {clientSecret && (
+            <EmbeddedCheckoutProvider
+              stripe={stripePromise}
+              options={{ clientSecret }}
+            >
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          )}
+        </div>
+      </>
+    );
+  };
 
-              {/* {activeMock &&
-                activeMock.mockups.map((mockup, index) => (
-                  <button
-                    key={index}
-                    className="flex flex-col justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
-                    onClick={() => {
-                      setActiveMockup(mockup.url);
-                    }}
-                  >
-                    <Image
-                      src={mockup.url}
-                      width={500}
-                      height={500}
-                      alt="mockup"
-                      className="rounded-lg"
-                    />
-                  </button>
-                ))} */}
-            </>
-          ))}
-        </div>
-        <div className="bottom-0 justify-between h-full flex">
-          <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:text-accent rounded-lg">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => setViewingMocks(!viewingMocks)}
-                    className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                  >
-                    Go back to editor
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                  <p className="text-accent text-sm">Go back to the editor.</p>
-                  <p className="text-accent text-sm"></p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+  const Mockup = () => {
+    const [activeMock, setActiveMock] = useState<any>(null);
+    const [checkout, setCheckout] = useState<boolean>(false);
+    const [quantity, setQuantity] = useState<number>(1);
+    const [mockImg, setMockImg] = useState<string>("");
+
+    useEffect(() => {
+      const mock = activeMock?.mockups?.[0].mockup_url;
+      setMockImg((prev) => (prev = mock));
+      console.log("mock: ", mock);
+    }, [activeMock, mockImg]);
+
+    const handleSet = (mock: any) => {
+      setActiveMock(mock);
+      setMockImg(mock.mockups?.[0].mockup_url);
+    };
+
+    return (
+      <>
+        {!activeMock ? (
+          <div className="grid grid-cols-3 gap-3 mx-4 justify-center items-center">
+            {mocks.map((mock, index) => (
+              <button
+                key={mock.task_key}
+                className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
+                onClick={() => handleSet(mock)}
+              >
+                <Image
+                  src={mockImg ?? mock.mockups[0].mockup_url}
+                  width={500}
+                  height={500}
+                  alt="mockup"
+                  className="rounded-lg"
+                />
+                <p className="text-accent text-sm mt-2">{mock.product}</p>
+              </button>
+            ))}
           </div>
-          <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:text-accent rounded-lg">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => setActiveMock(null)}
-                    className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                  >
-                    Go back to mockups
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                  <p className="text-accent text-sm">
-                    Go back to your collection of mockups.
-                  </p>
-                  <p className="text-accent text-sm"></p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+        ) : (
+          <div className="text-center justify-center ">
+            <p className="text-accent text-sm ">{activeMock.product}</p>
+            <button
+              className="flex-end right-0 w-full text-lg hover:bg-accent border border-accent hover:text-background text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+              onClick={() => setCheckout(true)}
+            >
+              Buy Now
+            </button>
+            <div className="relative justify-center w-[900px] h-[900px]">
+              <Image
+                src={mockImg}
+                width={4094}
+                height={4094}
+                alt="mockup"
+                style={{ willChange: "transform" }}
+                className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
+              />
+            </div>
           </div>
-        </div>
-      </Suspense>
+        )}
+
+        {checkout && <HandleSale mockup={activeMock} quantity={quantity} />}
+      </>
     );
   };
 
@@ -499,6 +543,71 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
+  const MockupLoader = (title, body) => {
+    return (
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
+
+          <div
+            className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+          >
+            <div className="flex flex-col justify-center items-center p-6">
+              <div className="flex flex-col justify-center items-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                <p className="text-accent text-2xl mt-4">{title}</p>
+                <p className="text-accent text-center text-sm mt-2">{body}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const NeedAccountLoader = () => (
+    <div className="fixed z-50 inset-0 overflow-y-auto">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span
+          className="hidden sm:inline-block sm:align-middle sm:h-screen"
+          aria-hidden="true"
+        >
+          &#8203;
+        </span>
+
+        <div
+          className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-headline"
+        >
+          <div className="flex flex-col justify-center items-center p-6">
+            <div className="flex flex-col justify-center items-center">
+              <h1 className="text-accent text-lg m-4">
+                Sign in or create an account to continue
+              </h1>
+              <Login />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
@@ -543,187 +652,147 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           )}
 
           {isMockingUp && (
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div
-                  className="fixed inset-0 transition-opacity"
-                  aria-hidden="true"
-                >
-                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <span
-                  className="hidden sm:inline-block sm:align-middle sm:h-screen"
-                  aria-hidden="true"
-                >
-                  &#8203;
-                </span>
-
-                <div
-                  className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="modal-headline"
-                >
-                  <div className="flex flex-col justify-center items-center p-6">
-                    <div className="flex flex-col justify-center items-center">
-                      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                      <p className="text-accent text-2xl mt-4">
-                        Creating your mockup...
-                      </p>
-                      <p className="text-accent text-center text-sm mt-2">
-                        This may take a minute or two. Future updates will
-                        improve this process.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <MockupLoader
+              title="Creating your mockup..."
+              body="This may take a minute or two. Future updates will improve this process."
+            />
           )}
 
-          {needAccount && (
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div
-                  className="fixed inset-0 transition-opacity"
-                  aria-hidden="true"
-                >
-                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <span
-                  className="hidden sm:inline-block sm:align-middle sm:h-screen"
-                  aria-hidden="true"
-                >
-                  &#8203;
-                </span>
+          {needAccount && <NeedAccountLoader />}
 
-                <div
-                  className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="modal-headline"
-                >
-                  <div className="flex flex-col justify-center items-center p-6">
-                    <div className="flex flex-col justify-center items-center">
-                      <h1 className="text-accent text-lg m-4">
-                        Sign in or create an account to continue
-                      </h1>
-                      <Login />
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {!viewingMocks && (
+            <div className="flex flex-row mx-8 m-4 justify-between items-center">
+              <VariantSelection
+                chosen={selectedVariant}
+                variants={selectedProduct?.variants}
+                setSelectedVariant={() => setSelectedVariant}
+              />
+              <ProductSelection
+                product={selectedProduct}
+                setSelectedProduct={onSelect}
+              />
             </div>
           )}
-
           {viewingMocks ? (
             <Mockup />
           ) : (
             <>
-              <TransformWrapper
-                initialScale={position.scale}
-                initialPositionX={-position.x}
-                initialPositionY={-position.y}
-                centerOnInit={true}
-                limitToBounds={false}
-                maxPositionX={Infinity}
-                maxPositionY={Infinity}
-                minPositionX={-Infinity}
-                minPositionY={-Infinity}
-                onZoom={({ state }) =>
-                  onTransformChange(
-                    state.scale,
-                    state.positionX,
-                    state.positionY
-                  )
-                }
-                onPanning={({ state }) =>
-                  onTransformChange(
-                    state.scale,
-                    state.positionX,
-                    state.positionY
-                  )
-                }
-                onPinching={({ state }) =>
-                  onTransformChange(
-                    state.scale,
-                    state.positionX,
-                    state.positionY
-                  )
-                }
-                onZoomStop={({ state }) =>
-                  onTransformChange(
-                    state.scale,
-                    state.positionX,
-                    state.positionY
-                  )
-                }
-                onPanningStop={({ state }) =>
-                  onTransformChange(
-                    state.scale,
-                    state.positionX,
-                    state.positionY
-                  )
-                }
-              >
-                {imageSrc ? (
-                  <div
-                    className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
-                    style={{ backgroundImage: `url(${imageSrc})` }}
-                    ref={editorRef}
-                  >
-                    <TransformComponent wrapperClass="relative h-auto w-auto fill">
-                      <div className="relative w-[650px] h-[650px]">
-                        <Suspense fallback={<div>Loading...</div>}>
-                          <Image
-                            onDrag={handleDrag}
-                            alt="user image"
-                            width={1024}
-                            height={1024}
-                            src={userImage}
-                            className="z-10"
-                            style={{
-                              maxWidth: "100%",
-                              width: "15%",
-                              height: "15%",
-                            }}
-                          />
-                        </Suspense>
-                      </div>
-                    </TransformComponent>
-                  </div>
-                ) : (
-                  <div
-                    className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
-                    style={{}}
-                    ref={editorRef}
-                  >
-                    <TransformComponent wrapperClass="relative h-auto w-auto fill">
-                      <div className="relative w-[650px] h-[650px]">
-                        <Suspense fallback={<div>Loading...</div>}>
-                          <Image
-                            onDrag={handleDrag}
-                            alt="user image"
-                            width={1024}
-                            height={1024}
-                            src={userImage}
-                            className="z-10"
-                            style={{
-                              maxWidth: "100%",
-                              width: "15%",
-                              height: "15%",
-                            }}
-                          />
-                        </Suspense>
-                      </div>
-                    </TransformComponent>
-                  </div>
-                )}
-              </TransformWrapper>
+              <div className="md:flex w-[1000px] ">
+                <TransformWrapper
+                  initialScale={position.scale}
+                  initialPositionX={-position.x}
+                  initialPositionY={-position.y}
+                  centerOnInit={true}
+                  limitToBounds={false}
+                  maxPositionX={Infinity}
+                  maxPositionY={Infinity}
+                  minPositionX={-Infinity}
+                  minPositionY={-Infinity}
+                  onZoom={({ state }) =>
+                    onTransformChange(
+                      state.scale,
+                      state.positionX,
+                      state.positionY
+                    )
+                  }
+                  onPanning={({ state }) =>
+                    onTransformChange(
+                      state.scale,
+                      state.positionX,
+                      state.positionY
+                    )
+                  }
+                  onPinching={({ state }) =>
+                    onTransformChange(
+                      state.scale,
+                      state.positionX,
+                      state.positionY
+                    )
+                  }
+                  onZoomStop={({ state }) =>
+                    onTransformChange(
+                      state.scale,
+                      state.positionX,
+                      state.positionY
+                    )
+                  }
+                  onPanningStop={({ state }) =>
+                    onTransformChange(
+                      state.scale,
+                      state.positionX,
+                      state.positionY
+                    )
+                  }
+                >
+                  {imageSrc ? (
+                    <div
+                      className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
+                      style={{ backgroundImage: `url(${imageSrc})` }}
+                      ref={editorRef}
+                    >
+                      <TransformComponent wrapperClass="relative h-auto w-auto fill">
+                        <div className="relative w-[650px] h-[650px]">
+                          <Suspense fallback={<div>Loading...</div>}>
+                            <Image
+                              onDrag={handleDrag}
+                              alt="user image"
+                              width={1024}
+                              height={1024}
+                              src={userImage}
+                              className="z-10"
+                              style={{
+                                maxWidth: "100%",
+                                width: "15%",
+                                height: "15%",
+                              }}
+                            />
+                          </Suspense>
+                        </div>
+                      </TransformComponent>
+                    </div>
+                  ) : (
+                    <div
+                      className="relative bg-center bg-no-repeat bg-cover h-[650px] w-[650px] fill"
+                      style={{}}
+                      ref={editorRef}
+                    >
+                      <TransformComponent wrapperClass="relative h-auto w-auto fill">
+                        <div className="relative w-[650px] h-[650px]">
+                          <Suspense fallback={<div>Loading...</div>}>
+                            <Image
+                              onDrag={handleDrag}
+                              alt="user image"
+                              width={1024}
+                              height={1024}
+                              src={userImage}
+                              className="z-10"
+                              style={{
+                                maxWidth: "100%",
+                                width: "15%",
+                                height: "15%",
+                              }}
+                            />
+                          </Suspense>
+                        </div>
+                      </TransformComponent>
+                    </div>
+                  )}
+                </TransformWrapper>
+                <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-1xl max-h-[650px] md:grid-cols-1 gap-4">
+                  {Object.values(products).map((option, index) => (
+                    <ProductOption
+                      key={index}
+                      image={userImage}
+                      product={option}
+                      isSelected={
+                        selectedVariant?.product_id === option.product.id
+                      }
+                      onSelect={onSelect}
+                    />
+                  ))}{" "}
+                </div>
+              </div>
               <div className="flex mx-8 mt-1 justify-between">
-                {/* {isOpen && (
-      <PricingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-    )} */}
                 <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
                   <TooltipProvider>
                     <Tooltip>
@@ -750,34 +819,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-
-                {/* <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          onClick={() => handleEnhanceUpscale()}
-                          className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                        >
-                          Generate Mockup
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                        <p className="text-accent text-sm">
-                          This feature will generate a mockup of your image on
-                          the selected product. Whether or not you have access
-                          to AI upscaling, this feature will always be
-                          available.
-                        </p>
-                        <p className="text-accent text-sm">
-                          Note: Lower quality images will result in lower
-                          quality end products and may not appear as expected.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div> */}
-
                 <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
                   <TooltipProvider>
                     <Tooltip>
@@ -800,6 +841,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   </TooltipProvider>
                 </div>
               </div>
+              <ImageSlider
+                userImages={userImages}
+                selectedImage={userImage}
+                setSelectedImage={setSelectedImage}
+              />
             </>
           )}
         </>
@@ -809,134 +855,3 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 };
 
 export default ImagePlacementEditor;
-
-/**
- *   function PricingModal({
-    isOpen,
-    onClose,
-  }: {
-    isOpen: boolean;
-    onClose: () => void;
-  }) {
-    if (!isOpen) return null;
-    const paymentTierOpts = [
-      {
-        name: "Basic",
-        price: 5.99,
-        features: [
-          { label: "Storage:", value: "10 designs (p/w)" },
-          { label: "Storage Limit:", value: "1GB (p/m)" },
-          { label: "AI Enhance & Upscale:", value: "5 (p/d)" },
-          { label: "Mockup Generation:", value: "2 (p/d)" },
-          { label: "Basic Support", value: "" },
-        ],
-        isPopular: false,
-      },
-      {
-        name: "Pro",
-        price: 19.99,
-        features: [
-          { label: "Storage:", value: "500 designs (p/w)" },
-          { label: "Storage Limit:", value: "5GB (p/m)" },
-          { label: "AI Enhance & Upscale:", value: "250 (p/d)" },
-          { label: "Mockup Generation:", value: "250 (p/d)" },
-          { label: "Priority Support", value: "" },
-          { label: "Product Requests", value: "" },
-          { label: "New feature Early-Access", value: "" },
-        ],
-        isPopular: true,
-      },
-      {
-        name: "Business",
-        price: 50,
-        features: [
-          { label: "Storage:", value: "2500 designs (p/w)" },
-          { label: "Storage Limit:", value: "50GB (p/m)" },
-          { label: "AI Enhance & Upscale:", value: "1250 (p/d)" },
-          { label: "Mockup Generation:", value: "1250 (p/d)" },
-          { label: "Priority Support", value: "" },
-          { label: "Product Requests", value: "" },
-          { label: "New feature Early-Access", value: "" },
-        ],
-        isPopular: false,
-      },
-    ];
-
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-6xl flex-wrap">
-          <div className="grid md:grid-cols-3 gap-4 p-4">
-            {paymentTierOpts.map((tier, index) => (
-              <div
-                key={index}
-                className={`relative flex flex-col justify-between border p-4 m-2 rounded-lg ${
-                  tier.isPopular ? "border-yellow-400" : "border-gray-300"
-                } shadow-lg transition-all duration-300 hover:shadow-xl h-full`}
-              >
-                <div>
-                  <div>
-                    <h3
-                      className={`text-lg font-semibold ${
-                        tier.isPopular ? "text-yellow-500" : "text-gray-700"
-                      }`}
-                    >
-                      {tier.name}
-                    </h3>
-                    <p className="text-3xl font-bold">
-                      ${tier.price}
-                      <span className="text-xl">/mo</span>
-                    </p>
-                  </div>
-                  <ul className="my-4">
-                    {tier.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center my-2">
-                        <svg
-                          className="w-4 h-4 text-green-500 mr-2"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 01.083 1.32l-7 8a1 1 0 01-1.4.083l-4-4a1 1 0 011.32-1.497l3.3 3.291 6.293-7.291a1 1 0 011.404-.206z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span>
-                          {feature.label} <strong>{feature.value}</strong>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Button className="bg-primary text-accent rounded hover:text-sky-200 py-2 px-4 transition ease-in-out duration-300 w-full font-bold">
-                  Subscribe
-                </Button>
-
-                {tier.isPopular && (
-                  <span className="absolute top-0 transform -translate-y-1/2 px-3 py-1 bg-yellow-500 text-white rounded-full text-sm font-bold">
-                    Popular
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="justify-center text-center mt-6 text-sm">
-            <p>
-              Have questions?{" "}
-              <a href="#" className="text-yellow-500 hover:underline">
-                Contact sales
-              </a>
-            </p>
-            <p>
-              View full{" "}
-              <a href="#" className="text-yellow-500 hover:underline">
-                pricing details
-              </a>
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
- */

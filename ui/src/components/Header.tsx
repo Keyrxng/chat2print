@@ -17,9 +17,12 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/database.types";
+import { useToast } from "./ui/use-toast";
 
 interface User {
   email?: string;
+  id?: string;
+  firstName?: string;
 }
 
 export default function Header() {
@@ -30,7 +33,9 @@ export default function Header() {
   const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false);
   const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
   const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
+  const [waitingForConfirm, setWaitingForConfirm] = React.useState(false);
   const [isConnected, setIsConnected] = React.useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
   const supabase = createClientComponentClient<Database>({
@@ -44,14 +49,24 @@ export default function Header() {
       if (error) {
         setIsConnected(false);
       } else {
+        console.log(data);
+        const { data: user } = await supabase
+          .from("users")
+          .select("*")
+          .match({ id: data?.user.id })
+          .single();
+
+        console.log(user);
         setIsConnected(true);
         setUser({
           email: data?.user.email,
+          id: data?.user.id,
+          firstName: user?.full_name?.split(" ")[0],
         });
       }
     }
     checkConnection();
-  }, []);
+  }, [supabase]);
 
   const ConnectedBlinker = () => {
     return (
@@ -66,7 +81,6 @@ export default function Header() {
   const Login = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [waitingForConfirm, setWaitingForConfirm] = React.useState(false);
 
     const signinValidation = () => {
       if (email === "") {
@@ -115,8 +129,11 @@ export default function Header() {
       fd.append("password", password);
 
       const target = event.target.action;
-      setWaitingForConfirm(true);
 
+      if (isRegistering) {
+        setIsRegistering(false);
+        setWaitingForConfirm(true);
+      }
       fetch(target, {
         method: "POST",
         body: fd,
@@ -125,7 +142,23 @@ export default function Header() {
           const res = await data.json();
           if (res.user) {
             console.log(res.user);
-            setUser(res.user);
+            if (res.user.confirmed_at === null) {
+              alert("Please confirm your email address before signing in");
+              return;
+            } else if (res.user.confirmed_at !== null) {
+              const { data: user } = await supabase
+                .from("users")
+                .select("*")
+                .match({ id: res.user.id })
+                .single();
+
+              setUser({
+                email: res.user.email,
+                id: res.user.id,
+                firstName: user?.full_name?.split(" ")[0],
+              });
+              setIsConnected(true);
+            }
           } else {
             alert(res.message);
           }
@@ -188,43 +221,6 @@ export default function Header() {
             </Button>
           </div> */}
 
-        {waitingForConfirm && (
-          <div className="z-50 inset-0 overflow-y-auto">
-            <div className="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div
-                className="inset-0 transition-opacity"
-                aria-hidden="true"
-              ></div>
-              <span
-                className="hidden sm:inline-block sm:align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-
-              <div
-                className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="modal-headline"
-              >
-                <div className="flex flex-col justify-center items-center p-6">
-                  <div className="flex flex-col justify-center items-center">
-                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                    <p className="text-accent text-2xl mt-4">
-                      A confirmation email has been sent to {email}
-                    </p>
-                    <p className="text-accent text-center text-sm mt-2">
-                      Please check your inbox and click the link to verify your
-                      account.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {!isRegistering && (
           <p className="text-center text-muted-foreground">
             Don&apos;t have an account?{" "}
@@ -250,6 +246,217 @@ export default function Header() {
       </>
     );
   };
+
+  const DetailsModal = () => {
+    const [billingData, setBillingData] = React.useState({});
+
+    const handleUpdateBilling = (event: any) => {
+      event.preventDefault();
+
+      const inputName = event.target.name;
+      const inputValue = event.target.value;
+
+      const newBillingData = { ...billingData, [inputName]: inputValue };
+      setBillingData(newBillingData);
+    };
+
+    const handleSubmitDetails = async (event: any) => {
+      event.preventDefault();
+
+      if (!billingData) {
+        alert("Please enter your details");
+        return;
+      }
+
+      let name;
+      if (!billingData.forename || !billingData.surname) {
+        alert("Please enter your full name");
+      }
+      name = billingData.forename + " " + billingData.surname;
+      delete billingData.forename;
+      delete billingData.surname;
+
+      const { error: uploadError } = await supabase
+        .from("users")
+        .update({
+          billing_address: billingData,
+          full_name: name,
+        })
+        .match({ id: user?.id });
+
+      if (uploadError) {
+        alert(uploadError);
+      }
+
+      setAddressModalIsOpen(false);
+
+      toast({
+        title: "Success!",
+        description: "Your details have been updated.",
+        duration: 4000,
+        variant: "default",
+      });
+
+      return;
+    };
+
+    return (
+      <>
+        <form className="space-y-4" onSubmit={(e) => handleSubmitDetails(e)}>
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="forename"
+            placeholder="First Name"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="surname"
+            placeholder="Surname"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="1stline"
+            placeholder="Address Line 1"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="2ndline"
+            placeholder="Address Line 2"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="city"
+            placeholder="City"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="state"
+            placeholder="State"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="zip"
+            placeholder="Zip"
+            className="text-accent"
+          />
+          <Input
+            onChange={(e) => handleUpdateBilling(e)}
+            type="text"
+            name="country"
+            placeholder="Country"
+            className="text-accent"
+          />
+
+          <Button
+            className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+            type="submit"
+            onSubmit={(e) => handleSubmitDetails(e)}
+          >
+            Save Changes
+          </Button>
+          <Button
+            onClick={() => setAddressModalIsOpen(false)}
+            className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+          >
+            Go Back
+          </Button>
+        </form>
+      </>
+    );
+  };
+
+  /*
+   TODO: add password reset functionality :: requires email be sent and callbacks handled
+   const SecurityModal = () => {
+     const [email, setEmail] = React.useState("");
+     const [password, setPassword] = React.useState("");
+     const [confirmEmail, setConfirmEmail] = React.useState("");
+     const [confirmPassword, setConfirmPassword] = React.useState("");
+
+     const handleMatches = () => {
+       if (email !== confirmEmail) {
+         alert("Emails do not match");
+         return false;
+       }
+       if (password !== confirmPassword) {
+         alert("Passwords do not match");
+         return false;
+       }
+       return true;
+     };
+
+     const handleSumbit = async (event: any) => {
+       event.preventDefault();
+
+       if (!handleMatches()) {
+         return;
+       }
+     };
+
+     return (
+       <>
+         <form
+           method="POST"
+            action={`/api/auth?action=update&password=${password}&email=${email}`}
+           className="space-y-4"
+            onSubmit={handleSubmit}
+         >
+           <Input
+             type="email"
+             name="email"
+             placeholder="Email"
+             className="text-accent"
+           />
+           <Input
+             type="email"
+             name="email"
+             placeholder="confirm email"
+             className="text-accent"
+           />
+           <Input
+             type="password"
+             name="password"
+             placeholder="current password"
+             className="text-accent"
+           />
+
+           <Input
+             type="password"
+             name="password"
+             placeholder="new password"
+             className="text-accent"
+           />
+
+           <Button
+             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+             type="submit"
+           >
+             Save Changes
+           </Button>
+           <Button
+             onClick={() => setSecurityModalIsOpen(false)}
+             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+           >
+             Go Back
+           </Button>
+         </form>
+       </>
+     );
+   };
+   */
 
   return (
     <motion.div
@@ -295,6 +502,7 @@ export default function Header() {
                   </>
                 </Dialog>
               </li>
+
               <li>
                 <Dialog>
                   <DialogTrigger
@@ -306,7 +514,6 @@ export default function Header() {
 
                   {isConnected ? (
                     <DialogContent className="border-accent border ">
-                      {/* inside account settings for updating details */}
                       {accountModalIsOpen && (
                         <>
                           <DialogHeader>
@@ -314,7 +521,8 @@ export default function Header() {
                               Account Details
                             </DialogTitle>
                             <DialogDescription>
-                              You are currently signed in as {user?.email}
+                              You are currently signed in as{" "}
+                              {user?.firstName || user?.email}
                             </DialogDescription>
                           </DialogHeader>
                           {!addressModalIsOpen && !securityModalIsOpen && (
@@ -323,128 +531,16 @@ export default function Header() {
                                 onClick={() => setAddressModalIsOpen(true)}
                                 className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                               >
-                                Update Delivery Address
-                              </Button>
-                              <Button
-                                onClick={() => setSecurityModalIsOpen(true)}
-                                className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                              >
-                                Update Security Settings
+                                Update Personal Details
                               </Button>
                             </>
                           )}
 
-                          {/* inside account settings for updating address */}
-                          {addressModalIsOpen && (
-                            <>
-                              <form
-                                method="POST"
-                                // action={`/api/auth?action=update&password=${password}&email=${email}`}
-                                className="space-y-4"
-                                // onSubmit={handleSubmit}
-                              >
-                                <Input
-                                  type="text"
-                                  name="1stline"
-                                  placeholder="Address Line 1"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="text"
-                                  name="2ndline"
-                                  placeholder="Address Line 2"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="text"
-                                  name="city"
-                                  placeholder="City"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="text"
-                                  name="state"
-                                  placeholder="State"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="text"
-                                  name="zip"
-                                  placeholder="Zip"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="text"
-                                  name="country"
-                                  placeholder="Country"
-                                  className="text-accent"
-                                />
+                          {addressModalIsOpen && <DetailsModal />}
 
-                                <Button
-                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                                  type="submit"
-                                >
-                                  Save Changes
-                                </Button>
-                                <Button
-                                  onClick={() => setAddressModalIsOpen(false)}
-                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                                >
-                                  Go Back
-                                </Button>
-                              </form>
-                            </>
-                          )}
+                          {/* TODO: add password reset functionality :: requires email be sent and callbacks handled  
+                            {securityModalIsOpen && <SecurityModal />} */}
 
-                          {securityModalIsOpen && (
-                            <>
-                              <form
-                                method="POST"
-                                // action={`/api/auth?action=update&password=${password}&email=${email}`}
-                                className="space-y-4"
-                                // onSubmit={handleSubmit}
-                              >
-                                <Input
-                                  type="email"
-                                  name="email"
-                                  placeholder="Email"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="email"
-                                  name="email"
-                                  placeholder="confirm email"
-                                  className="text-accent"
-                                />
-                                <Input
-                                  type="password"
-                                  name="password"
-                                  placeholder="current password"
-                                  className="text-accent"
-                                />
-
-                                <Input
-                                  type="password"
-                                  name="password"
-                                  placeholder="new password"
-                                  className="text-accent"
-                                />
-
-                                <Button
-                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                                  type="submit"
-                                >
-                                  Save Changes
-                                </Button>
-                                <Button
-                                  onClick={() => setSecurityModalIsOpen(false)}
-                                  className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                                >
-                                  Go Back
-                                </Button>
-                              </form>
-                            </>
-                          )}
                           <Button
                             onClick={() => setAccountModalIsOpen(false)}
                             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
@@ -453,7 +549,7 @@ export default function Header() {
                           </Button>
                         </>
                       )}
-                      {/* inside previous orders for viewing orders */}
+
                       {orderModalIsOpen && (
                         <>
                           <DialogHeader>
@@ -482,7 +578,24 @@ export default function Header() {
                               Account
                             </DialogTitle>
                             <DialogDescription>
-                              You are currently signed in as {user?.email}
+                              {user?.firstName && (
+                                <span className="text-accent">
+                                  Welcome back,{" "}
+                                  <span className="capitalize">
+                                    {user?.firstName}
+                                  </span>
+                                  !
+                                </span>
+                              )}
+                              {!user?.firstName && user?.email && (
+                                <span className="text-accent">
+                                  Welcome back,{" "}
+                                  <span className="capitalize">
+                                    {user?.email.split("@")[0]}
+                                  </span>
+                                  ! You can update your details below.
+                                </span>
+                              )}
                             </DialogDescription>
                           </DialogHeader>
                           <Button
@@ -497,7 +610,7 @@ export default function Header() {
                             type="submit"
                             onClick={() => setAccountModalIsOpen(true)}
                           >
-                            Account Settings
+                            Account Details
                           </Button>
                           <Button
                             className="text-accent hover:bg-accent hover:text-background transition duration-300 border border-accent"
@@ -516,18 +629,55 @@ export default function Header() {
                   ) : (
                     <DialogContent className=" border-accent">
                       <DialogHeader>
-                        <DialogTitle className="text-center justify-center text-white">
-                          {!isRegistering ? "Sign In" : "Register"}
-                        </DialogTitle>
+                        <DialogTitle className="text-center justify-center text-white mb-2"></DialogTitle>
+                        {!waitingForConfirm ? (
+                          <Login />
+                        ) : (
+                          <div className="z-50 inset-0 overflow-y-auto">
+                            <div className="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                              <div
+                                className="inset-0 transition-opacity"
+                                aria-hidden="true"
+                              ></div>
+                              <span
+                                className="hidden sm:inline-block sm:align-middle"
+                                aria-hidden="true"
+                              >
+                                &#8203;
+                              </span>
 
-                        <DialogDescription className="text-center justify-center">
-                          {!isRegistering
-                            ? "Sign in to your account to continue."
-                            : "Register your account to continue."}
-                        </DialogDescription>
+                              <div
+                                className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="modal-headline"
+                              >
+                                <div className="flex flex-col justify-center items-center p-6">
+                                  <div className="flex flex-col justify-center items-center">
+                                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                                    <p className="text-accent text-2xl mt-4">
+                                      A confirmation email has been sent to{" "}
+                                      {user?.email}
+                                    </p>
+                                    <p className="text-accent text-center text-sm mt-2">
+                                      Please check your inbox and click the link
+                                      to verify your account.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button
+                                onClick={() => setWaitingForConfirm(false)}
+                                className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                              >
+                                Thanks, take me back
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+
+                        <DialogDescription className="text-center justify-center"></DialogDescription>
                       </DialogHeader>
-
-                      <Login />
                     </DialogContent>
                   )}
                 </Dialog>
