@@ -1,29 +1,79 @@
 import Image from "next/image";
-import { Upload, X } from "lucide-react";
+import { ToggleLeft, ToggleRight, Upload, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useToast } from "./ui/use-toast";
+
+const supabase = createClientComponentClient();
 
 export const ImageSlider = ({
+  upscaledImages,
   userImages,
+  userDetails,
   setSelectedImage,
 }: {
+  upscaledImages: string[];
   userImages: string[];
+  userDetails: any;
   setSelectedImage: (image: string) => void;
 }) => {
+  const [images, setUserImages] = useState<string[]>([]);
+  const [upscaled, setUpscaled] = useState<string[]>([]);
+  const [viewingUpscaled, setViewingUpscaled] = useState<boolean>(false);
+  const { toast } = useToast();
+  useEffect(() => {
+    setUserImages(userImages);
+    setUpscaled(upscaledImages);
+  }, [userImages, upscaledImages]);
+
   const handleSelectImage = (image: string) => {
     setSelectedImage(image);
   };
 
-  const handleDeleteImage = (image: string) => {
-    const updatedImages = userImages.filter((img) => img !== image);
-    setSelectedImage("");
-    setUserImages(updatedImages);
+  const handleDeleteImage = async (image: string) => {
+    if (viewingUpscaled) {
+      const name = image.split("/")[image.split("/").length - 1];
+      const { data, error } = await supabase.storage
+        .from("user_uploads")
+        .remove([`${userDetails.id}/upscaled/${name}`]);
+
+      if (error) {
+        toast({
+          title: "Something went wrong.",
+          description:
+            "There was an error deleting your upscaled design, please try again.",
+          duration: 5000,
+        });
+      }
+
+      const updated = upscaled.filter((img) => img !== image);
+      setUpscaled(updated);
+    } else {
+      const name = image.split("/")[image.split("/").length - 1];
+      const { data, error } = await supabase.storage
+        .from("user_uploads")
+        .remove([`${userDetails.id}/${name}`]);
+
+      if (error) {
+        toast({
+          title: "Something went wrong.",
+          description:
+            "There was an error deleting your design, please try again.",
+          duration: 5000,
+        });
+      }
+
+      const updated = userImages.filter((img) => img !== image);
+      setUserImages(updated);
+    }
+
+    toast({
+      title: "It's gone!",
+      description: "Your image has been deleted.",
+      duration: 5000,
+    });
   };
-
-  const [images, setUserImages] = useState<string[]>([]);
-
-  useEffect(() => {
-    setUserImages(userImages);
-  }, [userImages]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,36 +94,102 @@ export const ImageSlider = ({
     if (file) {
       reader.readAsDataURL(file);
     }
+
+    const { data, error } = supabase.storage
+      .from("user_uploads")
+      .upload(`${userDetails.id}/${file?.name}`, file!);
+
+    if (error) {
+      toast({
+        title: "Something went wrong.",
+        description:
+          "Your upload was not successfully uploaded to your account, it will disappear when you refresh the page.",
+        duration: 5000,
+      });
+    }
   };
 
   return (
     <div className="flex flex-row justify-center items-center max-w-6xl">
-      {images.map((image, index) => (
-        <div key={index} className="flex">
-          <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
-            <button
-              onClick={() => handleDeleteImage(image)}
-              className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
-            >
-              <X className="h-4 w-4 text-accent" />
-            </button>
-            <button onClick={() => handleSelectImage(image)} className="m-1">
-              <Image
-                src={image}
-                alt="design"
-                width={100}
-                height={100}
-                className="rounded-full"
-                style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                }}
-              />
-            </button>
-          </div>
+      <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+        <div className="bg-background rounded-full h-24 w-24 flex items-center justify-center">
+          <Button
+            onClick={() => setViewingUpscaled(!viewingUpscaled)}
+            className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg"
+          >
+            {!viewingUpscaled ? (
+              <ToggleLeft className="h-8 w-8" />
+            ) : (
+              <ToggleRight className="h-8 w-8" />
+            )}
+          </Button>
         </div>
-      ))}
+      </div>
+      {!viewingUpscaled ? (
+        <>
+          {userImages.map((image, index) => (
+            <div key={index} className="flex">
+              <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+                <button
+                  onClick={() => handleDeleteImage(image)}
+                  className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+                >
+                  <X className="h-4 w-4 text-accent" />
+                </button>
+                <button
+                  onClick={() => handleSelectImage(image)}
+                  className="m-1"
+                >
+                  <Image
+                    src={image}
+                    alt="design"
+                    width={100}
+                    height={100}
+                    className="rounded-full"
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                  />
+                </button>
+              </div>
+            </div>
+          ))}
+        </>
+      ) : (
+        <>
+          {upscaled?.map((image, index) => (
+            <div key={image} className="flex">
+              <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+                <button
+                  onClick={() => handleDeleteImage(image)}
+                  className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+                >
+                  <X className="h-4 w-4 text-accent" />
+                </button>
+                <button
+                  onClick={() => handleSelectImage(image)}
+                  className="m-1"
+                >
+                  <Image
+                    src={image}
+                    alt="design"
+                    width={100}
+                    height={100}
+                    className="rounded-full"
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                  />
+                </button>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
       <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
         <label htmlFor="imageUpload" className="m-1 cursor-pointer">
           <div className="bg-background rounded-full h-24 w-24 flex items-center justify-center">

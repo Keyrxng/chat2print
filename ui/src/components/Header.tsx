@@ -307,27 +307,27 @@ export default function Header() {
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
             name="forename"
-            placeholder="First Name"
+            placeholder="Forename*"
             className="text-accent"
           />
           <Input
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
             name="surname"
-            placeholder="Surname"
+            placeholder="Surname*"
             className="text-accent"
           />
           <Input
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
-            name="1stline"
-            placeholder="Address Line 1"
+            name="firstLine"
+            placeholder="Address Line 1*"
             className="text-accent"
           />
           <Input
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
-            name="2ndline"
+            name="secondLine"
             placeholder="Address Line 2"
             className="text-accent"
           />
@@ -335,28 +335,29 @@ export default function Header() {
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
             name="city"
-            placeholder="City"
+            placeholder="City*"
             className="text-accent"
           />
+
           <Input
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
-            name="state"
-            placeholder="State"
+            name="country_code"
+            placeholder="Country Code (e.g. UK, FR, etc.)*"
             className="text-accent"
           />
           <Input
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
             name="zip"
-            placeholder="Zip"
+            placeholder="Zip or Post Code*"
             className="text-accent"
           />
           <Input
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
-            name="country"
-            placeholder="Country"
+            name="state_code"
+            placeholder="State Code (Required for USA, CA and AU customers only)"
             className="text-accent"
           />
 

@@ -46,11 +46,21 @@ export async function GET() {
     .from("user_uploads")
     .list(`${data.session?.user?.id}/`);
 
-  const handleUpscaled = async () => {
-    const { data: image } = await supabase.storage
-      .from("user_uploads")
-      .list(`${data.session?.user?.id}/upscaled/`);
-  };
+  const { data: upscales } = await supabase.storage
+    .from("user_uploads")
+    .list(`${data.session?.user?.id}/upscaled/`);
+
+  const upscaledImages = await Promise.all(
+    upscales!.map(async (upscale) => {
+      if (upscale.name === "temp.png") return;
+      if (upscale.name === "upscaled") return;
+      if (upscale.name === null || upscale.name === undefined) return;
+      const { data: image } = supabase.storage
+        .from("user_uploads")
+        .getPublicUrl(`${data.session?.user?.id}/upscaled/${upscale.name}`);
+      return image.publicUrl;
+    })
+  );
 
   const images = await Promise.all(
     designs!.map(async (design) => {
@@ -64,7 +74,12 @@ export async function GET() {
     })
   );
 
-  images.filter((image) => image !== undefined && image !== null);
+  const filteredImages = images.filter(
+    (image) => image !== undefined && image !== null
+  );
+  const filteredUpscaledImages = upscaledImages.filter(
+    (image) => image !== undefined && image !== null
+  );
 
   if (error) {
     return new Response(JSON.stringify(error), {
@@ -74,10 +89,16 @@ export async function GET() {
       },
     });
   }
-  return new Response(JSON.stringify({ images }), {
-    status: 200,
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+  return new Response(
+    JSON.stringify({
+      designImages: filteredImages,
+      upscaledImages: upscaledImages,
+    }),
+    {
+      status: 200,
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
 }

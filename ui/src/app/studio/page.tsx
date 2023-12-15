@@ -19,9 +19,7 @@ import { formatTextToHTML } from "@/utils/formatToHtml";
 
 export default function Page() {
   const [selectedImage, setSelectedImage] = useState<string>("");
-
   const [selectedProduct, setSelectedProduct] = useState<__Prod>();
-  const [selectedDesign, setSelectedDesign] = useState<__Product>();
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();
   const [template, setTemplate] = useState<__Template>();
   const [viewingMock, setViewingMock] = useState<boolean>(false);
@@ -40,7 +38,6 @@ export default function Page() {
   }, [selectedVariant]);
 
   const handleChosenProduct = (product: __Prod) => {
-    setSelectedDesign(product.product);
     setSelectedProduct((prev) => (prev = product));
     setSelectedVariant(product.variants[0]);
     loadForEditor(product.variants[0]);

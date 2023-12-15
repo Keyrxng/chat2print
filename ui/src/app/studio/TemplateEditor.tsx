@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Suspense } from "react";
+import { useState, useRef, useEffect, Suspense, use } from "react";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import {
@@ -42,6 +42,7 @@ import products from "@/data/products";
 import { ImageSlider } from "@/components/ImageSlider";
 import { ProductSelection } from "@/components/ProductSelection";
 import { VariantSelection } from "@/components/VariantSelection";
+import { useToast } from "@/components/ui/use-toast";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -65,6 +66,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
   const [needAccount, setNeedAccount] = useState<boolean>(false);
   const [userImages, setUserImages] = useState<string[]>([]);
+  const [upscaledImages, seUpscaledImages] = useState<string[]>([]);
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const { toast } = useToast();
   const [imageSrc, setImageSrc] = useState<string>(
     selectedTemplate?.background_url ?? selectedTemplate?.image_url ?? ""
   );
@@ -75,6 +79,21 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   });
 
   const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    async function getUser() {
+      const uID = (await supabase.auth.getSession()).data.session?.user.id;
+      const { data } = await supabase.from("users").select("*").match({
+        id: uID,
+      });
+
+      console.log("got user");
+      console.log(data);
+      setUserDetails(data?.[0]);
+    }
+
+    getUser();
+  }, []);
 
   useEffect(() => {
     const intitalPosition = {
@@ -97,10 +116,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       try {
         const imgs = await fetch("/api/designs/fetch");
         const data = await imgs.json();
-        let { images } = data;
-        images = images.filter((img: string) => img !== null);
-        setUserImages(images);
-        setSelectedImage(images[0]);
+        let { designImages, upscaledImages } = data;
+        designImages = designImages.filter((img: string) => img !== null);
+        setUserImages(designImages);
+        setSelectedImage(designImages[0]);
+        upscaledImages = upscaledImages.filter((img: string) => img !== null);
+        seUpscaledImages(upscaledImages);
       } catch (err) {}
     }
     set();
@@ -173,7 +194,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       throw new Error("No product or variant IDs found");
     }
 
-    const ress = await fetch("/api/pod/", {
+    const ress = await fetch("/api/pod/create-mocks", {
       method: "POST",
       body: JSON.stringify({
         productId: prodID,
@@ -195,7 +216,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       status: "pending",
     };
     saveTaskKeyToSupa(supaToSave);
-    setIsMockingUp(false);
   };
 
   const saveTaskKeyToSupa = async (supaToSave: {
@@ -208,6 +228,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (error) {
       console.log(error);
     } else {
+      setIsMockingUp(false);
     }
   };
 
@@ -291,13 +312,41 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .then((data) => setClientSecret(data.clientSecret));
     }, []);
 
+    const postDraftToPrintful = async () => {
+      const response = await fetch("/api/pod/create-order", {
+        method: "POST",
+        body: JSON.stringify({
+          recipient: {
+            name: userDetails.full_name,
+            address1: userDetails.billing_address.firstLine,
+            address2: userDetails.billing_address.secondLine,
+            city: userDetails.billing_address.city,
+            state_code: "NSW",
+            country_code: "AU",
+            zip: "2200",
+          },
+          items: [
+            {
+              variant_id: 11513,
+              quantity: 1,
+              files: [
+                {
+                  url: "http://example.com/files/posters/poster_1.jpg",
+                },
+              ],
+            },
+          ],
+        }),
+      });
+      const data = await response.json();
+    };
     return (
       <>
         <div id="checkout">
           {clientSecret && (
             <EmbeddedCheckoutProvider
               stripe={stripePromise}
-              options={{ clientSecret }}
+              options={{ clientSecret, onComplete: () => {} }}
             >
               <EmbeddedCheckout />
             </EmbeddedCheckoutProvider>
@@ -328,30 +377,75 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       setCheckout(true);
     };
 
+    const handleDelete = async (mock: any) => {
+      const { data, error } = await supabase
+        .from("mockups")
+        .delete()
+        .eq("task_key", mock.task_key);
+
+      console.log("mock: ", mock);
+      if (error) {
+        toast({
+          title: "Something went wrong.",
+          description:
+            "There was an error deleting your mockup, please try again.",
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
+      const updated = mocks.filter((m) => m.task_key !== mock.task_key);
+      setMocks(updated);
+
+      toast({
+        title: "It's gone!",
+        description: "Your mockup has been deleted.",
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+
+      console.log("data: ", data);
+    };
+
     return (
       <>
         <h1 className="text-accent text-2xl my-4">Your Mockups</h1>
-
         {!activeMock ? (
-          <div className="grid grid-cols-3 gap-3 mx-4 justify-center items-center">
-            {mocks.map((mock, index) => (
-              <button
-                key={mock.task_key}
-                className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
-                onClick={() => handleSet(mock)}
-              >
-                <Image
-                  priority={true}
-                  src={mockImg ?? mock.mockups[0].mockup_url}
-                  width={500}
-                  height={500}
-                  alt="mockup"
-                  className="rounded-lg"
-                />
-                <p className="text-accent text-sm mt-2">{mock.product}</p>
-              </button>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-3 gap-3 mx-4 justify-center items-center">
+              {mocks.map((mock, index) => (
+                <button
+                  key={mock.task_key}
+                  className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
+                  onClick={() => handleSet(mock)}
+                >
+                  <p className="text-accent text-sm mt-2">{mock.product}</p>
+                  <Image
+                    priority={true}
+                    src={mockImg ?? mock.mockups[0].mockup_url}
+                    width={500}
+                    height={500}
+                    alt="mockup"
+                    className="rounded-lg"
+                  />
+                </button>
+              ))}
+            </div>
+            <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={() => handleSetViewingMocks()}
+                      className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                    >
+                      Back to Editor
+                    </Button>
+                  </TooltipTrigger>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </>
         ) : (
           <div>
             {!checkout && (
@@ -374,48 +468,78 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
                   />
                 </div>
+                <div className="flex w-full">
+                  <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            onClick={() => setActiveMock(null)}
+                            className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                          >
+                            Return to Mockups
+                          </Button>
+                        </TooltipTrigger>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                  <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            onClick={() => handleDelete(activeMock)}
+                            className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                          >
+                            Delete Mockup
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent className="text-accent text-center justify-center opacity-90 bg-background rounded-md ">
+                          <p className="text-accent text-sm">
+                            This cannot be undone.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </div>
               </>
             )}
 
             {checkout && (
-              <div className="flex">
-                <div className="relative justify-center w-[900px] h-[900px]">
-                  <Image
-                    priority={true}
-                    src={mockImg}
-                    width={4094}
-                    height={4094}
-                    alt="mockup"
-                    style={{ willChange: "transform" }}
-                    className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
-                  />
+              <>
+                <div className="flex">
+                  <div className="relative justify-center w-[900px] h-[900px]">
+                    <Image
+                      priority={true}
+                      src={mockImg}
+                      width={4094}
+                      height={4094}
+                      alt="mockup"
+                      style={{ willChange: "transform" }}
+                      className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
+                    />
+                  </div>
+                  <HandleSale mockup={activeMock} quantity={quantity} />
                 </div>
-                <HandleSale mockup={activeMock} quantity={quantity} />
-              </div>
+                <div className="flex text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={() => handleSetViewingMocks()}
+                          className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                        >
+                          Return to Editor
+                        </Button>
+                      </TooltipTrigger>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </>
             )}
           </div>
         )}
-
-        <div className="flex text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={() => handleSetViewingMocks()}
-                  className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                >
-                  Back to Editor
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                <p className="text-accent text-sm">
-                  This will take you back to the product editor.
-                </p>
-                <p className="text-accent text-sm"></p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
       </>
     );
   };
@@ -564,36 +688,38 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
-  const MockupLoader = (title, body) => (
-    <div className="fixed z-50 inset-0 overflow-y-auto">
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-        >
-          &#8203;
-        </span>
+  const MockupLoader = ({ title, body }: { title: string; body: string }) => {
+    return (
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
 
-        <div
-          className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-headline"
-        >
-          <div className="flex flex-col justify-center items-center p-6">
-            <div className="flex flex-col justify-center items-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-              <p className="text-accent text-2xl mt-4">{title}</p>
-              <p className="text-accent text-center text-sm mt-2">{body}</p>
+          <div
+            className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+          >
+            <div className="flex flex-col justify-center items-center p-6">
+              <div className="flex flex-col justify-center items-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                <p className="text-accent text-2xl mt-4">{title}</p>
+                <p className="text-accent text-center text-sm mt-2">{body}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const NeedAccountLoader = () => (
     <div className="fixed z-50 inset-0 overflow-y-auto">
@@ -630,6 +756,19 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const handleSetViewingMocks = () => {
     setViewingMock(!viewingMocks);
     setViewingMocks(!viewingMocks);
+
+    if (!viewingMocks == true) {
+      console.log("userDetails: ", userDetails);
+      if (!userDetails?.billing_address) {
+        toast({
+          title: "Before you continue",
+          description:
+            "Please enter your billing address in your account settings if you are considering making a purchase.",
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        }).dismiss();
+      }
+    }
   };
 
   return (
@@ -866,8 +1005,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 </div>
               </div>
               <ImageSlider
+                userDetails={userDetails}
                 userImages={userImages}
-                selectedImage={userImage}
+                upscaledImages={upscaledImages}
                 setSelectedImage={setSelectedImage}
               />
             </>
