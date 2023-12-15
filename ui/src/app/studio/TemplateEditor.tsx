@@ -66,7 +66,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [viewingMocks, setViewingMocks] = useState<boolean>(false);
   const [needAccount, setNeedAccount] = useState<boolean>(false);
   const [userImages, setUserImages] = useState<string[]>([]);
-  const [upscaledImages, seUpscaledImages] = useState<string[]>([]);
+  const [upscaledImages, setUpscaledImages] = useState<string[]>([]);
   const [userDetails, setUserDetails] = useState<any>(null);
   const { toast } = useToast();
   const [imageSrc, setImageSrc] = useState<string>(
@@ -121,7 +121,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         setUserImages(designImages);
         setSelectedImage(designImages[0]);
         upscaledImages = upscaledImages.filter((img: string) => img !== null);
-        seUpscaledImages(upscaledImages);
+        setUpscaledImages(upscaledImages);
       } catch (err) {}
     }
     set();
@@ -286,6 +286,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     return completed;
   };
 
+  console.log("userDetails: ", userDetails);
+
   const HandleSale = async ({
     mockup,
     quantity,
@@ -310,9 +312,21 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       })
         .then((res) => res.json())
         .then((data) => setClientSecret(data.clientSecret));
+
+      postDraftToPrintful();
     }, []);
 
     const postDraftToPrintful = async () => {
+      const variantID = selectedVariant?.id;
+      const q = quantity;
+      console.log("mockup: ", mockup);
+      const files = [
+        {
+          url: mockup.printFiles[0].url,
+        },
+      ];
+
+      console.log("userDetails: ", userDetails);
       const response = await fetch("/api/pod/create-order", {
         method: "POST",
         body: JSON.stringify({
@@ -321,24 +335,22 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             address1: userDetails.billing_address.firstLine,
             address2: userDetails.billing_address.secondLine,
             city: userDetails.billing_address.city,
-            state_code: "NSW",
-            country_code: "AU",
-            zip: "2200",
+            state_code: userDetails.billing_address.state_code,
+            country_code: userDetails.billing_address.country_code,
+            zip: userDetails.billing_address.zip,
           },
           items: [
             {
-              variant_id: 11513,
-              quantity: 1,
-              files: [
-                {
-                  url: "http://example.com/files/posters/poster_1.jpg",
-                },
-              ],
+              variant_id: variantID,
+              quantity,
+              files,
             },
           ],
         }),
       });
       const data = await response.json();
+
+      console.log("draft order response: ", data);
     };
     return (
       <>
@@ -346,7 +358,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           {clientSecret && (
             <EmbeddedCheckoutProvider
               stripe={stripePromise}
-              options={{ clientSecret, onComplete: () => {} }}
+              options={{ clientSecret }}
             >
               <EmbeddedCheckout />
             </EmbeddedCheckoutProvider>

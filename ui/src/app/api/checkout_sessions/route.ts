@@ -12,7 +12,7 @@ export async function POST(req: Request, res: any) {
   const quantity = args.quantity.toString();
 
   const currency = "usd";
-
+  console.log("args", args);
   console.log("Creating checkout session for:", name, price, quantity);
 
   try {
