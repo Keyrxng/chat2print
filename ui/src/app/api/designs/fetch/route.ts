@@ -92,7 +92,7 @@ export async function GET() {
   return new Response(
     JSON.stringify({
       designImages: filteredImages,
-      upscaledImages: upscaledImages,
+      upscaledImages: filteredUpscaledImages,
     }),
     {
       status: 200,

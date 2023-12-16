@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Suspense, use } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import {
@@ -42,6 +42,7 @@ import { ImageSlider } from "@/components/ImageSlider";
 import { ProductSelection } from "@/components/ProductSelection";
 import { VariantSelection } from "@/components/VariantSelection";
 import { useToast } from "@/components/ui/use-toast";
+import { Database } from "@/lib/database.types";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -79,7 +80,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     positionY: 0,
   });
 
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
     async function getUser() {
@@ -88,8 +89,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         id: uID,
       });
 
-      console.log("got user");
-      console.log(data);
       setUserDetails(data?.[0]);
     }
 
@@ -123,7 +122,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         setSelectedImage(designImages[0]);
         upscaledImages = upscaledImages.filter((img: string) => img !== null);
         setUpscaledImages(upscaledImages);
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
     set();
   }, [selectedTemplate, setSelectedImage]);
@@ -161,7 +162,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     console.log("handling generation");
 
     if (viewingUpscaled) {
-      await handleCreateMockup(userImage);
+      const mockupData = await handleCreateMockup(userImage);
+
+      if (typeof mockupData === "number") {
+        console.log("mockupData: ", mockupData);
+
+        return;
+      }
     } else if (!viewingUpscaled) {
       await handleEnhanceUpscale();
     }
@@ -190,31 +197,119 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setEnhancing(false);
   };
 
-  function isAspectRatioCompatible(imageAspectRatio, templateAspectRatio) {
-    const tolerance = 0.05;
-    return Math.abs(imageAspectRatio - templateAspectRatio) <= tolerance;
-  }
+  const [mockReqs, setMockReqs] = useState<number[]>([]);
+  // TODO - test this
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    async function fetchAndProcessRequests() {
+      try {
+        const { data: pendingReqs, error } = await supabase
+          .from("mockup_requests")
+          .select("*")
+          .match({ user_id: userDetails.id, status: "pending" });
+
+        console.log("fetching pending requests");
+        if (error)
+          throw new Error(`Error fetching pending requests: ${error.message}`);
+        if (pendingReqs.length === 0) return;
+
+        console.log("pendingReqs: ", pendingReqs);
+
+        setMockReqs(pendingReqs.map((req) => req.id));
+
+        for (let request of pendingReqs) {
+          console.log("request of pendingReqs: ", request);
+
+          try {
+            const res = await fetch("/api/pod/create-mocks", {
+              method: "POST",
+              body: JSON.stringify({ ...request }),
+            });
+
+            const data = await res.json();
+            if (data.error) {
+              console.log(
+                `Error processing request ${request.id}: `,
+                data.error
+              );
+              const seconds = extractWaitTime(data.error.message);
+              await wait(seconds * 1000);
+              continue;
+            }
+
+            await updateRequestStatus(
+              request.id,
+              "completed",
+              data.result.task_key
+            );
+          } catch (err) {
+            console.error(`Error processing request ${request.id}:`, err);
+            await updateRequestStatus(request.id, "failed");
+          }
+        }
+      } catch (err) {
+        console.error("Error in fetchAndProcessRequests:", err);
+      }
+    }
+
+    intervalId = setInterval(fetchAndProcessRequests, 60000);
+    return () => clearInterval(intervalId);
+  }, [userDetails.id, supabase]);
+
+  const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const extractWaitTime = (errorMessage: string) => {
+    const match = errorMessage.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 60;
+  };
+
+  type Status =
+    | "pending"
+    | "processing"
+    | "completed"
+    | "failed"
+    | null
+    | undefined;
+
+  const updateRequestStatus = async (
+    requestId: number,
+    status: Status,
+    taskKey = null
+  ) => {
+    const updateData: { status: Status; task_key?: string } = { status };
+    if (taskKey) updateData.task_key = taskKey;
+
+    const { error } = await supabase
+      .from("mockup_requests")
+      .update(updateData)
+      .eq("id", requestId);
+
+    if (error)
+      console.error(`Error updating status for request ${requestId}:`, error);
+  };
 
   const handleCreateMockup = async (imageData: string) => {
-    console.log("creating mockup");
-
-    const prodID = selectedVariant?.product_id;
-    const variantID = selectedVariant?.id;
+    console.log("Creating mockup");
 
     if (!selectedTemplate || !selectedVariant) {
       console.error("Template or variant information is missing");
+      return;
     }
 
+    const { product_id: prodID, id: variantID, name, price } = selectedVariant;
+    const scaledWidth = selectedTemplate.print_area_width * transform.scale;
+    const scaledHeight = selectedTemplate.print_area_height * transform.scale;
+
     if (!prodID || !variantID) {
-      throw new Error("No product or variant IDs found");
+      console.error("No product or variant IDs found");
+      return;
     }
 
     setIsMockingUp(true);
 
-    const scaledWidth = selectedTemplate?.print_area_width! * transform.scale;
-    const scaledHeight = selectedTemplate?.print_area_height! * transform.scale;
-
-    const insertRes = await supabase.from("mockup_requests").insert([
+    const mockupRequest: Database["public"]["Tables"]["mockup_requests"]["Insert"] =
       {
         product_id: prodID,
         variant_id: variantID,
@@ -223,107 +318,50 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         scaled_height: scaledHeight,
         offset_x: transform.positionX,
         offset_y: transform.positionY,
+        user_id: userDetails.id,
         status: "pending",
-        // Don't set the task_key yet
-      },
-    ]);
+        product: name,
+        cost: price,
+        price: Math.round(Number(price) * 1.5),
+      };
 
-    if (insertRes.error) {
-      console.error("Failed to queue mockup request:", insertRes.error);
+    try {
+      const { data, error } = await supabase
+        .from("mockup_requests")
+        .insert([mockupRequest])
+        .select("id")
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Mockup request queued",
+        description: "Your request is being processed.",
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+
+      setMockReqs((prev) => [...prev, data.id]);
+    } catch (error) {
+      console.error("Failed to queue mockup request:", error);
       toast({
         title: "Something went wrong.",
-        description: insertRes.error.message,
+        description: "Failed to queue your mockup request.",
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
+    } finally {
       setIsMockingUp(false);
-      return;
-    }
-
-    toast({
-      title: "Mockup request queued",
-      description: "Your request is being processed.",
-      variant: "destructive",
-      className: "bg-background text-accent border-accent",
-    });
-
-    const ress = await fetch("/api/pod/create-mocks", {
-      method: "POST",
-      body: JSON.stringify({
-        productId: prodID,
-        imageUrl: imageData,
-        variantIDs: [variantID],
-        scaledWidth,
-        scaledHeight,
-        offsetX: transform.positionX,
-        offsetY: transform.positionY,
-      }),
-    });
-
-    const data = await ress.json();
-    if (!data) {
-      toast({
-        title: "We are experiencing high traffic.",
-        description:
-          "Your request has been queued. You will be notified when your mockup is ready.",
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-      setIsMockingUp(false);
-      return;
-    }
-
-    const taskKey = data.result.task_key;
-    const supaToSave = {
-      product: selectedVariant.name,
-      product_id: prodID,
-      variant_id: variantID,
-      cost: selectedVariant.price,
-      price: Math.round(Number(selectedVariant.price) * 1.5),
-      task_key: taskKey,
-      status: "pending",
-    };
-    saveTaskKeyToSupa(supaToSave);
-  };
-
-  const saveTaskKeyToSupa = async (supaToSave: {
-    product: string;
-    product_id: number;
-    variant_id: number;
-    cost: string;
-    price: number;
-    task_key: string;
-    status: string;
-  }) => {
-    const { data: error } = await supabase.from("mockups").insert(supaToSave);
-
-    if (error) {
-      console.log(error);
-      toast({
-        title: "Something went wrong.",
-        description: "There was an error saving your mockup, please try again.",
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-    } else {
-      setIsMockingUp(false);
-      toast({
-        title: "Success!",
-        description: "Your mockup has been saved. Refresh to view.",
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
     }
   };
 
   const fetchMockups = async () => {
-    const { data } = await supabase.auth.getUser();
-    const user_id = data?.user?.id;
+    const user_id = userDetails?.id;
 
     const { data: mockups, error } = await supabase
-      .from("mockups")
+      .from("mockup_requests")
       .select("*")
-      .eq("user_id", user_id);
+      .eq("user_id", user_id!);
 
     if (error) {
       toast({
@@ -344,34 +382,22 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         continue;
       }
 
-      const res = await fetch("/api/pod/fetch-mocks", {
-        method: "POST",
-        body: JSON.stringify({
-          taskKey: mockup.task_key,
-        }),
-      });
+      if (mockup.status === "pending") {
+        setMockReqs((prev) => [...prev, mockup.id]);
+      }
 
-      const data = await res.json();
+      if (mockup.status === "processing") {
+        console.log(`Request ${mockup.id} is still processing`);
+      }
 
-      if (data.result.status === "completed" && mockup.status !== "completed") {
-        completed.push(data.result);
-
-        const { data: statusData, error: editError } = await supabase
-          .from("mockups")
-          .upsert({
-            status: "completed",
-            task_key: mockup.task_key,
-            mockups: data.result.mockups,
-            printFiles: data.result.printfiles,
-          })
-          .eq("task_key", mockup.task_key);
-
-        console.log("posting to supa: ", mockup.task_key);
-        console.log("statusData: ", statusData);
-
-        if (editError) {
-          console.log("editError: ", editError);
-        }
+      if (mockup.status === "failed") {
+        console.log(`Request ${mockup.id} failed`);
+        toast({
+          title: "Something went wrong.",
+          description: `There was an error processing your mockup request for ${mockup.product}. You may need to create another.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
       }
     }
     setMocks(completed);
@@ -1383,8 +1409,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                         </TooltipTrigger>
                         <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
                           <p className="text-accent text-sm">
-                            This feature will switch the editor to view your
-                            generated mockups.
+                            View your generated mockups and place an order.
                           </p>
                           <p className="text-accent text-sm"></p>
                         </TooltipContent>

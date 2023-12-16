@@ -106,9 +106,18 @@ export async function GET(req: Request, res: any) {
 
   const prediction = data as IncomingData;
 
+  console.log("prediction: ", prediction);
+
   const userIdFromInput = prediction.input.image.split("/")[8];
+
+  console.log("userIdFromInput: ", userIdFromInput);
+
   const imageUrl = prediction.output;
+
+  console.log("imageUrl: ", imageUrl);
+
   const image = await fetch(imageUrl);
+
   console.log("image: ", image);
 
   const blob = await image.blob();

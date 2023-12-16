@@ -4,226 +4,492 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export interface Database {
   public: {
     Tables: {
       customers: {
         Row: {
-          id: string;
-          stripe_customer_id: string | null;
-        };
+          id: string
+          stripe_customer_id: string | null
+        }
         Insert: {
-          id: string;
-          stripe_customer_id?: string | null;
-        };
+          id: string
+          stripe_customer_id?: string | null
+        }
         Update: {
-          id?: string;
-          stripe_customer_id?: string | null;
-        };
+          id?: string
+          stripe_customer_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "customers_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "customers_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
+      designs: {
+        Row: {
+          bucket_path: string | null
+          created_at: string
+          id: string
+          upscale_id: string | null
+        }
+        Insert: {
+          bucket_path?: string | null
+          created_at?: string
+          id: string
+          upscale_id?: string | null
+        }
+        Update: {
+          bucket_path?: string | null
+          created_at?: string
+          id?: string
+          upscale_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "designs_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      mockup_requests: {
+        Row: {
+          cost: string | null
+          created_at: string
+          id: number
+          image_data: string | null
+          offset_x: number | null
+          offset_y: number | null
+          price: number | null
+          product: string | null
+          product_id: number | null
+          scaled_height: number | null
+          scaled_width: number | null
+          status: Database["public"]["Enums"]["mockup_status"] | null
+          task_key: string | null
+          updated_at: string | null
+          user_id: string | null
+          variant_id: number | null
+        }
+        Insert: {
+          cost?: string | null
+          created_at?: string
+          id?: number
+          image_data?: string | null
+          offset_x?: number | null
+          offset_y?: number | null
+          price?: number | null
+          product?: string | null
+          product_id?: number | null
+          scaled_height?: number | null
+          scaled_width?: number | null
+          status?: Database["public"]["Enums"]["mockup_status"] | null
+          task_key?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          variant_id?: number | null
+        }
+        Update: {
+          cost?: string | null
+          created_at?: string
+          id?: number
+          image_data?: string | null
+          offset_x?: number | null
+          offset_y?: number | null
+          price?: number | null
+          product?: string | null
+          product_id?: number | null
+          scaled_height?: number | null
+          scaled_width?: number | null
+          status?: Database["public"]["Enums"]["mockup_status"] | null
+          task_key?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          variant_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mockup_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      mockups: {
+        Row: {
+          cost: string | null
+          created_at: string
+          mockups: Json | null
+          price: number | null
+          printFiles: Json | null
+          product: string | null
+          product_id: number | null
+          status: string | null
+          task_key: string
+          user_id: string | null
+          variant_id: number | null
+        }
+        Insert: {
+          cost?: string | null
+          created_at?: string
+          mockups?: Json | null
+          price?: number | null
+          printFiles?: Json | null
+          product?: string | null
+          product_id?: number | null
+          status?: string | null
+          task_key: string
+          user_id?: string | null
+          variant_id?: number | null
+        }
+        Update: {
+          cost?: string | null
+          created_at?: string
+          mockups?: Json | null
+          price?: number | null
+          printFiles?: Json | null
+          product?: string | null
+          product_id?: number | null
+          status?: string | null
+          task_key?: string
+          user_id?: string | null
+          variant_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mockups_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          items: Json | null
+          retail_costs: Json | null
+          task_key: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          items?: Json | null
+          retail_costs?: Json | null
+          task_key: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          items?: Json | null
+          retail_costs?: Json | null
+          task_key?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       prices: {
         Row: {
-          active: boolean | null;
-          currency: string | null;
-          description: string | null;
-          id: string;
-          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null;
-          interval_count: number | null;
-          metadata: Json | null;
-          product_id: string | null;
-          trial_period_days: number | null;
-          type: Database["public"]["Enums"]["pricing_type"] | null;
-          unit_amount: number | null;
-        };
+          active: boolean | null
+          currency: string | null
+          description: string | null
+          id: string
+          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count: number | null
+          metadata: Json | null
+          product_id: string | null
+          trial_period_days: number | null
+          type: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount: number | null
+        }
         Insert: {
-          active?: boolean | null;
-          currency?: string | null;
-          description?: string | null;
-          id: string;
-          interval?:
-            | Database["public"]["Enums"]["pricing_plan_interval"]
-            | null;
-          interval_count?: number | null;
-          metadata?: Json | null;
-          product_id?: string | null;
-          trial_period_days?: number | null;
-          type?: Database["public"]["Enums"]["pricing_type"] | null;
-          unit_amount?: number | null;
-        };
+          active?: boolean | null
+          currency?: string | null
+          description?: string | null
+          id: string
+          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count?: number | null
+          metadata?: Json | null
+          product_id?: string | null
+          trial_period_days?: number | null
+          type?: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount?: number | null
+        }
         Update: {
-          active?: boolean | null;
-          currency?: string | null;
-          description?: string | null;
-          id?: string;
-          interval?:
-            | Database["public"]["Enums"]["pricing_plan_interval"]
-            | null;
-          interval_count?: number | null;
-          metadata?: Json | null;
-          product_id?: string | null;
-          trial_period_days?: number | null;
-          type?: Database["public"]["Enums"]["pricing_type"] | null;
-          unit_amount?: number | null;
-        };
+          active?: boolean | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count?: number | null
+          metadata?: Json | null
+          product_id?: string | null
+          trial_period_days?: number | null
+          type?: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount?: number | null
+        }
         Relationships: [
           {
-            foreignKeyName: "prices_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "products";
-            referencedColumns: ["id"];
+            foreignKeyName: "prices_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
       products: {
         Row: {
-          active: boolean | null;
-          description: string | null;
-          id: string;
-          image: string | null;
-          metadata: Json | null;
-          name: string | null;
-        };
+          active: boolean | null
+          description: string | null
+          id: string
+          image: string | null
+          metadata: Json | null
+          name: string | null
+        }
         Insert: {
-          active?: boolean | null;
-          description?: string | null;
-          id: string;
-          image?: string | null;
-          metadata?: Json | null;
-          name?: string | null;
-        };
+          active?: boolean | null
+          description?: string | null
+          id: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string | null
+        }
         Update: {
-          active?: boolean | null;
-          description?: string | null;
-          id?: string;
-          image?: string | null;
-          metadata?: Json | null;
-          name?: string | null;
-        };
-        Relationships: [];
-      };
+          active?: boolean | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
-          cancel_at: string | null;
-          cancel_at_period_end: boolean | null;
-          canceled_at: string | null;
-          created: string;
-          current_period_end: string;
-          current_period_start: string;
-          ended_at: string | null;
-          id: string;
-          metadata: Json | null;
-          price_id: string | null;
-          quantity: number | null;
-          status: Database["public"]["Enums"]["subscription_status"] | null;
-          trial_end: string | null;
-          trial_start: string | null;
-          user_id: string;
-        };
+          cancel_at: string | null
+          cancel_at_period_end: boolean | null
+          canceled_at: string | null
+          created: string
+          current_period_end: string
+          current_period_start: string
+          ended_at: string | null
+          id: string
+          metadata: Json | null
+          price_id: string | null
+          quantity: number | null
+          status: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end: string | null
+          trial_start: string | null
+          user_id: string
+        }
         Insert: {
-          cancel_at?: string | null;
-          cancel_at_period_end?: boolean | null;
-          canceled_at?: string | null;
-          created?: string;
-          current_period_end?: string;
-          current_period_start?: string;
-          ended_at?: string | null;
-          id: string;
-          metadata?: Json | null;
-          price_id?: string | null;
-          quantity?: number | null;
-          status?: Database["public"]["Enums"]["subscription_status"] | null;
-          trial_end?: string | null;
-          trial_start?: string | null;
-          user_id: string;
-        };
+          cancel_at?: string | null
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id: string
+          metadata?: Json | null
+          price_id?: string | null
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end?: string | null
+          trial_start?: string | null
+          user_id: string
+        }
         Update: {
-          cancel_at?: string | null;
-          cancel_at_period_end?: boolean | null;
-          canceled_at?: string | null;
-          created?: string;
-          current_period_end?: string;
-          current_period_start?: string;
-          ended_at?: string | null;
-          id?: string;
-          metadata?: Json | null;
-          price_id?: string | null;
-          quantity?: number | null;
-          status?: Database["public"]["Enums"]["subscription_status"] | null;
-          trial_end?: string | null;
-          trial_start?: string | null;
-          user_id?: string;
-        };
+          cancel_at?: string | null
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          price_id?: string | null
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end?: string | null
+          trial_start?: string | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "subscriptions_price_id_fkey";
-            columns: ["price_id"];
-            isOneToOne: false;
-            referencedRelation: "prices";
-            referencedColumns: ["id"];
+            foreignKeyName: "subscriptions_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "subscriptions_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-      };
-      users: {
+        ]
+      }
+      upscales: {
         Row: {
-          avatar_url: string | null;
-          billing_address: Json | null;
-          full_name: string | null;
-          id: string;
-          payment_method: Json | null;
-        };
+          bucket_path: string | null
+          finalized: Json | null
+          id: number
+          idd: string | null
+          user_id: string | null
+        }
         Insert: {
-          avatar_url?: string | null;
-          billing_address?: Json | null;
-          full_name?: string | null;
-          id: string;
-          payment_method?: Json | null;
-        };
+          bucket_path?: string | null
+          finalized?: Json | null
+          id?: number
+          idd?: string | null
+          user_id?: string | null
+        }
         Update: {
-          avatar_url?: string | null;
-          billing_address?: Json | null;
-          full_name?: string | null;
-          id?: string;
-          payment_method?: Json | null;
-        };
+          bucket_path?: string | null
+          finalized?: Json | null
+          id?: number
+          idd?: string | null
+          user_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "users_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "upscales_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-      };
-    };
+        ]
+      }
+      "user-stats": {
+        Row: {
+          created_at: string
+          designs: number | null
+          id: string
+          mockups: number | null
+          storage: number | null
+          upscales: number | null
+        }
+        Insert: {
+          created_at?: string
+          designs?: number | null
+          id: string
+          mockups?: number | null
+          storage?: number | null
+          upscales?: number | null
+        }
+        Update: {
+          created_at?: string
+          designs?: number | null
+          id?: string
+          mockups?: number | null
+          storage?: number | null
+          upscales?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user-stats_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      "user-upscales": {
+        Row: {
+          bucket_path: string | null
+          created_at: string
+          upscale_id: string | null
+          user_id: string
+        }
+        Insert: {
+          bucket_path?: string | null
+          created_at?: string
+          upscale_id?: string | null
+          user_id: string
+        }
+        Update: {
+          bucket_path?: string | null
+          created_at?: string
+          upscale_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user-upscales_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      users: {
+        Row: {
+          billing_address: Json | null
+          full_name: string | null
+          id: string
+          payment_method: Json | null
+        }
+        Insert: {
+          billing_address?: Json | null
+          full_name?: string | null
+          id: string
+          payment_method?: Json | null
+        }
+        Update: {
+          billing_address?: Json | null
+          full_name?: string | null
+          id?: string
+          payment_method?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
-      pricing_plan_interval: "day" | "week" | "month" | "year";
-      pricing_type: "one_time" | "recurring";
+      mockup_status: "pending" | "processing" | "completed" | "failed"
+      pricing_plan_interval: "day" | "week" | "month" | "year"
+      pricing_type: "one_time" | "recurring"
       subscription_status:
         | "trialing"
         | "active"
@@ -232,12 +498,12 @@ export interface Database {
         | "incomplete_expired"
         | "past_due"
         | "unpaid"
-        | "paused";
-    };
+        | "paused"
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
+      [_ in never]: never
+    }
+  }
 }
 
 export type Tables<
@@ -251,7 +517,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
@@ -259,11 +525,11 @@ export type Tables<
       Database["public"]["Views"])
   ? (Database["public"]["Tables"] &
       Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
-  : never;
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -274,17 +540,17 @@ export type TablesInsert<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
-  : never;
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -295,17 +561,17 @@ export type TablesUpdate<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
-  : never;
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -318,4 +584,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
   ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never;
+  : never

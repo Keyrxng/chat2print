@@ -10,9 +10,8 @@ async function runUpscale(request: Request, imageUrl: string) {
     {
       input: {
         image: imageUrl,
-        scale: 4,
       },
-      webhook: `https://4a4c-86-27-41-90.ngrok.io/api/upscale/callback`,
+      webhook: `https://426e-86-27-41-90.ngrok.io/api/upscale/callback`,
       webhook_events_filter: ["completed"],
     }
   );
