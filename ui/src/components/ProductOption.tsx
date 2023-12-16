@@ -33,7 +33,9 @@ export const ProductOption = ({
         }}
       />
       <div className="text-center mt-2">
-        <h3 className="text-sm font-bold">{product?.product.type_name}</h3>
+        <h3 className="text-sm text-accent font-bold">
+          {product?.product.type_name}
+        </h3>
         <p className="text-sm font-bold">
           ${Math.round(Number(product?.priceRange.low) * 1.5)} - $
           {Math.round(Number(product?.priceRange.high) * 1.5)}

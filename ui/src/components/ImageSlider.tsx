@@ -11,20 +11,29 @@ export const ImageSlider = ({
   upscaledImages,
   userImages,
   userDetails,
+  viewingUpscaled,
   setSelectedImage,
+  setViewingUpscaled,
 }: {
   upscaledImages: string[];
   userImages: string[];
   userDetails: any;
+  viewingUpscaled: boolean;
   setSelectedImage: (image: string) => void;
+  setViewingUpscaled: (value: boolean) => void;
 }) => {
   const [images, setUserImages] = useState<string[]>([]);
   const [upscaled, setUpscaled] = useState<string[]>([]);
-  const [viewingUpscaled, setViewingUpscaled] = useState<boolean>(false);
+
   const { toast } = useToast();
   useEffect(() => {
     setUserImages(userImages);
     setUpscaled(upscaledImages);
+    if (viewingUpscaled) {
+      setSelectedImage(upscaledImages[0]);
+    } else {
+      setSelectedImage(userImages[0]);
+    }
   }, [userImages, upscaledImages]);
 
   const handleSelectImage = (image: string) => {

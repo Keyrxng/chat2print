@@ -183,6 +183,18 @@ class PODHandler {
     }
   }
 
+  async estimateCosts(orderData: any) {
+    try {
+      const response = await this.client.post(
+        "/orders/estimate-costs",
+        orderData
+      );
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   async getProductList() {
     try {
       const response = await this.client.get("/products");
@@ -271,7 +283,7 @@ class PODHandler {
 
   private handleError(error: any) {
     console.error(error);
-    return null;
+    return error;
   }
 }
 

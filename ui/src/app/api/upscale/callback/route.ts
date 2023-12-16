@@ -1,5 +1,4 @@
 import Supabase from "@/classes/supabase";
-import { promises as fs } from "fs";
 const supabase = new Supabase();
 
 interface IncomingData {
