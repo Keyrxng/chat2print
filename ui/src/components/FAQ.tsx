@@ -75,11 +75,10 @@ export const FaqSection = ({ id }: { id: string }) => {
       currentOpenFaqs.map((isOpen, i) => (i === index ? !isOpen : isOpen))
     );
   };
-  // <section className="bg-gradient-to-b from-background to-accent text-white py-12 md:py-18">
 
   return (
-    <div id={id} className="gradientBG rounded-lg">
-      <div className="max-w-7xl mx-auto py-6 px-4">
+    <div id={id} className="gradientBG max-w-7xl rounded-lg">
+      <div className="py-6 px-4 mx-4">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           <div>
             <motion.h2
@@ -117,7 +116,7 @@ export const FaqSection = ({ id }: { id: string }) => {
                       className="mt-2 text-base text-gray-300"
                       aria-expanded={openFaqs[index]}
                     >
-                      {faq.answer}
+                      <p>{faq.answer}</p>
                     </dd>
                   )}
                 </div>

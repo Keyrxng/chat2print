@@ -166,34 +166,36 @@ export default function SlidingBackground() {
           </div>
         ))}
       </div>
-      <section className="text-center md:py-24">
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.5,
-            delay: 0.5,
-          }}
-        >
-          <div className="relative inline-block mb-4">
-            <h1 className="text-4xl text-accent md:text-6xl font-bold">
-              Chat2Print
-            </h1>
-            <span className="absolute top-0 -right-3 md:-right-6 bg-red-600 text-white text-xs md:text-sm px-2 py-1 rounded-full transform translate-x-1/2 -translate-y-1/2">
-              <a href="/support/#about">Early Release</a>
-            </span>
-          </div>
-          <p className="text-xl text-white md:text-2xl  mb-8">
-            Transform your ChatGPT art into physical products.
-          </p>
-          <a
-            href="/support/#about"
-            className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
-          >
-            Download Extension
-          </a>
-        </motion.div>
-      </section>
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.5,
+          delay: 0.5,
+        }}
+      >
+        <section className="text-center md:py-24">
+          <article className="max-w-[100rem] mx-auto px-5">
+            <div className="relative inline-block mb-4">
+              <h1 className="text-4xl text-accent md:text-6xl font-bold">
+                Chat2Print
+              </h1>
+              <span className="absolute top-0 -right-3 md:-right-6 bg-red-600 text-white text-xs md:text-sm px-2 py-1 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                <a href="/support/#about">Early Release</a>
+              </span>
+            </div>
+            <p className="text-xl text-white md:text-2xl  mb-8">
+              Transform your ChatGPT art into physical products.
+            </p>
+            <a
+              href="/support/#about"
+              className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
+            >
+              Download Extension
+            </a>
+          </article>
+        </section>
+      </motion.div>
     </motion.div>
   );
 }

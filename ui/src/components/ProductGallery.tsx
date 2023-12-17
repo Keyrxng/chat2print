@@ -14,14 +14,20 @@ export function ProductGallery() {
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: 1 }}
     >
-      <section id="" className="ml-12">
-        <div className="grid grid-cols-2 gap-4 m-12 md:grid-cols-5" ref={ref}>
+      <section className="justify-center">
+        <div className="grid grid-cols-2 md:grid-cols-5" ref={ref}>
           {staticImages.map(({ image_url, alt }, index) => (
             <div
               key={index}
-              className={`shadow-md rounded-lg overflow-hidden m-2`}
+              className={`shadow-md flex-grow rounded-lg overflow-hidden m-2`}
             >
-              <Image src={`/${image_url}`} alt={alt} width={250} height={250} />
+              <Image
+                src={`/${image_url}`}
+                alt={alt}
+                width={250}
+                height={250}
+                className="w-auto h-auto"
+              />
             </div>
           ))}
         </div>

@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 export const FeaturesSection = () => {
   const features = [
     {
-      title: "High Quality Prints",
+      title: "Highest Quality Prints",
       description: "We use the highest quality materials for our prints.",
       icon: "/prints.png",
     },
     {
       title: "Fast Shipping",
-      description: " We design and ship your products as fast as possible.",
+      description: "Reliable fulfillment and shipping options worldwide.",
       icon: "/shipping.png",
     },
     {

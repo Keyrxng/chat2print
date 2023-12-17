@@ -74,6 +74,7 @@ export default function Home() {
           {/* <Tiers /> */}
           <div ref={ref2} />
         </motion.div>
+        <br />
         <Journey />
         <ProductGallery />
       </div>

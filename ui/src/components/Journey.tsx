@@ -58,12 +58,14 @@ const Journey = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-accent border border-background rounded-lg p-6 shadow-lg"
             >
-              <h3 className="text-xl text-background md:text-2xl font-semibold mb-3">
-                {step.title}
-              </h3>
-              <p className="text-lg text-background md:text-xl">
-                {step.description}
-              </p>
+              <article className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
+                <h3 className="text-xl text-background md:text-2xl font-semibold mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-lg text-background md:text-xl">
+                  {step.description}
+                </p>
+              </article>
             </motion.div>
           ))}
         </div>

@@ -204,16 +204,17 @@ const FeaturedProductsGallery = () => {
               paginate(-1);
             }
           }}
-          className="text-center self-center  rounded-lg p-6 shadow-lg"
+          className="text-center self-center rounded-lg p-6 shadow-lg"
         >
-          <div className=" relative flex justify-between">
+          <div className="h-[130px] md:hidden"></div>
+          <div className="relative flex justify-between">
             <Image
               src={carouselImages[imageIndex].imageUrl}
               alt={carouselImages[imageIndex].alt}
               aria-details={carouselImages[imageIndex].description}
               width={300}
               height={300}
-              className="rounded-lg"
+              className="rounded-lg mb-5"
             />
             <div className="absolute flex justify-between bottom-0 end-0 left-0 ">
               <Button
@@ -234,7 +235,7 @@ const FeaturedProductsGallery = () => {
               alt={carouselImages[imageIndex].alt}
               width={300}
               height={300}
-              className="rounded-lg"
+              className="rounded-lg hidden mb-5 md:block"
             />
           </div>
         </motion.div>
