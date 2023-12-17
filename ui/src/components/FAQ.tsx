@@ -48,9 +48,10 @@ export const FaqSection = ({ id }: { id: string }) => {
       currentOpenFaqs.map((isOpen, i) => (i === index ? !isOpen : isOpen))
     );
   };
+  // <section className="bg-gradient-to-b from-background to-accent text-white py-12 md:py-18">
 
   return (
-    <div id={id} className="bg-gradient-to-b gradientBG rounded-lg">
+    <div id={id} className="gradientBG rounded-lg">
       <div className="max-w-7xl mx-auto py-6 px-4">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           <div>
@@ -80,7 +81,10 @@ export const FaqSection = ({ id }: { id: string }) => {
                     {faq.question}
                   </dt>
                   {openFaqs[index] && (
-                    <dd className="mt-2 text-base text-gray-300">
+                    <dd
+                      className="mt-2 text-base text-gray-300"
+                      aria-expanded={openFaqs[index]}
+                    >
                       {faq.answer}
                     </dd>
                   )}

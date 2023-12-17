@@ -255,7 +255,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     intervalId = setInterval(fetchAndProcessRequests, 60000);
     return () => clearInterval(intervalId);
-  }, [userDetails.id, supabase]);
+  }, [userDetails?.id, supabase]);
 
   const wait = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));

@@ -34,22 +34,26 @@ export const FeaturesSection = () => {
                 delay: 1.0,
               }}
             >
-              <div className="feature-card     text-center  py-8 px-8 bg-background rounded-lg transition-shadow hover:shadow-md hover:border-[1px] border-[1px] hover:border-accent   border-background hover:shadow-accent">
-                <Image
-                  src={feature.icon}
-                  width={80}
-                  height={80}
-                  alt={feature.title}
-                  className="mx-auto"
-                  style={{
-                    maxWidth: "100%",
-                    height: "auto"
-                  }} />
-                <h3 className="text-xl text-accent font-semibold mt-5 mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-white text-xl">{feature.description}</p>
-              </div>
+              <article className="flex flex-col items-center">
+                <div className="feature-card text-center py-8 px-8 bg-background rounded-lg transition-shadow hover:shadow-md hover:border-[1px] border-[1px] hover:border-accent border-background hover:shadow-accent">
+                  <Image
+                    priority
+                    src={feature.icon}
+                    width={80}
+                    height={80}
+                    alt={feature.title}
+                    className="mx-auto"
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                    }}
+                  />
+                  <h3 className="text-xl text-accent font-semibold mt-5 mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-white text-xl">{feature.description}</p>
+                </div>
+              </article>
             </motion.div>
           ))}
         </div>

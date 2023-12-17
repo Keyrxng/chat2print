@@ -8,6 +8,8 @@ import SlidingBackground from "@/components/SlidingBackground";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-scroll";
 import { FaqSection } from "@/components/FAQ";
+import Journey from "@/components/Journey";
+import FeaturedProductsGallery from "@/components/FeaturedProduct";
 
 export default function Home() {
   const ref = useRef(null);
@@ -153,18 +155,21 @@ export default function Home() {
             <div ref={ref} />
           </motion.div>
         </div>
+
         <motion.div
           initial={{ opacity: 0, y: 0 }}
           animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: -60 }}
           transition={{ duration: 0.5 }}
           className="-z-100"
         >
-          <FaqSection id="about" />
+          <FeaturedProductsGallery />
 
           {/* <Tiers /> */}
           <div ref={ref2} />
-          <ProductGallery />
+          {/* <ProductGallery /> */}
+          {/* <FaqSection id="about" /> */}
         </motion.div>
+        <Journey />
       </div>
     </div>
   );

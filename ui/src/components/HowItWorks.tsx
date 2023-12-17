@@ -15,14 +15,13 @@ export const HowItWorksSection = () => {
       description:
         "Place your order and we handle the rest, from printing to shipping.",
     },
-  ]
-
+  ];
   return (
     <section id="how-it-works" className="py-6 md:py-18 rounded-md">
       <div className="max-w-[120rem] mx-auto px-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {steps.map((step, index) => (
-            <div
+            <article
               key={index}
               className="step-card p-8 bg-background rounded-lg transition-shadow hover:shadow-md hover:border-[1px] border-[1px] hover:border-accent   border-background hover:shadow-accent"
             >
@@ -31,10 +30,10 @@ export const HowItWorksSection = () => {
                 {step.title}
               </h3>
               <p className="text-white text-xl">{step.description}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
