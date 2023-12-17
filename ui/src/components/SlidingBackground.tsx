@@ -1,59 +1,5 @@
+import { staticImages } from "@/data/statics";
 import { motion } from "framer-motion";
-
-const images = [
-  "00-10-gaming-retro.webp",
-  "00-10-gaming.webp",
-  "10-20-gaming.webp",
-  "90-00-gaming.webp",
-  "alienanotomy.webp",
-  "animalcinema.webp",
-  "animedragon.webp",
-  "atomdna.webp",
-  "badge.webp",
-  "betty.webp",
-  "bullettime.webp",
-  "bullettip.webp",
-  "c2pdigital.webp",
-  "c2pLogo.svg",
-  "carrier.webp",
-  "catcrown.webp",
-  "cosmicbirds.webp",
-  "crackedglass.webp",
-  "darkroads.webp",
-  "fantasyart.webp",
-  "felineeye.webp",
-  "ferce.webp",
-  "futurebuilding.webp",
-  "greenartifact.webp",
-  "horsecar.webp",
-  "impact.webp",
-  "kilted.webp",
-  "kingsloth.webp",
-  "lll.webp",
-  "mechfight.webp",
-  "metaloptical.webp",
-  "metalspiral.webp",
-  "mid-00-gaming.webp",
-  "mosaictimeline.webp",
-  "musclecar.webp",
-  "neutron.webp",
-  "nightmusic.webp",
-  "penguinbadge.webp",
-  "psychadelic.webp",
-  "redeagle.webp",
-  "revolverblueprint.webp",
-  "rifleblueprint.webp",
-  "roboheart.webp",
-  "robotbiker.webp",
-  "smolgaming.webp",
-  "spiderweb.webp",
-  "staghead.webp",
-  "timeline.webp",
-  "timeline2.webp",
-  "unicorn.webp",
-  "unitornado.webp",
-  "wfm.webp",
-];
 
 export default function SlidingBackground() {
   const translateSliderX = (index: any) => {
@@ -63,12 +9,12 @@ export default function SlidingBackground() {
   };
 
   const returnRows = () => {
-    return [images].map((row) => {
+    return [staticImages].map((row) => {
       const randomImages = [];
-      for (let i = 0; i < images.length; i++) {
+      for (let i = 0; i < staticImages.length; i++) {
         const randomIndex =
           Math.floor(Math.random() * row!.length) % row!.length;
-        randomImages.push(row![randomIndex]);
+        randomImages.push(row![randomIndex].image_url);
       }
       const set = new Set(randomImages);
       const arr = Array.from(set);

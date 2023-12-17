@@ -45,6 +45,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
 import { staticMocks } from "@/data/statics";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -91,7 +92,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         id: uID,
       });
 
-      setUserDetails((prev) => (prev = data[0]));
+      setUserDetails((prev) => (prev = data?.[0]));
     }
 
     getUser();
@@ -842,7 +843,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 </button>
               ))}
             </div>
-            <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+            <div className="flex w-full mb-6 text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -1205,6 +1206,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           aria-labelledby="modal-headline"
         >
           <div className="flex flex-col justify-center items-center p-6">
+            <button
+              onClick={() => setNeedAccount(false)}
+              className="absolute top-0 right-0 m-4 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+            >
+              <X className="h-4 w-4 text-accent" />
+            </button>
             <div className="flex flex-col justify-center items-center">
               <h1 className="text-accent text-lg m-4">
                 Sign in or create an account to continue
@@ -1238,7 +1245,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const snapImageToPrintArea = () => {
-    let scaleFactor = 0.15; // the image is scaled to 15% of the parent container
+    let scaleFactor = 0.15;
 
     let imageWidth = viewingUpscaled ? 4094 * scaleFactor : 1024 * scaleFactor;
     let imageHeight = viewingUpscaled ? 4094 * scaleFactor : 1024 * scaleFactor;
@@ -1254,7 +1261,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     let scaledWidth, scaledHeight;
 
-    // Calculate scaled dimensions based on aspect ratio
     if (imageAspectRatio > print_area_width / print_area_height) {
       scaledWidth = print_area_width;
       scaledHeight = print_area_width / imageAspectRatio;
@@ -1263,18 +1269,17 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       scaledWidth = print_area_height * imageAspectRatio;
     }
 
-    // Calculate offsets to center the image within the print area
     let offsetX = print_area_left + (print_area_width - scaledWidth) / 2;
     let offsetY = print_area_top + (print_area_height - scaledHeight) / 2;
 
-    // Apply the new styles and transformation to the image
     const ele = document.getElementById("userImage") as HTMLImageElement;
+
+    if (!ele) return;
     ele.style.width = `${scaledWidth}px`;
     ele.style.height = `${scaledHeight}px`;
     ele.style.left = `${offsetX}px`;
     ele.style.top = `${offsetY}px`;
 
-    // Determine the scale factor to apply based on the new dimensions
     let newScale = Math.min(
       scaledWidth / imageWidth,
       scaledHeight / imageHeight
@@ -1407,20 +1412,34 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       >
                         <TransformComponent wrapperClass="relative h-auto w-auto fill">
                           <div className="relative w-[700px] h-[700px]">
-                            <Image
-                              onDrag={handleDrag}
-                              alt="user image"
-                              width={viewingUpscaled ? 4094 : 1024}
-                              id="userImage"
-                              height={viewingUpscaled ? 4094 : 1024}
-                              src={userImage || ""}
-                              className="z-10"
-                              style={{
-                                maxWidth: "100%",
-                                width: "15%",
-                                height: "15%",
-                              }}
-                            />
+                            {userImage ? (
+                              <Image
+                                onDrag={handleDrag}
+                                alt="user image"
+                                width={viewingUpscaled ? 4094 : 1024}
+                                id="userImage"
+                                height={viewingUpscaled ? 4094 : 1024}
+                                src={userImage || ""}
+                                className="z-10"
+                                style={{
+                                  maxWidth: "100%",
+                                  width: "15%",
+                                  height: "15%",
+                                }}
+                              />
+                            ) : (
+                              <div
+                                style={{
+                                  maxWidth: "100%",
+                                  width: "15%",
+                                  height: "15%",
+                                }}
+                              >
+                                <p className="text-black text-md text-bold">
+                                  Upload an image
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </TransformComponent>
                       </div>
@@ -1433,20 +1452,34 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       <TransformComponent wrapperClass="relative h-auto w-auto fill">
                         <div className="relative w-[700px] h-[700px]">
                           <Suspense fallback={<div>Loading...</div>}>
-                            <Image
-                              onDrag={handleDrag}
-                              id="userImage"
-                              alt="user image"
-                              width={viewingUpscaled ? 4094 : 1024}
-                              height={viewingUpscaled ? 4094 : 1024}
-                              src={userImage || ""}
-                              className="z-10"
-                              style={{
-                                maxWidth: "100%",
-                                width: "15%",
-                                height: "15%",
-                              }}
-                            />
+                            {userImage ? (
+                              <Image
+                                onDrag={handleDrag}
+                                alt="user image"
+                                width={viewingUpscaled ? 4094 : 1024}
+                                id="userImage"
+                                height={viewingUpscaled ? 4094 : 1024}
+                                src={userImage || ""}
+                                className="z-10"
+                                style={{
+                                  maxWidth: "100%",
+                                  width: "15%",
+                                  height: "15%",
+                                }}
+                              />
+                            ) : (
+                              <div
+                                style={{
+                                  maxWidth: "100%",
+                                  width: "15%",
+                                  height: "15%",
+                                }}
+                              >
+                                <p className="text-black text-md text-bold">
+                                  Upload an image
+                                </p>
+                              </div>
+                            )}
                           </Suspense>
                         </div>
                       </TransformComponent>

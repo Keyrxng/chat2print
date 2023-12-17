@@ -43,7 +43,7 @@ const Chatbox = () => {
   };
 
   return (
-    <div className="fixed bottom-0 right-0 m-4">
+    <div className="fixed bottom-0 p-6 right-0">
       {isOpen && (
         <div className="flex flex-col items-end animate-slideIn">
           <div className="w-64 md:w-96 h-96 p-4 bg-background text-white rounded-lg shadow-xl overflow-hidden">

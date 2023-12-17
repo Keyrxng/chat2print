@@ -46,10 +46,12 @@ const Container = {
   display: "flex",
   // flexDirection: "column",
   alignItems: "center",
+  rounded: "md",
+  borderRadius: "15px",
   justifyContent: "center",
   minHeight: "50vh",
   width: "100%",
-  padding: "0 0.5rem",
+  padding: "4rem 4rem",
   fontSize: "calc(10px + 2vmin)",
   fontFamily: inter.toString(),
 };

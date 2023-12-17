@@ -13,7 +13,7 @@ export default function Page() {
       >
         <div className="max-w-6xl mx-auto px-5">
           <section className="mb-20">
-            <FaqSection id="#about" />
+            <FaqSection id="faq" />
           </section>
 
           <section className="mb-20 gradientBG rounded-lg p-8 m-4">
@@ -22,6 +22,7 @@ export default function Page() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8 }}
               className="text-3xl text-accent font-bold mb-6"
+              id="about"
             >
               About Chat2Print
             </motion.h2>
@@ -34,14 +35,13 @@ export default function Page() {
             >
               <p className="text-lg mb-4">
                 Founded in the last quarter of 2023, Chat2Print is an innovative
-                venture by Keyrxng. As a print-on-demand service, we specialize
-                in materializing ChatGPT-generated art into tangible products.
-                Our convenient browser extension simplifies the process,
-                allowing direct uploads from the ChatGPT interface to product
-                customization and printing on diverse items. Chat2Print emerged
-                from the desire to bring digital art into the physical realm,
-                making it a part of daily life beyond digital screens and X
-                threads.
+                AI art print-on-demand service, we specialize in materializing
+                ChatGPT-generated art into tangible products. Our convenient
+                browser extension simplifies the process, allowing direct
+                uploads from the ChatGPT interface to product customization and
+                printing on diverse items. Chat2Print emerged from the desire to
+                bring digital art into the physical realm, making it a part of
+                daily life beyond digital screens and X threads.
               </p>
 
               <p className="text-lg mb-4">
@@ -87,6 +87,7 @@ export default function Page() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6 }}
               className="text-3xl text-accent font-bold mb-6"
+              id="returns"
             >
               Return Policy
             </motion.h2>

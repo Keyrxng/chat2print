@@ -119,102 +119,111 @@ export const ImageSlider = ({
   };
 
   return (
-    <div className="flex flex-row justify-center items-center max-w-6xl">
-      <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
-        <div className="bg-background rounded-full h-24 w-24 flex items-center justify-center">
-          <Button
-            onClick={() => setViewingUpscaled(!viewingUpscaled)}
-            className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg"
-          >
-            {!viewingUpscaled ? (
-              <ToggleLeft className="h-8 w-8" />
-            ) : (
-              <ToggleRight className="h-8 w-8" />
-            )}
-          </Button>
+    <>
+      <div className="justify-center">
+        <div className="shadow-lg rounded-lg bg-background">
+          <p className="font-bold text-sm text-center text-accent -mb-56 mt-2">
+            {viewingUpscaled ? "Viewing Enhanced" : "Viewing Originals"}
+          </p>
         </div>
       </div>
-      {!viewingUpscaled ? (
-        <>
-          {userImages.map((image, index) => (
-            <div key={index} className="flex">
-              <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
-                <button
-                  onClick={() => handleDeleteImage(image)}
-                  className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
-                >
-                  <X className="h-4 w-4 text-accent" />
-                </button>
-                <button
-                  onClick={() => handleSelectImage(image)}
-                  className="m-1"
-                >
-                  <Image
-                    src={image}
-                    alt="design"
-                    width={100}
-                    height={100}
-                    className="rounded-full"
-                    style={{
-                      maxWidth: "100%",
-                      height: "auto",
-                      objectFit: "cover",
-                    }}
-                  />
-                </button>
-              </div>
-            </div>
-          ))}
-        </>
-      ) : (
-        <>
-          {upscaled?.map((image, index) => (
-            <div key={image} className="flex">
-              <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
-                <button
-                  onClick={() => handleDeleteImage(image)}
-                  className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
-                >
-                  <X className="h-4 w-4 text-accent" />
-                </button>
-                <button
-                  onClick={() => handleSelectImage(image)}
-                  className="m-1"
-                >
-                  <Image
-                    src={image}
-                    alt="design"
-                    width={100}
-                    height={100}
-                    className="rounded-full"
-                    style={{
-                      maxWidth: "100%",
-                      height: "auto",
-                      objectFit: "cover",
-                    }}
-                  />
-                </button>
-              </div>
-            </div>
-          ))}
-        </>
-      )}
-      <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
-        <label htmlFor="imageUpload" className="m-1 cursor-pointer">
+      <div className="flex flex-row justify-center items-center max-w-6xl">
+        <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
           <div className="bg-background rounded-full h-24 w-24 flex items-center justify-center">
-            <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-              <Upload className="h-8 w-8" />
-            </div>
+            <Button
+              onClick={() => setViewingUpscaled(!viewingUpscaled)}
+              className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg"
+            >
+              {!viewingUpscaled ? (
+                <ToggleLeft className="h-8 w-8" />
+              ) : (
+                <ToggleRight className="h-8 w-8" />
+              )}
+            </Button>
           </div>
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/png"
-            className="hidden"
-            onChange={handleImageUpload}
-          />
-        </label>
+        </div>
+        {!viewingUpscaled ? (
+          <>
+            {userImages.map((image, index) => (
+              <div key={index} className="flex">
+                <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+                  <button
+                    onClick={() => handleDeleteImage(image)}
+                    className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+                  >
+                    <X className="h-4 w-4 text-accent" />
+                  </button>
+                  <button
+                    onClick={() => handleSelectImage(image)}
+                    className="m-1"
+                  >
+                    <Image
+                      src={image}
+                      alt="design"
+                      width={100}
+                      height={100}
+                      className="rounded-full"
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            {upscaled?.map((image, index) => (
+              <div key={image} className="flex">
+                <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+                  <button
+                    onClick={() => handleDeleteImage(image)}
+                    className="absolute top-0 left-0 mb-2 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+                  >
+                    <X className="h-4 w-4 text-accent" />
+                  </button>
+                  <button
+                    onClick={() => handleSelectImage(image)}
+                    className="m-1"
+                  >
+                    <Image
+                      src={image}
+                      alt="design"
+                      width={100}
+                      height={100}
+                      className="rounded-full"
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+        <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+          <label htmlFor="imageUpload" className="m-1 cursor-pointer">
+            <div className="bg-background rounded-full h-24 w-24 flex items-center justify-center">
+              <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                <Upload className="h-8 w-8" />
+              </div>
+            </div>
+            <input
+              type="file"
+              id="imageUpload"
+              accept="image/png"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+          </label>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

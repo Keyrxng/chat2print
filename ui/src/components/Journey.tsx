@@ -69,7 +69,7 @@ const Journey = () => {
         </div>
         <div className="text-center mt-12">
           <motion.a
-            href="/create"
+            href="/studio"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 * steps.length }}

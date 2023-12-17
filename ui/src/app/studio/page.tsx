@@ -71,7 +71,7 @@ export default function Page() {
   return (
     <div className="flex flex-row max-[1780px]:flex-col min-w-max text-center">
       <Suspense fallback={<div>Loading...</div>}>
-        <div className="gradientBG flex flex-col min-h-screen h-max max-w-7xl">
+        <div className="gradientBG rounded-md flex flex-col min-h-screen h-max max-w-7xl">
           <div className="text-accent mx-auto p-4">
             <ImagePlacementEditor
               selectedTemplate={template}

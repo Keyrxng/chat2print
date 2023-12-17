@@ -5,25 +5,124 @@ import { Button } from "./ui/button";
 
 const carouselImages = [
   {
-    title: "Canvas Prints",
+    title: "Custom Canvas Prints",
     description:
       "Turn your ChatGPT art into stunning wall decor with our high-quality canvas prints.",
-    imageUrl: "/badge.webp",
+    imageUrl: "/staticMocks/framed-canvas-(in)-black-24x36-front.png",
     alt: "Canvas print of AI-generated artwork",
   },
   {
-    title: "Metal Prints",
+    title: "Custom Metal Prints",
     description:
       "Experience a modern touch with durable metal prints for a sleek, industrial look.",
-    imageUrl: "/betty.webp",
+    imageUrl: "/staticMocks/gaming-mouse-pad-white-18x16-front.png",
     alt: "Sleek metal print of AI-created design",
   },
   {
-    title: "Phone Cases",
+    title: "Custom Phone Cases",
     description:
-      "Carry your art everywhere with custom-designed phone cases that make a statement.",
-    imageUrl: "/fantasyArt.webp",
-    alt: "Custom phone case with personalized AI art",
+      "Design your unique phone case, showcasing your style with our custom design options.",
+    imageUrl: "/staticMocks/framed-canvas-(in)-brown-24x36-front.png",
+    alt: "Customized phone case with unique design elements",
+  },
+  {
+    title: "Custom Framed Canvas Prints",
+    description:
+      "Elevate your space with custom framed canvas prints, blending art and elegance seamlessly.",
+    imageUrl:
+      "/staticMocks/snap-case-for-samsung-glossy-samsung-galaxy-s20-fe-front.png",
+    alt: "Elegant framed canvas print in a modern setting",
+  },
+  {
+    title: "Custom Design Benefits",
+    description:
+      "Discover the advantages of custom design, from personalized aesthetics to creative freedom.",
+    imageUrl: "/staticMocks/mouse-pad-white-front.png",
+    alt: "Showcasing the benefits of custom design on everyday items",
+  },
+  {
+    title: "Best Custom",
+    description:
+      "Explore our top-rated custom products, where quality meets personalized design.",
+    imageUrl: "",
+    alt: "Highlight of the best custom-designed items",
+  },
+  {
+    title: "Large Custom Mouse Pad",
+    description:
+      "Enhance your gaming experience with our large custom mouse pads, tailored for comfort and style.",
+    imageUrl: "",
+    alt: "Spacious and stylish custom mouse pad for gaming",
+  },
+  {
+    title: "AI Product Design",
+    description:
+      "Futuristic AI product designs that redefine innovation and functionality in everyday items.",
+    imageUrl: "",
+    alt: "Innovative AI-driven product design showcase",
+  },
+  {
+    title: "Best Custom Mouse Pad",
+    description:
+      "Discover the finest custom mouse pads, combining ergonomic design with your personal flair.",
+    imageUrl: "",
+    alt: "Top-rated custom mouse pad with unique design",
+  },
+  {
+    title: "Custom Metal Prints Wall Art",
+    description:
+      "Transform your walls with our custom metal prints, a perfect blend of durability and artistry.",
+    imageUrl: "",
+    alt: "Elegant and durable custom metal print for wall decoration",
+  },
+  {
+    title: "AI Print on Demand",
+    description:
+      "Revolutionary AI print on demand service, offering unmatched customization and quality.",
+    imageUrl: "",
+    alt: "Advanced AI technology in print on demand services",
+  },
+  {
+    title: "Best Print on Demand Site",
+    description:
+      "Rated the best print on demand site for our exceptional quality and diverse product range.",
+    imageUrl: "",
+    alt: "Showcasing the excellence of the best print on demand site",
+  },
+  {
+    title: "Custom Wall Art",
+    description:
+      "Personalize your space with our custom wall art, tailored to reflect your unique taste and style.",
+    imageUrl: "",
+    alt: "Unique and personalized custom wall art piece",
+  },
+  {
+    title: "Design your own phone case",
+    description:
+      "Unleash your creativity by designing your own phone case, a perfect blend of protection and personality.",
+    imageUrl: "",
+    alt: "Creatively designed custom phone case by a user",
+  },
+  {
+    title: "Design your own mouse pad",
+    description:
+      "Customize your workspace with a mouse pad designed by you, for both comfort and style.",
+    imageUrl: "",
+    alt: "User-designed custom mouse pad adding a personal touch to workspaces",
+  },
+  {
+    title: "Metal Prints Custom",
+    description:
+      "Our custom metal prints offer a modern aesthetic, perfect for both home and office decor.",
+    imageUrl: "",
+    alt: "Stylish and modern custom metal print",
+  },
+  {
+    title: "large custom metal prints",
+    description:
+      "Make a bold statement with our large custom metal prints, ideal for making any room stand out.",
+    imageUrl: "",
+    alt: "Impressive large custom metal print for impactful decor",
   },
 ];
 
@@ -111,6 +210,7 @@ const FeaturedProductsGallery = () => {
             <Image
               src={carouselImages[imageIndex].imageUrl}
               alt={carouselImages[imageIndex].alt}
+              aria-details={carouselImages[imageIndex].description}
               width={300}
               height={300}
               className="rounded-lg"
