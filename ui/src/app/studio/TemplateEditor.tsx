@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Suspense } from "react";
+import { useState, useRef, useEffect, Suspense, useCallback } from "react";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import {
@@ -51,6 +51,14 @@ const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
 );
 
+type Status =
+  | "pending"
+  | "processing"
+  | "completed"
+  | "failed"
+  | null
+  | undefined;
+
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   selectedTemplate,
   selectedVariant,
@@ -76,6 +84,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [upscaledImages, setUpscaledImages] = useState<string[]>([]);
   const [userDetails, setUserDetails] = useState<any>(null);
   const [viewingUpscaled, setViewingUpscaled] = useState<boolean>(false);
+  const [dataStatic, setDataStatic] = useState<boolean>(false);
+  const [mockReqs, setMockReqs] = useState<any[]>([]);
+  const [pollForMockups, setPollForMockups] = useState<boolean>(false);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -87,16 +98,55 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   useEffect(() => {
     async function getUser() {
-      const uID = (await supabase.auth.getSession()).data.session?.user.id;
-      const { data } = await supabase.from("users").select("*").match({
+      const { data } = await supabase.auth.getSession();
+      const uID = data.session?.user.id;
+      const { data: user } = await supabase.from("users").select("*").match({
         id: uID,
       });
+      console.log("user: ", user);
 
-      setUserDetails((prev) => (prev = data?.[0]));
+      const usr = {
+        id: user?.[0].id,
+        full_name: user?.[0].full_name,
+        email: data.session?.user.email,
+        billing_address: user?.[0].billing_address,
+      };
+
+      setUserDetails((prev) => (prev = usr));
+
+      async function set(id) {
+        try {
+          let imgs;
+          let data;
+
+          if (id) {
+            imgs = await fetch("/api/designs/fetch");
+            data = await imgs.json();
+          }
+
+          if (!data) {
+            // TODO: provide static examples taken from supa [upscaled images and mockups]
+
+            console.log("no ddesigns or upscaled images");
+          } else {
+            let { designImages, upscaledImages } = data;
+            designImages = designImages.filter((img: string) => img !== null);
+            setUserImages(designImages);
+            setSelectedImage(designImages[0]);
+            upscaledImages = upscaledImages.filter(
+              (img: string) => img !== null
+            );
+            setUpscaledImages(upscaledImages);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      set(uID);
     }
 
     getUser();
-  }, [supabase]);
+  }, [supabase, userDetails?.id]);
 
   useEffect(() => {
     const intitalPosition = {
@@ -114,33 +164,63 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       );
     }
     load();
-
-    async function set() {
-      try {
-        const imgs = await fetch("/api/designs/fetch");
-        const data = await imgs.json();
-
-        if (
-          data.designImages.length === 0 &&
-          data.upscaledImages.length === 0
-        ) {
-          // TODO: provide static examples taken from supa [upscaled images and mockups]
-
-          console.log("no ddesigns or upscaled images");
-        } else {
-          let { designImages, upscaledImages } = data;
-          designImages = designImages.filter((img: string) => img !== null);
-          setUserImages(designImages);
-          setSelectedImage(designImages[0]);
-          upscaledImages = upscaledImages.filter((img: string) => img !== null);
-          setUpscaledImages(upscaledImages);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    set();
   }, [selectedTemplate, setSelectedImage]);
+
+  const processMockRequest = async (req) => {
+    console.log("processing mock requests");
+
+    for (const r of req) {
+      const data = {
+        productId: r.product_id,
+        imageUrl: r.image_data,
+        variantIDs: r.variant_id,
+        scaledWidth: r.scaled_width,
+        scaledHeight: r.scaled_height,
+        offsetX: r.offset_x,
+        offsetY: r.offset_y,
+      };
+      const response = await fetch("/api/pod/create-mocks", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      const res = await response.json();
+      console.log("res: ", res);
+
+      if (res.error) {
+        console.log(`Error processing ruest ${r.id}: `, res.error);
+        const seconds = extractWaitTime(res.error.message);
+        console.log(`Waiting ${seconds} seconds before retrying`);
+        await wait(seconds * 1000);
+      }
+      await updateRequestStatus(r.id, "completed", res.result.task_key);
+    }
+
+    console.log("finished processing mock requests");
+    return;
+  };
+
+  useEffect(() => {
+    async function load() {
+      if (!userDetails?.id) return;
+      const { data: pendingReqs, error } = await supabase
+        .from("mockup_requests")
+        .select("*")
+        .match({ user_id: userDetails.id, status: "pending" });
+
+      if (error) {
+        toast({
+          title: "Something went wrong.",
+          description: `There was an error fetching your mockups, error  ${error.message}. Please try again shortly.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
+      setMockReqs((prev) => [...prev, pendingReqs]);
+      await processMockRequest(pendingReqs);
+    }
+    load();
+  }, [userDetails?.id, pollForMockups]);
 
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
@@ -210,68 +290,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setEnhancing(false);
   };
 
-  const [dataStatic, setDataStatic] = useState<boolean>(false);
-
-  const [mockReqs, setMockReqs] = useState<number[]>([]);
   // TODO - test this
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    async function fetchAndProcessRequests() {
-      try {
-        const { data: pendingReqs, error } = await supabase
-          .from("mockup_requests")
-          .select("*")
-          .match({ user_id: userDetails.user.id, status: "pending" });
-
-        console.log("fetching pending requests");
-        if (error)
-          throw new Error(`Error fetching pending requests: ${error.message}`);
-        if (pendingReqs.length === 0) return;
-
-        console.log("pendingReqs: ", pendingReqs);
-
-        setMockReqs(pendingReqs.map((req) => req.id));
-
-        for (let request of pendingReqs) {
-          console.log("request of pendingReqs: ", request);
-
-          try {
-            const res = await fetch("/api/pod/create-mocks", {
-              method: "POST",
-              body: JSON.stringify({ ...request }),
-            });
-
-            const data = await res.json();
-            if (data.error) {
-              console.log(
-                `Error processing request ${request.id}: `,
-                data.error
-              );
-              const seconds = extractWaitTime(data.error.message);
-              await wait(seconds * 1000);
-              continue;
-            }
-
-            await updateRequestStatus(
-              request.id,
-              "completed",
-              data.result.task_key
-            );
-          } catch (err) {
-            console.error(`Error processing request ${request.id}:`, err);
-            await updateRequestStatus(request.id, "failed");
-          }
-        }
-      } catch (err) {
-        console.error("Error in fetchAndProcessRequests:", err);
-      }
-    }
-
-    intervalId = setInterval(fetchAndProcessRequests, 60000);
-    return () => clearInterval(intervalId);
-  }, [userDetails?.id, supabase]);
-
   const wait = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -280,19 +299,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     return match ? parseInt(match[0], 10) : 60;
   };
 
-  type Status =
-    | "pending"
-    | "processing"
-    | "completed"
-    | "failed"
-    | null
-    | undefined;
-
   const updateRequestStatus = async (
     requestId: number,
     status: Status,
     taskKey = null
   ) => {
+    console.log(`Updating request ${requestId} to status ${status}`);
     const updateData: { status: Status; task_key?: string } = { status };
     if (taskKey) updateData.task_key = taskKey;
 
@@ -301,8 +313,18 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       .update(updateData)
       .eq("id", requestId);
 
-    if (error)
+    toast({
+      title: "Mockup request updated",
+      description: `Request ${requestId} has been updated to status ${status}`,
+      variant: "destructive",
+      className: "bg-background text-accent border-accent",
+    });
+
+    if (error) {
       console.error(`Error updating status for request ${requestId}:`, error);
+    } else {
+      await fetchMockups();
+    }
   };
 
   const handleCreateMockup = async (imageData: string) => {
@@ -336,52 +358,48 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         user_id: userDetails.id,
         status: "pending",
         product: name,
-        cost: price,
         price: Math.round(Number(price) * 1.5),
       };
 
-    try {
-      const { data, error } = await supabase
-        .from("mockup_requests")
-        .insert([mockupRequest])
-        .select("id")
-        .single();
+    const { data, error } = await supabase
+      .from("mockup_requests")
+      .insert(mockupRequest);
 
-      if (error) throw error;
-
-      toast({
-        title: "Mockup request queued",
-        description: "Your request is being processed.",
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-
-      setMockReqs((prev) => [...prev, data.id]);
-    } catch (error) {
-      console.error("Failed to queue mockup request:", error);
+    if (error) {
+      console.error("Error inserting mockup request:", error);
       toast({
         title: "Something went wrong.",
-        description: "Failed to queue your mockup request.",
+        description: "Failed to queue your mockup request, please try again",
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-    } finally {
-      setIsMockingUp(false);
+      return;
     }
+
+    toast({
+      title: "Mockup request queued",
+      description: "Your request is being processed.",
+      variant: "destructive",
+      className: "bg-background text-accent border-accent",
+    });
+
+    setPollForMockups(true);
+    setIsMockingUp(false);
   };
 
   const fetchMockups = async () => {
-    const user_id = userDetails?.user?.id;
-
+    const user_id = userDetails?.id;
+    console.log("user_id: ", user_id);
     if (!user_id) {
       setDataStatic(true);
-      return staticMocks; // TODO: provide static examples taken from supa [upscaled images and mockups]
+      return staticMocks;
     }
+
     const { data: mockups, error } = await supabase
       .from("mockup_requests")
       .select("*")
-      .eq("user_id", user_id!);
-    console.log("user_id: ", user_id);
+      .eq("user_id", user_id)
+      .match({ status: "completed" });
 
     if (error) {
       toast({
@@ -395,34 +413,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return [];
     }
 
-    const completed = [];
-    for (const mockup of mockups!) {
-      if (mockup.status === "completed") {
-        completed.push(mockup);
-        continue;
-      }
-
-      if (mockup.status === "pending") {
-        setMockReqs((prev) => [...prev, mockup.id]);
-      }
-
-      if (mockup.status === "processing") {
-        console.log(`Request ${mockup.id} is still processing`);
-      }
-
-      if (mockup.status === "failed") {
-        console.log(`Request ${mockup.id} failed`);
-        toast({
-          title: "Something went wrong.",
-          description: `There was an error processing your mockup request for ${mockup.product}. You may need to create another.`,
-          variant: "destructive",
-          className: "bg-background text-accent border-accent",
-        });
-      }
-    }
-    setMocks(completed);
-
-    return completed;
+    setMocks(mockups);
+    return mockups;
   };
 
   const HandleSale = async ({
@@ -805,11 +797,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return ((((val - min) % range) + range) % range) + min;
     };
     console.log("activeMock: ", activeMock?.mockups);
-    const imageIndex = wrap(0, activeMock?.mockups.length, page);
+    const imageIndex = wrap(0, activeMock?.mockups?.length, page);
 
     const paginate = (newDirection) => {
       setPage([page + newDirection, newDirection]);
     };
+
+    console.log(mocks);
 
     return (
       <div className="h-full">
@@ -834,7 +828,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   <p className="text-accent text-sm mt-2">{mock.product}</p>
                   <Image
                     priority={true}
-                    src={mockImg ?? mock.mockups[0].mockup_url}
+                    src={mockImg ?? mock.image_data}
                     width={500}
                     height={500}
                     alt="mockup"

@@ -40,13 +40,19 @@ export async function GET() {
 
   const { data, error } = await supabase.auth.getSession();
 
-  if (!data.session?.user?.id) throw new Error("No user ID");
+  if (!data.session?.user?.id)
+    return new Response(JSON.stringify(null), {
+      status: 500,
+      headers: {
+        "content-type": "application/json",
+      },
+    });
 
-  const { data: designs } = await supabase.storage
+  const { data: designs, error: designError } = await supabase.storage
     .from("user_uploads")
     .list(`${data.session?.user?.id}/`);
 
-  const { data: upscales } = await supabase.storage
+  const { data: upscales, error: upscaledError } = await supabase.storage
     .from("user_uploads")
     .list(`${data.session?.user?.id}/upscaled/`);
 
@@ -67,6 +73,7 @@ export async function GET() {
       if (design.name === "temp.png") return;
       if (design.name === "upscaled") return;
       if (design.name === null || design.name === undefined) return;
+      if (design.metadata.mimetype !== "image/webp") return;
       const { data: image } = supabase.storage
         .from("user_uploads")
         .getPublicUrl(`${data.session?.user?.id}/${design.name}`);

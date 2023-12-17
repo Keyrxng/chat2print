@@ -12,21 +12,36 @@ export async function POST(request: Request) {
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
   });
+  try {
+    const { data: user, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${requestUrl.origin}/api/auth/callback`,
+      },
+    });
 
-  const { data: user } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: `${requestUrl.origin}/api/auth/callback`,
-    },
-  });
+    if (error) {
+      return new Response(JSON.stringify(error), {
+        status: 500,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    }
 
-  if (!user.user?.id) throw new Error("No user ID");
-
-  return new Response(JSON.stringify({ user }), {
-    status: 200,
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+    return new Response(JSON.stringify({ user }), {
+      status: 200,
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify(err), {
+      status: 500,
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  }
 }

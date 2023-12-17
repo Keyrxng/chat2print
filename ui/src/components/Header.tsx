@@ -44,10 +44,32 @@ export default function Header() {
   });
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
     async function checkConnection() {
       const { data, error } = await supabase.auth.getUser();
       if (error) {
-        setIsConnected(false);
+        try {
+          const { data } = await supabase.auth.exchangeCodeForSession(code!);
+          if (data.user?.email_confirmed_at !== null) {
+            const { data: user } = await supabase
+              .from("users")
+              .select("*")
+              .match({ id: data.user?.id })
+              .single();
+
+            setUser({
+              email: data.user?.email,
+              id: data.user?.id,
+              firstName: user?.full_name?.split(" ")[0],
+            });
+            setIsConnected(true);
+          }
+        } catch (err) {
+          setIsConnected(false);
+          console.log("checkConnection error", err);
+        }
       } else {
         const { data: user } = await supabase
           .from("users")
@@ -75,11 +97,10 @@ export default function Header() {
       />
     );
   };
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const Login = () => {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-
     const signinValidation = () => {
       if (email === "") {
         alert("Please enter your email address");
@@ -132,37 +153,42 @@ export default function Header() {
         setIsRegistering(false);
         setWaitingForConfirm(true);
       }
+
       fetch(target, {
         method: "POST",
         body: fd,
       })
         .then(async (data) => {
-          const res = await data.json();
-          if (res.user) {
-            if (res.user.confirmed_at === null) {
+          const { user } = await data.json();
+          if (user) {
+            if (user.confirmed_at === null) {
               alert("Please confirm your email address before signing in");
               return;
-            } else if (res.user.confirmed_at !== null) {
-              const { data: user } = await supabase
+            } else if (user.confirmed_at !== null) {
+              const { data: userdata } = await supabase
                 .from("users")
                 .select("*")
-                .match({ id: res.user.id })
+                .match({ id: user.id })
                 .single();
 
               setUser({
-                email: res.user.email,
-                id: res.user.id,
-                firstName: user?.full_name?.split(" ")[0],
+                id: user.id,
+                firstName: userdata?.full_name?.split(" ")[0],
               });
               setIsConnected(true);
             }
-          } else {
-            alert(res.message);
           }
         })
         .catch((err) => {
-          alert(err);
+          toast({
+            title: "Error!",
+            description: err,
+            duration: 4000,
+            variant: "default",
+          });
         });
+      setIsRegistering(false);
+      setAccountModalIsOpen(false);
     };
 
     return (
@@ -456,6 +482,52 @@ export default function Header() {
    };
    */
 
+  const isVerified = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) return false;
+    if (!data) return false;
+    if (!data?.user) return false;
+    if (data?.user.confirmed_at === null) return false;
+    return true;
+  };
+
+  const handleIsVerified = async () => {
+    const verified = await isVerified();
+    if (!verified) {
+      setWaitingForConfirm(true);
+      toast({
+        title: "Error!",
+        description: "It looks like you haven't verified your account yet.",
+        duration: 4000,
+        variant: "default",
+      });
+    } else {
+      setWaitingForConfirm(false);
+    }
+  };
+
+  const handleResendVeriEmail = async () => {
+    const { data, error } = await supabase.auth.resend({
+      email,
+      type: "signup",
+    });
+    if (error) {
+      toast({
+        title: "Error!",
+        description: error.message,
+        duration: 4000,
+        variant: "default",
+      });
+    } else {
+      toast({
+        title: "Success!",
+        description: "Verification email resent.",
+        duration: 4000,
+        variant: "default",
+      });
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -50 }}
@@ -516,7 +588,7 @@ export default function Header() {
                       {accountModalIsOpen && (
                         <>
                           <DialogHeader>
-                            <DialogTitle className="text-white">
+                            <DialogTitle className="tex">
                               Account Details
                             </DialogTitle>
                             <DialogDescription>
@@ -552,7 +624,7 @@ export default function Header() {
                       {orderModalIsOpen && (
                         <>
                           <DialogHeader>
-                            <DialogTitle className="text-white">
+                            <DialogTitle className="text-accent">
                               Previous Orders
                             </DialogTitle>
                             <DialogDescription>
@@ -579,7 +651,7 @@ export default function Header() {
                             <DialogDescription>
                               {user?.firstName && (
                                 <span className="text-accent">
-                                  Welcome back,{" "}
+                                  Welcome,{" "}
                                   <span className="capitalize">
                                     {user?.firstName}
                                   </span>
@@ -588,11 +660,11 @@ export default function Header() {
                               )}
                               {!user?.firstName && user?.email && (
                                 <span className="text-accent">
-                                  Welcome back,{" "}
+                                  Welcome,{" "}
                                   <span className="capitalize">
                                     {user?.email.split("@")[0]}
                                   </span>
-                                  ! You can update your details below.
+                                  ! Remember to update your details below.
                                 </span>
                               )}
                             </DialogDescription>
@@ -626,7 +698,7 @@ export default function Header() {
                       )}
                     </DialogContent>
                   ) : (
-                    <DialogContent className=" border-accent">
+                    <DialogContent className="border-accent text-accent">
                       <DialogHeader>
                         <DialogTitle className="text-center justify-center text-white mb-2"></DialogTitle>
                         {!waitingForConfirm ? (
@@ -655,21 +727,26 @@ export default function Header() {
                                   <div className="flex flex-col justify-center items-center">
                                     <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
                                     <p className="text-accent text-2xl mt-4">
-                                      A confirmation email has been sent to{" "}
-                                      {user?.email}
+                                      You are almost there!
                                     </p>
                                     <p className="text-accent text-center text-sm mt-2">
                                       Please check your inbox and click the link
-                                      to verify your account.
+                                      to verify your account then sign in.
                                     </p>
                                   </div>
                                 </div>
                               </div>
                               <Button
-                                onClick={() => setWaitingForConfirm(false)}
+                                onClick={() => handleIsVerified()}
                                 className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                               >
-                                Thanks, take me back
+                                I&apos;ve verified my account
+                              </Button>
+                              <Button
+                                onClick={() => handleResendVeriEmail()}
+                                className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                              >
+                                Resend Verification Email
                               </Button>
                             </div>
                           </div>

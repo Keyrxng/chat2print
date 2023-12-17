@@ -10,7 +10,7 @@ const Journey = () => {
       altText: "Digital artwork creation with ChatGPT",
     },
     {
-      title: "AI-Powered Art Enhancement",
+      title: "AI-Enhanced Artwork For Print",
       description:
         "Leverage our AI Print on Demand technology to refine every detail, guaranteeing a fourfold improvement in quality. Our platform enhances your art to ensure the highest quality for each custom-designed product.",
       imageUrl: "/images/enhance-art-ai.jpg",
