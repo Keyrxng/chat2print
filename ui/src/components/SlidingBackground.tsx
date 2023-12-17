@@ -234,14 +234,14 @@ export default function SlidingBackground() {
               Chat2Print
             </h1>
             <span className="absolute top-0 -right-3 md:-right-6 bg-red-600 text-white text-xs md:text-sm px-2 py-1 rounded-full transform translate-x-1/2 -translate-y-1/2">
-              <a href="/#about">Beta</a>
+              <a href="/support/#about">Early Release</a>
             </span>
           </div>
           <p className="text-xl text-white md:text-2xl  mb-8">
             Transform your ChatGPT art into physical products.
           </p>
           <a
-            href="/#about"
+            href="/support/#about"
             className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
           >
             Download Extension
