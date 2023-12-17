@@ -81,14 +81,6 @@ export async function GET() {
     (image) => image !== undefined && image !== null
   );
 
-  if (error) {
-    return new Response(JSON.stringify(error), {
-      status: 500,
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-  }
   return new Response(
     JSON.stringify({
       designImages: filteredImages,

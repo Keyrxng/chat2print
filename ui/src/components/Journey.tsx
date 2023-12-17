@@ -5,7 +5,7 @@ const Journey = () => {
     {
       title: "Craft Your Vision With ChatGPT",
       description:
-        "With a few simple words with AI, you can create stunning artwork. Our platform allows you to import your ChatGPT art directly from the chat interface using our browser extension or by uploading your design.",
+        "A few simple words with AI and you can create stunning artwork. Our platform allows you to import your ChatGPT art directly from the chat interface using our browser extension or by uploading your design.",
       imageUrl: "/images/craft-your-vision.jpg",
       altText: "Digital artwork creation with ChatGPT",
     },

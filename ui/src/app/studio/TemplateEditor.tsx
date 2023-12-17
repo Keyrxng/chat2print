@@ -43,6 +43,8 @@ import { ProductSelection } from "@/components/ProductSelection";
 import { VariantSelection } from "@/components/VariantSelection";
 import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
+import { staticMocks } from "@/data/statics";
+import { motion, AnimatePresence } from "framer-motion";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -89,11 +91,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         id: uID,
       });
 
-      setUserDetails(data?.[0]);
+      setUserDetails((prev) => (prev = data[0]));
     }
 
     getUser();
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     const intitalPosition = {
@@ -116,12 +118,22 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       try {
         const imgs = await fetch("/api/designs/fetch");
         const data = await imgs.json();
-        let { designImages, upscaledImages } = data;
-        designImages = designImages.filter((img: string) => img !== null);
-        setUserImages(designImages);
-        setSelectedImage(designImages[0]);
-        upscaledImages = upscaledImages.filter((img: string) => img !== null);
-        setUpscaledImages(upscaledImages);
+
+        if (
+          data.designImages.length === 0 &&
+          data.upscaledImages.length === 0
+        ) {
+          // TODO: provide static examples taken from supa [upscaled images and mockups]
+
+          console.log("no ddesigns or upscaled images");
+        } else {
+          let { designImages, upscaledImages } = data;
+          designImages = designImages.filter((img: string) => img !== null);
+          setUserImages(designImages);
+          setSelectedImage(designImages[0]);
+          upscaledImages = upscaledImages.filter((img: string) => img !== null);
+          setUpscaledImages(upscaledImages);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -197,6 +209,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setEnhancing(false);
   };
 
+  const [dataStatic, setDataStatic] = useState<boolean>(false);
+
   const [mockReqs, setMockReqs] = useState<number[]>([]);
   // TODO - test this
   useEffect(() => {
@@ -207,7 +221,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         const { data: pendingReqs, error } = await supabase
           .from("mockup_requests")
           .select("*")
-          .match({ user_id: userDetails.id, status: "pending" });
+          .match({ user_id: userDetails.user.id, status: "pending" });
 
         console.log("fetching pending requests");
         if (error)
@@ -356,12 +370,17 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const fetchMockups = async () => {
-    const user_id = userDetails?.id;
+    const user_id = userDetails?.user?.id;
 
+    if (!user_id) {
+      setDataStatic(true);
+      return staticMocks; // TODO: provide static examples taken from supa [upscaled images and mockups]
+    }
     const { data: mockups, error } = await supabase
       .from("mockup_requests")
       .select("*")
       .eq("user_id", user_id!);
+    console.log("user_id: ", user_id);
 
     if (error) {
       toast({
@@ -745,14 +764,66 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       console.log("data: ", data);
     };
 
+    const carouselVariants = {
+      enter: {
+        x: 1000,
+        opacity: 0,
+        transition: {
+          x: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.2 },
+        },
+      },
+      center: {
+        x: 0,
+        opacity: 1,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        transition: {
+          x: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.2 },
+        },
+      },
+      exit: {
+        x: -1000,
+        opacity: 0,
+        transition: {
+          x: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.2 },
+        },
+      },
+    };
+    const swipeConfidenceThreshold = 10000;
+    const swipePower = (offset, velocity) => {
+      return Math.abs(offset) * velocity;
+    };
+    const [[page, direction], setPage] = useState([0, 0]);
+    const wrap = (min, max, val) => {
+      const range = max - min;
+      return ((((val - min) % range) + range) % range) + min;
+    };
+    console.log("activeMock: ", activeMock?.mockups);
+    const imageIndex = wrap(0, activeMock?.mockups.length, page);
+
+    const paginate = (newDirection) => {
+      setPage([page + newDirection, newDirection]);
+    };
+
     return (
-      <>
-        <h1 className="text-accent text-2xl my-4">Your Mockups</h1>
+      <div className="h-full">
+        <motion.h1
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl md:text-5xl font-bold text-center mb-10"
+        >
+          Where our imagination ends, yours can begin.
+        </motion.h1>
+
         {!activeMock ? (
           <>
             <div className="grid grid-cols-3 gap-3 mx-4 justify-center items-center">
-              {mocks.length === 0 && <h1> none yet</h1>}
-
               {mocks.map((mock, index) => (
                 <button
                   key={mock.task_key}
@@ -790,59 +861,108 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           <div>
             {!checkout && (
               <>
-                <p className="text-accent text-sm ">{activeMock.product}</p>
-                <button
-                  className="flex-end right-0 w-full text-lg hover:bg-accent border border-accent hover:text-background text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
-                  onClick={() => handleCheckout()}
-                >
-                  Buy Now
-                </button>
-                <div className="relative justify-center w-[900px] h-[900px]">
-                  <Image
-                    priority={true}
-                    src={mockImg}
-                    width={4094}
-                    height={4094}
-                    alt="mockup"
-                    style={{ willChange: "transform" }}
-                    className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
-                  />
-                </div>
-                <div className="flex w-full">
-                  <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                <section className="relative text-center text-accent mb-14 py-12 md:py-18">
+                  <AnimatePresence initial={false} custom={direction}>
+                    <motion.div
+                      key={page}
+                      custom={direction}
+                      variants={carouselVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{
+                        x: { type: "spring", stiffness: 300, damping: 30 },
+                        opacity: { duration: 0.2 },
+                      }}
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={1}
+                      onDragEnd={(e, { offset, velocity }) => {
+                        const swipe = swipePower(offset.x, velocity.x);
+
+                        if (swipe < -swipeConfidenceThreshold) {
+                          paginate(1);
+                        } else if (swipe > swipeConfidenceThreshold) {
+                          paginate(-1);
+                        }
+                      }}
+                      className="text-center self-center justify-center rounded-lg p-6 shadow-lg"
+                    >
+                      <div className="relative mt-8 flex text-center items-center self-center justify-between">
+                        <div className="absolute z-10 flex mt-8 justify-between bottom-0 end-0 left-0 ">
                           <Button
-                            onClick={() => setActiveMock(null)}
-                            className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                            className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
+                            onClick={() => paginate(-1)}
                           >
-                            Return to Mockups
+                            Previous
                           </Button>
-                        </TooltipTrigger>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                          <div>
+                            <p className="text-accent text-sm ">
+                              {activeMock.product}
+                            </p>
+                            <button
+                              className="flex-end right-0 w-full text-lg hover:bg-accent border border-accent hover:text-background text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+                              onClick={() => handleCheckout()}
+                            >
+                              Buy Now
+                            </button>
+                          </div>
                           <Button
-                            onClick={() => handleDelete(activeMock)}
-                            className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                            className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
+                            onClick={() => paginate(1)}
                           >
-                            Delete Mockup
+                            Next
                           </Button>
-                        </TooltipTrigger>
-                        <TooltipContent className="text-accent text-center justify-center opacity-90 bg-background rounded-md ">
-                          <p className="text-accent text-sm">
-                            This cannot be undone.
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                        </div>
+                        <Image
+                          priority={true}
+                          src={mockImg}
+                          width={2100}
+                          height={2100}
+                          alt="mockup"
+                          style={{ willChange: "transform" }}
+                          className="absolute justify-center bottom-0 right-0 pl-6 ml-4 top-0 -z-2 align-middle p-16 -my-12 max-w-[950px] w-auto h-auto rounded-lg"
+                        />
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                  <div className="flex w-full mt-4 mx-6 px-10 h-full">
+                    <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              onClick={() => setActiveMock(null)}
+                              className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                            >
+                              Return to Mockups
+                            </Button>
+                          </TooltipTrigger>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              onClick={() => handleDelete(activeMock)}
+                              disabled={dataStatic}
+                              className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                            >
+                              Delete Mockup
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent className="text-accent text-center justify-center opacity-90 bg-background rounded-md ">
+                            <p className="text-accent text-sm">
+                              This cannot be undone.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                   </div>
-                </div>
+                </section>
               </>
             )}
 
@@ -884,7 +1004,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             )}
           </div>
         )}
-      </>
+      </div>
     );
   };
 
@@ -1293,7 +1413,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                               width={viewingUpscaled ? 4094 : 1024}
                               id="userImage"
                               height={viewingUpscaled ? 4094 : 1024}
-                              src={userImage}
+                              src={userImage || ""}
                               className="z-10"
                               style={{
                                 maxWidth: "100%",
@@ -1319,7 +1439,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                               alt="user image"
                               width={viewingUpscaled ? 4094 : 1024}
                               height={viewingUpscaled ? 4094 : 1024}
-                              src={userImage}
+                              src={userImage || ""}
                               className="z-10"
                               style={{
                                 maxWidth: "100%",

@@ -49,14 +49,12 @@ export default function Header() {
       if (error) {
         setIsConnected(false);
       } else {
-        console.log(data);
         const { data: user } = await supabase
           .from("users")
           .select("*")
           .match({ id: data?.user.id })
           .single();
 
-        console.log(user);
         setIsConnected(true);
         setUser({
           email: data?.user.email,
@@ -141,7 +139,6 @@ export default function Header() {
         .then(async (data) => {
           const res = await data.json();
           if (res.user) {
-            console.log(res.user);
             if (res.user.confirmed_at === null) {
               alert("Please confirm your email address before signing in");
               return;
@@ -480,6 +477,7 @@ export default function Header() {
               style={{
                 maxWidth: "100%",
                 height: "auto",
+                width: "auto",
               }}
             />
           </a>
