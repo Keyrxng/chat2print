@@ -171,75 +171,77 @@ const FeaturedProductsGallery = () => {
   };
 
   return (
-    <section className="relative text-center text-accent mb-14 py-12 md:py-18">
-      <motion.h2
-        initial={{ opacity: 0, y: 0 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-3xl md:text-5xl font-bold text-center mb-10"
-      >
-        Where our imagination ends, yours can begin.
-      </motion.h2>
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={page}
-          custom={direction}
-          variants={carouselVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={1}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-
-            if (swipe < -swipeConfidenceThreshold) {
-              paginate(1);
-            } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-1);
-            }
-          }}
-          className="text-center self-center rounded-lg p-6 shadow-lg"
+    <section className="relative text-center text-accent mb-16 py-12 md:py-18">
+      <div className="grid relative grid-cols-1 my-8">
+        <motion.h2
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl md:text-5xl font-bold text-center mb-10 "
         >
-          <div className="h-[130px] md:hidden"></div>
-          <div className="relative flex justify-between">
-            <Image
-              src={carouselImages[imageIndex].imageUrl}
-              alt={carouselImages[imageIndex].alt}
-              aria-details={carouselImages[imageIndex].description}
-              width={300}
-              height={300}
-              className="rounded-lg mb-5"
-            />
-            <div className="absolute flex justify-between bottom-0 end-0 left-0 ">
-              <Button
-                className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
-                onClick={() => paginate(-1)}
-              >
-                Previous
-              </Button>
-              <Button
-                className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
-                onClick={() => paginate(1)}
-              >
-                Next
-              </Button>
+          Where our imagination ends, yours can begin.
+        </motion.h2>
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.div
+            key={page}
+            custom={direction}
+            variants={carouselVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            className="text-center self-center rounded-lg p-6 shadow-lg mt-12 mb-12 md:mb-0"
+          >
+            <div className="h-[70px] md:hidden"></div>
+            <div className="relative flex justify-between items-center">
+              <Image
+                src={carouselImages[imageIndex].imageUrl}
+                alt={carouselImages[imageIndex].alt}
+                aria-details={carouselImages[imageIndex].description}
+                width={300}
+                height={300}
+                className="rounded-lg mb-5"
+              />
+              <div className="absolute flex justify-between bottom-0 end-0 left-0 ">
+                <Button
+                  className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
+                  onClick={() => paginate(-1)}
+                >
+                  Previous
+                </Button>
+                <Button
+                  className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
+                  onClick={() => paginate(1)}
+                >
+                  Next
+                </Button>
+              </div>
+              <Image
+                src={carouselImages[imageIndex].imageUrl}
+                alt={carouselImages[imageIndex].alt}
+                width={300}
+                height={300}
+                className="rounded-lg hidden self-center mb-5 md:block"
+              />
             </div>
-            <Image
-              src={carouselImages[imageIndex].imageUrl}
-              alt={carouselImages[imageIndex].alt}
-              width={300}
-              height={300}
-              className="rounded-lg hidden mb-5 md:block"
-            />
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </section>
   );
 };

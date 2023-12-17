@@ -69,7 +69,9 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="-z-100"
         >
-          <FeaturedProductsGallery />
+          <div>
+            <FeaturedProductsGallery />
+          </div>
 
           {/* <Tiers /> */}
           <div ref={ref2} />

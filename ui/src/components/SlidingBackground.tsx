@@ -191,7 +191,7 @@ export default function SlidingBackground() {
               href="/support/#about"
               className="bg-background text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-accent hover:text-background  transition duration-300"
             >
-              Download Extension
+              Learn More
             </a>
           </article>
         </section>
