@@ -74,6 +74,7 @@ export const ImageSlider = ({
       }
 
       const updated = userImages.filter((img) => img !== image);
+      console.log("data: ", data);
       setUserImages(updated);
     }
 
@@ -144,7 +145,7 @@ export const ImageSlider = ({
         </div>
         {!viewingUpscaled ? (
           <>
-            {userImages.map((image, index) => (
+            {images.map((image, index) => (
               <div key={index} className="flex">
                 <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
                   <button

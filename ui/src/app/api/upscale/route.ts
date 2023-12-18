@@ -11,7 +11,7 @@ async function runUpscale(request: Request, imageUrl: string) {
       input: {
         image: imageUrl,
       },
-      webhook: `https://0b03-86-27-41-90.ngrok.io/api/upscale/callback`,
+      webhook: `https://aca2-86-27-41-90.ngrok.io/api/upscale/callback`,
       webhook_events_filter: ["completed"],
     }
   );
@@ -21,10 +21,19 @@ async function runUpscale(request: Request, imageUrl: string) {
 export async function POST(request: Request) {
   const { url } = await request.json();
   console.log("🪝 incoming upscale request!", url);
-  const output = await runUpscale(request, url);
-  return new Response(JSON.stringify(output), {
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+  try {
+    const output = await runUpscale(request, url);
+    return new Response(JSON.stringify(output), {
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return new Response(JSON.stringify({ error: err }), {
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  }
 }

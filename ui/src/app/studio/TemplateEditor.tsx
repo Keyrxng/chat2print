@@ -170,6 +170,17 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     console.log("processing mock requests");
 
     for (const r of req) {
+      const contentType = r.image_data.includes(".png") ? true : false;
+
+      if (!contentType) {
+        toast({
+          title: "Oops!",
+          description: `It looks like you're trying to use a file that isn't a PNG. Please try again with a PNG file.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
       const data = {
         productId: r.product_id,
         imageUrl: r.image_data,
@@ -186,13 +197,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       const res = await response.json();
       console.log("res: ", res);
 
-      if (res.error) {
+      if (res.error || !res.result.task_key) {
         console.log(`Error processing ruest ${r.id}: `, res.error);
         const seconds = extractWaitTime(res.error.message);
         console.log(`Waiting ${seconds} seconds before retrying`);
         await wait(seconds * 1000);
       }
-      await updateRequestStatus(r.id, "completed", res.result.task_key);
+      await updateRequestStatus(r.id, "processing", res.result.task_key);
     }
 
     console.log("finished processing mock requests");
@@ -218,6 +229,70 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
       setMockReqs((prev) => [...prev, pendingReqs]);
       await processMockRequest(pendingReqs);
+    }
+    load();
+  }, [userDetails?.id, pollForMockups]);
+
+  useEffect(() => {
+    async function load() {
+      if (!userDetails?.id) return;
+
+      console.log("fetching 'processing' mockups");
+      const { data: processingReq, error: processError } = await supabase
+        .from("mockup_requests")
+        .select("*")
+        .match({ user_id: userDetails?.id, status: "processing" });
+
+      if (processError) {
+        toast({
+          title: "Something went wrong.",
+          description: `There was an error fetching your mockups, error  ${processError.message}. Please try again shortly.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
+      if (processingReq?.length === 0) return;
+      if (!processingReq) return;
+
+      console.log("we got processing reqs: ", processingReq);
+
+      for (const r of processingReq) {
+        try {
+          const resp = await fetch("/api/pod/fetch-mocks", {
+            method: "POST",
+            body: JSON.stringify({ taskKey: r.task_key }),
+          });
+
+          const res = await resp.json();
+
+          const { error: saveError } = await supabase.from("mockups").insert({
+            task_key: r.task_key,
+            user_id: userDetails.id,
+            mockups: res.result.mockups,
+            printFiles: res.result.printfiles,
+            product: r.product,
+            product_id: r.product_id,
+            variant_id: r.variant_id,
+            price: r.price,
+          });
+
+          if (saveError) {
+            toast({
+              title: "Something went wrong.",
+              description: `There was an error fetching your mockups, error  ${saveError.message}. Please try again shortly.`,
+              variant: "destructive",
+              className: "bg-background text-accent border-accent",
+            });
+          }
+
+          await updateRequestStatus(r.id, "completed");
+          console.log("fetching resp: ", res);
+        } catch (err) {
+          console.log("err: ", err);
+        }
+      }
+      setPollForMockups(false);
     }
     load();
   }, [userDetails?.id, pollForMockups]);
@@ -276,21 +351,41 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return;
     }
 
-    const res = await fetch("/api/upscale", {
-      method: "POST",
-      body: JSON.stringify({
-        url: userImage,
-      }),
-    });
+    try {
+      const res = await fetch("/api/upscale", {
+        method: "POST",
+        body: JSON.stringify({
+          url: userImage,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
+      if (data.error) {
+        console.log("error: ", data.error);
+        toast({
+          title: "Something went wrong.",
+          description: `There was an error enhancing your image, if you are trying to enhance a landscape or portrait design try it at a smaller scale.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+        setEnhancing(false);
+        return;
+      }
 
-    await handleCreateMockup(data);
+      await handleCreateMockup(data);
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: "Something went wrong.",
+        description: `There was an error enhancing your image, if you are trying to enhance a landscape or portrait design try it at a smaller scale.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+    }
 
     setEnhancing(false);
   };
 
-  // TODO - test this
   const wait = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -315,7 +410,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     toast({
       title: "Mockup request updated",
-      description: `Request ${requestId} has been updated to status ${status}`,
+      description: `One of your mockup requests has been updated to status ${status}`,
       variant: "destructive",
       className: "bg-background text-accent border-accent",
     });
@@ -361,7 +456,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         price: Math.round(Number(price) * 1.5),
       };
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("mockup_requests")
       .insert(mockupRequest);
 
@@ -393,13 +488,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (!user_id) {
       setDataStatic(true);
       return staticMocks;
+    } else {
+      setDataStatic(false);
     }
 
     const { data: mockups, error } = await supabase
-      .from("mockup_requests")
+      .from("mockups")
       .select("*")
-      .eq("user_id", user_id)
-      .match({ status: "completed" });
+      .eq("user_id", user_id);
 
     if (error) {
       toast({
@@ -409,7 +505,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-      // TODO: provide static examples taken from supa [upscaled images and mockups]
       return [];
     }
 
@@ -562,12 +657,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const [quantity, setQuantity] = useState<number>(1);
     const [mockImg, setMockImg] = useState<string>("");
     const itemPrice = activeMock?.price;
+    console.log("mockup: ", mocks);
 
     useEffect(() => {
-      const mock = activeMock?.mockups?.[0].mockup_url;
       console.log("activeMock: ", activeMock);
-      setMockImg((prev) => (prev = mock));
-      console.log("mock: ", mock);
     }, [activeMock, mockImg]);
 
     const handleSet = (mock: any) => {
@@ -728,13 +821,18 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     const handleDelete = async (mock: any) => {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("mockups")
         .delete()
         .eq("task_key", mock.task_key);
 
+      const { error: mockReqError } = await supabase
+        .from("mockup_requests")
+        .delete()
+        .eq("task_key", mock.task_key);
+
       console.log("mock: ", mock);
-      if (error) {
+      if (error || mockReqError) {
         toast({
           title: "Something went wrong.",
           description:
@@ -753,8 +851,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-
-      console.log("data: ", data);
     };
 
     const carouselVariants = {
@@ -797,10 +893,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return ((((val - min) % range) + range) % range) + min;
     };
     console.log("activeMock: ", activeMock?.mockups);
-    const imageIndex = wrap(0, activeMock?.mockups?.length, page);
+    const imageIndex = wrap(0, mocks?.length, page);
 
     const paginate = (newDirection) => {
       setPage([page + newDirection, newDirection]);
+      setActiveMock(mocks[page + newDirection]);
     };
 
     console.log(mocks);
@@ -825,13 +922,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
                   onClick={() => handleSet(mock)}
                 >
-                  <p className="text-accent text-sm mt-2">{mock.product}</p>
+                  <h1 className="text-accent text-sm m-1">{mock.product}</h1>
                   <Image
                     priority={true}
-                    src={mockImg ?? mock.image_data}
+                    src={mock.mockups?.[0].mockup_url}
                     width={500}
                     height={500}
-                    alt="mockup"
+                    alt={`Custom ${mock.product}`}
                     className="rounded-lg"
                   />
                 </button>
@@ -911,7 +1008,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                         </div>
                         <Image
                           priority={true}
-                          src={mockImg}
+                          src={activeMock.mockups?.[0].mockup_url}
                           width={2100}
                           height={2100}
                           alt="mockup"
@@ -942,7 +1039,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                           <TooltipTrigger asChild>
                             <Button
                               onClick={() => handleDelete(activeMock)}
-                              disabled={dataStatic}
+                              disabled={mocks.length === 0 && dataStatic}
                               className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                             >
                               Delete Mockup
@@ -1282,6 +1379,84 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     onTransformChange(newScale, offsetX, offsetY);
   };
 
+  const DimensionControls = () => {
+    // we use setPositions to update the position of the image
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+    useEffect(() => {
+      const userimg = userImage;
+      if (!userimg) return;
+      if (userImage) {
+        const img = document.getElementById("userImage") as HTMLImageElement;
+        if (!img) return;
+        setDimensions({ width: img.width, height: img.height });
+      }
+    }, [userImage]);
+
+    const increaseWidth = () => {
+      const img = document.getElementById("userImage") as HTMLImageElement;
+      if (!img) return;
+      img.style.width = `${dimensions.width + 25}px`;
+      setDimensions({ ...dimensions, width: dimensions.width + 25 });
+    };
+
+    const decreaseWidth = () => {
+      const img = document.getElementById("userImage") as HTMLImageElement;
+      if (!img) return;
+      img.style.width = `${dimensions.width - 25}px`;
+      setDimensions({ ...dimensions, width: dimensions.width - 25 });
+    };
+
+    const increaseHeight = () => {
+      const img = document.getElementById("userImage") as HTMLImageElement;
+      if (!img) return;
+      img.style.height = `${dimensions.height + 25}px`;
+      setDimensions({ ...dimensions, height: dimensions.height + 25 });
+    };
+
+    const decreaseHeight = () => {
+      const img = document.getElementById("userImage") as HTMLImageElement;
+      if (!img) return;
+      img.style.height = `${dimensions.height - 25}px`;
+      setDimensions({ ...dimensions, height: dimensions.height - 25 });
+    };
+
+    return (
+      <div className="flex justify-center items-center gap-4 m-4">
+        <div className="flex space-x-2">
+          <button
+            onClick={decreaseWidth}
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            -
+          </button>
+          <span>Width</span>
+          <button
+            onClick={increaseWidth}
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            +
+          </button>
+        </div>
+        <div className="flex space-x-2">
+          <button
+            onClick={decreaseHeight}
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            -
+          </button>
+          <span>Height</span>
+          <button
+            onClick={increaseHeight}
+            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+          >
+            +
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
@@ -1522,27 +1697,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            onClick={() => snapImageToPrintArea()}
-                            className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
-                          >
-                            Fit to Print Area
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
-                          <p className="text-accent text-sm">
-                            Snap your image to the print area of the selected
-                            product.
-                          </p>
-                          <p className="text-accent text-sm"></p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
+                  <DimensionControls />
                   <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
                     <TooltipProvider>
                       <Tooltip>
