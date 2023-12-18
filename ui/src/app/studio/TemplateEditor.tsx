@@ -168,6 +168,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   const processMockRequest = async (req) => {
     console.log("processing mock requests");
+    let count = 0;
+    const limit = 2;
+    const backoff = 60000;
 
     for (const r of req) {
       const contentType = r.image_data.includes(".png") ? true : false;
@@ -181,29 +184,35 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
       }
 
-      const data = {
-        productId: r.product_id,
-        imageUrl: r.image_data,
-        variantIDs: r.variant_id,
-        scaledWidth: r.scaled_width,
-        scaledHeight: r.scaled_height,
-        offsetX: r.offset_x,
-        offsetY: r.offset_y,
-      };
-      const response = await fetch("/api/pod/create-mocks", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      console.log("res: ", res);
+      while (count < limit) {
+        const data = {
+          productId: r.product_id,
+          imageUrl: r.image_data,
+          variantIDs: r.variant_id,
+          scaledWidth: r.scaled_width,
+          scaledHeight: r.scaled_height,
+          offsetX: r.offset_x,
+          offsetY: r.offset_y,
+        };
+        const response = await fetch("/api/pod/create-mocks", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        const res = await response.json();
+        console.log("res: ", res);
 
-      if (res.error || !res.result.task_key) {
-        console.log(`Error processing ruest ${r.id}: `, res.error);
-        const seconds = extractWaitTime(res.error.message);
-        console.log(`Waiting ${seconds} seconds before retrying`);
-        await wait(seconds * 1000);
+        if (res.error || !res.result.task_key) {
+          console.log(`Error processing ruest ${r.id}: `, res.error);
+          const seconds = extractWaitTime(res.error.message);
+          console.log(`Waiting ${seconds} seconds before retrying`);
+          await wait(seconds * 1000);
+        }
+        await updateRequestStatus(r.id, "processing", res.result.task_key);
+        await wait(1000);
+        count++;
+
+        count == limit && (await wait(backoff));
       }
-      await updateRequestStatus(r.id, "processing", res.result.task_key);
     }
 
     console.log("finished processing mock requests");
@@ -509,6 +518,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     setMocks(mockups);
+
     return mockups;
   };
 
@@ -657,11 +667,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const [quantity, setQuantity] = useState<number>(1);
     const [mockImg, setMockImg] = useState<string>("");
     const itemPrice = activeMock?.price;
-    console.log("mockup: ", mocks);
-
-    useEffect(() => {
-      console.log("activeMock: ", activeMock);
-    }, [activeMock, mockImg]);
 
     const handleSet = (mock: any) => {
       setActiveMock(mock);
@@ -843,6 +848,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
 
       const updated = mocks.filter((m) => m.task_key !== mock.task_key);
+
       setMocks(updated);
 
       toast({
@@ -888,19 +894,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return Math.abs(offset) * velocity;
     };
     const [[page, direction], setPage] = useState([0, 0]);
-    const wrap = (min, max, val) => {
-      const range = max - min;
-      return ((((val - min) % range) + range) % range) + min;
-    };
-    console.log("activeMock: ", activeMock?.mockups);
-    const imageIndex = wrap(0, mocks?.length, page);
 
     const paginate = (newDirection) => {
       setPage([page + newDirection, newDirection]);
       setActiveMock(mocks[page + newDirection]);
     };
-
-    console.log(mocks);
 
     return (
       <div className="h-full">
@@ -1333,50 +1331,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     fetchMockups();
-  };
-
-  const snapImageToPrintArea = () => {
-    let scaleFactor = 0.15;
-
-    let imageWidth = viewingUpscaled ? 4094 * scaleFactor : 1024 * scaleFactor;
-    let imageHeight = viewingUpscaled ? 4094 * scaleFactor : 1024 * scaleFactor;
-
-    const {
-      print_area_width,
-      print_area_height,
-      print_area_left,
-      print_area_top,
-    } = selectedTemplate;
-
-    const imageAspectRatio = imageWidth / imageHeight;
-
-    let scaledWidth, scaledHeight;
-
-    if (imageAspectRatio > print_area_width / print_area_height) {
-      scaledWidth = print_area_width;
-      scaledHeight = print_area_width / imageAspectRatio;
-    } else {
-      scaledHeight = print_area_height;
-      scaledWidth = print_area_height * imageAspectRatio;
-    }
-
-    let offsetX = print_area_left + (print_area_width - scaledWidth) / 2;
-    let offsetY = print_area_top + (print_area_height - scaledHeight) / 2;
-
-    const ele = document.getElementById("userImage") as HTMLImageElement;
-
-    if (!ele) return;
-    ele.style.width = `${scaledWidth}px`;
-    ele.style.height = `${scaledHeight}px`;
-    ele.style.left = `${offsetX}px`;
-    ele.style.top = `${offsetY}px`;
-
-    let newScale = Math.min(
-      scaledWidth / imageWidth,
-      scaledHeight / imageHeight
-    );
-
-    onTransformChange(newScale, offsetX, offsetY);
   };
 
   const DimensionControls = () => {

@@ -151,6 +151,7 @@
   will-change: transform;
   animation-duration: calc(250px * 53 * 0.03s); 
   transform: rotateX(55deg) rotateZ(20deg) translateZ(-200px);  
+  animation: slide infinite linear;
 }
 
 
@@ -161,9 +162,6 @@
     transform: translateX(calc(-50px * 52));  }
 }
 
-.image-row {
-  animation: slide infinite linear;
-}
 
 .upscale-button {
   position: relative;

@@ -46,56 +46,60 @@ function sendResponse(responseObj, statusCode, message) {
 }
 
 async function processWebhookData(prediction) {
-  console.log("processWebhookData");
-  try {
-    const userIdFromInput = prediction.input.image.split("/")[8];
-    const imageUrl = prediction.output;
-    const image = await fetch(imageUrl);
-    const blob = await image.blob();
+  console.log("processWebhookData", prediction);
+  if (prediction.status === "succeeded") {
+    try {
+      const userIdFromInput = prediction.input.image.split("/")[8];
+      const imageUrl = prediction.output;
+      const image = await fetch(imageUrl);
+      const blob = await image.blob();
 
-    const { data: uploadData, error: uploadError } =
-      await supabase.supabase.storage
-        .from("user_uploads")
-        .upload(`${userIdFromInput}/upscaled/${prediction.id}.png`, blob, {
-          contentType: "image/png",
-        });
+      const { data: uploadData, error: uploadError } =
+        await supabase.supabase.storage
+          .from("user_uploads")
+          .upload(`${userIdFromInput}/upscaled/${prediction.id}.png`, blob, {
+            contentType: "image/png",
+          });
 
-    if (uploadError) {
-      throw new Error("Error uploading blob to db: " + uploadError.message);
+      if (uploadError) {
+        throw new Error("Error uploading blob to db: " + uploadError.message);
+      }
+
+      console.log(`Image ${prediction.id} saved to ${uploadData.path}.`);
+
+      const finalizedJson = {
+        input: prediction.input,
+        output: prediction.output,
+        created_at: prediction.created_at,
+        started_at: prediction.started_at,
+        completed_at: prediction.completed_at,
+        cancel: prediction.urls.cancel,
+        get: prediction.urls.get,
+        predict_time: prediction.metrics.predict_time,
+      };
+
+      const { error } = await supabase.supabase.from("upscales").upsert([
+        {
+          idd: prediction.id,
+          finalized: finalizedJson,
+          bucket_path: uploadData?.path,
+          user_id: userIdFromInput,
+        },
+      ]);
+
+      if (error) {
+        throw new Error("Error uploading to table: " + error.message);
+      }
+
+      console.log(
+        `Upscale ${prediction.id} saved to database for user ${userIdFromInput}`
+      );
+      return new Response("", { status: 201 });
+    } catch (error) {
+      console.error(error);
     }
-
-    console.log(`Image ${prediction.id} saved to ${uploadData.path}.`);
-
-    const finalizedJson = {
-      input: prediction.input,
-      output: prediction.output,
-      created_at: prediction.created_at,
-      started_at: prediction.started_at,
-      completed_at: prediction.completed_at,
-      cancel: prediction.urls.cancel,
-      get: prediction.urls.get,
-      predict_time: prediction.metrics.predict_time,
-    };
-
-    const { error } = await supabase.supabase.from("upscales").upsert([
-      {
-        idd: prediction.id,
-        finalized: finalizedJson,
-        bucket_path: uploadData?.path,
-        user_id: userIdFromInput,
-      },
-    ]);
-
-    if (error) {
-      throw new Error("Error uploading to table: " + error.message);
-    }
-
-    console.log(
-      `Upscale ${prediction.id} saved to database for user ${userIdFromInput}`
-    );
-    return new Response("", { status: 201 });
-  } catch (error) {
-    console.error(error);
+  } else {
+    return new Response(JSON.stringify(prediction), { status: 202 });
   }
 }
 
@@ -174,59 +178,63 @@ export async function PUT(req: Request, res: any) {
 
   const data = await req.json();
 
-  const prediction = data as IncomingData;
+  if (data.status === "succeeded") {
+    const prediction = data as IncomingData;
 
-  const userIdFromInput = prediction.input.image.split("/")[8];
-  const imageUrl = prediction.output;
-  const image = await fetch(imageUrl);
-  console.log("image: ", image);
+    const userIdFromInput = prediction.input.image.split("/")[8];
+    const imageUrl = prediction.output;
+    const image = await fetch(imageUrl);
+    console.log("image: ", image);
 
-  const blob = await image.blob();
+    const blob = await image.blob();
 
-  console.log("blob: ", blob);
+    console.log("blob: ", blob);
 
-  // just uploaded to their bucket
-  const { data: uploadData, error: uploadError } =
-    await supabase.supabase.storage
-      .from("user_uploads")
-      .upload(`${userIdFromInput}/upscaled/${prediction.id}.png`, blob, {
-        contentType: "image/png",
-      });
+    // just uploaded to their bucket
+    const { data: uploadData, error: uploadError } =
+      await supabase.supabase.storage
+        .from("user_uploads")
+        .upload(`${userIdFromInput}/upscaled/${prediction.id}.png`, blob, {
+          contentType: "image/png",
+        });
 
-  if (uploadError) {
-    console.error("Error uploading blobbish to db: ", uploadError);
+    if (uploadError) {
+      console.error("Error uploading blobbish to db: ", uploadError);
+    } else {
+      console.log(`Image ${prediction.id} saved to ${uploadData.path}.`);
+    }
+
+    const finalizedJson = {
+      input: prediction.input,
+      output: prediction.output,
+      created_at: prediction.created_at,
+      started_at: prediction.started_at,
+      completed_at: prediction.completed_at,
+      cancel: prediction.urls.cancel,
+      get: prediction.urls.get,
+      predict_time: prediction.metrics.predict_time,
+    };
+
+    // pinning to the upscales table
+    const { error } = await supabase.supabase.from("upscales").upsert([
+      {
+        idd: prediction.id,
+        finalized: finalizedJson,
+        bucket_path: uploadData?.path,
+        user_id: userIdFromInput,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error uploading to table : ", error);
+      return new Response("", { status: 500 });
+    } else {
+      console.log(
+        `Upscale ${prediction.id} saved to database for user ${userIdFromInput}`
+      );
+      return new Response("", { status: 201 });
+    }
   } else {
-    console.log(`Image ${prediction.id} saved to ${uploadData.path}.`);
-  }
-
-  const finalizedJson = {
-    input: prediction.input,
-    output: prediction.output,
-    created_at: prediction.created_at,
-    started_at: prediction.started_at,
-    completed_at: prediction.completed_at,
-    cancel: prediction.urls.cancel,
-    get: prediction.urls.get,
-    predict_time: prediction.metrics.predict_time,
-  };
-
-  // pinning to the upscales table
-  const { error } = await supabase.supabase.from("upscales").upsert([
-    {
-      idd: prediction.id,
-      finalized: finalizedJson,
-      bucket_path: uploadData?.path,
-      user_id: userIdFromInput,
-    },
-  ]);
-
-  if (error) {
-    console.error("Error uploading to table : ", error);
-    return new Response("", { status: 500 });
-  } else {
-    console.log(
-      `Upscale ${prediction.id} saved to database for user ${userIdFromInput}`
-    );
-    return new Response("", { status: 201 });
+    return new Response("", { status: 202 });
   }
 }

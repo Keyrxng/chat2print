@@ -69,7 +69,7 @@ export default function SlidingBackground() {
                     style={{
                       backgroundImage: `url(${imageUrl})`,
                       transform: translateSliderX(index),
-                      animation: "slide 20s infinite linear reverse",
+                      animation: "slide 25s infinite linear reverse",
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
                       width: "250px",
@@ -95,7 +95,7 @@ export default function SlidingBackground() {
                     style={{
                       backgroundImage: `url(${imageUrl})`,
                       transform: translateSliderX(index),
-                      animation: "slide 20s infinite linear reverse",
+                      animation: "slide 25s infinite linear reverse",
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
                       width: "250px",
@@ -121,7 +121,7 @@ export default function SlidingBackground() {
                     style={{
                       backgroundImage: `url(${imageUrl})`,
                       transform: translateSliderX(index),
-                      animation: "slide 20s infinite linear reverse",
+                      animation: "slide 25s infinite linear reverse",
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
                       width: "250px",
@@ -147,7 +147,7 @@ export default function SlidingBackground() {
                     style={{
                       backgroundImage: `url(${imageUrl})`,
                       transform: translateSliderX(index),
-                      animation: "slide 20s infinite linear reverse",
+                      animation: "slide 25s infinite linear reverse",
                       backgroundSize: "contain",
                       backgroundRepeat: "no-repeat",
                       width: "250px",

@@ -8,6 +8,7 @@ import { Link } from "react-scroll";
 import Journey from "@/components/Journey";
 import FeaturedProductsGallery from "@/components/FeaturedProduct";
 import { ProductGallery } from "@/components/ProductGallery";
+import { ProductsDisplay } from "@/components/ProductsDisplay";
 
 export default function Home() {
   const ref = useRef(null);
@@ -78,7 +79,11 @@ export default function Home() {
         </motion.div>
         <br />
         <Journey />
-        <ProductGallery />
+        <div>
+          <ProductsDisplay />
+        </div>
+
+        <div>{/* <ProductGallery /> */}</div>
       </div>
     </div>
   );
