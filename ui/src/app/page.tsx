@@ -9,6 +9,7 @@ import Journey from "@/components/Journey";
 import FeaturedProductsGallery from "@/components/FeaturedProduct";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductsDisplay } from "@/components/ProductsDisplay";
+import { PricingPlans } from "@/components/Pricing";
 
 export default function Home() {
   const ref = useRef(null);
@@ -82,6 +83,12 @@ export default function Home() {
         <div>
           <ProductsDisplay />
         </div>
+        {/* https://billing.stripe.com/p/login/test_9AQ7uUejW4eM288288 */}
+        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+        <stripe-pricing-table
+          pricing-table-id="prctbl_1OPBJXJ8INwD5Vuc0dwAI2DR"
+          publishable-key="pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
+        ></stripe-pricing-table>
 
         <div>{/* <ProductGallery /> */}</div>
       </div>

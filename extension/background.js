@@ -88,7 +88,5 @@ async function createImage(image64, sendResponse) {
     console.log("error: ", actionError);
   }
 
-  console.log("action count updated");
-
   return data;
 }

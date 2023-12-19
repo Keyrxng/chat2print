@@ -45,21 +45,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
 import { staticMocks } from "@/data/statics";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ChevronDown, ChevronsUpDown, X } from "lucide-react";
+import { ChevronsUpDown, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -124,6 +112,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         full_name: user?.[0].full_name,
         email: data.session?.user.email,
         billing_address: user?.[0].billing_address,
+        tier: user?.[0].tier,
       };
 
       setUserDetails((prev) => (prev = usr));
@@ -179,59 +168,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
     load();
   }, [selectedTemplate, setSelectedImage]);
-
-  const processMockRequest = async (req) => {
-    console.log("processing mock requests");
-    let count = 0;
-    const limit = 2;
-    const backoff = 60000;
-
-    for (const r of req) {
-      const contentType = r.image_data.includes(".png") ? true : false;
-
-      if (!contentType) {
-        toast({
-          title: "Oops!",
-          description: `It looks like you're trying to use a file that isn't a PNG. Please try again with a PNG file.`,
-          variant: "destructive",
-          className: "bg-background text-accent border-accent",
-        });
-      }
-
-      while (count < limit) {
-        const data = {
-          productId: r.product_id,
-          imageUrl: r.image_data,
-          variantIDs: r.variant_id,
-          scaledWidth: r.scaled_width,
-          scaledHeight: r.scaled_height,
-          offsetX: r.offset_x,
-          offsetY: r.offset_y,
-        };
-        const response = await fetch("/api/pod/create-mocks", {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
-        const res = await response.json();
-        console.log("res: ", res);
-
-        if (res.error || !res.result.task_key) {
-          console.log(`Error processing ruest ${r.id}: `, res.error);
-          const seconds = extractWaitTime(res.error.message);
-          console.log(`Waiting ${seconds} seconds before retrying`);
-          await wait(seconds * 1000);
-        }
-        await updateRequestStatus(r.id, "processing", res.result.task_key);
-        await wait(1000);
-        count++;
-
-        count == limit && (await wait(backoff));
-      }
-    }
-
-    console.log("finished processing mock requests");
-    return;
-  };
 
   useEffect(() => {
     async function load() {
@@ -319,6 +255,194 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     load();
   }, [userDetails?.id, pollForMockups]);
 
+  const increaseUsage = async (action: string) => {
+    const { data: increaseData, error } = await supabase
+      .from("user_actions")
+      .insert({ user_id: userDetails.id, action_type: action });
+
+    if (error) {
+      console.log("error: ", error);
+    }
+
+    console.log("increaseData: ", increaseData);
+  };
+
+  const handleUsage = async (action: string) => {
+    const { data: usage, error } = await supabase
+      .from("user_actions")
+      .select("*")
+      .match({ user_id: userDetails.id })
+      .gte("timestamp", new Date().toISOString().slice(0, 10));
+
+    console.log("hanlding usage: ", usage);
+    const mockups = usage?.filter((u) => u.action === "mockup").length;
+    const enhancements = usage?.filter(
+      (u) => u.action === "enhancement"
+    ).length;
+    const imports = usage?.filter((u) => u.action === "import").length;
+    const dataSize = usage?.reduce((acc, curr) => {
+      return acc + curr.data_size;
+    }, 0);
+
+    const { data: tierData, error: tierError } = await supabase
+      .from("usage_tiers")
+      .select("*");
+
+    if (tierError) {
+      console.log("error: ", tierError);
+    }
+
+    const user_tier = userDetails?.tier;
+
+    const ttn =
+      user_tier === "free"
+        ? 0
+        : user_tier === "one-time"
+        ? 1
+        : user_tier === "silver"
+        ? 2
+        : 3;
+
+    const accTier = tierData?.[ttn];
+
+    if (!accTier) return;
+    if (!tierData) return;
+
+    if (dataSize >= accTier.data_size) {
+      toast({
+        title: "Oops!",
+        description: `You've used up your free storage for the day, please try again tomorrow.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return;
+    }
+
+    if (imports >= accTier.imports) {
+      toast({
+        title: "Oops!",
+        description: `You've used up your free imports for the day, please try again tomorrow.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return;
+    }
+
+    if (enhancements >= accTier.enhancements) {
+      toast({
+        title: "Oops!",
+        description: `You've used up your free enhancements for the day, please try again tomorrow.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return;
+    }
+
+    if (mockups >= accTier.mockups) {
+      toast({
+        title: "Oops!",
+        description: `You've used up your free mockups for the day, please try again tomorrow.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return;
+    }
+
+    switch (action) {
+      case "mockup":
+        const moreThan80Percent = (mockups / accTier.mockups) * 100 > 80;
+        if (moreThan80Percent) {
+          toast({
+            title: "Head's up!",
+            description: `You have used ${mockups} of your ${accTier.mockups} free mockups for the day. You can increase your limit by upgrading your account.`,
+          });
+        }
+        increaseUsage(action);
+        break;
+      case "enhancement":
+        const moreThan80PercentEnhancements =
+          (enhancements / accTier.enhancements) * 100 > 80;
+        if (moreThan80PercentEnhancements) {
+          toast({
+            title: "Head's up!",
+            description: `You have used ${enhancements} of your ${accTier.enhancements} free enhancements for the day. You can increase your limit by upgrading your account.`,
+          });
+        }
+
+        increaseUsage(action);
+        break;
+      case "import":
+        const moreThan80PercentImports = (imports / accTier.imports) * 100 > 80;
+        if (moreThan80PercentImports) {
+          toast({
+            title: "Head's up!",
+            description: `You have used ${imports} of your ${accTier.imports} free imports for the day. You can increase your limit by upgrading your account.`,
+          });
+        }
+        increaseUsage(action);
+        break;
+    }
+
+    if (error) {
+      console.log("error: ", error);
+    }
+
+    console.log("usage: ", usage);
+  };
+
+  const processMockRequest = async (req) => {
+    console.log("processing mock requests");
+    let count = 0;
+    const limit = 2;
+    const backoff = 60000;
+
+    for (const r of req) {
+      const contentType = r.image_data.includes(".png") ? true : false;
+
+      if (!contentType) {
+        toast({
+          title: "Oops!",
+          description: `It looks like you're trying to use a file that isn't a PNG. Please try again with a PNG file.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
+      while (count < limit) {
+        const data = {
+          productId: r.product_id,
+          imageUrl: r.image_data,
+          variantIDs: r.variant_id,
+          scaledWidth: r.scaled_width,
+          scaledHeight: r.scaled_height,
+          offsetX: r.offset_x,
+          offsetY: r.offset_y,
+        };
+        const response = await fetch("/api/pod/create-mocks", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        const res = await response.json();
+        console.log("res: ", res);
+
+        if (res.error || !res.result.task_key) {
+          console.log(`Error processing ruest ${r.id}: `, res.error);
+          const seconds = extractWaitTime(res.error.message);
+          console.log(`Waiting ${seconds} seconds before retrying`);
+          await wait(seconds * 1000);
+        }
+        await updateRequestStatus(r.id, "processing", res.result.task_key);
+        await wait(1000);
+        count++;
+
+        count == limit && (await wait(backoff));
+      }
+    }
+
+    console.log("finished processing mock requests");
+    return;
+  };
+
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
       x: event.clientX - editorRef.current?.offsetLeft!,
@@ -352,14 +476,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     console.log("handling generation");
 
     if (viewingUpscaled) {
-      const mockupData = await handleCreateMockup(userImage);
-
-      if (typeof mockupData === "number") {
-        console.log("mockupData: ", mockupData);
-
-        return;
-      }
+      await handleUsage("mockup");
+      await handleCreateMockup(userImage);
     } else if (!viewingUpscaled) {
+      await handleUsage("enhancement");
       await handleEnhanceUpscale();
     }
   };
@@ -394,7 +514,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         return;
       }
       updateActionCount("ehancement");
-
       await handleCreateMockup(data);
     } catch (err) {
       console.log(err);
@@ -502,7 +621,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     });
 
     updateActionCount("mockup");
-
     setPollForMockups(true);
     setIsMockingUp(false);
   };

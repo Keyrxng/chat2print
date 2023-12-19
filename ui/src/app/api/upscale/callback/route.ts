@@ -54,6 +54,20 @@ async function processWebhookData(prediction) {
       const image = await fetch(imageUrl);
       const blob = await image.blob();
 
+      const dataSize = blob.size / 1024 / 1024;
+
+      const { error: usageError } = await supabase.supabase
+        .from("user_actions")
+        .insert({
+          user_id: userIdFromInput,
+          action_type: "enhancement",
+          data_size: dataSize,
+        });
+
+      if (usageError) {
+        console.error("Error uploading usage data: ", usageError);
+      }
+
       const { data: uploadData, error: uploadError } =
         await supabase.supabase.storage
           .from("user_uploads")
