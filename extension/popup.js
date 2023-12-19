@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+// import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
 const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YWVleG9ldnh4anF1d2xoZmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1MTI0NzAsImV4cCI6MjAxNzA4ODQ3MH0.47_j0Q-nfP1bvG8wUP5RAsrpQKZMuZkv_rPvmjVIXHM";
@@ -21,7 +22,7 @@ function updateAuthUI(user) {
     button.onclick = logout;
     authContainer.appendChild(button);
     statisticsContainer.style.display = "grid";
-    loadStats(user.id);
+    // loadStats(user.id);
   } else {
     setupLoginInterface(authContainer);
     statisticsContainer.style.display = "none";

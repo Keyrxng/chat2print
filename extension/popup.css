@@ -66,6 +66,19 @@ body, html {
   margin: 0;
 }
 
+.early-access {
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 1.5rem;
+}
+
+.early-access p {
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
 .auth-cont button:hover {
   background-color: hsla(var(--hover-color));
 }

@@ -1,3 +1,5 @@
+let isProcessing = false;
+
 function createUIForImage(image) {
   const pd = image.parentElement;
 
@@ -19,7 +21,16 @@ function createUIForImage(image) {
   exportButton.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,0.2)";
   exportButton.style.transition = "0.3s";
 
-  exportButton.onclick = () => fetchAndConvertImage(image.src);
+  exportButton.onclick = () => {
+    if (isProcessing) {
+      console.log("Action is already in process.");
+      return;
+    }
+    isProcessing = true;
+    exportButton.disabled = true;
+    exportButton.innerText = "Uploading...";
+    fetchAndConvertImage(image.src, exportButton);
+  };
 
   const exportButtonContainer = document.createElement("div");
   exportButtonContainer.style.display = "flex";
@@ -29,16 +40,40 @@ function createUIForImage(image) {
 
   finalDiv.appendChild(exportButtonContainer);
 }
-async function fetchAndConvertImage(imageUrl) {
+async function fetchAndConvertImage(imageUrl, exportButton) {
   try {
-    chrome.runtime.sendMessage({
-      message: "create",
-      image64: imageUrl,
-    });
+    exportButton.disabled = true;
+    exportButton.innerText = "Uploading...";
+
+    chrome.runtime.sendMessage(
+      {
+        message: "create",
+        image64: imageUrl,
+      },
+      (response) => {
+        isProcessing = false;
+        exportButton.disabled = false;
+        if (response.error) {
+          console.error("Error fetching and converting image:", response.error);
+          exportButton.innerText = "Failed to Export 😞 " + response.error;
+          setTimeout(() => {
+            exportButton.disabled = false;
+            exportButton.innerText = "Export to Chat2Print";
+          }, 1000);
+        } else {
+          exportButton.innerText = "Image Exported Successfully ✅";
+          exportButton.style.color = "#4caf50";
+        }
+      }
+    );
   } catch (error) {
     console.error("Error fetching and converting image:", error);
+    exportButton.innerText =
+      "Failed to Export 😞 " + error.message ? error.message : error;
+    exportButton.disabled = false;
   }
 }
+
 function handleMutations(mutations) {
   mutations.forEach((mutation) => {
     mutation.addedNodes.forEach((node) => {
@@ -64,26 +99,10 @@ async function getCookie(name, url) {
   });
 }
 
-// Not using during MVP
-// async function background() {
-//   const accessToken = await getCookie(token, localhostUrl);
-//   console.log("accessToken: ", accessToken);
-//   if (accessToken) {
-//     chrome.runtime.sendMessage({
-//       message: "loginWithToken",
-//       accessToken,
-//     });
-//   } else {
-//     chrome.runtime.sendMessage({ message: "getToken" });
-//   }
-// }
-
 const currentUrl = window.location.hostname;
 
 if (currentUrl === "chat.openai.com") {
   const observer = new MutationObserver(handleMutations);
 
   observer.observe(document.body, { childList: true, subtree: true });
-} else {
-  // background();
 }

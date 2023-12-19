@@ -99,8 +99,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [userDetails, setUserDetails] = useState<any>(null);
   const [viewingUpscaled, setViewingUpscaled] = useState<boolean>(false);
   const [dataStatic, setDataStatic] = useState<boolean>(false);
-  const [mockReqs, setMockReqs] = useState<any[]>([]);
   const [pollForMockups, setPollForMockups] = useState<boolean>(false);
+  const [tipsOpen, setTipsOpen] = useState<boolean>(false);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -250,7 +250,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
       }
 
-      setMockReqs((prev) => [...prev, pendingReqs]);
       await processMockRequest(pendingReqs);
     }
     load();
@@ -373,7 +372,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       setEnhancing(false);
       return;
     }
-
     try {
       const res = await fetch("/api/upscale", {
         method: "POST",
@@ -391,9 +389,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
+
         setEnhancing(false);
         return;
       }
+      updateActionCount("ehancement");
 
       await handleCreateMockup(data);
     } catch (err) {
@@ -500,6 +500,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       variant: "destructive",
       className: "bg-background text-accent border-accent",
     });
+
+    updateActionCount("mockup");
 
     setPollForMockups(true);
     setIsMockingUp(false);
@@ -1457,7 +1459,17 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       </div>
     );
   };
-  const [tipsOpen, setTipsOpen] = useState<boolean>(false);
+
+  const updateActionCount = async (action: string) => {
+    const { error } = await supabase.from("user_actions").insert({
+      user_id: userDetails.id,
+      action_type: action,
+    });
+
+    if (error) {
+      console.log("error: ", error);
+    }
+  };
 
   return (
     <>

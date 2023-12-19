@@ -105,9 +105,18 @@ export const ImageSlider = ({
       reader.readAsDataURL(file);
     }
 
-    const { data, error } = supabase.storage
+    const { error } = supabase.storage
       .from("user_uploads")
       .upload(`${userDetails.id}/${file?.name}`, file!);
+
+    const updateActionCount = async (action: string) => {
+      const { data, error } = await supabase.from("user_actions").insert({
+        user_id: userDetails.id,
+        action_type: action,
+      });
+    };
+
+    updateActionCount("import");
 
     if (error) {
       toast({
