@@ -45,7 +45,21 @@ import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
 import { staticMocks } from "@/data/statics";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { Check, ChevronDown, ChevronsUpDown, X } from "lucide-react";
+import { TipsAndTricksModal } from "@/components/TipsAndTricks";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -1377,39 +1391,73 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     return (
       <div className="flex justify-center items-center gap-4 m-4">
-        <div className="flex space-x-2">
-          <button
-            onClick={decreaseWidth}
-            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            -
-          </button>
-          <span>Width</span>
-          <button
-            onClick={increaseWidth}
-            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            +
-          </button>
+        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={decreaseWidth}
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+                    <span>Width</span>
+                    <button
+                      onClick={increaseWidth}
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
+                </>
+              </TooltipTrigger>
+              <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-xs rounded-md flex-wrap">
+                <p className="text-accent text-sm">
+                  This will change the width of the image without changing the
+                  height or scale. See tips for more info.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={decreaseHeight}
-            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            -
-          </button>
-          <span>Height</span>
-          <button
-            onClick={increaseHeight}
-            className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            +
-          </button>
+
+        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={decreaseHeight}
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+                    <span>Height</span>
+                    <button
+                      onClick={increaseHeight}
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
+                </>
+              </TooltipTrigger>
+              <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-xs rounded-md flex-wrap">
+                <p className="text-accent text-sm">
+                  This will change the height of the image without changing the
+                  width or scale. See tips for more info.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     );
   };
+  const [tipsOpen, setTipsOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -1464,17 +1512,36 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           {needAccount && <NeedAccountLoader />}
 
           {!viewingMocks && (
-            <div className="flex flex-row mx-8 m-4 justify-between items-center">
-              <VariantSelection
-                chosen={selectedVariant}
-                variants={selectedProduct?.variants}
-                setSelectedVariant={setSelectedVariant}
-              />
-              <ProductSelection
-                product={selectedProduct}
-                setSelectedProduct={onSelect}
-              />
-            </div>
+            <>
+              <div className="flex flex-row mx-8 m-4 justify-between items-center">
+                <VariantSelection
+                  chosen={selectedVariant}
+                  variants={selectedProduct?.variants}
+                  setSelectedVariant={setSelectedVariant}
+                />
+                <ProductSelection
+                  product={selectedProduct}
+                  setSelectedProduct={onSelect}
+                />
+
+                <TipsAndTricksModal
+                  onClose={() => setTipsOpen(false)}
+                  isOpen={tipsOpen}
+                />
+
+                <Popover open={tipsOpen} onOpenChange={setTipsOpen}>
+                  <PopoverTrigger asChild className="mr-2">
+                    <Button
+                      variant="outline"
+                      className="w-min justify-between text-accent"
+                    >
+                      How To Use{" "}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                </Popover>
+              </div>
+            </>
           )}
           {viewingMocks ? (
             <Mockup />
