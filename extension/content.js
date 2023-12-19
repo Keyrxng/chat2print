@@ -1,4 +1,24 @@
-let isProcessing = false;
+const token = "sb-ywaeexoevxxjquwlhfjx-auth-token";
+const chat2printUrl = "https://chat2print.xyz";
+const localhostUrl = "http://localhost:3000/";
+const currentUrl = window.location.hostname;
+
+document.body.addEventListener("click", function (event) {
+  if (event.target.classList.contains("export-to-chat2print")) {
+    const exportButton = event.target;
+
+    if (exportButton.dataset.isProcessing === "true") {
+      console.log("Action is already in process.");
+      return;
+    }
+
+    exportButton.dataset.isProcessing = "true";
+    exportButton.disabled = true;
+    exportButton.innerText = "Uploading...";
+
+    fetchAndConvertImage(exportButton.dataset.imageUrl, exportButton);
+  }
+});
 
 function createUIForImage(image) {
   const pd = image.parentElement;
@@ -10,6 +30,11 @@ function createUIForImage(image) {
 
   const exportButton = document.createElement("button");
   exportButton.innerText = "Export to Chat2Print";
+
+  exportButton.dataset.imageUrl = image.src;
+  exportButton.dataset.isProcessing = "false";
+  exportButton.classList.add("export-to-chat2print");
+
   exportButton.style.color = "#fdc80a";
   exportButton.style.padding = "10px";
   exportButton.style.borderRadius = "5px";
@@ -21,23 +46,11 @@ function createUIForImage(image) {
   exportButton.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,0.2)";
   exportButton.style.transition = "0.3s";
 
-  exportButton.onclick = () => {
-    if (isProcessing) {
-      console.log("Action is already in process.");
-      return;
-    }
-    isProcessing = true;
-    exportButton.disabled = true;
-    exportButton.innerText = "Uploading...";
-    fetchAndConvertImage(image.src, exportButton);
-  };
-
   const exportButtonContainer = document.createElement("div");
   exportButtonContainer.style.display = "flex";
   exportButtonContainer.style.flexDirection = "column";
 
   exportButtonContainer.appendChild(exportButton);
-
   finalDiv.appendChild(exportButtonContainer);
 }
 async function fetchAndConvertImage(imageUrl, exportButton) {
@@ -51,15 +64,11 @@ async function fetchAndConvertImage(imageUrl, exportButton) {
         image64: imageUrl,
       },
       (response) => {
-        isProcessing = false;
         exportButton.disabled = false;
         if (response.error) {
           console.error("Error fetching and converting image:", response.error);
-          exportButton.innerText = "Failed to Export 😞 " + response.error;
-          setTimeout(() => {
-            exportButton.disabled = false;
-            exportButton.innerText = "Export to Chat2Print";
-          }, 1000);
+          exportButton.innerText = "Failed to Export 😞 ";
+          exportButton.style.color = "#f44336";
         } else {
           exportButton.innerText = "Image Exported Successfully ✅";
           exportButton.style.color = "#4caf50";
@@ -87,10 +96,6 @@ function handleMutations(mutations) {
   });
 }
 
-const token = "sb-ywaeexoevxxjquwlhfjx-auth-token";
-const chat2printUrl = "https://chat2print.xyz";
-const localhostUrl = "http://localhost:3000/";
-
 async function getCookie(name, url) {
   return new Promise((resolve) => {
     chrome.cookies.get({ name, url }, (cookie) => {
@@ -98,8 +103,6 @@ async function getCookie(name, url) {
     });
   });
 }
-
-const currentUrl = window.location.hostname;
 
 if (currentUrl === "chat.openai.com") {
   const observer = new MutationObserver(handleMutations);

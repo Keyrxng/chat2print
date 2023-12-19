@@ -6,9 +6,6 @@ const SUPABASE_KEY =
 const SUPABASE_URL = "https://ywaeexoevxxjquwlhfjx.supabase.co";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let lastCreateCall = 0;
-let isUploading = false;
-
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "login") {
     const email = request.email;
@@ -32,47 +29,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
-  if (request.message === "create" && !isUploading) {
-    isUploading = true;
-    const now = Date.now();
-    if (now - lastCreateCall < 1000) {
-      sendResponse({ error: "Please wait a second between uploads." });
-      return true;
-    }
-    lastCreateCall = now;
+  if (request.message === "create") {
     const image64 = request.image64;
+
     createImage(image64)
       .then((response) => {
-        isUploading = false;
-        updateActionCount("import");
-        sendResponse(response);
-        return true;
+        sendResponse({ data: response });
       })
       .catch((error) => {
-        isUploading = false;
         sendResponse({ error: error.message });
-        return true;
       });
 
     return true;
   }
 });
-
-const updateActionCount = async (action) => {
-  console.log("action: ", action);
-  const user = await chrome.storage.local.get(["session"]);
-
-  const { error } = await supabase.from("user_actions").insert({
-    user_id: user.session.user.id,
-    action_type: action,
-  });
-
-  if (error) {
-    console.log("error: ", error);
-  }
-
-  console.log("action count updated");
-};
 
 async function createImage(image64, sendResponse) {
   const user = await chrome.storage.local.get(["session"]);
@@ -107,7 +77,18 @@ async function createImage(image64, sendResponse) {
 
   if (error) {
     throw new Error({ error: error.message });
-  } else {
-    return data;
   }
+
+  const { error: actionError } = await supabase.from("user_actions").insert({
+    user_id: user.session.user.id,
+    action_type: "import",
+  });
+
+  if (actionError) {
+    console.log("error: ", actionError);
+  }
+
+  console.log("action count updated");
+
+  return data;
 }
