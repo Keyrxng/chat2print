@@ -181,7 +181,7 @@ export default function SlidingBackground() {
                 Chat2Print
               </h1>
               <span className="absolute top-0 -right-3 md:-right-6 bg-red-600 text-white text-xs md:text-sm px-2 py-1 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                <a href="/support/#about">Early Release</a>
+                <a href="/support/#about">early access</a>
               </span>
             </div>
             <p className="text-xl text-white md:text-2xl  mb-8">

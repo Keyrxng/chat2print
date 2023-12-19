@@ -555,7 +555,7 @@ export default function Header() {
           </a>
           <div className="hidden md:flex flex-col lg:ml-[10rem]">
             <p className="text-accent text-sm text-center">
-              <a href="/support/#about">Early Release?</a>
+              <a href="/support/#about">Early Access?</a>
             </p>
           </div>
 

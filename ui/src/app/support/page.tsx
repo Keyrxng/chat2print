@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { FaqSection } from "@/components/FAQ";
+import Roadmap from "@/components/Roadmap";
 
 export default function Page() {
   return (
@@ -52,9 +53,8 @@ export default function Page() {
                 </p>
 
                 <p className="text-lg mb-4">
-                  As a trailblazer in the niche, Chat2Print stands as the
-                  premier print-on-demand platform for ChatGPT art, conceived
-                  from a single developer&apos;s passion. Now, your digital
+                  As a trailblazer in the niche, Chat2Print stands as the best
+                  print-on-demand site for ChatGPT art. Now, your digital
                   creations transcend the virtual space, becoming cherished
                   physical items that you can display or share as gifts.
                 </p>
@@ -67,7 +67,7 @@ export default function Page() {
                 </p>
 
                 <p className="text-lg mb-4">
-                  In early release, we&apos;re continuously growing our product
+                  In early access, we&apos;re continuously growing our product
                   range and enhancing features. We welcome your feedback at{" "}
                   <a
                     className="text-accent"
@@ -83,6 +83,10 @@ export default function Page() {
                 </p>
               </article>
             </motion.div>
+          </section>
+
+          <section className="mb-20 gradientBG rounded-lg p-8 m-4">
+            <Roadmap />
           </section>
 
           <section className="mb-20 gradientBG rounded-lg p-8 m-4">
@@ -146,16 +150,15 @@ export default function Page() {
                 <strong>Returned by Customer -</strong> It is best to contact us
                 before returning any products.&nbsp;Except for Customers
                 residing in Brazil,&nbsp;we do not refund orders for
-                buyer&apos;s remorse. Returns for products and size exchanges
-                are to be offered at our expense and discretion. If we choose to
-                accept returns or offer size exchanges for you there may be
-                additional costs to you.&nbsp;Customers residing in Brazil and
-                regretting a purchase must contact our Customer Service and
-                express their will to return the item within 7 consecutive days
-                after receiving it, providing a picture of the item. The
-                withdrawal request will undergo an evaluation to verify whether
-                the product was used or destroyed, even if partial. In these
-                cases, a refund will not be possible.
+                buyer&apos;s remorse. Returns for products are to be offered at
+                our expense and discretion. If we choose to accept returns there
+                may be additional costs to you.&nbsp;Customers residing in
+                Brazil and regretting a purchase must contact our Customer
+                Service and express their will to return the item within 7
+                consecutive days after receiving it, providing a picture of the
+                item. The withdrawal request will undergo an evaluation to
+                verify whether the product was used or destroyed, even if
+                partial. In these cases, a refund will not be possible.
               </p>
               <p className="text-muted text-sm my-2">
                 {" "}

@@ -26,7 +26,7 @@ const Journey = () => {
     {
       title: "Detailed Mockups For Preview Perfection",
       description:
-        "Our platform generates detailed mockups of your design on a variety of products, allowing you to make adjustments and ensure perfection before ordering. During our early release, our product range is limited to Metal Prints, Posters, Canvas Prints, Phone Cases, Laptop Sleeves, and Mouse Pads, with more to come.",
+        "Our platform generates detailed mockups of your design on a variety of products, allowing you to make adjustments and ensure perfection before ordering. During our early access, our product range is limited to Metal Prints, Posters, Canvas Prints, Phone Cases, Laptop Sleeves, and Mouse Pads, with more to come.",
       imageUrl: "/images/preview-perfection.jpg",
       altText: "Previewing the design on different products",
     },

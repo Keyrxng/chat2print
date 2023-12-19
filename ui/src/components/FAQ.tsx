@@ -9,12 +9,12 @@ const faqs = [
       "Chat2Print, founded in Q4 of 2023, is a pioneering print-on-demand service, seamlessly integrating with ChatGPT to transform AI-generated art into printed masterpieces. Our browser extension streamlines the process from digital to physical, offering a swift journey from prompt to print.",
   },
   {
-    question: "What does 'early release' mean for Chat2Print?",
+    question: "What does 'early access' mean for Chat2Print?",
     answer:
-      "Our 'early release' status means active refinement and growth. During this phase products are offered at a reduced cost, with a limited selection. User account storage is also very limited with a < 500MB cap which may be reduced at any time until release. We are keenly seeking your input to enhance our services before then.",
+      "Our 'early access' status means active refinement and growth. During this phase products are offered at a reduced cost, with a limited selection. User account storage is also very limited with a < 500MB cap which may be reduced at any time until release. We are keenly seeking your input to enhance our services before then.",
   },
   {
-    question: "Are products free during early release?",
+    question: "Are products free during early access?",
     answer:
       "Products are offered at a reduced cost but are not free. You will pay only for product production and shipping (if applicable) while we covering the cost of storage and processing.",
   },
@@ -46,7 +46,7 @@ const faqs = [
   {
     question: "Which products can I create with Chat2Print?",
     answer:
-      "During early release, we offer a curated selection including Metal Prints, Posters, Framed Canvas and more. A broader range is on the horizon, ultimately shaped by our customer's needs and preferences, so please share your feedback with us.",
+      "During early access, we offer a curated selection including Metal Prints, Posters, Framed Canvas and more. A broader range is on the horizon, ultimately shaped by our customer's needs and preferences, so please share your feedback with us.",
   },
   {
     question: "How do I place an order?",

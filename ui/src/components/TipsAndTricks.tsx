@@ -8,7 +8,7 @@ const tipsAndTricks = [
       {
         title: "Design Storage Tips",
         detail:
-          "Your creative designs and upscaled images are securely stored on our servers. To manage your storage capacity, feel free to delete old designs and make room for new creations.",
+          "Your custom designs and upscaled images are securely stored on our servers. To manage your storage capacity, feel free to delete old designs and make room for new creations.",
       },
       {
         title: "Future of Image Upscaling",
@@ -39,7 +39,7 @@ const tipsAndTricks = [
       {
         title: "Familiarizing Yourself",
         detail:
-          "The user-friendly interface may require some practice to perfect. We recommend starting with basic placements and progressing to more intricate designs. Our 'Tips & Tricks' section offers further guidance.",
+          "The user-friendly interface may require some practice to perfect. We recommend starting with basic placements and progressing to more intricate designs. See the 'Tips for Custom Designs' section below for further guidance.",
       },
     ],
   },
@@ -50,7 +50,7 @@ const tipsAndTricks = [
       {
         title: "Advanced AI Upscaling",
         detail:
-          "Utilize our state-of-the-art AI to upscale your images with precision, enhancing size without compromising quality. Enjoy this feature for free during early access.",
+          "We utilize best-in-class AI to upscale your images with precision, enhancing size without compromising quality. Enjoy this feature for free during early access.",
       },
       {
         title: "Daily Upscaling Cap",
