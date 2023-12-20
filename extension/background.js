@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-// import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
 const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3YWVleG9ldnh4anF1d2xoZmp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1MTI0NzAsImV4cCI6MjAxNzA4ODQ3MH0.47_j0Q-nfP1bvG8wUP5RAsrpQKZMuZkv_rPvmjVIXHM";
@@ -30,26 +29,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.message === "create") {
-    const image64 = request.image64;
+    const image64 = request?.image64;
 
-    createImage(image64)
-      .then((response) => {
-        sendResponse({ data: response });
-      })
-      .catch((error) => {
-        sendResponse({ error: error.message });
-      });
-
+    createImage(image64).then((response) => {
+      sendResponse({ data: response });
+    });
     return true;
   }
 });
 
 async function createImage(image64, sendResponse) {
   const user = await chrome.storage.local.get(["session"]);
-  const imageCount = await supabase.storage
-    .from("user_uploads")
-    .list(`${user.session.user.id}/`);
-
   const image = await fetch(image64);
   const contentType = image.headers.get("content-type");
 
@@ -58,35 +48,34 @@ async function createImage(image64, sendResponse) {
     contentType !== "image/jpeg" &&
     contentType !== "image/webp"
   ) {
-    sendResponse({ error: "Invalid image type, refresh and try again." });
-    return;
+    return "Invalid image type, refresh and try again.";
   }
-
   const blobbish = await image.blob();
+
+  const imageName = image64.split("/")[3].split("?")[0];
+
+  const dataSize = blobbish.size / 1024 / 1024;
 
   const { data, error } = await supabase.storage
     .from("user_uploads")
-    .upload(
-      `${user.session.user.id}/${imageCount.data.length}.webp`,
-      blobbish,
-      {
-        cacheControl: "3600",
-        upsert: false,
-      }
-    );
+    .upload(`${user.session.user.id}/${imageName}.webp`, blobbish, {
+      cacheControl: "608600",
+      upsert: false,
+    });
 
   if (error) {
-    throw new Error({ error: error.message });
+    return error.message;
   }
 
   const { error: actionError } = await supabase.from("user_actions").insert({
     user_id: user.session.user.id,
     action_type: "import",
+    data_size: dataSize.toFixed(8),
   });
 
   if (actionError) {
-    console.log("error: ", actionError);
+    return actionError.message;
   }
 
-  return data;
+  return data.path;
 }

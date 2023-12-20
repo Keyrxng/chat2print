@@ -16,6 +16,14 @@ document.body.addEventListener("click", function (event) {
     exportButton.disabled = true;
     exportButton.innerText = "Uploading...";
 
+    if (!exportButton.dataset.imageUrl) {
+      console.error("No image url found.");
+      exportButton.innerText = "Failed to Export 😞 No image source found.";
+      exportButton.style.color = "#f44336";
+      exportButton.disabled = false;
+      return;
+    }
+
     fetchAndConvertImage(exportButton.dataset.imageUrl, exportButton);
   }
 });
@@ -54,33 +62,28 @@ function createUIForImage(image) {
   finalDiv.appendChild(exportButtonContainer);
 }
 async function fetchAndConvertImage(imageUrl, exportButton) {
-  try {
-    exportButton.disabled = true;
-    exportButton.innerText = "Uploading...";
+  exportButton.disabled = true;
+  exportButton.innerText = "Uploading...";
 
-    chrome.runtime.sendMessage(
-      {
-        message: "create",
-        image64: imageUrl,
-      },
-      (response) => {
-        exportButton.disabled = false;
-        if (response.error) {
-          console.error("Error fetching and converting image:", response.error);
-          exportButton.innerText = "Failed to Export 😞 ";
-          exportButton.style.color = "#f44336";
-        } else {
-          exportButton.innerText = "Image Exported Successfully ✅";
-          exportButton.style.color = "#4caf50";
-        }
+  chrome.runtime.sendMessage(
+    {
+      message: "create",
+      image64: imageUrl,
+    },
+    (response) => {
+      exportButton.disabled = false;
+      if (response.data === "Invalid image type, refresh and try again.") {
+        exportButton.innerText = "Failed to Export 😞 Invalid image type.";
+        exportButton.style.color = "#f44336";
+      } else if (response.data === "The resource already exists") {
+        exportButton.innerText = "Image already exported 😉";
+        exportButton.style.color = "#4caf50";
+      } else {
+        exportButton.innerText = "Image Exported Successfully ✅";
+        exportButton.style.color = "#4caf50";
       }
-    );
-  } catch (error) {
-    console.error("Error fetching and converting image:", error);
-    exportButton.innerText =
-      "Failed to Export 😞 " + error.message ? error.message : error;
-    exportButton.disabled = false;
-  }
+    }
+  );
 }
 
 function handleMutations(mutations) {
