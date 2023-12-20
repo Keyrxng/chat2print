@@ -587,7 +587,7 @@ export default function Header() {
                       {accountModalIsOpen && (
                         <>
                           <DialogHeader>
-                            <DialogTitle className="tex">
+                            <DialogTitle className="text-accent">
                               Account Details
                             </DialogTitle>
                             <DialogDescription>
@@ -644,12 +644,12 @@ export default function Header() {
                       {!orderModalIsOpen && !accountModalIsOpen && (
                         <>
                           <DialogHeader>
-                            <DialogTitle className="text-white">
+                            <DialogTitle className="text-accent">
                               Account
                             </DialogTitle>
                             <DialogDescription>
                               {user?.firstName && (
-                                <span className="text-accent">
+                                <span>
                                   Welcome,{" "}
                                   <span className="capitalize">
                                     {user?.firstName}

@@ -1,9 +1,7 @@
 import { NextRequest } from "next/server";
 import PODHandler from "../../../../classes/PODHandler";
 
-const key = process.env.PRINTFUL_API_KEY;
-if (!key) throw new Error("Missing Printful API Key");
-const podHandler = new PODHandler(key);
+const podHandler = new PODHandler();
 /*
 'https://api.printful.com/orders' with post will create a draft order
 'https://api.printful.com/orders' with get will get all orders

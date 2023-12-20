@@ -1,10 +1,6 @@
-"gt-609142352";
 import { NextRequest } from "next/server";
 import PODHandler from "../../../../classes/PODHandler";
-
-const key = process.env.PRINTFUL_API_KEY;
-if (!key) throw new Error("Missing Printful API Key");
-const podHandler = new PODHandler(key);
+const podHandler = new PODHandler();
 
 export async function POST(req: NextRequest, res: NextRequest) {
   const args = JSON.parse(await req.text());

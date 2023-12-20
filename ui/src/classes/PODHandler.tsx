@@ -6,12 +6,23 @@ class PODHandler {
   private client: AxiosInstance;
   private apiKey: string;
 
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
+  constructor() {
+    const key = process.env.PRINTFUL_API_KEY;
+    if (!key) throw new Error("Missing Printful API Key");
+    this.apiKey = key;
     this.client = axios.create({
       baseURL: "https://api.printful.com/",
-      headers: { Authorization: `Bearer ${apiKey}` },
+      headers: { Authorization: `Bearer ${key}` },
     });
+  }
+
+  async getCountries() {
+    try {
+      const response = await this.client.get("/countries");
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   /**

@@ -1,8 +1,10 @@
+import PODHandler from "@/classes/PODHandler";
 import { Stripe } from "stripe";
 
 const key = process.env.STRIPE_KEY;
 if (!key) throw new Error("Missing Stripe Key");
 const stripe = new Stripe(key);
+const podHandler = new PODHandler();
 
 export async function POST(req: Request, res: any) {
   const args = await req.json();
@@ -10,19 +12,107 @@ export async function POST(req: Request, res: any) {
   const name = args.mockup.product;
   const price = Math.round(Number(args.itemPrice));
   const quantity = args.quantity.toString();
+  const stock = args.stock;
 
+  const eu = [
+    "AL",
+    "AD",
+    "AM",
+    "AT",
+    "AZ",
+    "BY",
+    "BE",
+    "BA",
+    "BG",
+    "HR",
+    "CY",
+    "CZ",
+    "DK",
+    "EE",
+    "FI",
+    "FR",
+    "GE",
+    "DE",
+    "GR",
+    "HU",
+    "IS",
+    "IE",
+    "IT",
+    "KZ",
+    "XK",
+    "LV",
+    "LI",
+    "LT",
+    "LU",
+    "MT",
+    "MD",
+    "MC",
+    "ME",
+    "NL",
+    "MK",
+    "NO",
+    "PL",
+    "PT",
+    "RO",
+    "RU",
+    "SM",
+    "RS",
+    "SK",
+    "SI",
+    "ES",
+    "SE",
+    "CH",
+    "TR",
+    "UA",
+    "GB",
+    "VA",
+  ];
+
+  const inStock = stock.filter((item: any) => {
+    if (item.status === "in_stock") {
+      if (item.region.length > 2) {
+        item.region = item.region.slice(3);
+      }
+      return item.region;
+    }
+  });
+  const inStockRegion = inStock.map((item: any) => item.region);
+
+  if (inStockRegion.includes("EU")) {
+    inStockRegion.findIndex((item) => item === "EU");
+    inStockRegion.splice(
+      inStockRegion.findIndex((item) => item === "EU"),
+      1
+    );
+    inStockRegion.push(...eu);
+  }
+
+  if (inStockRegion.includes("UK")) {
+    inStockRegion.findIndex((item) => item === "UK");
+    inStockRegion.splice(
+      inStockRegion.findIndex((item) => item === "UK"),
+      1
+    );
+    inStockRegion.push("GB");
+  }
   const currency = "usd";
-  console.log("args", args);
-  console.log("Creating checkout session for:", name, price, quantity);
+
+  console.log("args", inStock);
+  console.log("Creating checkout session for:", inStockRegion);
 
   try {
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
+      payment_method_types: ["card"],
+
+      billing_address_collection: "required",
+      shipping_address_collection: {
+        allowed_countries: inStockRegion,
+      },
       line_items: [
         {
           price_data: {
-            currency,
+            currency: currency,
             product_data: {
               name: name,
             },

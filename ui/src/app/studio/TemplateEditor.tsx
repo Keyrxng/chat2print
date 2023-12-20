@@ -538,6 +538,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     const estimateOrderCosts = async () => {
+      if (!activeMock) return;
+      if (!userDetails?.billing_address) {
+        toast({
+          title: "Head's up!",
+          description: `Please add a delivery address to your account before checking out.`,
+        });
+        return;
+      }
       const data = {
         recipient: {
           address1: userDetails.billing_address.firstLine,
@@ -549,7 +557,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         },
         items: [
           {
-            variant_id: activeMock.variant_id,
+            variant_ids: activeMock?.variant_ids,
             quantity,
             itemPrice,
           },
@@ -569,6 +577,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     const estimateShippingCosts = async () => {
+      if (!activeMock) return;
+      if (!userDetails?.billing_address) {
+        toast({
+          title: "Head's up!",
+          description: `Please add a delivery address to your account before checking out.`,
+        });
+        return;
+      }
       const data = {
         recipient: {
           address1: userDetails.billing_address.firstLine,
@@ -580,7 +596,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         },
         items: [
           {
-            variant_id: activeMock.variant_ids[0],
+            variant_ids: activeMock.variant_ids,
             quantity,
             value: itemPrice,
           },
@@ -1178,6 +1194,79 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const [clientSecret, setClientSecret] = useState<string>("");
 
     useEffect(() => {
+      const orderCost = async () => {
+        const data = {
+          recipient: {
+            address1: userDetails.billing_address.firstLine,
+            address2: userDetails.billing_address.secondLine,
+            city: userDetails.billing_address.city,
+            state_code: userDetails.billing_address.state_code,
+            country_code: userDetails.billing_address.country_code,
+            zip: userDetails.billing_address.zip,
+          },
+          items: [
+            {
+              variant_ids: mockup.variant_ids,
+              quantity,
+              itemPrice,
+            },
+          ],
+          currency: "USD",
+          locale: "en_US",
+        };
+
+        const response = await fetch("/api/pod/estimate-costs", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+
+        const res = await response.json();
+
+        console.log("estimate costs response: ", res);
+
+        return res;
+      };
+
+      const shippingCost = async () => {
+        const data = {
+          recipient: {
+            address1: userDetails.billing_address.firstLine,
+            address2: userDetails.billing_address.secondLine,
+            city: userDetails.billing_address.city,
+            state_code: userDetails.billing_address.state_code,
+            country_code: userDetails.billing_address.country_code,
+            zip: userDetails.billing_address.zip,
+          },
+          items: [
+            {
+              variant_ids: mockup.variant_ids,
+              quantity,
+              value: itemPrice,
+            },
+          ],
+          currency: "USD",
+          locale: "en_US",
+        };
+
+        const response = await fetch("/api/pod/estimate-shipping", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+
+        const res = await response.json();
+
+        console.log("estimate shipping response: ", res);
+
+        return res;
+      };
+
+      async function load() {
+        const estOrderCost = await orderCost();
+        const estShippingCost = await shippingCost();
+      }
+    });
+
+    useEffect(() => {
       fetch("/api/checkout_sessions", {
         method: "POST",
         headers: {
@@ -1187,6 +1276,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           mockup,
           quantity,
           itemPrice,
+          regions: selectedVariant?.availability_regions,
+          stock: selectedVariant?.availability_status,
         }),
       })
         .then((res) => res.json())
