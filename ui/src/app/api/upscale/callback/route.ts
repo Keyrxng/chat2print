@@ -56,6 +56,8 @@ async function processWebhookData(prediction) {
 
       const dataSize = blob.size / 1024 / 1024;
 
+      console.log("data size in MB: ", dataSize);
+
       const { error: usageError } = await supabase.supabase
         .from("user_actions")
         .insert({
@@ -72,6 +74,7 @@ async function processWebhookData(prediction) {
         await supabase.supabase.storage
           .from("user_uploads")
           .upload(`${userIdFromInput}/upscaled/${prediction.id}.png`, blob, {
+            cacheControl: (60 * 60 * 24 * 7).toString(),
             contentType: "image/png",
           });
 

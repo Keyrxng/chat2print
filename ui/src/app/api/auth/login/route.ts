@@ -24,10 +24,7 @@ export async function POST(request: Request) {
   if (doesUserHaveStorageFolder.data?.length === 0) {
     const { error: folderError } = await supabase.storage
       .from("user_uploads")
-      .upload(`${data.user?.id}/temp.png`, "temp", {
-        cacheControl: "3600",
-        upsert: false,
-      });
+      .upload(`${data.user?.id}/temp.png`, "temp");
 
     if (folderError)
       return new Response(JSON.stringify(folderError), { status: 420 });

@@ -7,9 +7,7 @@ import SlidingBackground from "@/components/SlidingBackground";
 import { Link } from "react-scroll";
 import Journey from "@/components/Journey";
 import FeaturedProductsGallery from "@/components/FeaturedProduct";
-import { ProductGallery } from "@/components/ProductGallery";
 import { ProductsDisplay } from "@/components/ProductsDisplay";
-import { PricingPlans } from "@/components/Pricing";
 
 export default function Home() {
   const ref = useRef(null);
@@ -85,105 +83,12 @@ export default function Home() {
         </div>
         {/* https://billing.stripe.com/p/login/test_9AQ7uUejW4eM288288 */}
         <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+        {/* @ts-ignore */}
         <stripe-pricing-table
           pricing-table-id="prctbl_1OPBJXJ8INwD5Vuc0dwAI2DR"
           publishable-key="pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
-        ></stripe-pricing-table>
-
-        <div>{/* <ProductGallery /> */}</div>
+        />
       </div>
     </div>
   );
 }
-
-/*
-  const Tiers = () => {
-    const paymentTierOpts = [
-      {
-        name: "Basic",
-        price: 5.99,
-        features: [
-          { label: "Storage:", value: "10 designs (p/w)" },
-          { label: "Storage Limit:", value: "1GB (p/m)" },
-          { label: "AI Enhance & Upscale:", value: "5 (p/d)" },
-          { label: "Mockup Generation:", value: "2 (p/d)" },
-          { label: "Basic Support", value: "" },
-        ],
-        isPopular: false,
-      },
-      {
-        name: "Pro",
-        price: 19.99,
-        features: [
-          { label: "Storage:", value: "500 designs (p/w)" },
-          { label: "Storage Limit:", value: "5GB (p/m)" },
-          { label: "AI Enhance & Upscale:", value: "250 (p/d)" },
-          { label: "Mockup Generation:", value: "250 (p/d)" },
-          { label: "Priority Support", value: "" },
-          { label: "Product Requests", value: "" },
-          { label: "New feature Early-Access", value: "" },
-        ],
-        isPopular: true,
-      },
-      {
-        name: "Business",
-        price: 50,
-        features: [
-          { label: "Storage:", value: "2500 designs (p/w)" },
-          { label: "Storage Limit:", value: "50GB (p/m)" },
-          { label: "AI Enhance & Upscale:", value: "1250 (p/d)" },
-          { label: "Mockup Generation:", value: "1250 (p/d)" },
-          { label: "Priority Support", value: "" },
-          { label: "Product Requests", value: "" },
-          { label: "New feature Early-Access", value: "" },
-        ],
-        isPopular: false,
-      },
-    ];
-
-    return (
-      <div className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 w-full flex-wrap">
-        <div className="grid md:grid-cols-3 justify-between mx-auto gap-4 p-4">
-          {paymentTierOpts.map((tier) => (
-            <div
-              key={tier.name}
-              className="flex flex-col justify-between p-4 rounded-md "
-            >
-              <div className="flex flex-col items-center">
-                <h3 className="text-3xl font-bold">{tier.name}</h3>
-                <h4 className="text-xl font-bold">${tier.price}</h4>
-                <p className="text-sm text-center">Per Month</p>
-              </div>
-              <div className="flex flex-col items-center">
-                {tier.isPopular && (
-                  <div className="text-xs font-bold bg-accent text-background p-1 rounded-md">
-                    Popular
-                  </div>
-                )}
-                <Button
-                  className="mt-4"
-                  onClick={() => {
-                    window.location.href = "/";
-                  }}
-                >
-                  Select
-                </Button>
-              </div>
-              <div className="flex flex-col items-center">
-                {tier.features.map((feature) => (
-                  <div
-                    key={feature.value}
-                    className="flex justify-between w-full"
-                  >
-                    <p className="text-lg">{feature.label}</p>
-                    <p className="text-lg">{feature.value}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-*/

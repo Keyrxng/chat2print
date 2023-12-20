@@ -379,10 +379,7 @@ class Supabase {
   async createUserFolder(userId: string) {
     const { data: folder, error } = await this.supabase.storage
       .from("design_images")
-      .upload(`user-${userId}/designs/placeholder.webp`, "", {
-        cacheControl: "3600",
-        upsert: false,
-      });
+      .upload(`user-${userId}/designs/placeholder.webp`, "");
 
     if (error) {
       return this.errorHandler(error);

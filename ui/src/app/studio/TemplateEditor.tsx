@@ -105,7 +105,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       const { data: user } = await supabase.from("users").select("*").match({
         id: uID,
       });
-      console.log("user: ", user);
 
       const usr = {
         id: user?.[0].id,
@@ -195,7 +194,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     async function load() {
       if (!userDetails?.id) return;
 
-      console.log("fetching 'processing' mockups");
       const { data: processingReq, error: processError } = await supabase
         .from("mockup_requests")
         .select("*")
@@ -213,9 +211,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       if (processingReq?.length === 0) return;
       if (!processingReq) return;
 
-      console.log("we got processing reqs: ", processingReq);
-
       for (const r of processingReq) {
+        if (!r.task_key) return;
         try {
           const resp = await fetch("/api/pod/fetch-mocks", {
             method: "POST",
@@ -245,7 +242,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           }
 
           await updateRequestStatus(r.id, "completed");
-          console.log("fetching resp: ", res);
         } catch (err) {
           console.log("err: ", err);
         }
@@ -254,6 +250,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
     load();
   }, [userDetails?.id, pollForMockups]);
+
+  /////// STATS \\\\\\\
+  /////// STATS \\\\\\\
 
   const increaseUsage = async (action: string) => {
     const { data: increaseData, error } = await supabase
@@ -268,21 +267,27 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const handleUsage = async (action: string) => {
+    let allowed = true;
     const { data: usage, error } = await supabase
       .from("user_actions")
       .select("*")
       .match({ user_id: userDetails.id })
-      .gte("timestamp", new Date().toISOString().slice(0, 10));
+      .gt(
+        "timestamp",
+        new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      );
 
-    console.log("hanlding usage: ", usage);
-    const mockups = usage?.filter((u) => u.action === "mockup").length;
+    const mockups = usage?.filter((u) => u.action_type === "mockup").length;
     const enhancements = usage?.filter(
-      (u) => u.action === "enhancement"
+      (u) => u.action_type === "enhancement"
     ).length;
-    const imports = usage?.filter((u) => u.action === "import").length;
+    const imports = usage?.filter((u) => u.action_type === "import").length;
     const dataSize = usage?.reduce((acc, curr) => {
       return acc + curr.data_size;
     }, 0);
+
+    console.log("enhancements: ", enhancements);
+    console.log("dataSize: ", dataSize);
 
     const { data: tierData, error: tierError } = await supabase
       .from("usage_tiers")
@@ -297,174 +302,153 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const ttn =
       user_tier === "free"
         ? 0
-        : user_tier === "one-time"
+        : user_tier === "crafter"
         ? 1
-        : user_tier === "silver"
+        : user_tier === "designer"
         ? 2
         : 3;
 
     const accTier = tierData?.[ttn];
+    const activeTier = accTier[user_tier];
 
-    if (!accTier) return;
-    if (!tierData) return;
+    if (!activeTier) {
+      toast({
+        title: "Oops!",
+        description: `There was an error fetching your account information, please try again shortly.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return false;
+    }
 
-    if (dataSize >= accTier.data_size) {
+    if (dataSize >= activeTier.data_size) {
       toast({
         title: "Oops!",
         description: `You've used up your free storage for the day, please try again tomorrow.`,
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-      return;
+      allowed = false;
     }
 
-    if (imports >= accTier.imports) {
+    if (imports >= activeTier.imports) {
       toast({
         title: "Oops!",
         description: `You've used up your free imports for the day, please try again tomorrow.`,
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-      return;
+      allowed = false;
     }
 
-    if (enhancements >= accTier.enhancements) {
+    if (enhancements >= activeTier.enhancements) {
       toast({
         title: "Oops!",
         description: `You've used up your free enhancements for the day, please try again tomorrow.`,
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-      return;
+      allowed = false;
     }
+    console.log(`mockups: ${mockups} activeTier.mockups: `, activeTier);
 
-    if (mockups >= accTier.mockups) {
+    if (mockups >= activeTier.mockups) {
       toast({
         title: "Oops!",
         description: `You've used up your free mockups for the day, please try again tomorrow.`,
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
-      return;
+      allowed = false;
     }
 
-    switch (action) {
-      case "mockup":
-        const moreThan80Percent = (mockups / accTier.mockups) * 100 > 80;
-        if (moreThan80Percent) {
-          toast({
-            title: "Head's up!",
-            description: `You have used ${mockups} of your ${accTier.mockups} free mockups for the day. You can increase your limit by upgrading your account.`,
-          });
-        }
-        increaseUsage(action);
-        break;
-      case "enhancement":
-        const moreThan80PercentEnhancements =
-          (enhancements / accTier.enhancements) * 100 > 80;
-        if (moreThan80PercentEnhancements) {
-          toast({
-            title: "Head's up!",
-            description: `You have used ${enhancements} of your ${accTier.enhancements} free enhancements for the day. You can increase your limit by upgrading your account.`,
-          });
-        }
+    if (allowed) {
+      switch (action) {
+        case "mockup":
+          const moreThan80Percent = (mockups / activeTier.mockups) * 100 > 80;
+          if (moreThan80Percent) {
+            toast({
+              title: "Head's up!",
+              description: `You have used ${mockups} of your ${activeTier.mockups} free mockups for the day. You can increase your limit by upgrading your account.`,
+            });
+          }
+          increaseUsage(action);
+          break;
+        case "enhancement":
+          const moreThan80PercentEnhancements =
+            (enhancements / activeTier.enhancements) * 100 > 80;
+          if (moreThan80PercentEnhancements) {
+            toast({
+              title: "Head's up!",
+              description: `You have used ${enhancements} of your ${activeTier.enhancements} free enhancements for the day. You can increase your limit by upgrading your account.`,
+            });
+          }
 
-        increaseUsage(action);
-        break;
-      case "import":
-        const moreThan80PercentImports = (imports / accTier.imports) * 100 > 80;
-        if (moreThan80PercentImports) {
-          toast({
-            title: "Head's up!",
-            description: `You have used ${imports} of your ${accTier.imports} free imports for the day. You can increase your limit by upgrading your account.`,
-          });
-        }
-        increaseUsage(action);
-        break;
+          increaseUsage(action);
+          break;
+        case "import":
+          const moreThan80PercentImports =
+            (imports / activeTier.imports) * 100 > 80;
+          if (moreThan80PercentImports) {
+            toast({
+              title: "Head's up!",
+              description: `You have used ${imports} of your ${activeTier.imports} free imports for the day. You can increase your limit by upgrading your account.`,
+            });
+          }
+          increaseUsage(action);
+          break;
+        default:
+          break;
+      }
+      return allowed;
     }
+
+    return allowed;
+  };
+
+  const updateActionCount = async (action: string) => {
+    const { error } = await supabase.from("user_actions").insert({
+      user_id: userDetails.id,
+      action_type: action,
+    });
 
     if (error) {
       console.log("error: ", error);
     }
-
-    console.log("usage: ", usage);
   };
 
-  const processMockRequest = async (req) => {
-    console.log("processing mock requests");
-    let count = 0;
-    const limit = 2;
-    const backoff = 60000;
-
-    for (const r of req) {
-      const contentType = r.image_data.includes(".png") ? true : false;
-
-      if (!contentType) {
-        toast({
-          title: "Oops!",
-          description: `It looks like you're trying to use a file that isn't a PNG. Please try again with a PNG file.`,
-          variant: "destructive",
-          className: "bg-background text-accent border-accent",
-        });
-      }
-
-      while (count < limit) {
-        const data = {
-          productId: r.product_id,
-          imageUrl: r.image_data,
-          variantIDs: r.variant_id,
-          scaledWidth: r.scaled_width,
-          scaledHeight: r.scaled_height,
-          offsetX: r.offset_x,
-          offsetY: r.offset_y,
-        };
-        const response = await fetch("/api/pod/create-mocks", {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
-        const res = await response.json();
-        console.log("res: ", res);
-
-        if (res.error || !res.result.task_key) {
-          console.log(`Error processing ruest ${r.id}: `, res.error);
-          const seconds = extractWaitTime(res.error.message);
-          console.log(`Waiting ${seconds} seconds before retrying`);
-          await wait(seconds * 1000);
-        }
-        await updateRequestStatus(r.id, "processing", res.result.task_key);
-        await wait(1000);
-        count++;
-
-        count == limit && (await wait(backoff));
-      }
-    }
-
-    console.log("finished processing mock requests");
-    return;
-  };
-
-  const handleDrag = (event: React.DragEvent) => {
-    setPosition({
-      x: event.clientX - editorRef.current?.offsetLeft!,
-      y: event.clientY - editorRef.current?.offsetTop!,
-      scale: 1,
-    });
-  };
-
-  const onTransformChange = (
-    zoomScale: number,
-    positionX: number,
-    positionY: number
+  const updateRequestStatus = async (
+    requestId: number,
+    status: Status,
+    taskKey = null
   ) => {
-    console.log(
-      `zoomScale: ${zoomScale}, positionX: ${positionX}, positionY: ${positionY}`
-    );
-    setTransform({
-      scale: zoomScale,
-      positionX: positionX,
-      positionY: positionY,
+    const updateData: { status: Status; task_key?: string } = { status };
+    if (taskKey) updateData.task_key = taskKey;
+
+    const { error } = await supabase
+      .from("mockup_requests")
+      .update(updateData)
+      .eq("id", requestId);
+
+    toast({
+      title: "Mockup request updated",
+      description: `One of your mockup requests has been updated to status ${status}`,
+      variant: "destructive",
+      className: "bg-background text-accent border-accent",
     });
+
+    if (error) {
+      console.error(`Error updating status for request ${requestId}:`, error);
+    } else {
+      await fetchMockups();
+    }
   };
+
+  /////// STATS \\\\\\\
+  /////// STATS \\\\\\\
+
+  /////// UPSCA \\\\\\\
+  /////// UPSCA \\\\\\\
 
   const handleGeneration = async () => {
     if (!userDetails?.id) {
@@ -473,19 +457,20 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return;
     }
 
-    console.log("handling generation");
+    let allowed = true;
 
     if (viewingUpscaled) {
-      await handleUsage("mockup");
-      await handleCreateMockup(userImage);
+      allowed = await handleUsage("mockup");
+      console.log(`Mockup allowed: ${allowed}`);
+      if (allowed) await handleCreateMockup(userImage);
     } else if (!viewingUpscaled) {
-      await handleUsage("enhancement");
-      await handleEnhanceUpscale();
+      allowed = await handleUsage("enhancement");
+      console.log(`Enhancement allowed: ${allowed}`);
+      if (allowed) await handleEnhanceUpscale();
     }
   };
 
   const handleEnhanceUpscale = async () => {
-    console.log("enhancing");
     setEnhancing(true);
     if (!userImage) {
       alert("Please choose an image first");
@@ -528,272 +513,19 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setEnhancing(false);
   };
 
-  const wait = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
   const extractWaitTime = (errorMessage: string) => {
     const match = errorMessage.match(/\d+/);
     return match ? parseInt(match[0], 10) : 60;
   };
 
-  const updateRequestStatus = async (
-    requestId: number,
-    status: Status,
-    taskKey = null
-  ) => {
-    console.log(`Updating request ${requestId} to status ${status}`);
-    const updateData: { status: Status; task_key?: string } = { status };
-    if (taskKey) updateData.task_key = taskKey;
+  const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
-    const { error } = await supabase
-      .from("mockup_requests")
-      .update(updateData)
-      .eq("id", requestId);
+  /////// UPSCA \\\\\\\
+  /////// UPSCA \\\\\\\
 
-    toast({
-      title: "Mockup request updated",
-      description: `One of your mockup requests has been updated to status ${status}`,
-      variant: "destructive",
-      className: "bg-background text-accent border-accent",
-    });
-
-    if (error) {
-      console.error(`Error updating status for request ${requestId}:`, error);
-    } else {
-      await fetchMockups();
-    }
-  };
-
-  const handleCreateMockup = async (imageData: string) => {
-    console.log("Creating mockup");
-
-    if (!selectedTemplate || !selectedVariant) {
-      console.error("Template or variant information is missing");
-      return;
-    }
-
-    const { product_id: prodID, id: variantID, name, price } = selectedVariant;
-    const scaledWidth = selectedTemplate.print_area_width * transform.scale;
-    const scaledHeight = selectedTemplate.print_area_height * transform.scale;
-
-    if (!prodID || !variantID) {
-      console.error("No product or variant IDs found");
-      return;
-    }
-
-    setIsMockingUp(true);
-
-    const mockupRequest: Database["public"]["Tables"]["mockup_requests"]["Insert"] =
-      {
-        product_id: prodID,
-        variant_id: variantID,
-        image_data: imageData,
-        scaled_width: scaledWidth,
-        scaled_height: scaledHeight,
-        offset_x: transform.positionX,
-        offset_y: transform.positionY,
-        user_id: userDetails.id,
-        status: "pending",
-        product: name,
-        price: Math.round(Number(price) * 1.5),
-      };
-
-    const { error } = await supabase
-      .from("mockup_requests")
-      .insert(mockupRequest);
-
-    if (error) {
-      console.error("Error inserting mockup request:", error);
-      toast({
-        title: "Something went wrong.",
-        description: "Failed to queue your mockup request, please try again",
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-      return;
-    }
-
-    toast({
-      title: "Mockup request queued",
-      description: "Your request is being processed.",
-      variant: "destructive",
-      className: "bg-background text-accent border-accent",
-    });
-
-    updateActionCount("mockup");
-    setPollForMockups(true);
-    setIsMockingUp(false);
-  };
-
-  const fetchMockups = async () => {
-    const user_id = userDetails?.id;
-    console.log("user_id: ", user_id);
-    if (!user_id) {
-      setDataStatic(true);
-      return staticMocks;
-    } else {
-      setDataStatic(false);
-    }
-
-    const { data: mockups, error } = await supabase
-      .from("mockups")
-      .select("*")
-      .eq("user_id", user_id);
-
-    if (error) {
-      toast({
-        title: "Something went wrong.",
-        description:
-          "There was an error fetching your mockups, so examples have been provided. Please try again shortly.",
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-      return [];
-    }
-
-    setMocks(mockups);
-
-    return mockups;
-  };
-
-  const HandleSale = async ({
-    mockup,
-    quantity,
-    itemPrice,
-  }: {
-    mockup: any;
-    quantity: number;
-    itemPrice: number;
-  }) => {
-    const [clientSecret, setClientSecret] = useState<string>("");
-
-    useEffect(() => {
-      fetch("/api/checkout_sessions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mockup,
-          quantity,
-          itemPrice,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => setClientSecret(data.clientSecret));
-    }, []);
-
-    /**
-     * {
-    "id": "cs_test_a1dfzc4tGze7dNgPSmWgzBMtZCSH3G6MyIEkTUhpgRlYrbUWlKq7c5OzNf",
-    "object": "checkout.session",
-    "after_expiration": null,
-    "allow_promotion_codes": null,
-    "amount_subtotal": 3600,
-    "amount_total": 3600,
-    "automatic_tax": {
-        "enabled": false,
-        "status": null
-    },
-    "billing_address_collection": null,
-    "cancel_url": null,
-    "client_reference_id": null,
-    "client_secret": null,
-    "consent": null,
-    "consent_collection": null,
-    "created": 1702671078,
-    "currency": "usd",
-    "currency_conversion": null,
-    "custom_fields": [],
-    "custom_text": {
-        "after_submit": null,
-        "shipping_address": null,
-        "submit": null,
-        "terms_of_service_acceptance": null
-    },
-    "customer": null,
-    "customer_creation": "if_required",
-    "customer_details": {
-        "address": {
-            "city": null,
-            "country": "GB",
-            "line1": null,
-            "line2": null,
-            "postal_code": "TE57 5TE",
-            "state": null
-        },
-        "email": "kieranpatton@proton.me",
-        "name": "mr testy test",
-        "phone": null,
-        "tax_exempt": "none",
-        "tax_ids": []
-    },
-    "customer_email": null,
-    "expires_at": 1702757478,
-    "invoice": null,
-    "invoice_creation": {
-        "enabled": false,
-        "invoice_data": {
-            "account_tax_ids": null,
-            "custom_fields": null,
-            "description": null,
-            "footer": null,
-            "metadata": {},
-            "rendering_options": null
-        }
-    },
-    "livemode": false,
-    "locale": null,
-    "metadata": {},
-    "mode": "payment",
-    "payment_intent": "pi_3ONhjbJ8INwD5Vuc0YtDVDTg",
-    "payment_link": null,
-    "payment_method_collection": "if_required",
-    "payment_method_configuration_details": null,
-    "payment_method_options": {},
-    "payment_method_types": [
-        "card"
-    ],
-    "payment_status": "paid",
-    "phone_number_collection": {
-        "enabled": false
-    },
-    "recovered_from": null,
-    "redirect_on_completion": "always",
-    "return_url": "http://localhost:3000/return?session_id={CHECKOUT_SESSION_ID}",
-    "setup_intent": null,
-    "shipping_address_collection": null,
-    "shipping_cost": null,
-    "shipping_details": null,
-    "shipping_options": [],
-    "status": "complete",
-    "submit_type": null,
-    "subscription": null,
-    "success_url": null,
-    "total_details": {
-        "amount_discount": 0,
-        "amount_shipping": 0,
-        "amount_tax": 0
-    },
-    "ui_mode": "embedded",
-    "url": null
-}
-     */
-    return (
-      <>
-        <div id="checkout">
-          {clientSecret && (
-            <EmbeddedCheckoutProvider
-              stripe={stripePromise}
-              options={{ clientSecret }}
-            >
-              <EmbeddedCheckout />
-            </EmbeddedCheckoutProvider>
-          )}
-        </div>
-      </>
-    );
-  };
+  /////// MOCKS \\\\\\\
+  /////// MOCKS \\\\\\\
 
   const Mockup = () => {
     const [activeMock, setActiveMock] = useState<any>(null);
@@ -911,7 +643,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     const postDraftToPrintful = async () => {
-      console.log("posting to printful: ", activeMock.task_key);
       const files = [
         {
           url: activeMock.printFiles[0].url,
@@ -948,8 +679,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }),
       });
       const data = await response.json();
-
-      console.log("draft order response: ", data);
     };
 
     const handleCheckout = () => {
@@ -970,7 +699,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .delete()
         .eq("task_key", mock.task_key);
 
-      console.log("mock: ", mock);
       if (error || mockReqError) {
         toast({
           title: "Something went wrong.",
@@ -1232,6 +960,342 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
+  const processMockRequest = async (req) => {
+    let count = 0;
+    const limit = 2;
+    const backoff = 60000;
+
+    for (const r of req) {
+      const contentType = r.image_data.includes(".png") ? true : false;
+
+      if (!contentType) {
+        toast({
+          title: "Oops!",
+          description: `It looks like you're trying to use a file that isn't a PNG. Please try again with a PNG file.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
+      while (count < limit) {
+        const data = {
+          productId: r.product_id,
+          imageUrl: r.image_data,
+          variantIDs: r.variant_id,
+          scaledWidth: r.scaled_width,
+          scaledHeight: r.scaled_height,
+          offsetX: r.offset_x,
+          offsetY: r.offset_y,
+        };
+        const response = await fetch("/api/pod/create-mocks", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        const res = await response.json();
+
+        if (res.status === 429 || !res.result?.task_key) {
+          console.log(`Error processing ruest ${r.id}: `, res.error);
+          const seconds = extractWaitTime(res.error.message);
+          console.log(`Waiting ${seconds} seconds before retrying`);
+          await wait(seconds * 1000);
+        }
+        await updateRequestStatus(r.id, "processing", res.result.task_key);
+        await wait(1000);
+        count++;
+
+        count == limit && (await wait(backoff));
+      }
+    }
+
+    return;
+  };
+
+  const handleCreateMockup = async (imageData: string) => {
+    if (!selectedTemplate || !selectedVariant) {
+      console.error("Template or variant information is missing");
+      return;
+    }
+
+    const { product_id: prodID, id: variantID, name, price } = selectedVariant;
+    const scaledWidth = selectedTemplate.print_area_width * transform.scale;
+    const scaledHeight = selectedTemplate.print_area_height * transform.scale;
+
+    if (!prodID || !variantID) {
+      console.error("No product or variant IDs found");
+      return;
+    }
+
+    setIsMockingUp(true);
+
+    const mockupRequest: Database["public"]["Tables"]["mockup_requests"]["Insert"] =
+      {
+        product_id: prodID,
+        variant_id: variantID,
+        image_data: imageData,
+        scaled_width: scaledWidth,
+        scaled_height: scaledHeight,
+        offset_x: transform.positionX,
+        offset_y: transform.positionY,
+        user_id: userDetails.id,
+        status: "pending",
+        product: name,
+        price: Math.round(Number(price) * 1.5),
+      };
+
+    const { error } = await supabase
+      .from("mockup_requests")
+      .insert(mockupRequest);
+
+    if (error) {
+      console.error("Error inserting mockup request:", error);
+      toast({
+        title: "Something went wrong.",
+        description: "Failed to queue your mockup request, please try again",
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return;
+    }
+
+    toast({
+      title: "Mockup request queued",
+      description: "Your request is being processed.",
+      variant: "destructive",
+      className: "bg-background text-accent border-accent",
+    });
+
+    updateActionCount("mockup");
+    setPollForMockups(true);
+    setIsMockingUp(false);
+  };
+
+  const fetchMockups = async () => {
+    const user_id = userDetails?.id;
+    if (!user_id) {
+      setDataStatic(true);
+      return staticMocks;
+    } else {
+      setDataStatic(false);
+    }
+
+    const { data: mockups, error } = await supabase
+      .from("mockups")
+      .select("*")
+      .eq("user_id", user_id);
+
+    if (error) {
+      toast({
+        title: "Something went wrong.",
+        description:
+          "There was an error fetching your mockups, so examples have been provided. Please try again shortly.",
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return [];
+    }
+
+    setMocks(mockups);
+
+    return mockups;
+  };
+
+  const handleSetViewingMocks = () => {
+    setViewingMock(!viewingMocks);
+    setViewingMocks(!viewingMocks);
+
+    if (!viewingMocks == true) {
+      if (!userDetails?.billing_address) {
+        toast({
+          title: "Before you continue",
+          description:
+            "Please enter your billing address in your account settings if you are considering making a purchase.",
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        }).dismiss();
+      }
+    }
+
+    fetchMockups();
+  };
+
+  const MockupLoader = ({ title, body }: { title: string; body: string }) => {
+    return (
+      <div className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
+
+          <div
+            className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+          >
+            <div className="flex flex-col justify-center items-center p-6">
+              <div className="flex flex-col justify-center items-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                <p className="text-accent text-2xl mt-4">{title}</p>
+                <p className="text-accent text-center text-sm mt-2">{body}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  /////// MOCKS \\\\\\\
+  /////// MOCKS \\\\\\\
+
+  /////// ACCT \\\\\\\
+  /////// ACCT \\\\\\\
+
+  const HandleSale = async ({
+    mockup,
+    quantity,
+    itemPrice,
+  }: {
+    mockup: any;
+    quantity: number;
+    itemPrice: number;
+  }) => {
+    const [clientSecret, setClientSecret] = useState<string>("");
+
+    useEffect(() => {
+      fetch("/api/checkout_sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mockup,
+          quantity,
+          itemPrice,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => setClientSecret(data.clientSecret));
+    }, []);
+
+    /**
+     * {
+    "id": "cs_test_a1dfzc4tGze7dNgPSmWgzBMtZCSH3G6MyIEkTUhpgRlYrbUWlKq7c5OzNf",
+    "object": "checkout.session",
+    "after_expiration": null,
+    "allow_promotion_codes": null,
+    "amount_subtotal": 3600,
+    "amount_total": 3600,
+    "automatic_tax": {
+        "enabled": false,
+        "status": null
+    },
+    "billing_address_collection": null,
+    "cancel_url": null,
+    "client_reference_id": null,
+    "client_secret": null,
+    "consent": null,
+    "consent_collection": null,
+    "created": 1702671078,
+    "currency": "usd",
+    "currency_conversion": null,
+    "custom_fields": [],
+    "custom_text": {
+        "after_submit": null,
+        "shipping_address": null,
+        "submit": null,
+        "terms_of_service_acceptance": null
+    },
+    "customer": null,
+    "customer_creation": "if_required",
+    "customer_details": {
+        "address": {
+            "city": null,
+            "country": "GB",
+            "line1": null,
+            "line2": null,
+            "postal_code": "TE57 5TE",
+            "state": null
+        },
+        "email": "kieranpatton@proton.me",
+        "name": "mr testy test",
+        "phone": null,
+        "tax_exempt": "none",
+        "tax_ids": []
+    },
+    "customer_email": null,
+    "expires_at": 1702757478,
+    "invoice": null,
+    "invoice_creation": {
+        "enabled": false,
+        "invoice_data": {
+            "account_tax_ids": null,
+            "custom_fields": null,
+            "description": null,
+            "footer": null,
+            "metadata": {},
+            "rendering_options": null
+        }
+    },
+    "livemode": false,
+    "locale": null,
+    "metadata": {},
+    "mode": "payment",
+    "payment_intent": "pi_3ONhjbJ8INwD5Vuc0YtDVDTg",
+    "payment_link": null,
+    "payment_method_collection": "if_required",
+    "payment_method_configuration_details": null,
+    "payment_method_options": {},
+    "payment_method_types": [
+        "card"
+    ],
+    "payment_status": "paid",
+    "phone_number_collection": {
+        "enabled": false
+    },
+    "recovered_from": null,
+    "redirect_on_completion": "always",
+    "return_url": "http://localhost:3000/return?session_id={CHECKOUT_SESSION_ID}",
+    "setup_intent": null,
+    "shipping_address_collection": null,
+    "shipping_cost": null,
+    "shipping_details": null,
+    "shipping_options": [],
+    "status": "complete",
+    "submit_type": null,
+    "subscription": null,
+    "success_url": null,
+    "total_details": {
+        "amount_discount": 0,
+        "amount_shipping": 0,
+        "amount_tax": 0
+    },
+    "ui_mode": "embedded",
+    "url": null
+}
+     */
+    return (
+      <>
+        <div id="checkout">
+          {clientSecret && (
+            <EmbeddedCheckoutProvider
+              stripe={stripePromise}
+              options={{ clientSecret }}
+            >
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          )}
+        </div>
+      </>
+    );
+  };
+
   const Login = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -1376,39 +1440,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
-  const MockupLoader = ({ title, body }: { title: string; body: string }) => {
-    return (
-      <div className="fixed z-50 inset-0 overflow-y-auto">
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-          </div>
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span>
-
-          <div
-            className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-headline"
-          >
-            <div className="flex flex-col justify-center items-center p-6">
-              <div className="flex flex-col justify-center items-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                <p className="text-accent text-2xl mt-4">{title}</p>
-                <p className="text-accent text-center text-sm mt-2">{body}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const NeedAccountLoader = () => (
     <div className="fixed z-50 inset-0 overflow-y-auto">
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -1447,25 +1478,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     </div>
   );
 
-  const handleSetViewingMocks = () => {
-    setViewingMock(!viewingMocks);
-    setViewingMocks(!viewingMocks);
+  /////// ACCT \\\\\\\
+  /////// ACCT \\\\\\\
 
-    if (!viewingMocks == true) {
-      console.log("userDetails: ", userDetails);
-      if (!userDetails?.billing_address) {
-        toast({
-          title: "Before you continue",
-          description:
-            "Please enter your billing address in your account settings if you are considering making a purchase.",
-          variant: "destructive",
-          className: "bg-background text-accent border-accent",
-        }).dismiss();
-      }
-    }
-
-    fetchMockups();
-  };
+  /////// CTRLS \\\\\\\
+  /////// CTRLS \\\\\\\
 
   const DimensionControls = () => {
     // we use setPositions to update the position of the image
@@ -1578,16 +1595,28 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
-  const updateActionCount = async (action: string) => {
-    const { error } = await supabase.from("user_actions").insert({
-      user_id: userDetails.id,
-      action_type: action,
+  const handleDrag = (event: React.DragEvent) => {
+    setPosition({
+      x: event.clientX - editorRef.current?.offsetLeft!,
+      y: event.clientY - editorRef.current?.offsetTop!,
+      scale: 1,
     });
-
-    if (error) {
-      console.log("error: ", error);
-    }
   };
+
+  const onTransformChange = (
+    zoomScale: number,
+    positionX: number,
+    positionY: number
+  ) => {
+    setTransform({
+      scale: zoomScale,
+      positionX: positionX,
+      positionY: positionY,
+    });
+  };
+
+  /////// CTRLS \\\\\\\
+  /////// CTRLS \\\\\\\
 
   return (
     <>

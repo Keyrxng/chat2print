@@ -85,7 +85,7 @@ export const ImageSlider = ({
     });
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     const reader = new FileReader();
 
@@ -105,7 +105,7 @@ export const ImageSlider = ({
       reader.readAsDataURL(file);
     }
 
-    const { error } = supabase.storage
+    const { error } = await supabase.storage
       .from("user_uploads")
       .upload(`${userDetails.id}/${file?.name}`, file!);
 
@@ -115,6 +115,8 @@ export const ImageSlider = ({
         action_type: action,
       });
     };
+
+    console.log("uploaded: ", file?.name);
 
     updateActionCount("import");
 
