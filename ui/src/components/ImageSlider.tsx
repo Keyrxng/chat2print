@@ -172,12 +172,13 @@ export const ImageSlider = ({
                     <Image
                       src={image}
                       alt="design"
-                      width={100}
-                      height={100}
+                      width={60}
+                      height={60}
                       className="rounded-full"
                       style={{
                         maxWidth: "100%",
                         height: "auto",
+                        width: "auto",
                         objectFit: "cover",
                       }}
                     />
@@ -188,7 +189,7 @@ export const ImageSlider = ({
           </>
         ) : (
           <>
-            {upscaled?.map((image, index) => (
+            {upscaled?.map((image) => (
               <div key={image} className="flex">
                 <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
                   <button
@@ -204,12 +205,13 @@ export const ImageSlider = ({
                     <Image
                       src={image}
                       alt="design"
-                      width={100}
-                      height={100}
+                      width={60}
+                      height={60}
                       className="rounded-full"
                       style={{
                         maxWidth: "100%",
                         height: "auto",
+                        width: "auto",
                         objectFit: "cover",
                       }}
                     />

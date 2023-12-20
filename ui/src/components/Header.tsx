@@ -68,7 +68,6 @@ export default function Header() {
           }
         } catch (err) {
           setIsConnected(false);
-          console.log("checkConnection error", err);
         }
       } else {
         const { data: user } = await supabase

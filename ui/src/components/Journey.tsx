@@ -52,7 +52,7 @@ const Journey = () => {
         <div className="flex flex-col space-y-10">
           {steps.map((step, index) => (
             <motion.div
-              key={index}
+              key={step.title}
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}

@@ -32,7 +32,6 @@ export default function Page() {
 
   useEffect(() => {
     if (!selectedVariant) return;
-    console.log(selectedVariant);
     if (selectedVariant?.id) {
       loadForEditor(selectedVariant);
     }

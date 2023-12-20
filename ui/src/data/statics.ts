@@ -3,85 +3,6 @@ export const staticMocks = [
     mockups: [
       {
         mockup_url:
-          "/staticMocks/snap-case-for-samsung-glossy-samsung-galaxy-s20-fe-front.png",
-      },
-    ],
-    product: "Snap Case for Samsung\u00ae (Glossy / Samsung Galaxy S20 FE)",
-    product_id: 684,
-    variant_id: 16930,
-    price: 18,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
-          "/staticMocks/premium-luster-photo-paper-poster-(in)-10x10-front.png",
-      },
-    ],
-    product: "Premium Luster Photo Paper Poster 10\u2033\u00d710\u2033",
-    product_id: 171,
-    variant_id: 6872,
-    price: 13,
-  },
-  {
-    mockups: [
-      {
-        mockup_url: "/staticMocks/mouse-pad-white-front.png",
-      },
-    ],
-    product: 'Mouse Pad (White / 8.7"x7.1")',
-    product_id: 518,
-    variant_id: 13097,
-    price: 11,
-  },
-  {
-    mockups: [
-      {
-        mockup_url: "/staticMocks/glossy-metal-print-(in)-white-8x10-front.png",
-      },
-    ],
-    product: "Glossy Metal Print (White / 8\u2033\u00d710\u2033)",
-    product_id: 588,
-    variant_id: 15134,
-    price: 47,
-  },
-  {
-    mockups: [
-      {
-        mockup_url: "/staticMocks/gaming-mouse-pad-white-18x16-front.png",
-      },
-    ],
-    product: "Gaming Mouse Pad (White / 18\u2033\u00d716\u2033)",
-    product_id: 583,
-    variant_id: 14943,
-    price: 14,
-  },
-  {
-    mockups: [
-      {
-        mockup_url: "/staticMocks/framed-canvas-(in)-brown-24x36-front.png",
-      },
-    ],
-    product: "Framed Canvas (Black / 24\u2033\u00d736\u2033)",
-    product_id: 614,
-    variant_id: 16039,
-    price: 132,
-  },
-  {
-    mockups: [
-      {
-        mockup_url: "/staticMocks/framed-canvas-(in)-black-24x36-front.png",
-      },
-    ],
-    product: "Framed Canvas (Brown / 24\u2033\u00d736\u2033)",
-    product_id: 614,
-    variant_id: 16045,
-    price: 131,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
           "/staticMocks/custom-premium-luster-photo-paper-framed-poster-white-24x36-headphone-girl-cosmic.png",
       },
     ],
@@ -103,18 +24,6 @@ export const staticMocks = [
     product_id: 172,
     variant_id: 10770,
     price: 122,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
-          "https://ywaeexoevxxjquwlhfjx.supabase.co/storage/v1/object/sign/design_images/holder/framed-canvas-white-16x20-skateboard-tricks.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJkZXNpZ25faW1hZ2VzL2hvbGRlci9mcmFtZWQtY2FudmFzLXdoaXRlLTE2eDIwLXNrYXRlYm9hcmQtdHJpY2tzLnBuZyIsImlhdCI6MTcwMjkyMTg2OCwiZXhwIjoyMDE4MjgxODY4fQ.OfqNf1g2dUJbaxLl0yqOmyNMXjqqH0h-R4_JWhwddQ8",
-      },
-    ],
-    product: "Framed Canvas (White / 16\u2033\u00d720\u2033)",
-    product_id: 614,
-    variant_id: 15698,
-    price: 81,
   },
   {
     mockups: [
@@ -143,49 +52,13 @@ export const staticMocks = [
     mockups: [
       {
         mockup_url:
-          "/staticMocks/tough-case-for-iphone-glossy-iphone-12-pro-red-lightning-bolt.png",
-      },
-    ],
-    product: "Tough iPhone Case (Glossy / iPhone 12 Pro)",
-    product_id: 601,
-    variant_id: 15386,
-    price: 20,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
-          "/staticMocks/snap-case-for-samsung-glossy-samsung-galaxy-s21-plus-lonely-spaceman.png",
-      },
-    ],
-    product: "Snap Case for Samsung\u00ae (Glossy / Samsung Galaxy S21 Plus)",
-    product_id: 684,
-    variant_id: 16936,
-    price: 18,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
-          "https://ywaeexoevxxjquwlhfjx.supabase.co/storage/v1/object/sign/design_images/holder/custom-framed-canvas-black-24x36-viewing-earth.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJkZXNpZ25faW1hZ2VzL2hvbGRlci9jdXN0b20tZnJhbWVkLWNhbnZhcy1ibGFjay0yNHgzNi12aWV3aW5nLWVhcnRoLnBuZyIsImlhdCI6MTcwMjkyMTgxMCwiZXhwIjoyMDE4MjgxODEwfQ.uqe0MAAVUcFE2eez8-TfTL2Jcf_xkaS7Xf_EPTPCzw0",
+          "/staticMocks/custom-framed-canvas-black-24x36-viewing-earth.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJkZXNpZ25faW1hZ2VzL2hvbGRlci9jdXN0b20tZnJhbWVkLWNhbnZhcy1ibGFjay0yNHgzNi12aWV3aW5nLWVhcnRoLnBuZyIsImlhdCI6MTcwMjkyMTgxMCwiZXhwIjoyMDE4MjgxODEwfQ.uqe0MAAVUcFE2eez8-TfTL2Jcf_xkaS7Xf_EPTPCzw0",
       },
     ],
     product: "Framed Canvas (Black / 24\u2033\u00d736\u2033)",
     product_id: 614,
     variant_id: 16039,
     price: 132,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
-          "/staticMocks/snap-case-for-iphone-glossy-iphone-11-pro-max-cat-cover.png",
-      },
-    ],
-    product: "Snap Case for iPhone\u00ae (Glossy / iPhone 11 Pro Max)",
-    product_id: 683,
-    variant_id: 16892,
-    price: 18,
   },
   {
     mockups: [
@@ -197,18 +70,6 @@ export const staticMocks = [
     product_id: 518,
     variant_id: 13097,
     price: 11,
-  },
-  {
-    mockups: [
-      {
-        mockup_url:
-          "/staticMocks/snap-case-for-samsung-glossy-samsung-galaxy-s23-ultra-space-theme.png",
-      },
-    ],
-    product: "Snap Case for Samsung\u00ae (Glossy / Samsung Galaxy S23 Ultra)",
-    product_id: 684,
-    variant_id: 16950,
-    price: 18,
   },
   {
     mockups: [

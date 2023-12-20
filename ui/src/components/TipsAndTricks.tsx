@@ -135,7 +135,7 @@ export const TipsAndTricksModal = ({ isOpen, onClose }) => {
               &times;
             </button>
             {tipsAndTricks.map((tip, index) => (
-              <div key={index} className="border-b border-gray-200 py-4">
+              <div key={tip.title} className="border-b border-gray-200 py-4">
                 <h3
                   onClick={() => toggleSection(index)}
                   className="text-lg font-semibold cursor-pointer"
@@ -147,7 +147,7 @@ export const TipsAndTricksModal = ({ isOpen, onClose }) => {
                     {tip.content}
                     {tip.subsections &&
                       tip.subsections.map((sub, subIndex) => (
-                        <div key={subIndex} className="pl-4">
+                        <div key={sub.title} className="pl-4">
                           <h4 className="font-medium ">{sub.title}</h4>
                           <p className="text-sm text-white">{sub.detail}</p>
                         </div>

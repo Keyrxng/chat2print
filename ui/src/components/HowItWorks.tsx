@@ -22,7 +22,7 @@ export const HowItWorksSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {steps.map((step, index) => (
             <article
-              key={index}
+              key={step.title}
               className="step-card p-8 bg-background rounded-lg transition-shadow hover:shadow-md hover:border-[1px] border-[1px] hover:border-accent   border-background hover:shadow-accent"
             >
               <div className="step-icon text-4xl mb-4">👉</div>

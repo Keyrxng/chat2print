@@ -26,7 +26,7 @@ export const FeaturesSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <motion.div
-              key={index}
+              key={feature.title}
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{

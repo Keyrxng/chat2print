@@ -31,7 +31,7 @@ const milestones = [
 ];
 
 const Roadmap = () => {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<number | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },

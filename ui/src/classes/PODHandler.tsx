@@ -1,6 +1,5 @@
 import { Product, __Variant } from "@/types/all";
 import axios, { AxiosInstance } from "axios";
-import probe from "probe-image-size";
 import templates from "@/data/templates";
 
 class PODHandler {

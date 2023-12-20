@@ -49,7 +49,7 @@ export default function OrderDetail({ orderId }: { orderId: number }) {
         <div className="mb-4 text-sm ">
           {order.items.map((item, index) => (
             <div
-              key={index}
+              key={item.name}
               className="grid   grid-cols-1 sm:grid-cols-3 gap-4 mb-2"
             >
               <span className="font-semibold   w-fit">{item.name}</span>

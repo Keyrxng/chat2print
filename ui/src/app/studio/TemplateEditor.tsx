@@ -45,9 +45,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
 import { staticMocks } from "@/data/statics";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronsUpDown, X } from "lucide-react";
+import { ChevronsUpDown, ToggleLeftIcon, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@radix-ui/react-dropdown-menu";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -127,9 +129,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           }
 
           if (!data) {
-            // TODO: provide static examples taken from supa [upscaled images and mockups]
-
-            console.log("no ddesigns or upscaled images");
           } else {
             let { designImages, upscaledImages } = data;
             designImages = designImages.filter((img: string) => img !== null);
@@ -321,7 +320,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return false;
     }
 
-    if (dataSize >= activeTier.data_size) {
+    if (
+      (dataSize >= activeTier.data_size * (1024 * 1024) &&
+        action === "mockup") ||
+      action === "enhancement"
+    ) {
       toast({
         title: "Oops!",
         description: `You've used up your free storage for the day, please try again tomorrow.`,
@@ -331,7 +334,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (imports >= activeTier.imports) {
+    if (imports >= activeTier.imports && action === "import") {
       toast({
         title: "Oops!",
         description: `You've used up your free imports for the day, please try again tomorrow.`,
@@ -341,7 +344,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (enhancements >= activeTier.enhancements) {
+    if (enhancements >= activeTier.enhancements && action === "enhancement") {
       toast({
         title: "Oops!",
         description: `You've used up your free enhancements for the day, please try again tomorrow.`,
@@ -352,7 +355,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
     console.log(`mockups: ${mockups} activeTier.mockups: `, activeTier);
 
-    if (mockups >= activeTier.mockups) {
+    if (mockups >= activeTier.mockups && action === "mockup") {
       toast({
         title: "Oops!",
         description: `You've used up your free mockups for the day, please try again tomorrow.`,
@@ -460,11 +463,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     let allowed = true;
 
     if (viewingUpscaled) {
-      allowed = await handleUsage("mockup");
+      // allowed = await handleUsage("mockup");
       console.log(`Mockup allowed: ${allowed}`);
       if (allowed) await handleCreateMockup(userImage);
     } else if (!viewingUpscaled) {
-      allowed = await handleUsage("enhancement");
+      // allowed = await handleUsage("enhancement");
       console.log(`Enhancement allowed: ${allowed}`);
       if (allowed) await handleEnhanceUpscale();
     }
@@ -498,7 +501,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         setEnhancing(false);
         return;
       }
-      updateActionCount("ehancement");
+      updateActionCount("enhancement");
       await handleCreateMockup(data);
     } catch (err) {
       console.log(err);
@@ -511,11 +514,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     setEnhancing(false);
-  };
-
-  const extractWaitTime = (errorMessage: string) => {
-    const match = errorMessage.match(/\d+/);
-    return match ? parseInt(match[0], 10) : 60;
   };
 
   const wait = (ms: number) =>
@@ -978,15 +976,29 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
 
       while (count < limit) {
-        const data = {
-          productId: r.product_id,
-          imageUrl: r.image_data,
-          variantIDs: r.variant_id,
-          scaledWidth: r.scaled_width,
-          scaledHeight: r.scaled_height,
-          offsetX: r.offset_x,
-          offsetY: r.offset_y,
-        };
+        let data;
+        if (aiAssist) {
+          data = {
+            productId: r.product_id,
+            imageUrl: r.image_data,
+            variantIDs: r.variant_id,
+            scaledWidth: r.scaled_width,
+            scaledHeight: r.scaled_height,
+            offsetX: 0,
+            offsetY: 0,
+          };
+        } else {
+          data = {
+            productId: r.product_id,
+            imageUrl: r.image_data,
+            variantIDs: r.variant_id,
+            scaledWidth: r.scaled_width,
+            scaledHeight: r.scaled_height,
+            offsetX: r.offset_x,
+            offsetY: r.offset_y,
+          };
+        }
+
         const response = await fetch("/api/pod/create-mocks", {
           method: "POST",
           body: JSON.stringify(data),
@@ -994,12 +1006,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         const res = await response.json();
 
         if (res.status === 429 || !res.result?.task_key) {
-          console.log(`Error processing ruest ${r.id}: `, res.error);
-          const seconds = extractWaitTime(res.error.message);
-          console.log(`Waiting ${seconds} seconds before retrying`);
-          await wait(seconds * 1000);
+          await wait(60 * 1000);
         }
-        await updateRequestStatus(r.id, "processing", res.result.task_key);
+        await updateRequestStatus(r.id, "processing", res.result?.task_key);
         await wait(1000);
         count++;
 
@@ -1017,8 +1026,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     const { product_id: prodID, id: variantID, name, price } = selectedVariant;
-    const scaledWidth = selectedTemplate.print_area_width * transform.scale;
-    const scaledHeight = selectedTemplate.print_area_height * transform.scale;
+    const scaledWidth = selectedTemplate.print_area_width;
+    const scaledHeight = selectedTemplate.print_area_height;
 
     if (!prodID || !variantID) {
       console.error("No product or variant IDs found");
@@ -1484,117 +1493,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   /////// CTRLS \\\\\\\
   /////// CTRLS \\\\\\\
 
-  const DimensionControls = () => {
-    // we use setPositions to update the position of the image
-    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-    useEffect(() => {
-      const userimg = userImage;
-      if (!userimg) return;
-      if (userImage) {
-        const img = document.getElementById("userImage") as HTMLImageElement;
-        if (!img) return;
-        setDimensions({ width: img.width, height: img.height });
-      }
-    }, [userImage]);
-
-    const increaseWidth = () => {
-      const img = document.getElementById("userImage") as HTMLImageElement;
-      if (!img) return;
-      img.style.width = `${dimensions.width + 25}px`;
-      setDimensions({ ...dimensions, width: dimensions.width + 25 });
-    };
-
-    const decreaseWidth = () => {
-      const img = document.getElementById("userImage") as HTMLImageElement;
-      if (!img) return;
-      img.style.width = `${dimensions.width - 25}px`;
-      setDimensions({ ...dimensions, width: dimensions.width - 25 });
-    };
-
-    const increaseHeight = () => {
-      const img = document.getElementById("userImage") as HTMLImageElement;
-      if (!img) return;
-      img.style.height = `${dimensions.height + 25}px`;
-      setDimensions({ ...dimensions, height: dimensions.height + 25 });
-    };
-
-    const decreaseHeight = () => {
-      const img = document.getElementById("userImage") as HTMLImageElement;
-      if (!img) return;
-      img.style.height = `${dimensions.height - 25}px`;
-      setDimensions({ ...dimensions, height: dimensions.height - 25 });
-    };
-
-    return (
-      <div className="flex justify-center items-center gap-4 m-4">
-        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={decreaseWidth}
-                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                      -
-                    </button>
-                    <span>Width</span>
-                    <button
-                      onClick={increaseWidth}
-                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                      +
-                    </button>
-                  </div>
-                </>
-              </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-xs rounded-md flex-wrap">
-                <p className="text-accent text-sm">
-                  This will change the width of the image without changing the
-                  height or scale. See tips for more info.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
-        <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={decreaseHeight}
-                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                      -
-                    </button>
-                    <span>Height</span>
-                    <button
-                      onClick={increaseHeight}
-                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                      +
-                    </button>
-                  </div>
-                </>
-              </TooltipTrigger>
-              <TooltipContent className="text-accent opacity-90 bg-background overflow-ellipsis mb-2 max-w-xs rounded-md flex-wrap">
-                <p className="text-accent text-sm">
-                  This will change the height of the image without changing the
-                  width or scale. See tips for more info.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
-    );
-  };
-
   const handleDrag = (event: React.DragEvent) => {
     setPosition({
       x: event.clientX - editorRef.current?.offsetLeft!,
@@ -1618,6 +1516,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   /////// CTRLS \\\\\\\
   /////// CTRLS \\\\\\\
 
+  const [aiAssist, setAiAssist] = useState(true);
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
@@ -1772,8 +1671,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 className="z-10"
                                 style={{
                                   maxWidth: "100%",
-                                  width: "15%",
-                                  height: "15%",
+                                  width: "50%",
+                                  height: "50%",
                                 }}
                               />
                             ) : (
@@ -1812,8 +1711,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 className="z-10"
                                 style={{
                                   maxWidth: "100%",
-                                  width: "15%",
-                                  height: "15%",
+                                  width: "35%",
+                                  height: "35%",
                                 }}
                               />
                             ) : (
@@ -1838,7 +1737,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-xs max-h-[700px] md:grid-cols-1 gap-4">
                   {Object.values(products).map((option, index) => (
                     <ProductOption
-                      key={index}
+                      key={option.product.id}
                       product={option}
                       isSelected={
                         selectedVariant?.product_id === option.product.id
@@ -1877,7 +1776,31 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <DimensionControls />
+                  <div className="flex text-accent justify-center align-middle items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <p className="mb-[4.5px]">Ai-Assist</p>
+                        <TooltipTrigger>
+                          <Switch
+                            defaultChecked={aiAssist}
+                            onChange={() => {
+                              setAiAssist(!aiAssist);
+                            }}
+                            className="relative overflow-hidden w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent className="text-accent opacity-90 bg-background rounded-md overflow-ellipsis mb-2 max-w-xs flex-wrap">
+                          <p className="text-accent text-sm">
+                            This will apply the best solution for your image
+                            automatically upon mockup generation regardless of
+                            your current placement. We recommend leaving this
+                            enabled.
+                          </p>
+                          <p className="text-accent text-sm"></p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
                     <TooltipProvider>
                       <Tooltip>

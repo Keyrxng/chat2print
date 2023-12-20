@@ -18,7 +18,7 @@ export function ProductGallery() {
         <div className="grid grid-cols-2 md:grid-cols-5" ref={ref}>
           {staticImages.map(({ image_url, alt }, index) => (
             <div
-              key={index}
+              key={image_url}
               className={`shadow-md flex-grow rounded-lg overflow-hidden m-2`}
             >
               <Image
