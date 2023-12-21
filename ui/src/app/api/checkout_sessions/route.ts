@@ -95,10 +95,6 @@ export async function POST(req: Request, res: any) {
     );
     inStockRegion.push("GB");
   }
-  const currency = "usd";
-
-  console.log("args", inStock);
-  console.log("Creating checkout session for:", inStockRegion);
 
   try {
     const session = await stripe.checkout.sessions.create({

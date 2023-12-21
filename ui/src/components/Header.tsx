@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { use, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import OrderHistory from "./OrderHistory";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -26,15 +26,16 @@ interface User {
 }
 
 export default function Header() {
-  const [user, setUser] = React.useState<User>();
-  const [isRegistering, setIsRegistering] = React.useState(false);
+  const [user, setUser] = useState<User>();
+  const [isRegistering, setIsRegistering] = useState(false);
 
-  const [orderModalIsOpen, setOrderModalIsOpen] = React.useState(false);
-  const [accountModalIsOpen, setAccountModalIsOpen] = React.useState(false);
-  const [securityModalIsOpen, setSecurityModalIsOpen] = React.useState(false);
-  const [addressModalIsOpen, setAddressModalIsOpen] = React.useState(false);
-  const [waitingForConfirm, setWaitingForConfirm] = React.useState(false);
-  const [isConnected, setIsConnected] = React.useState(false);
+  const [orderModalIsOpen, setOrderModalIsOpen] = useState(false);
+  const [accountModalIsOpen, setAccountModalIsOpen] = useState(false);
+  const [securityModalIsOpen, setSecurityModalIsOpen] = useState(false);
+  const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
+  const [waitingForConfirm, setWaitingForConfirm] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
   const { toast } = useToast();
 
   const router = useRouter();
@@ -96,10 +97,11 @@ export default function Header() {
       />
     );
   };
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
   const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const signinValidation = () => {
       if (email === "") {
         alert("Please enter your email address");

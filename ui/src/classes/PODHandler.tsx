@@ -195,6 +195,7 @@ class PODHandler {
 
   async estimateCosts(orderData: any) {
     try {
+      console.log("Estimating costs: ", orderData);
       const response = await this.client.post(
         "/orders/estimate-costs",
         orderData
@@ -301,8 +302,8 @@ class PODHandler {
   }
 
   private handleError(error: any) {
-    console.error(error);
-    return error;
+    console.log("FUCKING ERRORS? ", error);
+    return error.response;
   }
 }
 

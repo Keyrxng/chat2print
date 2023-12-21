@@ -19,7 +19,7 @@ export async function POST(req: NextRequest, res: NextRequest) {
       headers: { "content-type": "application/json" },
     });
   } catch (err) {
-    return new Response(JSON.stringify(err), {
+    return new Response(JSON.stringify({ error: err }), {
       status: 500,
       headers: { "content-type": "application/json" },
     });

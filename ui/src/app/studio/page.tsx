@@ -16,13 +16,21 @@ import {
 } from "@/types/all";
 import ImagePlacementEditor from "./TemplateEditor";
 import { formatTextToHTML } from "@/utils/formatToHtml";
-
+interface PFILE {
+  printfile_id: number;
+  width: number;
+  height: number;
+  dpi: number;
+  fill_mode: string;
+  can_rotate: boolean;
+}
 export default function Page() {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<__Prod>();
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();
   const [template, setTemplate] = useState<__Template>();
   const [viewingMock, setViewingMock] = useState<boolean>(false);
+  const [printFiles, setPrintFiles] = useState<PFILE>();
 
   useEffect(() => {
     loadForEditor(products["tough_iphone_case"].variants[0]);
@@ -58,13 +66,21 @@ export default function Page() {
             (t) => t.template_id === selected.template_id
           )
         );
-        return template?.template.templates.find(
+
+        const id = template?.template.templates.find(
           (t) => t.template_id === selected.template_id
         );
+
+        const printFiles = template?.printFiles.printfiles.find(
+          (file) => file.printfile_id === id?.printfile_id
+        );
+
+        return { id, printFiles };
       })
       .find((template) => template !== undefined);
 
-    setTemplate(selectedTemplate);
+    setTemplate(selectedTemplate?.id);
+    setPrintFiles(selectedTemplate?.printFiles);
   };
 
   return (
@@ -81,6 +97,7 @@ export default function Page() {
               setSelectedImage={setSelectedImage}
               setSelectedVariant={setSelectedVariant}
               setViewingMock={setViewingMock}
+              printFiles={printFiles}
             />
           </div>
         </div>
@@ -91,7 +108,7 @@ export default function Page() {
               <div className="flex flex-row my-2 gap-4 justify-between items-center">
                 <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
                 <h2 className="text-2xl font-bold ">
-                  £{Math.round(Number(selectedVariant?.price) * 2)}
+                  £{Math.round(Number(selectedVariant?.price) * 2.3)}
                 </h2>
               </div>
 

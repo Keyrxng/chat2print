@@ -24,17 +24,6 @@ import {
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
 
-interface ImagePlacementEditorProps {
-  selectedTemplate: __Template | undefined;
-  selectedVariant: __Variant | undefined;
-  userImage: string;
-  onSelect: (design: __Prod) => void;
-  setSelectedImage: (image: string) => void;
-  selectedProduct: __Prod | undefined;
-  setSelectedVariant: (variant: __Variant) => void;
-  setViewingMock: (viewing: boolean) => void;
-}
-
 import { loadStripe } from "@stripe/stripe-js";
 import { ProductOption } from "@/components/ProductOption";
 import products from "@/data/products";
@@ -54,6 +43,15 @@ const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
 );
 
+interface PFILE {
+  printfile_id: number;
+  width: number;
+  height: number;
+  dpi: number;
+  fill_mode: string;
+  can_rotate: boolean;
+}
+
 type Status =
   | "pending"
   | "processing"
@@ -62,10 +60,23 @@ type Status =
   | null
   | undefined;
 
+interface ImagePlacementEditorProps {
+  selectedTemplate: __Template | undefined;
+  selectedVariant: __Variant | undefined;
+  userImage: string;
+  printFiles: PFILE | undefined;
+  selectedProduct: __Prod | undefined;
+  onSelect: (design: __Prod) => void;
+  setViewingMock: (viewing: boolean) => void;
+  setSelectedImage: (image: string) => void;
+  setSelectedVariant: (variant: __Variant) => void;
+}
+
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   selectedTemplate,
   selectedVariant,
   userImage,
+  printFiles,
   onSelect,
   setSelectedImage,
   selectedProduct,
@@ -114,7 +125,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         billing_address: user?.[0].billing_address,
         tier: user?.[0].tier,
       };
-      console.log("fireeed");
+      console.log("useEffect0 fired");
 
       setUserDetails((prev) => (prev = usr));
     }
@@ -149,6 +160,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
     }
     set();
+    console.log("useEffect1 fired");
   }, [setSelectedImage, supabase, userDetails?.id]);
 
   useEffect(() => {
@@ -157,6 +169,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       setUserDetails((prev) => (prev = null));
       return;
     }
+
+    console.log("useEffect2 fired: ");
   }, [supabase.changedAccessToken]);
 
   useEffect(() => {
@@ -166,7 +180,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       scale: 1,
     };
     setPosition((prev) => (prev = intitalPosition));
-    console.log("firedddd");
+    console.log("useEffect3 fired: ", selectedTemplate);
 
     async function load() {
       const completed = await fetchMockups();
@@ -185,7 +199,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       const { data: pendingReqs, error } = await supabase
         .from("mockup_requests")
         .select("*")
-        .match({ user_id: userDetails.id, status: "pending" });
+        .match({ user_id: userDetails.id, status: "pending" })
+        .limit(3);
 
       if (error) {
         toast({
@@ -194,13 +209,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
+        console.log("useEffect4 error: ", error);
       }
-      console.log("fiiiiired");
+      console.log("useEffect4 fired: ", pendingReqs);
 
       await processMockRequest(pendingReqs);
     }
     load();
-  }, [userDetails?.id, pollForMockups, supabase]);
+  }, [pollForMockups]);
 
   useEffect(() => {
     async function load() {
@@ -218,7 +234,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
+        console.log("useEffect5 error: ", processError);
       }
+
+      console.log("useEffect5 fired: ", processingReq);
 
       if (processingReq?.length === 0) return;
       if (!processingReq) return;
@@ -258,7 +277,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           console.log("err: ", err);
         }
       }
-      console.log("firrrreeeed");
+      console.log("useEffect5 fired: ", processingReq);
 
       setPollForMockups(false);
     }
@@ -549,6 +568,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const handleSet = (mock: any) => {
       setActiveMock(mock);
+      console.log("mockkkkk: ", mock);
       setItemPrice(mock.price);
       setMockImg(mock.mockups?.[0].mockup_url);
     };
@@ -580,7 +600,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           },
         });
 
-      if (uploadError) {
+      if (uploadError?.code === "23505") {
+        // dupe draft in db
+        setCheckout(true);
+      } else if (uploadError) {
         console.log("uploadError: ", uploadError);
         toast({
           title: "Something went wrong.",
@@ -589,8 +612,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
-      } else {
-        postDraftToPrintful();
       }
     };
 
@@ -632,7 +653,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       });
       const data = await response.json();
 
-      console.log("create order data: ", data);
+      if (typeof data == "string") {
+        toast({
+          title: "Something went wrong.",
+          description: `${data}`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+
+      return data;
     };
 
     const handleCheckout = () => {
@@ -648,9 +678,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         return;
       }
 
-      postDraftToSupa();
-
-      setCheckout(true);
+      postDraftToPrintful().then((res) => {
+        if (res && typeof res === "string") {
+          return;
+        } else if (res) {
+          postDraftToSupa();
+          setCheckout(true);
+        }
+      });
     };
 
     const handleDelete = async (mock: any) => {
@@ -896,6 +931,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       style={{ willChange: "transform" }}
                       className="absolute top-0 left-0  pb-40 mb-40 max-4-xl w-auto h-auto rounded-lg m-8 "
                     />
+                    <h1 className="text-xl font-bold">{activeMock.product}</h1>
+                    <h2 id="delivery-date" className="text-xl"></h2>
                   </div>
                   <HandleSale
                     mockup={activeMock}
@@ -972,9 +1009,22 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
         const res = await response.json();
 
-        if (res.status === 429 || !res.result?.task_key) {
+        console.log("processMockRequest res: ", res);
+
+        if (res.error) {
+          console.log("processMockRequest error: ", res.error);
+        }
+
+        if (res.status === 429) {
+          console.log("waiting for 60 seconds or status 429");
           await wait(60 * 1000);
         }
+
+        if (!res.result?.task_key) {
+          console.log("no task key");
+          return;
+        }
+
         await updateRequestStatus(r.id, "processing", res.result?.task_key);
         await wait(1000);
         count++;
@@ -993,8 +1043,18 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     const { product_id: prodID, id: variantID, name, price } = selectedVariant;
-    const scaledWidth = selectedTemplate.print_area_width;
-    const scaledHeight = selectedTemplate.print_area_height;
+
+    const {
+      template_height,
+      template_width,
+      print_area_height,
+      print_area_width,
+    } = selectedTemplate;
+
+    const scaledWidth = print_area_height * transform.scale;
+    const scaledHeight = print_area_width * transform.scale;
+
+    console.log("printFiles: ", printFiles);
 
     if (!prodID || !variantID) {
       console.error("No product or variant IDs found");
@@ -1015,7 +1075,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         user_id: userDetails.id,
         status: "pending",
         product: name,
-        price: Math.round(Number(price) * 2),
+        price: Math.round(Number(price) * 1.8),
       };
 
     const { error } = await supabase
@@ -1057,7 +1117,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const { data: mockups, error } = await supabase
       .from("mockups")
       .select("*")
-      .eq("user_id", user_id);
+      .eq("user_id", user_id)
+      .limit(10);
 
     if (error) {
       toast({
@@ -1143,29 +1204,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
-    // "recipient": {
-    //   "address1": "19749 Dearborn St",
-    //   "city": "Chatsworth",
-    //   "country_code": "US",
-    //   "state_code": "CA",
-    //   "zip": "91311",
-    //   "phone": "string"
-    //   },
-    //   "items": [
-    //   {
-    //   "variant_id": "202",
-    //   "external_variant_id": "1001",
-    //   "warehouse_product_variant_id": "2",
-    //   "quantity": 10,
-    //   "value": "2.99"
-    //   }
-    //   ],
-    //   "currency": "USD",
-    //   "locale": "en_US"
 
     useEffect(() => {
       console.log("=====================================");
-      console.log("mockup: ", mockup);
       const orderCost = async () => {
         const data = {
           recipient: {
@@ -1175,14 +1216,35 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             state_code: userDetails.billing_address.state_code,
             country_code: userDetails.billing_address.country_code,
             zip: userDetails.billing_address.zip,
+            phone: "07485441905",
           },
           items: [
             {
               variant_id: mockup.variant_id,
               quantity,
-              itemPrice,
+              retail_price: itemPrice,
+              name: mockup.product,
+              product: {
+                variant_id: mockup.variant_id,
+                product_id: mockup.product_id,
+                name: mockup.product,
+                image: mockup.printFiles[0].url,
+              },
+              files: [
+                {
+                  type: "default",
+                  url: mockup.printFiles[0].url,
+                  filename: "immmage",
+                },
+              ],
             },
           ],
+          retail_costs: {
+            subtotal: itemPrice * quantity,
+            discount: userDetails?.discount || "0",
+            shipping: "0",
+            tax: "0",
+          },
         };
 
         const response = await fetch("/api/pod/estimate-costs", {
@@ -1190,11 +1252,18 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           body: JSON.stringify(data),
         });
 
-        const res = await response.json();
+        const result = await response.json();
+        console.log("est order: ", result);
 
-        console.log("estimate costs response: ", res);
+        const orderData = {
+          currency: result.costs.currency,
+          shipping: result.costs.shipping,
+          subtotal: result.costs.subtotal,
+          vat: result.costs.vat,
+          total: result.costs.total,
+        };
 
-        return res;
+        return orderData;
       };
 
       const shippingCost = async () => {
@@ -1215,14 +1284,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             },
           ],
           retail_costs: {
-            currency: "GBP",
             subtotal: itemPrice * quantity,
             discount: userDetails?.discount || "0",
             shipping: "0",
             tax: "0",
           },
-          currency: "GBP",
-          locale: "en_GB",
         };
 
         const response = await fetch("/api/pod/shipping", {
@@ -1230,11 +1296,21 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           body: JSON.stringify(data),
         });
 
-        const res = await response.json();
+        const result = await response.json();
 
-        console.log("estimate shipping response: ", res);
+        console.log("est shipping: ", result);
 
-        return res;
+        const shippingData = {
+          currency: result[0].currency,
+          id: result[0].id,
+          maxDeliveryDate: result[0].maxDeliveryDate,
+          maxDeliveryDays: result[0].maxDeliveryDays,
+          minDeliveryDays: result[0].minDeliveryDays,
+          name: result[0].name,
+          rate: result[0].rate,
+        };
+
+        return shippingData;
       };
 
       async function load() {
@@ -1242,6 +1318,30 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         const estShippingCost = await shippingCost();
         console.log(`estOrderCost: `, estOrderCost);
         console.log(`estShippingCost: `, estShippingCost);
+
+        const data = {
+          ...estOrderCost,
+          ...estShippingCost,
+        };
+
+        const ele = document.getElementById("delivery-date");
+        if (ele) {
+          ele.innerHTML = `Estimated delivery date: ${new Date(
+            data.maxDeliveryDate
+          ).toLocaleDateString()}`;
+        }
+
+        const { data: dbUpdate, error } = await supabase
+          .from("orders")
+          .update({
+            final: data,
+            product: mockup.product,
+          })
+          .eq("task_key", mockup.task_key);
+
+        if (error) {
+          console.log("dbUpdate error: ", error);
+        }
       }
 
       load();
@@ -1264,103 +1364,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .then((res) => res.json())
         .then((data) => setClientSecret(data.clientSecret));
     }, []);
-
-    /**
-     * {
-    "id": "cs_test_a1dfzc4tGze7dNgPSmWgzBMtZCSH3G6MyIEkTUhpgRlYrbUWlKq7c5OzNf",
-    "object": "checkout.session",
-    "after_expiration": null,
-    "allow_promotion_codes": null,
-    "amount_subtotal": 3600,
-    "amount_total": 3600,
-    "automatic_tax": {
-        "enabled": false,
-        "status": null
-    },
-    "billing_address_collection": null,
-    "cancel_url": null,
-    "client_reference_id": null,
-    "client_secret": null,
-    "consent": null,
-    "consent_collection": null,
-    "created": 1702671078,
-    "currency": "usd",
-    "currency_conversion": null,
-    "custom_fields": [],
-    "custom_text": {
-        "after_submit": null,
-        "shipping_address": null,
-        "submit": null,
-        "terms_of_service_acceptance": null
-    },
-    "customer": null,
-    "customer_creation": "if_required",
-    "customer_details": {
-        "address": {
-            "city": null,
-            "country": "GB",
-            "line1": null,
-            "line2": null,
-            "postal_code": "TE57 5TE",
-            "state": null
-        },
-        "email": "kieranpatton@proton.me",
-        "name": "mr testy test",
-        "phone": null,
-        "tax_exempt": "none",
-        "tax_ids": []
-    },
-    "customer_email": null,
-    "expires_at": 1702757478,
-    "invoice": null,
-    "invoice_creation": {
-        "enabled": false,
-        "invoice_data": {
-            "account_tax_ids": null,
-            "custom_fields": null,
-            "description": null,
-            "footer": null,
-            "metadata": {},
-            "rendering_options": null
-        }
-    },
-    "livemode": false,
-    "locale": null,
-    "metadata": {},
-    "mode": "payment",
-    "payment_intent": "pi_3ONhjbJ8INwD5Vuc0YtDVDTg",
-    "payment_link": null,
-    "payment_method_collection": "if_required",
-    "payment_method_configuration_details": null,
-    "payment_method_options": {},
-    "payment_method_types": [
-        "card"
-    ],
-    "payment_status": "paid",
-    "phone_number_collection": {
-        "enabled": false
-    },
-    "recovered_from": null,
-    "redirect_on_completion": "always",
-    "return_url": "http://localhost:3000/return?session_id={CHECKOUT_SESSION_ID}",
-    "setup_intent": null,
-    "shipping_address_collection": null,
-    "shipping_cost": null,
-    "shipping_details": null,
-    "shipping_options": [],
-    "status": "complete",
-    "submit_type": null,
-    "subscription": null,
-    "success_url": null,
-    "total_details": {
-        "amount_discount": 0,
-        "amount_shipping": 0,
-        "amount_tax": 0
-    },
-    "ui_mode": "embedded",
-    "url": null
-}
-     */
     return (
       <>
         <div id="checkout">
@@ -1438,8 +1441,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         console.log(res);
         if (res.error) {
           alert(res.error);
-        } else {
-          window.location.reload();
         }
       });
     };
@@ -1647,7 +1648,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 <VariantSelection
                   chosen={selectedVariant}
                   variants={selectedProduct?.variants}
-                  setSelectedVariant={() => setSelectedVariant}
+                  setSelectedVariant={setSelectedVariant}
                 />
                 <ProductSelection
                   product={selectedProduct}
