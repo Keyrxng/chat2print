@@ -16,6 +16,11 @@ export const ProductOption = ({
   const selectedClass = isSelected
     ? "ring ring-offset-2 ring-offset-accent ring-accent"
     : "";
+
+  const isSame =
+    Math.round(Number(product?.priceRange.low) * 2) ===
+    Math.round(Number(product?.priceRange.high) * 2);
+
   return (
     <div
       className={`cursor-pointer mx-auto p-4 rounded-lg border gradientBG text-muted-foreground hover:bg-dark-700 transition duration-300 ease-in-out hover:scale-105 ${selectedClass}`}
@@ -37,8 +42,11 @@ export const ProductOption = ({
           {product?.product.type_name}
         </h3>
         <p className="text-sm font-bold">
-          ${Math.round(Number(product?.priceRange.low) * 1.5)} - $
-          {Math.round(Number(product?.priceRange.high) * 1.5)}
+          {!isSame
+            ? `From £${Math.round(
+                Number(product?.priceRange.low) * 2
+              )} - £${Math.round(Number(product?.priceRange.high) * 2)}`
+            : `£${Math.round(Number(product?.priceRange.low) * 2)}`}
         </p>
       </div>
     </div>

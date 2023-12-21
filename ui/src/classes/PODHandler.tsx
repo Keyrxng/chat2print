@@ -205,6 +205,15 @@ class PODHandler {
     }
   }
 
+  async estimateShipping(orderData: any) {
+    try {
+      const response = await this.client.post("/shipping/rates", orderData);
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   async getProductList() {
     try {
       const response = await this.client.get("/products");

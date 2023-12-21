@@ -22,9 +22,7 @@ import { __Variant } from "@/types/all";
 interface VariantSelectionProps {
   chosen: __Variant | undefined;
   variants: __Variant[] | undefined;
-  setSelectedVariant: React.Dispatch<
-    React.SetStateAction<__Variant | undefined>
-  >;
+  setSelectedVariant: (variant: __Variant) => void;
 }
 
 export function VariantSelection({
@@ -34,6 +32,12 @@ export function VariantSelection({
 }: VariantSelectionProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  React.useEffect(() => {
+    if (chosen) {
+      setValue(chosen.name);
+    }
+  }, [chosen]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -50,15 +50,72 @@ export default function SlidingBackground() {
                     width: "250px",
                     height: "250px",
                   }}
-                >
-                  {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                    <h3 className="text-white text-xl font-bold">
-                      {index + 1}
-                    </h3>
-                  </div> */}
-                </div>
+                ></div>
               ))}
             </div>
+            {returnRows().map((row, index) => (
+              <div key={index} className="grid grid-flow-row py-8">
+                <div className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: translateSliderX(index),
+                        animation: "slide 25s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "250px",
+                        height: "250px",
+                      }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {returnRows().map((row, index) => (
+              <div key={index} className="grid grid-flow-row py-8">
+                <div className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: translateSliderX(index),
+                        animation: "slide 25s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "250px",
+                        height: "250px",
+                      }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {returnRows().map((row, index) => (
+              <div key={index} className="grid grid-flow-row py-8">
+                <div className="image-row">
+                  {row.map((imageUrl, index) => (
+                    <div
+                      key={index}
+                      className={`shadow-md rounded-lg overflow-hidden m-2`}
+                      style={{
+                        backgroundImage: `url(${imageUrl})`,
+                        transform: translateSliderX(index),
+                        animation: "slide 25s infinite linear reverse",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        width: "250px",
+                        height: "250px",
+                      }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>

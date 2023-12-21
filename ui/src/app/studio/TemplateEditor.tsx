@@ -49,7 +49,6 @@ import { ChevronsUpDown, ToggleLeftIcon, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@radix-ui/react-dropdown-menu";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -115,39 +114,50 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         billing_address: user?.[0].billing_address,
         tier: user?.[0].tier,
       };
+      console.log("fireeed");
 
       setUserDetails((prev) => (prev = usr));
-
-      async function set(id) {
-        try {
-          let imgs;
-          let data;
-
-          if (id) {
-            imgs = await fetch("/api/designs/fetch");
-            data = await imgs.json();
-          }
-
-          if (!data) {
-          } else {
-            let { designImages, upscaledImages } = data;
-            designImages = designImages.filter((img: string) => img !== null);
-            setUserImages(designImages);
-            setSelectedImage(designImages[0]);
-            upscaledImages = upscaledImages.filter(
-              (img: string) => img !== null
-            );
-            setUpscaledImages(upscaledImages);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      set(uID);
     }
 
     getUser();
-  }, [supabase, userDetails?.id]);
+  }, [setSelectedImage, supabase, userDetails?.id]);
+
+  useEffect(() => {
+    async function set() {
+      if (!userDetails?.id) return;
+      try {
+        let imgs;
+        let data;
+        console.log("fired");
+
+        if (userDetails.id) {
+          imgs = await fetch("/api/designs/fetch");
+          data = await imgs.json();
+        }
+
+        if (!data) {
+        } else {
+          let { designImages, upscaledImages } = data;
+          designImages = designImages.filter((img: string) => img !== null);
+          setUserImages(designImages);
+          setSelectedImage(designImages[0]);
+          upscaledImages = upscaledImages.filter((img: string) => img !== null);
+          setUpscaledImages(upscaledImages);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    set();
+  }, [setSelectedImage, supabase, userDetails?.id]);
+
+  useEffect(() => {
+    if (supabase.changedAccessToken === undefined) {
+      setUserImages([]);
+      setUserDetails((prev) => (prev = null));
+      return;
+    }
+  }, [supabase.changedAccessToken]);
 
   useEffect(() => {
     const intitalPosition = {
@@ -156,6 +166,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       scale: 1,
     };
     setPosition((prev) => (prev = intitalPosition));
+    console.log("firedddd");
+
     async function load() {
       const completed = await fetchMockups();
       setMocks((prev) => (prev = completed));
@@ -165,7 +177,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       );
     }
     load();
-  }, [selectedTemplate, setSelectedImage]);
+  }, [selectedTemplate, setSelectedImage, supabase]);
 
   useEffect(() => {
     async function load() {
@@ -183,11 +195,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           className: "bg-background text-accent border-accent",
         });
       }
+      console.log("fiiiiired");
 
       await processMockRequest(pendingReqs);
     }
     load();
-  }, [userDetails?.id, pollForMockups]);
+  }, [userDetails?.id, pollForMockups, supabase]);
 
   useEffect(() => {
     async function load() {
@@ -245,10 +258,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           console.log("err: ", err);
         }
       }
+      console.log("firrrreeeed");
+
       setPollForMockups(false);
     }
     load();
-  }, [userDetails?.id, pollForMockups]);
+  }, [userDetails?.id, pollForMockups, supabase]);
 
   /////// STATS \\\\\\\
   /////// STATS \\\\\\\
@@ -530,89 +545,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const [checkout, setCheckout] = useState<boolean>(false);
     const [quantity, setQuantity] = useState<number>(1);
     const [mockImg, setMockImg] = useState<string>("");
-    const itemPrice = activeMock?.price;
+    const [itemPrice, setItemPrice] = useState<number>(0);
 
     const handleSet = (mock: any) => {
       setActiveMock(mock);
+      setItemPrice(mock.price);
       setMockImg(mock.mockups?.[0].mockup_url);
-    };
-
-    const estimateOrderCosts = async () => {
-      if (!activeMock) return;
-      if (!userDetails?.billing_address) {
-        toast({
-          title: "Head's up!",
-          description: `Please add a delivery address to your account before checking out.`,
-        });
-        return;
-      }
-      const data = {
-        recipient: {
-          address1: userDetails.billing_address.firstLine,
-          address2: userDetails.billing_address.secondLine,
-          city: userDetails.billing_address.city,
-          state_code: userDetails.billing_address.state_code,
-          country_code: userDetails.billing_address.country_code,
-          zip: userDetails.billing_address.zip,
-        },
-        items: [
-          {
-            variant_ids: activeMock?.variant_ids,
-            quantity,
-            itemPrice,
-          },
-        ],
-        currency: "USD",
-        locale: "en_US",
-      };
-
-      const response = await fetch("/api/pod/estimate-costs", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      const res = await response.json();
-
-      console.log("estimate costs response: ", res);
-    };
-
-    const estimateShippingCosts = async () => {
-      if (!activeMock) return;
-      if (!userDetails?.billing_address) {
-        toast({
-          title: "Head's up!",
-          description: `Please add a delivery address to your account before checking out.`,
-        });
-        return;
-      }
-      const data = {
-        recipient: {
-          address1: userDetails.billing_address.firstLine,
-          address2: userDetails.billing_address.secondLine,
-          city: userDetails.billing_address.city,
-          state_code: userDetails.billing_address.state_code,
-          country_code: userDetails.billing_address.country_code,
-          zip: userDetails.billing_address.zip,
-        },
-        items: [
-          {
-            variant_ids: activeMock.variant_ids,
-            quantity,
-            value: itemPrice,
-          },
-        ],
-        currency: "USD",
-        locale: "en_US",
-      };
-
-      const response = await fetch("/api/pod/estimate-shipping", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      const res = await response.json();
-
-      console.log("estimate shipping response: ", res);
     };
 
     const postDraftToSupa = async () => {
@@ -634,9 +572,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             },
           ],
           retail_costs: {
-            curreny: "USD",
+            curreny: "GBP",
             subtotal: itemPrice * quantity,
-            discount: "0",
+            discount: userDetails.discount,
             shipping: "0",
             tax: "0",
           },
@@ -693,10 +631,23 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }),
       });
       const data = await response.json();
+
+      console.log("create order data: ", data);
     };
 
     const handleCheckout = () => {
-      //do it
+      if (!userDetails?.billing_address) {
+        toast({
+          title: "Before you continue",
+          description:
+            "Please enter your shipping address by clicking the 'Profile' button if you are considering making a purchase. This will be used to determine your shipping options.",
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+
+        return;
+      }
+
       postDraftToSupa();
 
       setCheckout(true);
@@ -1064,7 +1015,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         user_id: userDetails.id,
         status: "pending",
         product: name,
-        price: Math.round(Number(price) * 1.5),
+        price: Math.round(Number(price) * 2),
       };
 
     const { error } = await supabase
@@ -1192,8 +1143,29 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
+    // "recipient": {
+    //   "address1": "19749 Dearborn St",
+    //   "city": "Chatsworth",
+    //   "country_code": "US",
+    //   "state_code": "CA",
+    //   "zip": "91311",
+    //   "phone": "string"
+    //   },
+    //   "items": [
+    //   {
+    //   "variant_id": "202",
+    //   "external_variant_id": "1001",
+    //   "warehouse_product_variant_id": "2",
+    //   "quantity": 10,
+    //   "value": "2.99"
+    //   }
+    //   ],
+    //   "currency": "USD",
+    //   "locale": "en_US"
 
     useEffect(() => {
+      console.log("=====================================");
+      console.log("mockup: ", mockup);
       const orderCost = async () => {
         const data = {
           recipient: {
@@ -1206,13 +1178,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           },
           items: [
             {
-              variant_ids: mockup.variant_ids,
+              variant_id: mockup.variant_id,
               quantity,
               itemPrice,
             },
           ],
-          currency: "USD",
-          locale: "en_US",
         };
 
         const response = await fetch("/api/pod/estimate-costs", {
@@ -1239,16 +1209,23 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           },
           items: [
             {
-              variant_ids: mockup.variant_ids,
+              variant_id: mockup.variant_id,
               quantity,
-              value: itemPrice,
+              value: itemPrice.toString(),
             },
           ],
-          currency: "USD",
-          locale: "en_US",
+          retail_costs: {
+            currency: "GBP",
+            subtotal: itemPrice * quantity,
+            discount: userDetails?.discount || "0",
+            shipping: "0",
+            tax: "0",
+          },
+          currency: "GBP",
+          locale: "en_GB",
         };
 
-        const response = await fetch("/api/pod/estimate-shipping", {
+        const response = await fetch("/api/pod/shipping", {
           method: "POST",
           body: JSON.stringify(data),
         });
@@ -1263,7 +1240,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       async function load() {
         const estOrderCost = await orderCost();
         const estShippingCost = await shippingCost();
+        console.log(`estOrderCost: `, estOrderCost);
+        console.log(`estShippingCost: `, estShippingCost);
       }
+
+      load();
     });
 
     useEffect(() => {
@@ -1666,7 +1647,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                 <VariantSelection
                   chosen={selectedVariant}
                   variants={selectedProduct?.variants}
-                  setSelectedVariant={setSelectedVariant}
+                  setSelectedVariant={() => setSelectedVariant}
                 />
                 <ProductSelection
                   product={selectedProduct}
@@ -1826,7 +1807,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   )}
                 </TransformWrapper>
                 <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-xs max-h-[700px] md:grid-cols-1 gap-4">
-                  {Object.values(products).map((option, index) => (
+                  {Object.values(products).map((option) => (
                     <ProductOption
                       key={option.product.id}
                       product={option}

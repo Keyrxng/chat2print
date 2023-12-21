@@ -104,23 +104,29 @@ export async function POST(req: Request, res: any) {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       payment_method_types: ["card"],
-
       billing_address_collection: "required",
       shipping_address_collection: {
         allowed_countries: inStockRegion,
       },
+      currency: "GBP",
       line_items: [
         {
           price_data: {
-            currency: currency,
+            currency: "GBP",
             product_data: {
               name: name,
             },
             unit_amount: price * 100,
           },
+          adjustable_quantity: {
+            enabled: true,
+            minimum: 1,
+            maximum: 10,
+          },
           quantity: quantity,
         },
       ],
+
       mode: "payment",
       return_url: `${req.headers.get(
         "origin"

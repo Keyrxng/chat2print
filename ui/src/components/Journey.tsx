@@ -31,16 +31,9 @@ const Journey = () => {
       altText: "Previewing the design on different products",
     },
     {
-      title: "Seamless Integration With Printful",
-      description:
-        "A seamless integration with Printful, a leading print on demand service, allows us to offer a wide variety of high-quality products while ensuring the highest quality printing process and fast, reliable delivery.",
-      imageUrl: "/images/printful-partnership.jpg",
-      altText: "Printful's high-quality printing process",
-    },
-    {
       title: "Fast And Reliable Delivery",
       description:
-        "Once you're satisfied with your design, submit your order and we'll take care of the rest. Payments are safely and securely processed through Stripe, while our fulfillment partner, Printful, manages the printing and shipping.",
+        "Once you're satisfied with your design, submit your order and we'll take care of the rest. Payments are safely and securely processed through Stripe, while our best-in-class print-on-demand partner, manages the printing and shipping.",
       imageUrl: "/images/delivered-to-doorstep.jpg",
       altText: "Custom art product delivery",
     },

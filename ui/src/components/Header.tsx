@@ -175,6 +175,12 @@ export default function Header() {
                 firstName: userdata?.full_name?.split(" ")[0],
               });
               setIsConnected(true);
+              toast({
+                title: "Success!",
+                description: "You are now signed in, refresh to see changes.",
+                duration: 4000,
+                variant: "default",
+              });
             }
           }
         })
@@ -186,8 +192,10 @@ export default function Header() {
             variant: "default",
           });
         });
+
       setIsRegistering(false);
       setAccountModalIsOpen(false);
+      setWaitingForConfirm(false);
     };
 
     return (
@@ -314,11 +322,10 @@ export default function Header() {
 
       toast({
         title: "Success!",
-        description: "Your details have been updated.",
+        description: "Your details have been updated, refresh to see changes.",
         duration: 4000,
         variant: "default",
       });
-
       return;
     };
 
@@ -365,7 +372,7 @@ export default function Header() {
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
             name="country_code"
-            placeholder="Country Code (e.g. UK, FR, etc.)*"
+            placeholder="Country Code* (e.g. GB, FR, DK, etc.)"
             className="text-accent"
           />
           <Input
@@ -379,7 +386,7 @@ export default function Header() {
             onChange={(e) => handleUpdateBilling(e)}
             type="text"
             name="state_code"
-            placeholder="State Code (Required for USA, CA and AU customers only)"
+            placeholder="State Code (Required for US, CA and AU customers only)"
             className="text-accent"
           />
 
@@ -553,7 +560,22 @@ export default function Header() {
             />
           </a>
           <div className="hidden md:flex flex-col lg:ml-[10rem]">
-            <p className="text-accent text-sm text-center">
+            <p className="text-accent font-bold flex align-middle gap-2 justify-center text-xl text-center">
+              Free Shipping During Early Access!{" "}
+              <span>
+                <Image
+                  src={"/shipping.png"}
+                  width={20}
+                  height={20}
+                  style={{
+                    height: "auto",
+                    width: "auto",
+                  }}
+                  alt="fast shipping icon"
+                />
+              </span>
+            </p>
+            <p className="text-accent underline text-sm text-center">
               <a href="/support/#about">Early Access?</a>
             </p>
           </div>

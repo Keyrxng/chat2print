@@ -24,6 +24,8 @@ export default function Page() {
       });
   }, []);
 
+  // need to update their order as fully complete in the database
+
   // if (status === "open") {
   //   return redirect("/");
   // }

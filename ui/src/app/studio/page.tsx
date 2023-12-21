@@ -25,9 +25,9 @@ export default function Page() {
   const [viewingMock, setViewingMock] = useState<boolean>(false);
 
   useEffect(() => {
-    loadForEditor(products["canvas"].variants[0]);
-    setSelectedVariant(products["canvas"].variants[0]);
-    handleChosenProduct(products["canvas"]);
+    loadForEditor(products["tough_iphone_case"].variants[0]);
+    setSelectedVariant(products["tough_iphone_case"].variants[0]);
+    handleChosenProduct(products["tough_iphone_case"]);
   }, []);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function Page() {
               <div className="flex flex-row my-2 gap-4 justify-between items-center">
                 <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
                 <h2 className="text-2xl font-bold ">
-                  ${Math.round(Number(selectedVariant?.price) * 1.5)}
+                  £{Math.round(Number(selectedVariant?.price) * 2)}
                 </h2>
               </div>
 
