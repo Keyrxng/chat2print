@@ -11,7 +11,7 @@ async function runUpscale(request: Request, imageUrl: string) {
       input: {
         image: imageUrl,
       },
-      webhook: `https://de19-86-27-41-90.ngrok-free.app/api/upscale/callback`,
+      webhook: `https://0bb1-86-27-41-90.ngrok-free.app/api/upscale/callback`,
       webhook_events_filter: ["completed"],
     }
   );

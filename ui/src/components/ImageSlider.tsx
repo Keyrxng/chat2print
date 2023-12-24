@@ -105,29 +105,29 @@ export const ImageSlider = ({
       reader.readAsDataURL(file);
     }
 
-    const { error } = await supabase.storage
-      .from("user_uploads")
-      .upload(`${userDetails.id}/${file?.name}`, file!);
+    // const { error } = await supabase.storage
+    //   .from("user_uploads")
+    //   .upload(`${userDetails.id}/${file?.name}`, file!);
 
-    const updateActionCount = async (action: string) => {
-      const { data, error } = await supabase.from("user_actions").insert({
-        user_id: userDetails.id,
-        action_type: action,
-      });
-    };
+    // const updateActionCount = async (action: string) => {
+    //   const { data, error } = await supabase.from("user_actions").insert({
+    //     user_id: userDetails.id,
+    //     action_type: action,
+    //   });
+    // };
 
-    console.log("uploaded: ", file?.name);
+    // console.log("uploaded: ", file?.name);
 
-    updateActionCount("import");
+    // updateActionCount("import");
 
-    if (error) {
-      toast({
-        title: "Something went wrong.",
-        description:
-          "Your upload was not successfully uploaded to your account, it will disappear when you refresh the page.",
-        duration: 5000,
-      });
-    }
+    // if (error) {
+    //   toast({
+    //     title: "Something went wrong.",
+    //     description:
+    //       "Your upload was not successfully uploaded to your account, it will disappear when you refresh the page.",
+    //     duration: 5000,
+    //   });
+    // }
   };
 
   return (

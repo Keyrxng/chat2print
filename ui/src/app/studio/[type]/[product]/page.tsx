@@ -121,7 +121,7 @@ export default function Page(params: { type: string; product: string }) {
         </div>
 
         {!viewingMock && (
-          <div className="flex flex-row max-w-lg self-center max-[1780px]:max-w-5xl items-center rounded-lg bg-background text-accent">
+          <div className="flex flex-row max-w-lg self-center mb-4 max-[1780px]:max-w-4xl items-center rounded-lg bg-background text-accent">
             <div>
               <div className="flex flex-row my-2 gap-4 justify-between items-center">
                 <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>

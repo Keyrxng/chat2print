@@ -31,7 +31,7 @@ export default function page(params: {
       <h1 className="text-4xl font-bold text-center text-accent">
         Select a blank product to start designing
       </h1>
-      <div className="grid grid-cols-2 mx-8 pt-4 px-4 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 mx-8 pt-4 px-4 gap-4">
         {Object.values(products).map((option) => (
           <ProductOption
             key={option.product.id}

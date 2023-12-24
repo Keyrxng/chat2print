@@ -199,8 +199,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       const { data: pendingReqs, error } = await supabase
         .from("mockup_requests")
         .select("*")
-        .match({ user_id: userDetails.id, status: "pending" })
-        .limit(3);
+        .match({ user_id: userDetails.id, status: "pending" });
 
       if (error) {
         toast({
@@ -216,7 +215,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       await processMockRequest(pendingReqs);
     }
     load();
-  }, [pollForMockups]);
+  }, [pollForMockups, userDetails?.id, supabase]);
 
   useEffect(() => {
     async function load() {
@@ -551,7 +550,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const wait = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+    new Promise((resolve) => {
+      toast({
+        title: "Generating Mockup",
+        description: `Please wait while we generate your mockup.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+
+      setTimeout(resolve, ms);
+    });
 
   /////// UPSCA \\\\\\\
   /////// UPSCA \\\\\\\
@@ -1026,15 +1034,21 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }
 
         await updateRequestStatus(r.id, "processing", res.result?.task_key);
-        await wait(1000);
         count++;
 
         count == limit && (await wait(backoff));
       }
+
+      count = 0;
     }
 
     return;
   };
+
+  const ele = document?.getElementById("user-image-source") as HTMLImageElement;
+
+  console.log("ele h: ", ele?.naturalHeight);
+  console.log("ele w: ", ele?.naturalWidth);
 
   const handleCreateMockup = async (imageData: string) => {
     if (!selectedTemplate || !selectedVariant) {
@@ -1044,21 +1058,36 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const { product_id: prodID, id: variantID, name, price } = selectedVariant;
 
-    const {
-      template_height,
-      template_width,
-      print_area_height,
-      print_area_width,
-    } = selectedTemplate;
-
-    const scaledWidth = print_area_height * transform.scale;
-    const scaledHeight = print_area_width * transform.scale;
-
-    console.log("printFiles: ", printFiles);
-
     if (!prodID || !variantID) {
       console.error("No product or variant IDs found");
       return;
+    }
+
+    const ele = document.getElementById(
+      "user-image-source"
+    ) as HTMLImageElement;
+
+    const { naturalWidth, naturalHeight } = ele;
+    const desiredDpi = 300;
+
+    const printFileWidthPixels = printFiles.width;
+    const printFileHeightPixels = printFiles.height;
+
+    const maxPrintWidthInches = printFileWidthPixels / desiredDpi;
+    const maxPrintHeightInches = printFileHeightPixels / desiredDpi;
+
+    let scaled_width;
+    let scaled_height;
+
+    if (
+      naturalWidth / naturalHeight >
+      printFileWidthPixels / printFileHeightPixels
+    ) {
+      scaled_width = Math.round(maxPrintWidthInches * desiredDpi);
+      scaled_height = Math.round((scaled_width / naturalWidth) * naturalHeight);
+    } else {
+      scaled_height = Math.round(maxPrintHeightInches * desiredDpi);
+      scaled_width = Math.round((scaled_height / naturalHeight) * naturalWidth);
     }
 
     setIsMockingUp(true);
@@ -1068,10 +1097,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         product_id: prodID,
         variant_id: variantID,
         image_data: imageData,
-        scaled_width: scaledWidth,
-        scaled_height: scaledHeight,
-        offset_x: transform.positionX,
-        offset_y: transform.positionY,
+        scaled_width: scaled_width,
+        scaled_height: scaled_height,
+        offset_x: 0,
+        offset_y: 0,
         user_id: userDetails.id,
         status: "pending",
         product: name,
@@ -1117,8 +1146,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const { data: mockups, error } = await supabase
       .from("mockups")
       .select("*")
-      .eq("user_id", user_id)
-      .limit(10);
+      .eq("user_id", user_id);
 
     if (error) {
       toast({
@@ -1738,14 +1766,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 onDrag={handleDrag}
                                 alt="user image"
                                 width={viewingUpscaled ? 4094 : 1024}
-                                id="userImage"
+                                id="user-image-source"
                                 height={viewingUpscaled ? 7168 : 1024}
                                 src={userImage || ""}
                                 className="z-10"
                                 style={{
                                   maxWidth: "100%",
                                   width: "50%",
-                                  height: "80%",
+                                  height: "70%",
                                 }}
                               />
                             ) : (
