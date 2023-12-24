@@ -1,13 +1,14 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { carouselImages } from "@/data/statics";
 import { Button } from "./ui/button";
 
 export function ProductsDisplay() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const [[page, direction], setPage] = useState([0, 0]);
+  const intervalRef = useRef();
+
   const [activeProd, setActiveProd] = useState<{
     title: string;
     description: string;
@@ -15,96 +16,48 @@ export function ProductsDisplay() {
     alt: string;
   } | null>(null);
 
-  const carouselVariants = {
-    enter: {
-      x: 1000,
-      opacity: 0,
-      transition: {
-        x: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
-      },
-    },
-    center: {
-      x: 0,
-      opacity: 1,
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      transition: {
-        x: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
-      },
-    },
-    exit: {
-      x: -1000,
-      opacity: 0,
-      transition: {
-        x: { type: "spring", stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
-      },
-    },
-  };
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset, velocity) => {
-    return Math.abs(offset) * velocity;
-  };
-  const [[page, direction], setPage] = useState([0, 0]);
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      paginate(1);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(intervalRef.current);
+  }, [page]);
 
   const paginate = (newDirection) => {
-    setPage([page + newDirection, newDirection]);
-    setActiveProd(carouselImages[page + newDirection]);
+    let newPage = page + newDirection;
+    if (newPage >= carouselImages.length) {
+      newPage = 0;
+    } else if (newPage < 0) {
+      newPage = carouselImages.length - 1;
+    }
+    setPage([newPage, newDirection]);
+    setActiveProd(carouselImages[newPage]);
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.5, delay: 1 }}
-    >
-      <section className="justify-center">
-        <h2 className="text-accent text-5xl font-bold text-center mb-6">
-          Imagine the Possibilities, Print the Reality
-        </h2>
-        {!activeProd ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2" ref={ref}>
-            {carouselImages.map((mock, index) => (
-              <button
-                key={mock.title}
-                className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
-                onClick={() => setActiveProd(mock)}
-              >
-                <h1 className="text-accent text-lg m-1">{mock.title}</h1>
-                <Image
-                  priority={true}
-                  src={mock.image_url}
-                  width={150}
-                  height={150}
-                  alt={mock.alt}
-                  className="rounded-lg"
-                />
-              </button>
-            ))}
-          </div>
-        ) : (
-          <button
-            key={activeProd.title}
-            className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-black hover:text-background transition-all duration-300"
-            onClick={() => setActiveProd(null)}
-            about="Close Product Display"
-          >
-            <h1 className="text-accent text-lg m-1">{activeProd.title}</h1>
-            <Image
-              priority={true}
-              src={activeProd.image_url}
-              width={450}
-              height={450}
-              alt={activeProd.alt}
-              className="rounded-lg"
-            />
-          </button>
-        )}
-      </section>
-    </motion.div>
+    <div className="space-y-24 overflow-x-hidden gap-4">
+      <h2 className="text-accent text-5xl font-bold text-center">
+        Imagine the Impossible, Print the Reality
+      </h2>
+
+      <button
+        key={activeProd?.title}
+        className="flex flex-col w-full h-full justify-center items-center rounded-lg p-2 m-2 transition-all duration-300"
+        about="Close Product Display"
+      >
+        <h3 className="text-3xl font-bold text-center text-accent">
+          {activeProd?.title}
+        </h3>
+        <Image
+          priority={true}
+          src={activeProd?.image_url}
+          width={450}
+          height={450}
+          alt={activeProd?.alt}
+          className="rounded-lg"
+        />
+      </button>
+    </div>
   );
 }
