@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect, Suspense, useCallback } from "react";
 import Image from "next/image";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -25,8 +27,6 @@ import {
 } from "@stripe/react-stripe-js";
 
 import { loadStripe } from "@stripe/stripe-js";
-import { ProductOption } from "@/components/ProductOption";
-import products from "@/data/products";
 import { ImageSlider } from "@/components/ImageSlider";
 import { ProductSelection } from "@/components/ProductSelection";
 import { VariantSelection } from "@/components/VariantSelection";
@@ -1644,7 +1644,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
           {!viewingMocks && (
             <>
-              <div className="flex flex-row mx-8 m-4 justify-between items-center">
+              <div className="flex flex-row mx-8 m-4 gap-2 justify-between items-center">
                 <VariantSelection
                   chosen={selectedVariant}
                   variants={selectedProduct?.variants}
@@ -1678,7 +1678,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             <Mockup />
           ) : (
             <>
-              <div className="flex w-full h-min max-w-7xl">
+              <div className="flex justify-center w-full h-min max-w-full">
                 <TransformWrapper
                   initialScale={position.scale}
                   initialPositionX={-position.x}
@@ -1728,7 +1728,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                   {imageSrc ? (
                     <Suspense fallback={<div>Loading...</div>}>
                       <div
-                        className="relative bg-center bg-no-repeat bg-cover h-[700px] w-[700px] fill"
+                        className="relative bg-center bg-no-repeat bg-cover h-[750px] w-[750px] fill"
                         style={{ backgroundImage: `url(${imageSrc})` }}
                       >
                         <TransformComponent wrapperClass="relative h-auto w-auto fill">
@@ -1739,13 +1739,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 alt="user image"
                                 width={viewingUpscaled ? 4094 : 1024}
                                 id="userImage"
-                                height={viewingUpscaled ? 4094 : 1024}
+                                height={viewingUpscaled ? 7168 : 1024}
                                 src={userImage || ""}
                                 className="z-10"
                                 style={{
                                   maxWidth: "100%",
                                   width: "50%",
-                                  height: "50%",
+                                  height: "80%",
                                 }}
                               />
                             ) : (
@@ -1807,18 +1807,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     </div>
                   )}
                 </TransformWrapper>
-                <div className="grid grid-cols-2 mx-8 pt-4 px-4 overflow-y-auto max-w-xs max-h-[700px] md:grid-cols-1 gap-4">
-                  {Object.values(products).map((option) => (
-                    <ProductOption
-                      key={option.product.id}
-                      product={option}
-                      isSelected={
-                        selectedVariant?.product_id === option.product.id
-                      }
-                      onSelect={onSelect}
-                    />
-                  ))}
-                </div>
+                {/* values */}
               </div>
               <div className="grid grid-cols-1">
                 <div className="flex mx-8 mt-4 justify-between">

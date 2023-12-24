@@ -12,16 +12,14 @@ import snapCaseSamsungTemplate from "./Snap Case for Samsung.json";
 import thinCanvasTemplate from "./Thin Canvas.json";
 import toughCaseIphoneTemplate from "./Tough Case for iPhone.json";
 import toughCaseSamsungTemplate from "./Tough Case for Samsung.json";
-// import clearSamsungTemplate from "./Clear Case for Samsung.json";
-// import clearIphoneTemplate from "./Clear Case for iPhone.json";
+import clearSamsungTemplate from "./Clear Case for Samsung.json";
+import clearIphoneTemplate from "./Clear Case for iPhone.json";
 // import pinButtonsTemplate from './Set of Pin Buttons.json'
 // import holographicStickerTemplate from "./Kiss-Cut Holographic Stickers.json";
 // import stickerSheetTemplate from "./Kiss-Cut Sticker Sheet.json";
 // import stickerTemplate from "./Kiss-Cut Stickers.json";
 
 const templates = {
-  // clearSamsungTemplate,
-  // clearIphoneTemplate,
   // holographicStickerTemplate,
   // stickerSheetTemplate,
   // stickerTemplate,
@@ -31,15 +29,17 @@ const templates = {
   toughCaseSamsungTemplate,
   snapCaseIphoneTemplate,
   snapCaseSamsungTemplate,
-  gamingMousepadTemplate,
-  metalPrintTemplate,
-  framedCanvasTemplate,
-  framedPaperPosterTemplate,
-  paperPosterTemplate,
-  laptopSleeveTemplate,
-  mousePadTemplate,
-  canvasTemplate,
-  thinCanvasTemplate,
+  clearSamsungTemplate,
+  clearIphoneTemplate,
+  // gamingMousepadTemplate,
+  // metalPrintTemplate,
+  // framedCanvasTemplate,
+  // framedPaperPosterTemplate,
+  // paperPosterTemplate,
+  // laptopSleeveTemplate,
+  // mousePadTemplate,
+  // canvasTemplate,
+  // thinCanvasTemplate,
 };
 
 export default templates;

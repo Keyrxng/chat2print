@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { __Variant } from "@/types/all";
+import { useRouter } from "next/navigation";
 
 interface VariantSelectionProps {
   chosen: __Variant | undefined;
@@ -32,6 +33,7 @@ export function VariantSelection({
 }: VariantSelectionProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const router = useRouter();
 
   React.useEffect(() => {
     if (chosen) {
@@ -65,6 +67,18 @@ export function VariantSelection({
                   setValue(currentValue === value ? "" : currentValue);
                   setSelectedVariant(variant);
                   setOpen(false);
+                  let url = new URL(window.location.href);
+                  const split = url.pathname.split("/").pop();
+
+                  const newProdName = variant.name
+                    .toLowerCase()
+                    .replaceAll(" ", "-")
+                    .replaceAll("-/-", "-");
+
+                  url.searchParams.set("vid", variant.id.toString());
+                  url.searchParams.set("pid", variant.product_id.toString());
+                  url.pathname = url.pathname.replace(split!, `${newProdName}`);
+                  router.push(url.toString());
                 }}
               >
                 <Check

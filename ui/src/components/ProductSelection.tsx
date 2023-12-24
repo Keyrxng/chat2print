@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { __Prod, __ProductsList } from "@/types/all";
 import Products from "@/data/products";
+import { useRouter } from "next/navigation";
 
 interface ProductSelectionProps {
   product: __Prod | undefined;
@@ -31,6 +32,7 @@ export function ProductSelection({
 }: ProductSelectionProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const router = useRouter();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -62,6 +64,22 @@ export function ProductSelection({
                   setValue(currentValue === value ? "" : currentValue);
                   setSelectedProduct(product);
                   setOpen(false);
+                  let url = new URL(window.location.href);
+                  const split = url.pathname.split("/").pop();
+
+                  const newProdName = product.product.type_name
+                    .toLowerCase()
+                    .replaceAll(" ", "-")
+                    .replaceAll("-/-", "-");
+
+                  url.searchParams.set("pid", product.product.id.toString());
+                  url.searchParams.set(
+                    "vid",
+                    product.variants[0].id.toString()
+                  );
+
+                  url.pathname = url.pathname.replace(split!, `${newProdName}`);
+                  router.push(url.toString());
                 }}
               >
                 <Check
