@@ -987,6 +987,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
       }
 
+      console.log("processMockRequest r: ", r);
+
       while (count < limit) {
         let data;
         if (aiAssist) {

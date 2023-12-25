@@ -3,30 +3,30 @@ import { motion } from "framer-motion";
 const Journey = () => {
   const steps = [
     {
-      title: "Craft Your Vision With ChatGPT",
+      title: "Words With AI",
       description:
         "A few simple words with AI and you can create stunning artwork. Our platform allows you to import your ChatGPT art directly from the chat interface using our browser extension or by uploading your design.",
       imageUrl: "/images/craft-your-vision.jpg",
       altText: "Digital artwork creation with ChatGPT",
     },
     {
-      title: "AI-Enhanced Artwork For Print",
+      title: "AI Print On Demand",
       description:
-        "Leverage our AI Print on Demand technology to refine every detail, guaranteeing a fourfold improvement in quality. Our platform enhances your art to ensure the highest quality for each custom-designed product.",
+        "Leverage our AI Print on Demand technology to refine every detail, guaranteeing a fourfold improvement in print quality. Our platform enhances your art to ensure the highest quality for each custom-designed product.",
       imageUrl: "/images/enhance-art-ai.jpg",
       altText: "AI-enhanced artwork for print",
     },
     {
-      title: "Design With The Chat2Print Editor",
+      title: "Easy-To-Use Design",
       description:
-        "Our editor simplifies the personalization process, allowing you complete control over your design. Creating mockups is as easy as drag, pinch, pan, and zoom. We handle the rest, from printing to shipping.",
+        "Our editor simplifies the personalization process, allowing you complete control over your design. Creating mockups is as easy as drag, pinch, pan, and zoom.",
       imageUrl: "/images/chat2print-editor.jpg",
       altText: "Customizing artwork in Chat2Print Editor",
     },
     {
-      title: "Detailed Mockups For Preview Perfection",
+      title: "Mockups For Perfection",
       description:
-        "Our platform generates detailed mockups of your design on a variety of products, allowing you to make adjustments and ensure perfection before ordering. During our early access, our product range is limited to Metal Prints, Posters, Canvas Prints, Phone Cases, Laptop Sleeves, and Mouse Pads, with more to come.",
+        "Our platform generates detailed mockups of your design on a variety of products, allowing you to make adjustments and ensure perfection before ordering. We will continue to expand the product line on a per request basis.",
       imageUrl: "/images/preview-perfection.jpg",
       altText: "Previewing the design on different products",
     },
@@ -68,9 +68,9 @@ const Journey = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 * steps.length }}
-            className="inline-block bg-background hover:text-background hover:border-background hover:border-2 hover:bg-accent text-accent font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
+            className="mb-4 inline-block bg-background hover:text-background hover:border-background hover:border-2 hover:bg-accent text-accent font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
           >
-            Say less and take my money already!
+            Start Creating
           </motion.a>
         </div>
       </div>

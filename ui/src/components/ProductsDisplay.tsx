@@ -1,9 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { carouselImages } from "@/data/statics";
-import { Button } from "./ui/button";
 
 export function ProductsDisplay() {
   const [[page, direction], setPage] = useState([0, 0]);
