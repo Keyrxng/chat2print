@@ -125,7 +125,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         billing_address: user?.[0].billing_address,
         tier: user?.[0].tier,
       };
-      console.log("useEffect0 fired");
 
       setUserDetails((prev) => (prev = usr));
     }
@@ -160,7 +159,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
     }
     set();
-    console.log("useEffect1 fired");
   }, [setSelectedImage, supabase, userDetails?.id]);
 
   useEffect(() => {
@@ -169,8 +167,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       setUserDetails((prev) => (prev = null));
       return;
     }
-
-    console.log("useEffect2 fired: ");
   }, [supabase.changedAccessToken]);
 
   useEffect(() => {
@@ -180,7 +176,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       scale: 1,
     };
     setPosition((prev) => (prev = intitalPosition));
-    console.log("useEffect3 fired: ", selectedTemplate);
 
     async function load() {
       const completed = await fetchMockups();
@@ -200,6 +195,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .from("mockup_requests")
         .select("*")
         .match({ user_id: userDetails.id, status: "pending" });
+      console.log("pendingReqs: ", pendingReqs);
 
       if (error) {
         toast({
@@ -208,9 +204,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
-        console.log("useEffect4 error: ", error);
       }
-      console.log("useEffect4 fired: ", pendingReqs);
 
       await processMockRequest(pendingReqs);
     }
@@ -225,7 +219,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .from("mockup_requests")
         .select("*")
         .match({ user_id: userDetails?.id, status: "processing" });
-
+      console.log("processingReq: ", processingReq);
       if (processError) {
         toast({
           title: "Something went wrong.",
@@ -233,10 +227,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
-        console.log("useEffect5 error: ", processError);
       }
-
-      console.log("useEffect5 fired: ", processingReq);
 
       if (processingReq?.length === 0) return;
       if (!processingReq) return;
@@ -276,7 +267,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           console.log("err: ", err);
         }
       }
-      console.log("useEffect5 fired: ", processingReq);
 
       setPollForMockups(false);
     }
@@ -1047,11 +1037,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     return;
   };
 
-  const ele = document?.getElementById("user-image-source") as HTMLImageElement;
-
-  console.log("ele h: ", ele?.naturalHeight);
-  console.log("ele w: ", ele?.naturalWidth);
-
   const handleCreateMockup = async (imageData: string) => {
     if (!selectedTemplate || !selectedVariant) {
       console.error("Template or variant information is missing");
@@ -1181,8 +1166,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }).dismiss();
       }
     }
-
-    fetchMockups();
   };
 
   const MockupLoader = ({ title, body }: { title: string; body: string }) => {
@@ -1774,8 +1757,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 className="z-10"
                                 style={{
                                   maxWidth: "100%",
-                                  width: "50%",
-                                  height: "70%",
+                                  width: "40%",
+                                  height: "60%",
                                 }}
                               />
                             ) : (

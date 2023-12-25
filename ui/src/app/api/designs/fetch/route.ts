@@ -56,6 +56,18 @@ export async function GET() {
       },
     });
 
+  const { data: upscaleBucketPaths, error: upBucketPathError } = await supabase
+    .from("upscales")
+    .select("bucket_path")
+    .eq("user_id", data.session.user.id)
+    .limit(10)
+    .order("created_at", { ascending: false });
+
+  const upscaledImages = upscaleBucketPaths?.map((upscale) => {
+    const bucketPath = upscale.bucket_path;
+    return `${process.env.SUPABASE_URL}/storage/v1/object/public/user_uploads/${bucketPath}`;
+  });
+
   const { data: designs, error: designError } = await supabase.rpc(
     "list_objects",
     {
@@ -65,28 +77,6 @@ export async function GET() {
       offsets: 0,
     },
     { headers: { "cache-control": "public, max-age=604800" } }
-  );
-
-  const { data: upscales, error: upscalesError } = await supabase.rpc(
-    "list_objects",
-    {
-      bucketid: "user_uploads",
-      prefix: `${data.session?.user?.id}/upscaled/`,
-      limits: 10,
-      offsets: 0,
-    },
-    { headers: { "cache-control": "public, max-age=604800" } }
-  );
-
-  const upscaledImages = await Promise.all(
-    upscales!.map(async (upscale) => {
-      if (upscale.name === "temp.png") return;
-      if (upscale.name === "upscaled") return;
-      if (upscale.name === null || upscale.name === undefined) return;
-
-      const url = `${process.env.SUPABASE_URL}/storage/v1/object/public/user_uploads/${upscale.name}`;
-      return url;
-    })
   );
 
   const images = await Promise.all(
@@ -103,23 +93,23 @@ export async function GET() {
   const filteredImages = images.filter(
     (image) => image !== undefined && image !== null
   );
-  const filteredUpscaledImages = upscaledImages.filter(
-    (image) => image !== undefined && image !== null
-  );
 
-  if (designError || upscalesError) {
-    return new Response(JSON.stringify({ error: error }), {
-      status: 500,
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+  if (designError || upBucketPathError) {
+    return new Response(
+      JSON.stringify({ authError: error, designError, upBucketPathError }),
+      {
+        status: 500,
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
   }
 
   return new Response(
     JSON.stringify({
       designImages: filteredImages,
-      upscaledImages: filteredUpscaledImages,
+      upscaledImages: upscaledImages,
     }),
     {
       status: 200,

@@ -50,12 +50,6 @@ export default function Page(params: { type: string; product: string }) {
     }
   }, [params.product, params.type]);
 
-  // useEffect(() => {
-  //   loadForEditor(products["tough_iphone_case"].variants[0]);
-  //   setSelectedVariant(products["tough_iphone_case"].variants[0]);
-  //   handleChosenProduct(products["tough_iphone_case"]);
-  // }, []);
-
   useEffect(() => {
     if (!selectedVariant) return;
     if (selectedVariant?.id) {
