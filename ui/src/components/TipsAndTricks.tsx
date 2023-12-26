@@ -8,7 +8,7 @@ const tipsAndTricks = [
       {
         title: "Results and Quality",
         detail:
-          "We guarantee print quality 173% higher than industry minimums and are actively working to further increase this capacity.",
+          "We guarantee print quality 173% higher than industry minimums, achieving a minimum of 260 DPI (dots per inch).",
       },
       {
         title: "Basic Usage",

@@ -1229,41 +1229,27 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
-    const [shippingInfo, setShippingInfo] = useState<any>(null);
     const [seshId, setSeshId] = useState<string>("");
 
     useEffect(() => {
-      console.log("=====================================");
-      console.log("=============== loadShippingInfos() =============");
-      async function load() {
-        await postDraftToSupa();
-      }
-      load();
-      console.log("=============== loadShippingInfos() =============");
-      console.log("=====================================");
-
-      return () => {
-        fetch("/api/checkout_sessions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mockup,
-            quantity,
-            itemPrice,
-            regions: selectedVariant?.availability_regions,
-            stock: selectedVariant?.availability_status,
-            shippingInfo,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            setClientSecret(data.clientSecret);
-            postDraftToSupa(data.id);
-            console.log("data: ", data);
-          });
-      };
+      fetch("/api/checkout_sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mockup,
+          quantity,
+          itemPrice,
+          regions: selectedVariant?.availability_regions,
+          stock: selectedVariant?.availability_status,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+          postDraftToSupa(data.id);
+        });
     }, []);
 
     const loadShippingInfos = useCallback(async () => {
@@ -1790,7 +1776,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
               body="This may take a minute or two. Future updates will improve this process."
             />
           )}
-          {/* middle right aligned abolute inset loader during processing */}
 
           {needAccount && <NeedAccountLoader />}
 
