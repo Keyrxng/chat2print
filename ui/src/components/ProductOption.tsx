@@ -9,8 +9,8 @@ interface ProductOptionProps {
 
 export const ProductOption = ({ product, vid, pid }: ProductOptionProps) => {
   const isSame =
-    Math.round(Number(product?.priceRange.low) * 2) ===
-    Math.round(Number(product?.priceRange.high) * 2);
+    Math.round(Number(product?.priceRange.low) * 1.8) ===
+    Math.round(Number(product?.priceRange.high) * 1.8);
 
   const type = product.product.type.replaceAll(" ", "-").toLowerCase();
   const prod = product.variants[0].name
@@ -43,9 +43,9 @@ export const ProductOption = ({ product, vid, pid }: ProductOptionProps) => {
           <p className="text-sm font-bold">
             {!isSame
               ? `From £${Math.round(
-                  Number(product?.priceRange.low) * 2
-                )} - £${Math.round(Number(product?.priceRange.high) * 2)}`
-              : `£${Math.round(Number(product?.priceRange.low) * 2)}`}
+                  Number(product?.priceRange.low) * 1.8
+                )} - £${Math.round(Number(product?.priceRange.high) * 1.8)}`
+              : `£${Math.round(Number(product?.priceRange.low) * 1.8)}`}
           </p>
         </div>
       </div>

@@ -120,7 +120,7 @@ export default function Page(params: { type: string; product: string }) {
               <div className="flex flex-row my-2 gap-4 justify-between items-center">
                 <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
                 <h2 className="text-2xl font-bold ">
-                  £{Math.round(Number(selectedVariant?.price) * 2.3)}
+                  £{Math.round(Number(selectedVariant?.price) * 1.8)}
                 </h2>
               </div>
 

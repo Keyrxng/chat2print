@@ -38,6 +38,7 @@ export const ImageSlider = ({
 
   const handleSelectImage = (image: string) => {
     setSelectedImage(image);
+    console.log("selected: ", image);
   };
 
   const handleDeleteImage = async (image: string) => {
@@ -56,8 +57,10 @@ export const ImageSlider = ({
         });
       }
 
-      const updated = upscaled.filter((img) => img !== image);
-      setUpscaled(updated);
+      const updated = upscaled.findIndex((img) => img === image);
+      upscaled.splice(updated, 1);
+
+      setUpscaled(upscaled);
     } else {
       const name = image.split("/")[image.split("/").length - 1];
       const { data, error } = await supabase.storage
@@ -73,9 +76,11 @@ export const ImageSlider = ({
         });
       }
 
-      const updated = userImages.filter((img) => img !== image);
+      const index = userImages.findIndex((img) => img === image);
+      userImages.splice(index, 1);
+
       console.log("data: ", data);
-      setUserImages(updated);
+      setUserImages(userImages);
     }
 
     toast({

@@ -14,6 +14,7 @@ export async function POST(req: Request, res: any) {
   const quantity = args.quantity.toString();
   const stock = args.stock;
 
+  console.log("args: ", args);
   const eu = [
     "AL",
     "AD",
@@ -101,6 +102,9 @@ export async function POST(req: Request, res: any) {
       ui_mode: "embedded",
       payment_method_types: ["card"],
       billing_address_collection: "required",
+      phone_number_collection: {
+        enabled: true,
+      },
       shipping_address_collection: {
         allowed_countries: inStockRegion,
       },
@@ -130,7 +134,7 @@ export async function POST(req: Request, res: any) {
     });
 
     return new Response(
-      JSON.stringify({ clientSecret: session.client_secret })
+      JSON.stringify({ clientSecret: session.client_secret, id: session.id })
     );
   } catch (err: any) {
     console.log("Error creating checkout session:", err.message);

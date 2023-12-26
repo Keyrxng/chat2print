@@ -32,38 +32,8 @@ export interface Database {
           }
         ]
       }
-      designs: {
-        Row: {
-          bucket_path: string | null
-          created_at: string
-          id: string
-          upscale_id: string | null
-        }
-        Insert: {
-          bucket_path?: string | null
-          created_at?: string
-          id: string
-          upscale_id?: string | null
-        }
-        Update: {
-          bucket_path?: string | null
-          created_at?: string
-          id?: string
-          upscale_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "designs_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       mockup_requests: {
         Row: {
-          cost: string | null
           created_at: string
           id: number
           image_data: string | null
@@ -81,7 +51,6 @@ export interface Database {
           variant_id: number | null
         }
         Insert: {
-          cost?: string | null
           created_at?: string
           id?: number
           image_data?: string | null
@@ -99,7 +68,6 @@ export interface Database {
           variant_id?: number | null
         }
         Update: {
-          cost?: string | null
           created_at?: string
           id?: number
           image_data?: string | null
@@ -128,40 +96,34 @@ export interface Database {
       }
       mockups: {
         Row: {
-          cost: string | null
           created_at: string
           mockups: Json | null
           price: number | null
           printFiles: Json | null
           product: string | null
           product_id: number | null
-          status: string | null
           task_key: string
           user_id: string | null
           variant_id: number | null
         }
         Insert: {
-          cost?: string | null
           created_at?: string
           mockups?: Json | null
           price?: number | null
           printFiles?: Json | null
           product?: string | null
           product_id?: number | null
-          status?: string | null
           task_key: string
           user_id?: string | null
           variant_id?: number | null
         }
         Update: {
-          cost?: string | null
           created_at?: string
           mockups?: Json | null
           price?: number | null
           printFiles?: Json | null
           product?: string | null
           product_id?: number | null
-          status?: string | null
           task_key?: string
           user_id?: string | null
           variant_id?: number | null
@@ -178,22 +140,31 @@ export interface Database {
       }
       orders: {
         Row: {
+          completed: boolean
           created_at: string
+          final: Json
           items: Json | null
+          product: string
           retail_costs: Json | null
           task_key: string
           user_id: string | null
         }
         Insert: {
+          completed?: boolean
           created_at?: string
+          final?: Json
           items?: Json | null
+          product?: string
           retail_costs?: Json | null
           task_key: string
           user_id?: string | null
         }
         Update: {
+          completed?: boolean
           created_at?: string
+          final?: Json
           items?: Json | null
+          product?: string
           retail_costs?: Json | null
           task_key?: string
           user_id?: string | null
@@ -207,83 +178,6 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
-      }
-      prices: {
-        Row: {
-          active: boolean | null
-          currency: string | null
-          description: string | null
-          id: string
-          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null
-          interval_count: number | null
-          metadata: Json | null
-          product_id: string | null
-          trial_period_days: number | null
-          type: Database["public"]["Enums"]["pricing_type"] | null
-          unit_amount: number | null
-        }
-        Insert: {
-          active?: boolean | null
-          currency?: string | null
-          description?: string | null
-          id: string
-          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
-          interval_count?: number | null
-          metadata?: Json | null
-          product_id?: string | null
-          trial_period_days?: number | null
-          type?: Database["public"]["Enums"]["pricing_type"] | null
-          unit_amount?: number | null
-        }
-        Update: {
-          active?: boolean | null
-          currency?: string | null
-          description?: string | null
-          id?: string
-          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
-          interval_count?: number | null
-          metadata?: Json | null
-          product_id?: string | null
-          trial_period_days?: number | null
-          type?: Database["public"]["Enums"]["pricing_type"] | null
-          unit_amount?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "prices_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      products: {
-        Row: {
-          active: boolean | null
-          description: string | null
-          id: string
-          image: string | null
-          metadata: Json | null
-          name: string | null
-        }
-        Insert: {
-          active?: boolean | null
-          description?: string | null
-          id: string
-          image?: string | null
-          metadata?: Json | null
-          name?: string | null
-        }
-        Update: {
-          active?: boolean | null
-          description?: string | null
-          id?: string
-          image?: string | null
-          metadata?: Json | null
-          name?: string | null
-        }
-        Relationships: []
       }
       subscriptions: {
         Row: {
@@ -339,13 +233,6 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "subscriptions_price_id_fkey"
-            columns: ["price_id"]
-            isOneToOne: false
-            referencedRelation: "prices"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "subscriptions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -357,6 +244,7 @@ export interface Database {
       upscales: {
         Row: {
           bucket_path: string | null
+          created_at: string | null
           finalized: Json | null
           id: number
           idd: string | null
@@ -364,6 +252,7 @@ export interface Database {
         }
         Insert: {
           bucket_path?: string | null
+          created_at?: string | null
           finalized?: Json | null
           id?: number
           idd?: string | null
@@ -371,6 +260,7 @@ export interface Database {
         }
         Update: {
           bucket_path?: string | null
+          created_at?: string | null
           finalized?: Json | null
           id?: number
           idd?: string | null
@@ -386,65 +276,57 @@ export interface Database {
           }
         ]
       }
-      "user-stats": {
+      usage_tiers: {
         Row: {
-          created_at: string
-          designs: number | null
-          id: string
-          mockups: number | null
-          storage: number | null
-          upscales: number | null
+          crafter: Json | null
+          designer: Json | null
+          free: Json | null
+          id: number
+          manufacturer: Json | null
         }
         Insert: {
-          created_at?: string
-          designs?: number | null
-          id: string
-          mockups?: number | null
-          storage?: number | null
-          upscales?: number | null
+          crafter?: Json | null
+          designer?: Json | null
+          free?: Json | null
+          id?: number
+          manufacturer?: Json | null
         }
         Update: {
-          created_at?: string
-          designs?: number | null
-          id?: string
-          mockups?: number | null
-          storage?: number | null
-          upscales?: number | null
+          crafter?: Json | null
+          designer?: Json | null
+          free?: Json | null
+          id?: number
+          manufacturer?: Json | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "user-stats_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
-      "user-upscales": {
+      user_actions: {
         Row: {
-          bucket_path: string | null
-          created_at: string
-          upscale_id: string | null
+          action_type: Database["public"]["Enums"]["actions"]
+          data_size: number | null
+          id: number
+          timestamp: string | null
           user_id: string
         }
         Insert: {
-          bucket_path?: string | null
-          created_at?: string
-          upscale_id?: string | null
+          action_type: Database["public"]["Enums"]["actions"]
+          data_size?: number | null
+          id?: number
+          timestamp?: string | null
           user_id: string
         }
         Update: {
-          bucket_path?: string | null
-          created_at?: string
-          upscale_id?: string | null
+          action_type?: Database["public"]["Enums"]["actions"]
+          data_size?: number | null
+          id?: number
+          timestamp?: string | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "user-upscales_user_id_fkey"
+            foreignKeyName: "user_actions_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -456,18 +338,21 @@ export interface Database {
           full_name: string | null
           id: string
           payment_method: Json | null
+          tier: Database["public"]["Enums"]["usage_tier"] | null
         }
         Insert: {
           billing_address?: Json | null
           full_name?: string | null
           id: string
           payment_method?: Json | null
+          tier?: Database["public"]["Enums"]["usage_tier"] | null
         }
         Update: {
           billing_address?: Json | null
           full_name?: string | null
           id?: string
           payment_method?: Json | null
+          tier?: Database["public"]["Enums"]["usage_tier"] | null
         }
         Relationships: [
           {
@@ -484,9 +369,25 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      list_objects: {
+        Args: {
+          bucketid: string
+          prefix: string
+          limits?: number
+          offsets?: number
+        }
+        Returns: {
+          name: string
+          id: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
+          metadata: Json
+        }[]
+      }
     }
     Enums: {
+      actions: "enhancement" | "mockup" | "import"
       mockup_status: "pending" | "processing" | "completed" | "failed"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
@@ -499,6 +400,7 @@ export interface Database {
         | "past_due"
         | "unpaid"
         | "paused"
+      usage_tier: "free" | "one-time" | "silver" | "gold"
     }
     CompositeTypes: {
       [_ in never]: never

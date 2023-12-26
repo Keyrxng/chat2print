@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { carouselImages } from "@/data/statics";
+import { Button } from "./ui/button";
 
 export function ProductsDisplay() {
   const [[page, direction], setPage] = useState([0, 0]);
@@ -34,28 +35,36 @@ export function ProductsDisplay() {
   };
 
   return (
-    <div className="space-y-24 overflow-x-hidden gap-4">
+    <div className="space-y-8 overflow-x-hidden gap-4">
       <h2 className="text-accent text-5xl font-bold text-center">
         Imagine the Impossible, Print the Reality
       </h2>
 
-      <button
-        key={activeProd?.title}
-        className="flex flex-col w-full h-full justify-center items-center rounded-lg p-2 m-2 transition-all duration-300"
-        about="Close Product Display"
-      >
-        <h3 className="text-3xl font-bold text-center text-accent">
-          {activeProd?.title}
-        </h3>
-        <Image
-          priority={true}
-          src={activeProd?.image_url}
-          width={450}
-          height={450}
-          alt={activeProd?.alt}
-          className="rounded-lg"
-        />
-      </button>
+      <div className="flex flex-col justify-center gap-4 items-center">
+        <div
+          key={activeProd?.title}
+          className="flex flex-col sm:flex-row w-full h-full justify-center items-center rounded-lg p-2 m-2 transition-all duration-300"
+          about="Close Product Display"
+        >
+          <Button
+            className="text-accent font-bold"
+            onClick={() => paginate(-1)}
+          >
+            &#8592;
+          </Button>
+          <Image
+            priority={true}
+            src={activeProd?.image_url}
+            width={450}
+            height={450}
+            alt={activeProd?.alt}
+            className="rounded-lg"
+          />
+          <Button className="text-accent font-bold" onClick={() => paginate(1)}>
+            &#8594;
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

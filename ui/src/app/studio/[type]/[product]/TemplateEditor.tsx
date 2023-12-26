@@ -34,7 +34,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
 import { staticMocks } from "@/data/statics";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronsUpDown, ToggleLeftIcon, X } from "lucide-react";
+import { ChevronsUpDown, Send, ToggleLeftIcon, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
@@ -101,6 +101,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [dataStatic, setDataStatic] = useState<boolean>(false);
   const [pollForMockups, setPollForMockups] = useState<boolean>(false);
   const [tipsOpen, setTipsOpen] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -114,6 +116,15 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     async function getUser() {
       const { data } = await supabase.auth.getSession();
       const uID = data.session?.user.id;
+
+      if (!uID) {
+        toast({
+          title: "Haven't signed up yet?",
+          description: `Click "View Mockups" to get a feel for what's possible. If you like what you see, click "Profile" to sign up and start creating your own.`,
+          duration: 10000,
+        });
+      }
+
       const { data: user } = await supabase.from("users").select("*").match({
         id: uID,
       });
@@ -126,13 +137,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         tier: user?.[0].tier,
       };
 
-      setUserDetails((prev) => (prev = usr));
+      console.log("usr: ", usr);
+      console.log(`user: `, user);
+
+      setUserDetails((prev) => usr);
     }
-
-    getUser();
-  }, [setSelectedImage, supabase, userDetails?.id]);
-
-  useEffect(() => {
     async function set() {
       if (!userDetails?.id) return;
       try {
@@ -158,8 +167,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         console.log(err);
       }
     }
+
+    getUser();
     set();
-  }, [setSelectedImage, supabase, userDetails?.id]);
+  }, [supabase, userDetails?.id]);
 
   useEffect(() => {
     if (supabase.changedAccessToken === undefined) {
@@ -186,6 +197,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       );
     }
     load();
+    setMounted(true);
   }, [selectedTemplate, setSelectedImage, supabase]);
 
   useEffect(() => {
@@ -205,16 +217,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           className: "bg-background text-accent border-accent",
         });
       }
-
+      gety();
       await processMockRequest(pendingReqs);
     }
-    load();
-  }, [pollForMockups, userDetails?.id, supabase]);
 
-  useEffect(() => {
-    async function load() {
-      if (!userDetails?.id) return;
-
+    async function gety() {
       const { data: processingReq, error: processError } = await supabase
         .from("mockup_requests")
         .select("*")
@@ -267,11 +274,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           console.log("err: ", err);
         }
       }
-
-      setPollForMockups(false);
     }
     load();
-  }, [userDetails?.id, pollForMockups, supabase]);
+  }, [pollForMockups, userDetails?.id, supabase]);
 
   /////// STATS \\\\\\\
   /////// STATS \\\\\\\
@@ -456,13 +461,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       .update(updateData)
       .eq("id", requestId);
 
-    toast({
-      title: "Mockup request updated",
-      description: `One of your mockup requests has been updated to status ${status}`,
-      variant: "destructive",
-      className: "bg-background text-accent border-accent",
-    });
-
+    if (status === "completed") {
+      toast({
+        title: "Your mockup is ready!",
+        description: `Your mockup is ready! You can view it in the mockup section.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+    }
     if (error) {
       console.error(`Error updating status for request ${requestId}:`, error);
     } else {
@@ -516,7 +522,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         console.log("error: ", data.error);
         toast({
           title: "Something went wrong.",
-          description: `There was an error enhancing your image, if you are trying to enhance a landscape or portrait design try it at a smaller scale.`,
+          description: `It's likely that your image is too large, please try again with smaller dimensions (suggested: 260x380).`,
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
@@ -539,7 +545,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setEnhancing(false);
   };
 
-  const wait = (ms: number) =>
+  const wait = async (ms: number) => {
+    setIsProcessing(true);
     new Promise((resolve) => {
       toast({
         title: "Generating Mockup",
@@ -550,6 +557,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
       setTimeout(resolve, ms);
     });
+    setIsProcessing(false);
+  };
 
   /////// UPSCA \\\\\\\
   /////// UPSCA \\\\\\\
@@ -563,54 +572,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const [quantity, setQuantity] = useState<number>(1);
     const [mockImg, setMockImg] = useState<string>("");
     const [itemPrice, setItemPrice] = useState<number>(0);
+    console.log("activeMock: ", activeMock);
+    console.log(`itemPrice: ${itemPrice} quantity: ${quantity}`);
 
     const handleSet = (mock: any) => {
       setActiveMock(mock);
       console.log("mockkkkk: ", mock);
       setItemPrice(mock.price);
       setMockImg(mock.mockups?.[0].mockup_url);
-    };
-
-    const postDraftToSupa = async () => {
-      console.log("posting to supa: ", activeMock.task_key);
-      const { data: uploadData, error: uploadError } = await supabase
-        .from("orders")
-        .insert({
-          task_key: activeMock.task_key,
-          user_id: userDetails.id,
-          items: [
-            {
-              variant_id: activeMock.variant_id,
-              quantity,
-              files: [
-                {
-                  url: activeMock.printFiles[0].url,
-                },
-              ],
-            },
-          ],
-          retail_costs: {
-            curreny: "GBP",
-            subtotal: itemPrice * quantity,
-            discount: userDetails.discount,
-            shipping: "0",
-            tax: "0",
-          },
-        });
-
-      if (uploadError?.code === "23505") {
-        // dupe draft in db
-        setCheckout(true);
-      } else if (uploadError) {
-        console.log("uploadError: ", uploadError);
-        toast({
-          title: "Something went wrong.",
-          description:
-            "There was an error uploading your order, please try again.",
-          variant: "destructive",
-          className: "bg-background text-accent border-accent",
-        });
-      }
     };
 
     const postDraftToPrintful = async () => {
@@ -664,6 +633,17 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     const handleCheckout = () => {
+      if (!userDetails?.id) {
+        toast({
+          title: "Before you continue",
+          description:
+            "Please sign up for an account by clicking the 'Profile' button if you are considering making a purchase.",
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+
+        return;
+      }
       if (!userDetails?.billing_address) {
         toast({
           title: "Before you continue",
@@ -680,7 +660,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         if (res && typeof res === "string") {
           return;
         } else if (res) {
-          postDraftToSupa();
           setCheckout(true);
         }
       });
@@ -843,6 +822,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                           <Button
                             className="bg-accent text-background font-bold py-3 px-6 rounded-lg text-2xl transition duration-300"
                             onClick={() => paginate(-1)}
+                            disabled={page === 0}
                           >
                             Previous
                           </Button>
@@ -877,7 +857,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     </motion.div>
                   </AnimatePresence>
                   <div className="flex w-full mt-4 mx-6 px-10 h-full">
-                    <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                    <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 rounded-lg">
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -891,13 +871,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                         </Tooltip>
                       </TooltipProvider>
                     </div>
-                    <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+                    <div className="flex w-full text-accent items-center bottom-0 space-x-4 px-2 py-4 rounded-lg">
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button
                               onClick={() => handleDelete(activeMock)}
-                              disabled={mocks.length === 0 && dataStatic}
+                              disabled={dataStatic}
                               className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                             >
                               Delete Mockup
@@ -1015,6 +995,15 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           console.log("processMockRequest error: ", res.error);
         }
 
+        if (res.result?.task_key) {
+          console.log("task key: ", res.result.task_key);
+
+          await updateRequestStatus(r.id, "processing", res.result.task_key);
+          count++;
+
+          count == limit && (await wait(backoff));
+        }
+
         if (res.status === 429) {
           console.log("waiting for 60 seconds or status 429");
           await wait(60 * 1000);
@@ -1024,11 +1013,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           console.log("no task key");
           return;
         }
-
-        await updateRequestStatus(r.id, "processing", res.result?.task_key);
-        count++;
-
-        count == limit && (await wait(backoff));
       }
 
       count = 0;
@@ -1045,6 +1029,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const { product_id: prodID, id: variantID, name, price } = selectedVariant;
 
+    console.log(
+      `prodID: ${prodID} variantID: ${variantID}: Price: ${price}: Retail Price: ${Math.round(
+        Number(price) * 1.8
+      )}`
+    );
     if (!prodID || !variantID) {
       console.error("No product or variant IDs found");
       return;
@@ -1121,9 +1110,32 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setIsMockingUp(false);
   };
 
+  const setUserDeets = async () => {
+    const { data } = await supabase.auth.getSession();
+    const uID = data.session?.user.id;
+    const { data: user } = await supabase.from("users").select("*").match({
+      id: uID,
+    });
+
+    const usr = {
+      id: user?.[0].id,
+      full_name: user?.[0].full_name,
+      email: data.session?.user.email,
+      billing_address: user?.[0].billing_address,
+      tier: user?.[0].tier,
+    };
+
+    console.log("usr: ", usr);
+    console.log(`user: `, user);
+
+    setUserDetails((prev) => usr);
+    return usr;
+  };
+
   const fetchMockups = async () => {
-    const user_id = userDetails?.id;
-    if (!user_id) {
+    const usr = await setUserDeets();
+    const userID = usr?.id;
+    if (!userID) {
       setDataStatic(true);
       return staticMocks;
     } else {
@@ -1133,7 +1145,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const { data: mockups, error } = await supabase
       .from("mockups")
       .select("*")
-      .eq("user_id", user_id);
+      .eq("user_id", userID);
 
     if (error) {
       toast({
@@ -1217,11 +1229,47 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
+    const [shippingInfo, setShippingInfo] = useState<any>(null);
+    const [seshId, setSeshId] = useState<string>("");
 
     useEffect(() => {
       console.log("=====================================");
+      console.log("=============== loadShippingInfos() =============");
+      async function load() {
+        await postDraftToSupa();
+      }
+      load();
+      console.log("=============== loadShippingInfos() =============");
+      console.log("=====================================");
+
+      return () => {
+        fetch("/api/checkout_sessions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mockup,
+            quantity,
+            itemPrice,
+            regions: selectedVariant?.availability_regions,
+            stock: selectedVariant?.availability_status,
+            shippingInfo,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setClientSecret(data.clientSecret);
+            postDraftToSupa(data.id);
+            console.log("data: ", data);
+          });
+      };
+    }, []);
+
+    const loadShippingInfos = useCallback(async () => {
       const orderCost = async () => {
         const data = {
+          shipping: "STANDARD",
           recipient: {
             address1: userDetails.billing_address.firstLine,
             address2: userDetails.billing_address.secondLine,
@@ -1265,15 +1313,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           body: JSON.stringify(data),
         });
 
-        const result = await response.json();
+        const { result } = await response.json();
         console.log("est order: ", result);
 
         const orderData = {
-          currency: result.costs.currency,
-          shipping: result.costs.shipping,
-          subtotal: result.costs.subtotal,
-          vat: result.costs.vat,
-          total: result.costs.total,
+          shipping: result.costs?.shipping,
+          subtotal: result.costs?.subtotal,
+          vat: result.costs?.vat,
+          total: result.costs?.total,
         };
 
         return orderData;
@@ -1288,6 +1335,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             state_code: userDetails.billing_address.state_code,
             country_code: userDetails.billing_address.country_code,
             zip: userDetails.billing_address.zip,
+            phone: "07485441905",
           },
           items: [
             {
@@ -1309,12 +1357,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           body: JSON.stringify(data),
         });
 
-        const result = await response.json();
+        const { result } = await response.json();
 
         console.log("est shipping: ", result);
 
         const shippingData = {
-          currency: result[0].currency,
           id: result[0].id,
           maxDeliveryDate: result[0].maxDeliveryDate,
           maxDeliveryDays: result[0].maxDeliveryDays,
@@ -1343,40 +1390,69 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             data.maxDeliveryDate
           ).toLocaleDateString()}`;
         }
-
-        const { data: dbUpdate, error } = await supabase
-          .from("orders")
-          .update({
-            final: data,
-            product: mockup.product,
-          })
-          .eq("task_key", mockup.task_key);
-
-        if (error) {
-          console.log("dbUpdate error: ", error);
-        }
+        return data;
       }
 
-      load();
-    });
+      return await load();
+    }, [
+      itemPrice,
+      mockup.printFiles,
+      mockup.product,
+      mockup.product_id,
+      mockup.variant_id,
+      quantity,
+    ]);
 
-    useEffect(() => {
-      fetch("/api/checkout_sessions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mockup,
-          quantity,
-          itemPrice,
-          regions: selectedVariant?.availability_regions,
-          stock: selectedVariant?.availability_status,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => setClientSecret(data.clientSecret));
-    }, []);
+    const postDraftToSupa = async (id) => {
+      if (!id) {
+        console.log("no sesh id");
+        return;
+      }
+      const data = await loadShippingInfos();
+
+      console.log("posting to supa data: ", data);
+      const { data: uploadData, error: uploadError } = await supabase
+        .from("orders")
+        .insert({
+          task_key: mockup.task_key,
+          id: id,
+          user_id: userDetails.id,
+          product: mockup.product,
+          items: [
+            {
+              variant_id: mockup.variant_id,
+              quantity,
+              files: [
+                {
+                  url: mockup.printFiles[0].url,
+                },
+              ],
+            },
+          ],
+          retail_costs: {
+            curreny: "GBP",
+            subtotal: itemPrice * quantity,
+            discount: userDetails.discount,
+            shipping: "0",
+            tax: "0",
+          },
+          final: data,
+        });
+
+      if (uploadError?.code === "23505") {
+        // dupe draft in db
+      } else if (uploadError) {
+        console.log("uploadError: ", uploadError);
+        toast({
+          title: "Something went wrong.",
+          description:
+            "There was an error uploading your order, please try again.",
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+      }
+    };
+
     return (
       <>
         <div id="checkout">
@@ -1599,6 +1675,68 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     });
   };
 
+  const DimensionControls = () => {
+    let ele: HTMLImageElement | null = null;
+
+    if (mounted) {
+      ele = document?.getElementById("user-image-source") as HTMLImageElement;
+    }
+    const [width, setWidth] = useState(ele?.width);
+    const [height, setHeight] = useState(ele?.height);
+
+    const handleWidthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setWidth((prev) => Number(event.target.value));
+    };
+
+    const handleHeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setHeight((prev) => Number(event.target.value));
+    };
+
+    const handleApply = () => {
+      if (width && height) {
+        const { naturalWidth, naturalHeight } = ele;
+
+        const newWidth = width > naturalWidth ? naturalWidth : width;
+        const newHeight = height > naturalHeight ? naturalHeight : height;
+
+        ele.width = newWidth;
+        ele.height = newHeight;
+        ele.style.height = `${newHeight}px`;
+        ele.style.width = `${newWidth}px`;
+      }
+    };
+
+    return (
+      <div className="flex flex-row justify-center items-center gap-2 mb-4">
+        <div className="flex flex-col justify-center items-center">
+          <label className="text-accent text-sm">Width</label>
+          <input
+            type="number"
+            value={width}
+            onChange={handleWidthChange}
+            className="text-accent text-sm border-accent border-2 rounded-md p-1 w-20"
+          />
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          <label className="text-accent text-sm">Height</label>
+          <input
+            type="number"
+            inputMode="numeric"
+            value={height}
+            onChange={handleHeightChange}
+            className="text-accent text-sm border-accent border-2 rounded-md p-1 w-20"
+          />
+        </div>
+        <Button
+          className="text-accent w-6 h-6 mt-4 hover:bg-accent hover:text-background transition duration-300 border border-accent"
+          onClick={handleApply}
+        >
+          ✅
+        </Button>
+      </div>
+    );
+  };
+
   /////// CTRLS \\\\\\\
   /////// CTRLS \\\\\\\
 
@@ -1652,6 +1790,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
               body="This may take a minute or two. Future updates will improve this process."
             />
           )}
+          {/* middle right aligned abolute inset loader during processing */}
 
           {needAccount && <NeedAccountLoader />}
 
@@ -1824,7 +1963,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
               </div>
               <div className="grid grid-cols-1">
                 <div className="flex mx-8 mt-4 justify-between">
-                  <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                  <div className="flex text-accent items-center space-x-4 px-2 py-1  rounded-lg">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
@@ -1834,6 +1973,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 onClick={() => handleGeneration()}
                                 className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                               >
+                                <div
+                                  hidden={isProcessing}
+                                  className={`${
+                                    isProcessing ? "inline-block" : "hidden"
+                                  } animate-spin mr-2 rounded-full h-4 w-4 border-b-2 border-accent`}
+                                ></div>
                                 Generate Mockup
                               </Button>
                               <div className="shine-effect"></div>
@@ -1851,7 +1996,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <div className="flex text-accent justify-center align-middle items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                  <DimensionControls />
+                  <div className="flex text-accent justify-center align-middle items-center space-x-4 px-2 py-1 rounded-lg">
                     <TooltipProvider>
                       <Tooltip>
                         <p className="mb-[4.5px]">Ai-Assist</p>
@@ -1876,7 +2022,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <div className="flex text-accent items-center space-x-4 px-2 py-1 hover:bg-background hover:text-accent rounded-lg">
+                  <div className="flex text-accent items-center space-x-4 px-2 py-1  rounded-lg">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>

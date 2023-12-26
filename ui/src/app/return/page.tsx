@@ -3,10 +3,13 @@ import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/database.types";
+
+const supabase = createClientComponentClient<Database>();
 
 export default function Page() {
   const [status, setStatus] = useState(null);
-  const [customerEmail, setCustomerEmail] = useState("");
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -20,7 +23,43 @@ export default function Page() {
       .then((data) => {
         console.log("data", data);
         setStatus(data.status);
-        setCustomerEmail(data.customer_email);
+
+        async function getDB() {
+          const { data: customerData, error: customerError } =
+            await supabase.auth.getUser();
+
+          return customerData.user;
+        }
+
+        const dbData = {
+          customer_details: data.customer_details,
+          shipping_details: data.shipping_details,
+          payment_intent: data.payment_intent,
+          payment_total: data.amount_total,
+          payment_status: data.payment_status,
+          status: data.status,
+        };
+
+        async function setDB() {
+          const user = await getDB();
+          console.log("user", user);
+          const { data: insertData, error } = await supabase
+            .from("sales")
+            .insert({
+              id: data.id,
+              sale_info: dbData,
+              user_id: user?.id,
+            })
+            .single();
+
+          console.log(
+            "setdb sales data: ",
+            insertData,
+            "setdb sales error: ",
+            error
+          );
+        }
+        setDB();
       });
   }, []);
 

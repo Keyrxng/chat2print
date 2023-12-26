@@ -60,8 +60,8 @@ export async function GET() {
     .from("upscales")
     .select("bucket_path")
     .eq("user_id", data.session.user.id)
-    .limit(10)
-    .order("created_at", { ascending: false });
+    .limit(20)
+    .order("created_at", { ascending: true });
 
   const upscaledImages = upscaleBucketPaths?.map((upscale) => {
     const bucketPath = upscale.bucket_path;

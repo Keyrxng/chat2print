@@ -63,10 +63,15 @@ export default function Home() {
           </motion.div>
         </div>
 
-        <div>
+        <motion.div 
+        initial={{ opacity: 0, y: 0 }}
+        animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: -60 }}
+        transition={{ duration: 0.5 }}
+        className="-z-100"
+        >
           <ProductsDisplay />
-        </div>
-
+        </motion.div>
+        
         <motion.div
           initial={{ opacity: 0, y: 0 }}
           animate={isInView2 ? { opacity: 1, y: 0 } : { opacity: 0, y: -60 }}
@@ -84,12 +89,12 @@ export default function Home() {
         <Journey />
 
         {/* https://billing.stripe.com/p/login/test_9AQ7uUejW4eM288288 */} */}
-        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+        {/* <script async src="https://js.stripe.com/v3/pricing-table.js"></script> */}
         {/* @ts-ignore */}
-         <stripe-pricing-table
+         {/* <stripe-pricing-table
           pricing-table-id="prctbl_1OPBJXJ8INwD5Vuc0dwAI2DR"
           publishable-key="pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
-        />
+        /> */}
       </div>
     </div>
   );
