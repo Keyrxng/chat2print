@@ -56,17 +56,35 @@ export async function GET() {
       },
     });
 
+  const { data: user, error: userError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (userError) {
+    return new Response(JSON.stringify(userError), {
+      status: 500,
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+  }
+
+  let upscaledImages = [] as string[] | undefined;
   const { data: upscaleBucketPaths, error: upBucketPathError } = await supabase
     .from("upscales")
     .select("bucket_path")
     .eq("user_id", data.session.user.id)
-    .limit(20)
+    .limit(10)
     .order("created_at", { ascending: true });
 
-  const upscaledImages = upscaleBucketPaths?.map((upscale) => {
-    const bucketPath = upscale.bucket_path;
-    return `${process.env.SUPABASE_URL}/storage/v1/object/public/user_uploads/${bucketPath}`;
-  });
+  if (user.tier !== "free") {
+    upscaledImages = upscaleBucketPaths?.map((upscale) => {
+      const bucketPath = upscale.bucket_path;
+      return `${process.env.SUPABASE_URL}/storage/v1/object/public/user_uploads/${bucketPath}`;
+    });
+  }
 
   const { data: designs, error: designError } = await supabase.rpc(
     "list_objects",
@@ -75,8 +93,7 @@ export async function GET() {
       prefix: `${data.session?.user?.id}`,
       limits: 10,
       offsets: 0,
-    },
-    { headers: { "cache-control": "public, max-age=604800" } }
+    }
   );
 
   const images = await Promise.all(
@@ -84,6 +101,7 @@ export async function GET() {
       if (design.name === "temp.png") return;
       if (design.name === "upscaled") return;
       if (design.name === null || design.name === undefined) return;
+      // @ts-ignore
       if (design.metadata.mimetype !== "image/webp") return;
       const url = `${process.env.SUPABASE_URL}/storage/v1/object/public/user_uploads/${design.name}`;
       return url;

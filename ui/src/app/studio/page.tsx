@@ -1,6 +1,8 @@
 import { ProductOption } from "@/components/ProductOption";
+import { ProductsDisplay } from "@/components/ProductsDisplay";
 import products from "@/data/products";
-import React from "react";
+import { motion } from "framer-motion";
+import React, { Suspense } from "react";
 
 export async function generateStaticParams() {
   const prods = Object.values(products);
@@ -20,12 +22,7 @@ export async function generateStaticParams() {
   return paths;
 }
 
-export default function page(params: {
-  type: string;
-  product: string;
-  vid: number;
-  pid: number;
-}) {
+export default function Page(params: { [x: string]: never }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-4xl font-bold text-center text-accent">
@@ -41,6 +38,9 @@ export default function page(params: {
           />
         ))}
       </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProductsDisplay />
+      </Suspense>
     </div>
   );
 }

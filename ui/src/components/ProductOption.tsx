@@ -12,13 +12,12 @@ export const ProductOption = ({ product, vid, pid }: ProductOptionProps) => {
     Math.round(Number(product?.priceRange.low) * 1.8) ===
     Math.round(Number(product?.priceRange.high) * 1.8);
 
-  const type = product.product.type.replaceAll(" ", "-").toLowerCase();
   const prod = product.variants[0].name
     .replaceAll(" ", "-")
     .replaceAll("-/-", "-")
     .toLowerCase();
 
-  const url = `/studio/custom-${type}/${prod}?pid=${product.product.id}&vid=${product.variants[0].id}`;
+  const url = `/studio/${prod}?pid=${product.product.id}&vid=${product.variants[0].id}`;
 
   return (
     <a href={url} className="flex flex-col items-center justify-center">

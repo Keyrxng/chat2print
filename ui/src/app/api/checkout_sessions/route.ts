@@ -80,18 +80,18 @@ export async function POST(req: Request, res: any) {
   const inStockRegion = inStock.map((item: any) => item.region);
 
   if (inStockRegion.includes("EU")) {
-    inStockRegion.findIndex((item) => item === "EU");
+    inStockRegion.findIndex((item: string) => item === "EU");
     inStockRegion.splice(
-      inStockRegion.findIndex((item) => item === "EU"),
+      inStockRegion.findIndex((item: string) => item === "EU"),
       1
     );
     inStockRegion.push(...eu);
   }
 
   if (inStockRegion.includes("UK")) {
-    inStockRegion.findIndex((item) => item === "UK");
+    inStockRegion.findIndex((item: string) => item === "UK");
     inStockRegion.splice(
-      inStockRegion.findIndex((item) => item === "UK"),
+      inStockRegion.findIndex((item: string) => item === "UK"),
       1
     );
     inStockRegion.push("GB");

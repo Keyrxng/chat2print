@@ -140,7 +140,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       console.log("usr: ", usr);
       console.log(`user: `, user);
 
-      setUserDetails((prev) => usr);
+      setUserDetails((prev: any) => usr);
     }
     async function set() {
       if (!userDetails?.id) return;
@@ -170,14 +170,18 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     getUser();
     set();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase, userDetails?.id]);
 
   useEffect(() => {
+    // @ts-ignore
     if (supabase.changedAccessToken === undefined) {
       setUserImages([]);
-      setUserDetails((prev) => (prev = null));
+      setUserDetails((prev: null) => (prev = null));
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //@ts-ignore
   }, [supabase.changedAccessToken]);
 
   useEffect(() => {
@@ -198,6 +202,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
     load();
     setMounted(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTemplate, setSelectedImage, supabase]);
 
   useEffect(() => {
@@ -276,12 +281,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
     }
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pollForMockups, userDetails?.id, supabase]);
 
   /////// STATS \\\\\\\
   /////// STATS \\\\\\\
 
   const increaseUsage = async (action: string) => {
+    // @ts-ignore
     const { data: increaseData, error } = await supabase
       .from("user_actions")
       .insert({ user_id: userDetails.id, action_type: action });
@@ -310,7 +317,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     ).length;
     const imports = usage?.filter((u) => u.action_type === "import").length;
     const dataSize = usage?.reduce((acc, curr) => {
-      return acc + curr.data_size;
+      return acc + curr.data_size!;
     }, 0);
 
     console.log("enhancements: ", enhancements);
@@ -336,6 +343,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         : 3;
 
     const accTier = tierData?.[ttn];
+    // @ts-ignore
     const activeTier = accTier[user_tier];
 
     if (!activeTier) {
@@ -349,7 +357,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     if (
-      (dataSize >= activeTier.data_size * (1024 * 1024) &&
+      (dataSize! >= activeTier.data_size * (1024 * 1024) &&
         action === "mockup") ||
       action === "enhancement"
     ) {
@@ -362,7 +370,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (imports >= activeTier.imports && action === "import") {
+    if (imports! >= activeTier.imports && action === "import") {
       toast({
         title: "Oops!",
         description: `You've used up your free imports for the day, please try again tomorrow.`,
@@ -372,7 +380,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (enhancements >= activeTier.enhancements && action === "enhancement") {
+    if (enhancements! >= activeTier.enhancements && action === "enhancement") {
       toast({
         title: "Oops!",
         description: `You've used up your free enhancements for the day, please try again tomorrow.`,
@@ -383,7 +391,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
     console.log(`mockups: ${mockups} activeTier.mockups: `, activeTier);
 
-    if (mockups >= activeTier.mockups && action === "mockup") {
+    if (mockups! >= activeTier.mockups && action === "mockup") {
       toast({
         title: "Oops!",
         description: `You've used up your free mockups for the day, please try again tomorrow.`,
@@ -396,7 +404,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (allowed) {
       switch (action) {
         case "mockup":
-          const moreThan80Percent = (mockups / activeTier.mockups) * 100 > 80;
+          const moreThan80Percent = (mockups! / activeTier.mockups) * 100 > 80;
           if (moreThan80Percent) {
             toast({
               title: "Head's up!",
@@ -407,7 +415,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           break;
         case "enhancement":
           const moreThan80PercentEnhancements =
-            (enhancements / activeTier.enhancements) * 100 > 80;
+            (enhancements! / activeTier.enhancements) * 100 > 80;
           if (moreThan80PercentEnhancements) {
             toast({
               title: "Head's up!",
@@ -419,7 +427,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           break;
         case "import":
           const moreThan80PercentImports =
-            (imports / activeTier.imports) * 100 > 80;
+            (imports! / activeTier.imports) * 100 > 80;
           if (moreThan80PercentImports) {
             toast({
               title: "Head's up!",
@@ -438,6 +446,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const updateActionCount = async (action: string) => {
+    // @ts-ignore
     const { error } = await supabase.from("user_actions").insert({
       user_id: userDetails.id,
       action_type: action,
@@ -729,12 +738,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       },
     };
     const swipeConfidenceThreshold = 10000;
-    const swipePower = (offset, velocity) => {
+    const swipePower = (offset: number, velocity: number) => {
       return Math.abs(offset) * velocity;
     };
     const [[page, direction], setPage] = useState([0, 0]);
 
-    const paginate = (newDirection) => {
+    const paginate = (newDirection: number) => {
       setPage([page + newDirection, newDirection]);
       setActiveMock(mocks[page + newDirection]);
     };
@@ -795,6 +804,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     <motion.div
                       key={page}
                       custom={direction}
+                      // @ts-ignore
                       variants={carouselVariants}
                       initial="enter"
                       animate="center"
@@ -940,13 +950,33 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
-  const processMockRequest = async (req) => {
+  const processMockRequest = async (
+    req:
+      | {
+          created_at: string;
+          id: number;
+          image_data: string | null;
+          offset_x: number | null;
+          offset_y: number | null;
+          price: number | null;
+          product: string | null;
+          product_id: number | null;
+          scaled_height: number | null;
+          scaled_width: number | null;
+          status: "pending" | "processing" | "completed" | "failed" | null;
+          task_key: string | null;
+          updated_at: string | null;
+          user_id: string | null;
+          variant_id: number | null;
+        }[]
+      | null
+  ) => {
     let count = 0;
     const limit = 2;
     const backoff = 60000;
 
-    for (const r of req) {
-      const contentType = r.image_data.includes(".png") ? true : false;
+    for (const r of req!) {
+      const contentType = r.image_data?.includes(".png") ? true : false;
 
       if (!contentType) {
         toast({
@@ -1046,8 +1076,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const { naturalWidth, naturalHeight } = ele;
     const desiredDpi = 300;
 
-    const printFileWidthPixels = printFiles.width;
-    const printFileHeightPixels = printFiles.height;
+    const printFileWidthPixels = printFiles!.width;
+    const printFileHeightPixels = printFiles!.height;
 
     const maxPrintWidthInches = printFileWidthPixels / desiredDpi;
     const maxPrintHeightInches = printFileHeightPixels / desiredDpi;
@@ -1128,7 +1158,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     console.log("usr: ", usr);
     console.log(`user: `, user);
 
-    setUserDetails((prev) => usr);
+    setUserDetails((prev: any) => usr);
     return usr;
   };
 
@@ -1250,6 +1280,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           setClientSecret(data.clientSecret);
           postDraftToSupa(data.id);
         });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadShippingInfos = useCallback(async () => {
@@ -1389,7 +1420,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       quantity,
     ]);
 
-    const postDraftToSupa = async (id) => {
+    const postDraftToSupa = async (id: string) => {
       if (!id) {
         console.log("no sesh id");
         return;
@@ -1680,15 +1711,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const handleApply = () => {
       if (width && height) {
+        // @ts-ignore
         const { naturalWidth, naturalHeight } = ele;
 
         const newWidth = width > naturalWidth ? naturalWidth : width;
         const newHeight = height > naturalHeight ? naturalHeight : height;
 
-        ele.width = newWidth;
-        ele.height = newHeight;
-        ele.style.height = `${newHeight}px`;
-        ele.style.width = `${newWidth}px`;
+        ele!.width = newWidth;
+        ele!.height = newHeight;
+        ele!.style.height = `${newHeight}px`;
+        ele!.style.width = `${newWidth}px`;
       }
     };
 

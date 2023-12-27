@@ -364,46 +364,6 @@ class Supabase {
       return true;
     }
   }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///// Storage Buckets //////////// Storage Buckets //////////// Storage Buckets //////////// Storage Buckets ////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  //!!! RLS is enabled on the design_images bucket so only the user can access only their own folder and files !!!\\
-
-  /**
-   * Creates a new folder for the given user in the design_images bucket with a placeholder so the folder is created
-   * @param userId  The id of the user to create the folder for
-   * @returns  The folder object and error if any
-   */
-  async createUserFolder(userId: string) {
-    const { data: folder, error } = await this.supabase.storage
-      .from("design_images")
-      .upload(`user-${userId}/designs/placeholder.webp`, "");
-
-    if (error) {
-      return this.errorHandler(error);
-    }
-
-    return { folder };
-  }
-
-  /**
-   *  Gets the folder for the given user in the design_images bucket
-   * @param userId  The id of the user to get the folder for
-   * @returns  The folder object and error if any
-   */
-  async getUserFolder(userId: string) {
-    const { data: folder, error } = await this.supabase.storage
-      .from("design_images")
-      .list(`user-${userId}/designs/`, { limit: 1 });
-
-    if (error) {
-      return this.errorHandler(error);
-    }
-
-    return { folder };
-  }
 }
 
 export default Supabase;

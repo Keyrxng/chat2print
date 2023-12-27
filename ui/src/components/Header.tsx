@@ -27,7 +27,6 @@ interface User {
 
 export default function Header() {
   const [user, setUser] = useState<User>();
-  const [isRegistering, setIsRegistering] = useState(false);
 
   const [orderModalIsOpen, setOrderModalIsOpen] = useState(false);
   const [accountModalIsOpen, setAccountModalIsOpen] = useState(false);
@@ -101,6 +100,7 @@ export default function Header() {
   const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const signinValidation = () => {
       if (email === "") {
@@ -172,17 +172,21 @@ export default function Header() {
                 .match({ id: user.id })
                 .single();
 
-              setUser({
-                id: user.id,
-                firstName: userdata?.full_name?.split(" ")[0],
-              });
-              setIsConnected(true);
-              toast({
-                title: "Success!",
-                description: "You are now signed in, refresh to see changes.",
-                duration: 4000,
-                variant: "default",
-              });
+              if (!waitingForConfirm) {
+                setUser({
+                  id: user.id,
+                  firstName: userdata?.full_name?.split(" ")[0],
+                });
+                setIsConnected(true);
+                setAccountModalIsOpen(false);
+                toast({
+                  title: "Success!",
+                  description: "You are now signed in, refresh to see changes.",
+                  duration: 4000,
+                  variant: "default",
+                });
+              } else {
+              }
             }
           }
         })
@@ -194,10 +198,6 @@ export default function Header() {
             variant: "default",
           });
         });
-
-      setIsRegistering(false);
-      setAccountModalIsOpen(false);
-      setWaitingForConfirm(false);
     };
 
     return (
@@ -280,7 +280,16 @@ export default function Header() {
   };
 
   const DetailsModal = () => {
-    const [billingData, setBillingData] = React.useState({});
+    const [billingData, setBillingData] = useState({
+      forename: "",
+      surname: "",
+      firstLine: "",
+      secondLine: "",
+      city: "",
+      country_code: "",
+      zip: "",
+      state_code: "",
+    });
 
     const handleUpdateBilling = (event: any) => {
       event.preventDefault();
@@ -305,8 +314,6 @@ export default function Header() {
         alert("Please enter your full name");
       }
       name = billingData.forename + " " + billingData.surname;
-      delete billingData.forename;
-      delete billingData.surname;
 
       const { error: uploadError } = await supabase
         .from("users")
@@ -516,7 +523,7 @@ export default function Header() {
 
   const handleResendVeriEmail = async () => {
     const { data, error } = await supabase.auth.resend({
-      email,
+      email: user?.email!,
       type: "signup",
     });
     if (error) {

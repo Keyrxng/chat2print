@@ -25,7 +25,7 @@ interface PFILE {
   can_rotate: boolean;
 }
 
-export default function Page(params: { type: string; product: string }) {
+export default function Page(params: { [x: string]: never }) {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<__Prod>();
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();

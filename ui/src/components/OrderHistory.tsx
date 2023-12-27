@@ -19,8 +19,16 @@ const supabase = createClientComponentClient<Database>();
 
 interface Order {
   created_at: string;
-  items: Json;
-  retail_costs: Json;
+  items: {
+    files: {
+      quantity: number;
+    };
+  };
+
+  retail_costs: {
+    subtotal: number;
+  };
+
   task_key: string;
   user_id: string | null;
 }
@@ -40,6 +48,7 @@ export default function OrderHistory() {
         .eq("user_id", user.user!.id);
       if (!orders) return console.error(fetchError);
       console.log("orders", orders);
+      // @ts-ignore
       setOrders(orders);
       return orders;
     }
@@ -86,7 +95,8 @@ export default function OrderHistory() {
                           </p>
                           <p className="flex items-center text-gray-500">
                             <Truck className="mr-1" />
-                            {order.items.files?.quantity}
+                            {/* // @ts-ignore */}
+                            {order.items?.files?.quantity}
                           </p>
                           <p className="flex items-center text-gray-500">
                             <PoundSterling />

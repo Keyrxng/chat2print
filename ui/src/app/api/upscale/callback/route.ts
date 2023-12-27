@@ -22,7 +22,7 @@ interface IncomingData {
     predict_time: number;
   };
 }
-export async function POST(req, res) {
+export async function POST(req: Request, res: any) {
   console.log("🪝 incoming webhook!");
 
   const data = await req.json();
@@ -41,11 +41,25 @@ export async function POST(req, res) {
   return sendResponse(res, 202, "Accepted for processing");
 }
 
-function sendResponse(responseObj, statusCode, message) {
+function sendResponse(
+  responseObj: any,
+  statusCode: number,
+  message: BodyInit | null | undefined
+) {
   return new Response(message, { status: statusCode });
 }
 
-async function processWebhookData(prediction) {
+async function processWebhookData(prediction: {
+  status: string;
+  input: { image: string };
+  output: any;
+  id: any;
+  created_at: any;
+  started_at: any;
+  completed_at: any;
+  urls: { cancel: any; get: any };
+  metrics: { predict_time: any };
+}) {
   console.log("processWebhookData", prediction);
   if (prediction.status === "succeeded") {
     try {

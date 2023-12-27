@@ -127,12 +127,18 @@ const tipsAndTricks = [
   },
 ];
 
-export const TipsAndTricksModal = ({ isOpen, onClose }) => {
+export const TipsAndTricksModal = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   const [openSections, setOpenSections] = useState(
     tipsAndTricks.map(() => false)
   );
 
-  const toggleSection = (index) => {
+  const toggleSection = (index: number) => {
     setOpenSections((current) =>
       current.map((open, i) => (i === index ? !open : open))
     );

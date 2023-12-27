@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 export function ProductsDisplay() {
   const [[page, direction], setPage] = useState([0, 0]);
-  const intervalRef = useRef();
+  const intervalRef: NodeJS.Timeout | any = useRef();
 
   const [activeProd, setActiveProd] = useState<{
     title: string;
@@ -21,9 +21,10 @@ export function ProductsDisplay() {
     }, 3000); // Change image every 3 seconds
 
     return () => clearInterval(intervalRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const paginate = (newDirection) => {
+  const paginate = (newDirection: number) => {
     let newPage = page + newDirection;
     if (newPage >= carouselImages.length) {
       newPage = 0;
@@ -35,7 +36,7 @@ export function ProductsDisplay() {
   };
 
   return (
-    <div className="space-y-8 overflow-x-hidden gap-4">
+    <div className="space-y-8 overflow-x-hidden gap-4 mt-4">
       <h2 className="text-accent text-5xl font-bold text-center">
         Imagine the Impossible, Print the Reality
       </h2>
@@ -54,10 +55,17 @@ export function ProductsDisplay() {
           </Button>
           <Image
             priority={true}
-            src={activeProd?.image_url}
+            blurDataURL="/mewStaticmocks/clear-case-for-iphone-iphone-13-pro-max-yellow-lightning-on-sand.png"
+            src={
+              activeProd?.image_url ??
+              "/mewStaticmocks/clear-case-for-iphone-iphone-13-pro-max-yellow-lightning-on-sand.png"
+            }
             width={450}
             height={450}
-            alt={activeProd?.alt}
+            alt={
+              activeProd?.alt ??
+              "Clear Case for iPhone 13 Pro Max - Yellow Lightning on Sand"
+            }
             className="rounded-lg"
           />
           <Button className="text-accent font-bold" onClick={() => paginate(1)}>
