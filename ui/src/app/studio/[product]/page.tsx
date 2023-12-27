@@ -1,9 +1,6 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import products from "@/data/products";
-import templates from "@/data/templates";
-
 import {
   __Prod,
   __Product,
@@ -16,6 +13,7 @@ import {
 } from "@/types/all";
 import ImagePlacementEditor from "./TemplateEditor";
 import { formatTextToHTML } from "@/utils/formatToHtml";
+import Image from "next/image";
 interface PFILE {
   printfile_id: number;
   width: number;
@@ -38,61 +36,34 @@ export default function Page(params: { [x: string]: never }) {
     const pid = Number(urlParams.get("pid"));
     const vid = Number(urlParams.get("vid"));
 
-    const product = Object.values(products).find(
-      (product) => product.product.id === pid
-    );
-    const variant = product?.variants.find((variant) => variant.id === vid);
+    async function load() {
+      const data = await fetch("/api/data/templates", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pid, vid }),
+      });
 
-    if (product && variant) {
-      setSelectedProduct(product);
-      setSelectedVariant(variant);
-      loadForEditor(variant);
+      const json = await data.json();
+      console.log("json: ", json);
+
+      setSelectedProduct(json.product);
+      setSelectedVariant(json.variant);
+      loadForEditor(json.template, json.printFiles);
     }
+
+    load();
   }, [params.product, params.type]);
-
-  useEffect(() => {
-    if (!selectedVariant) return;
-    if (selectedVariant?.id) {
-      loadForEditor(selectedVariant);
-    }
-  }, [selectedVariant]);
 
   const handleChosenProduct = (product: __Prod) => {
     setSelectedProduct((prev) => (prev = product));
     setSelectedVariant(product.variants[0]);
-    loadForEditor(product.variants[0]);
   };
 
-  const loadForEditor = async (variant: __Variant) => {
-    const varID = variant?.id;
-
-    const selectedVariant = Object.values(templates)
-      .flatMap((template) => template.template.variant_mapping)
-      .filter((variant) => variant.variant_id === varID)
-      .flatMap((variant) => variant.templates);
-
-    const selectedTemplate = selectedVariant
-      .map((selected) => {
-        const template = Object.values(templates).find((t) =>
-          t.template.templates.some(
-            (t) => t.template_id === selected.template_id
-          )
-        );
-
-        const id = template?.template.templates.find(
-          (t) => t.template_id === selected.template_id
-        );
-
-        const printFiles = template?.printFiles.printfiles.find(
-          (file) => file.printfile_id === id?.printfile_id
-        );
-
-        return { id, printFiles };
-      })
-      .find((template) => template !== undefined);
-
-    setTemplate(selectedTemplate?.id);
-    setPrintFiles(selectedTemplate?.printFiles);
+  const loadForEditor = async (template: __Template, printFiles: PFILE) => {
+    setTemplate(template);
+    setPrintFiles(printFiles);
   };
 
   return (
@@ -100,17 +71,29 @@ export default function Page(params: { [x: string]: never }) {
       <Suspense fallback={<div>Loading...</div>}>
         <div className="gradientBG rounded-md flex flex-col min-h-screen h-max max-w-7xl">
           <div className="text-accent mx-auto p-4">
-            <ImagePlacementEditor
-              selectedTemplate={template}
-              selectedVariant={selectedVariant}
-              selectedProduct={selectedProduct}
-              userImage={selectedImage}
-              onSelect={handleChosenProduct}
-              setSelectedImage={setSelectedImage}
-              setSelectedVariant={setSelectedVariant}
-              setViewingMock={setViewingMock}
-              printFiles={printFiles}
-            />
+            {!printFiles ? (
+              <>
+                <Image
+                  blurDataURL={selectedImage}
+                  src={selectedImage}
+                  alt="Product Image"
+                  width={500}
+                  height={500}
+                />
+              </>
+            ) : (
+              <ImagePlacementEditor
+                selectedTemplate={template}
+                selectedVariant={selectedVariant}
+                selectedProduct={selectedProduct}
+                userImage={selectedImage}
+                onSelect={handleChosenProduct}
+                setSelectedImage={setSelectedImage}
+                setSelectedVariant={setSelectedVariant}
+                setViewingMock={setViewingMock}
+                printFiles={printFiles}
+              />
+            )}
           </div>
         </div>
 
@@ -120,7 +103,7 @@ export default function Page(params: { [x: string]: never }) {
               <div className="flex flex-row my-2 gap-4 justify-between items-center">
                 <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
                 <h2 className="text-2xl font-bold ">
-                  £{Math.round(Number(selectedVariant?.price) * 1.8)}
+                  £{Math.round(Number(selectedVariant?.price) * 2)}
                 </h2>
               </div>
 
@@ -128,16 +111,7 @@ export default function Page(params: { [x: string]: never }) {
                 <div className="flex justify-center text-center mx-4">
                   <div>
                     <p className="text-sm">Stock Checker</p>
-                    <select
-                      className="border bg-background text-accent rounded-lg p-2"
-                      onChange={(e) =>
-                        setSelectedVariant(
-                          selectedProduct?.variants.find(
-                            (variant) => e.target.value === variant.name
-                          )
-                        )
-                      }
-                    >
+                    <select className="border bg-background text-accent rounded-lg p-2">
                       {selectedVariant?.availability_status?.map((status) => (
                         <option key={status.region} value={status.region}>
                           {status.region} - {status.status}

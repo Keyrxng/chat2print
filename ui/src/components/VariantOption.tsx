@@ -1,13 +1,13 @@
 import { __Prod } from "@/types/all";
 import Image from "next/image";
 
-interface ProductOptionProps {
+interface VariantOptionProps {
   product: __Prod;
   vid: number;
   pid: number;
 }
 
-export const ProductOption = ({ product, vid, pid }: ProductOptionProps) => {
+export const VariantOption = ({ product, vid, pid }: VariantOptionProps) => {
   const isSame =
     Math.round(Number(product?.priceRange.low) * 2) ===
     Math.round(Number(product?.priceRange.high) * 2);

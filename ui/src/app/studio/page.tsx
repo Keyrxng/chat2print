@@ -1,23 +1,31 @@
 import { ProductOption } from "@/components/ProductOption";
 import { ProductsDisplay } from "@/components/ProductsDisplay";
 import products from "@/data/products";
-import { motion } from "framer-motion";
 import React, { Suspense } from "react";
 
 export async function generateStaticParams() {
   const prods = Object.values(products);
 
   let paths: { product: string; type: string; vid: number; pid: number }[] = [];
-  prods.forEach((product) => {
-    product.variants.forEach((variant) => {
-      paths.push({
-        type: "custom-" + product.product.type.toLowerCase(),
-        product: variant.name.toLowerCase().replace(" ", "-"),
-        vid: variant.id,
-        pid: product.product.id,
-      });
+
+  for (const prod of prods) {
+    const product = await fetch("/api/data/product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ pid: prod.product }),
     });
-  });
+
+    const json = await product.json();
+
+    paths.push({
+      type: "custom-" + json.product.type.toLowerCase(),
+      product: json.variant.name.toLowerCase().replace(" ", "-"),
+      vid: json.variant.id,
+      pid: json.product.id,
+    });
+  }
 
   return paths;
 }

@@ -103,6 +103,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [tipsOpen, setTipsOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [aiAssist, setAiAssist] = useState(true);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -1061,7 +1062,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     console.log(
       `prodID: ${prodID} variantID: ${variantID}: Price: ${price}: Retail Price: ${Math.round(
-        Number(price) * 1.8
+        Number(price) * 2
       )}`
     );
     if (!prodID || !variantID) {
@@ -1110,7 +1111,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         user_id: userDetails.id,
         status: "pending",
         product: name,
-        price: Math.round(Number(price) * 1.8),
+        price: Math.round(Number(price) * 2),
       };
 
     const { error } = await supabase
@@ -1259,7 +1260,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
-    const [seshId, setSeshId] = useState<string>("");
 
     useEffect(() => {
       fetch("/api/checkout_sessions", {
@@ -1758,7 +1758,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   /////// CTRLS \\\\\\\
   /////// CTRLS \\\\\\\
 
-  const [aiAssist, setAiAssist] = useState(true);
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
