@@ -212,7 +212,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Matte / iPhone 14 Pro Max)",
     product_id: 601,
     variant_id: 16131,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -224,7 +224,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Matte / iPhone 13 Pro Max)",
     product_id: 601,
     variant_id: 15402,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -236,7 +236,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Matte / iPhone 12 Pro Max)",
     product_id: 601,
     variant_id: 15398,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -248,7 +248,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Matte / iPhone 11 Pro Max)",
     product_id: 601,
     variant_id: 15394,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -260,7 +260,7 @@ export const staticMocks = [
     product: "Tough Case for Samsung® (Matte / Samsung Galaxy S22 Ultra)",
     product_id: 686,
     variant_id: 16994,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -272,7 +272,7 @@ export const staticMocks = [
     product: "Tough Case for Samsung® (Matte / Samsung Galaxy S21 Ultra)",
     product_id: 686,
     variant_id: 16988,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -284,7 +284,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 15 Pro Max)",
     product_id: 601,
     variant_id: 17720,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -296,7 +296,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 14 Pro Max)",
     product_id: 601,
     variant_id: 16130,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -308,7 +308,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 13 Pro Max)",
     product_id: 601,
     variant_id: 15391,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -320,7 +320,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 12 Pro Max)",
     product_id: 601,
     variant_id: 15387,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -332,7 +332,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 15 Plus)",
     product_id: 601,
     variant_id: 17716,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -344,7 +344,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 13 mini)",
     product_id: 601,
     variant_id: 15389,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -356,7 +356,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 12 Pro Max)",
     product_id: 601,
     variant_id: 15387,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -368,7 +368,7 @@ export const staticMocks = [
     product: "Clear Case for iPhone® (iPhone 14 Pro Max)",
     product_id: 181,
     variant_id: 16243,
-    price: 15,
+    price: 17,
   },
   {
     mockups: [
@@ -380,7 +380,7 @@ export const staticMocks = [
     product: "Clear Case for iPhone® (iPhone 13 Pro Max)",
     product_id: 181,
     variant_id: 13801,
-    price: 15,
+    price: 17,
   },
   {
     mockups: [
@@ -392,7 +392,7 @@ export const staticMocks = [
     product: "Clear Case for iPhone® (iPhone 12 Pro Max)",
     product_id: 181,
     variant_id: 11705,
-    price: 15,
+    price: 17,
   },
   {
     mockups: [
@@ -404,7 +404,7 @@ export const staticMocks = [
     product: "Clear Case for iPhone® (iPhone 11 Pro Max)",
     product_id: 181,
     variant_id: 10996,
-    price: 15,
+    price: 17,
   },
   {
     mockups: [
@@ -416,7 +416,7 @@ export const staticMocks = [
     product: "Snap Case for iPhone® (Glossy / iPhone 15 Pro Max)",
     product_id: 683,
     variant_id: 17728,
-    price: 22,
+    price: 25,
   },
   {
     mockups: [
@@ -428,7 +428,7 @@ export const staticMocks = [
     product: "Snap Case for iPhone® (Glossy / iPhone 14 Pro Max)",
     product_id: 683,
     variant_id: 16916,
-    price: 22,
+    price: 25,
   },
   {
     mockups: [
@@ -440,7 +440,7 @@ export const staticMocks = [
     product: "Snap Case for iPhone® (Glossy / iPhone 13 Pro Max)",
     product_id: 683,
     variant_id: 16908,
-    price: 22,
+    price: 25,
   },
   {
     mockups: [
@@ -452,7 +452,7 @@ export const staticMocks = [
     product: "Snap Case for iPhone® (Glossy / iPhone 12 Pro Max)",
     product_id: 683,
     variant_id: 16900,
-    price: 22,
+    price: 25,
   },
   {
     mockups: [
@@ -464,7 +464,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 11 Pro Max)",
     product_id: 601,
     variant_id: 15383,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -476,7 +476,7 @@ export const staticMocks = [
     product: "Tough iPhone Case (Glossy / iPhone 11 Pro Max)",
     product_id: 601,
     variant_id: 15383,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -488,7 +488,7 @@ export const staticMocks = [
     product: "Tough Case for Samsung® (Glossy / Samsung Galaxy S22 Ultra)",
     product_id: 686,
     variant_id: 16993,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -500,7 +500,7 @@ export const staticMocks = [
     product: "Tough Case for Samsung® (Glossy / Samsung Galaxy S21 Plus)",
     product_id: 686,
     variant_id: 16985,
-    price: 24,
+    price: 27,
   },
   {
     mockups: [
@@ -512,7 +512,7 @@ export const staticMocks = [
     product: "Tough Case for Samsung® (Glossy / Samsung Galaxy S10e)",
     product_id: 686,
     variant_id: 16973,
-    price: 24,
+    price: 27,
   },
 ];
 export const carouselImages = [

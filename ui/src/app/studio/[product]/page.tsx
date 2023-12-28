@@ -14,6 +14,8 @@ import {
 import ImagePlacementEditor from "./TemplateEditor";
 import { formatTextToHTML } from "@/utils/formatToHtml";
 import Image from "next/image";
+import BuiltinChat from "@/components/BuiltinChat";
+import DescAndGen from "@/components/BuiltinChat";
 interface PFILE {
   printfile_id: number;
   width: number;
@@ -67,7 +69,7 @@ export default function Page(params: { [x: string]: never }) {
   };
 
   return (
-    <div className="flex flex-row max-[1780px]:flex-col min-w-max text-center">
+    <div className="flex mb-10 flex-row max-[1780px]:flex-col min-w-max text-center">
       <Suspense fallback={<div>Loading...</div>}>
         <div className="gradientBG rounded-md flex flex-col min-h-screen h-max max-w-7xl">
           <div className="text-accent mx-auto p-4">
@@ -98,47 +100,12 @@ export default function Page(params: { [x: string]: never }) {
         </div>
 
         {!viewingMock && (
-          <div className="flex flex-row max-w-lg self-center mb-4 max-[1780px]:max-w-4xl items-center rounded-lg bg-background text-accent">
-            <div>
-              <div className="flex flex-row my-2 gap-4 justify-between items-center">
-                <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>
-                <h2 className="text-2xl font-bold ">
-                  £{Math.round(Number(selectedVariant?.price) * 2)}
-                </h2>
-              </div>
-
-              <div className="justify-between pb-0 max-[1780px]:pb-16 items-center h-fit text-lg">
-                <div className="flex justify-center text-center mx-4">
-                  <div>
-                    <p className="text-sm">Stock Checker</p>
-                    <select className="border bg-background text-accent rounded-lg p-2">
-                      {selectedVariant?.availability_status?.map((status) => (
-                        <option key={status.region} value={status.region}>
-                          {status.region} - {status.status}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {formatTextToHTML(
-                  selectedProduct?.product.description ?? ""
-                ).map((line, index) => (
-                  <p
-                    key={index}
-                    className="p-2"
-                    dangerouslySetInnerHTML={{ __html: line }}
-                  />
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-4 justify-between items-center">
-                <h1 className="text-2xl font-bold">
-                  Purchase it using the mockup viewer.
-                </h1>
-              </div>
-            </div>
-          </div>
+          <DescAndGen
+            selectedProduct={selectedProduct}
+            selectedVariant={selectedVariant}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+          />
         )}
       </Suspense>
     </div>

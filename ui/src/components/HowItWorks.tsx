@@ -1,7 +1,7 @@
 export const HowItWorksSection = () => {
   const steps = [
     {
-      title: "Generate and Import",
+      title: "Import",
       description:
         "Import directly from the chat interface using the browser extension.",
     },

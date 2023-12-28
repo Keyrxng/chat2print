@@ -17,7 +17,7 @@ const Journey = () => {
       altText: "AI-enhanced artwork for print",
     },
     {
-      title: "Easy-To-Use Design",
+      title: "Ease Of Use",
       description:
         "Our editor simplifies the personalization process, allowing you complete control over your design. Creating mockups is as easy as drag, pinch, pan, and zoom.",
       imageUrl: "/images/chat2print-editor.jpg",

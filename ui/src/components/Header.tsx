@@ -152,7 +152,7 @@ export default function Header() {
 
       if (isRegistering) {
         setIsRegistering(false);
-        setWaitingForConfirm(true);
+        setWaitingForConfirm((prev) => true);
       }
 
       fetch(target, {
@@ -162,10 +162,12 @@ export default function Header() {
         .then(async (data) => {
           const { user } = await data.json();
           if (user) {
-            if (user.confirmed_at === null) {
-              alert("Please confirm your email address before signing in");
+            if (user.session === null) {
+              console.log("waiting for confirm");
+              setUser(user);
               return;
-            } else if (user.confirmed_at !== null) {
+            } else if (user.session) {
+              console.log("not waiting for confirm");
               const { data: userdata } = await supabase
                 .from("users")
                 .select("*")
@@ -173,10 +175,13 @@ export default function Header() {
                 .single();
 
               if (!waitingForConfirm) {
+                console.log("not waiting for confirm");
                 setUser({
                   id: user.id,
                   firstName: userdata?.full_name?.split(" ")[0],
                 });
+
+                console.log("user", user);
                 setIsConnected(true);
                 setAccountModalIsOpen(false);
                 toast({
@@ -497,51 +502,31 @@ export default function Header() {
    };
    */
 
-  const isVerified = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) return false;
-    if (!data) return false;
-    if (!data?.user) return false;
-    if (data?.user.confirmed_at === null) return false;
-    return true;
-  };
-
   const handleIsVerified = async () => {
-    const verified = await isVerified();
-    if (!verified) {
-      setWaitingForConfirm(true);
-      toast({
-        title: "Error!",
-        description: "It looks like you haven't verified your account yet.",
-        duration: 4000,
-        variant: "default",
-      });
-    } else {
-      setWaitingForConfirm(false);
-    }
+    return window.location.reload();
   };
 
-  const handleResendVeriEmail = async () => {
-    const { data, error } = await supabase.auth.resend({
-      email: user?.email!,
-      type: "signup",
-    });
-    if (error) {
-      toast({
-        title: "Error!",
-        description: error.message,
-        duration: 4000,
-        variant: "default",
-      });
-    } else {
-      toast({
-        title: "Success!",
-        description: "Verification email resent.",
-        duration: 4000,
-        variant: "default",
-      });
-    }
-  };
+  // const handleResendVeriEmail = async () => {
+  //   const { data, error } = await supabase.auth.resend({
+  //     email: user?.email!,
+  //     type: "signup",
+  //   });
+  //   if (error) {
+  //     toast({
+  //       title: "Error!",
+  //       description: error.message,
+  //       duration: 4000,
+  //       variant: "default",
+  //     });
+  //   } else {
+  //     toast({
+  //       title: "Success!",
+  //       description: "Verification email resent.",
+  //       duration: 4000,
+  //       variant: "default",
+  //     });
+  //   }
+  // };
 
   return (
     <motion.div
@@ -772,12 +757,12 @@ export default function Header() {
                               >
                                 I&apos;ve verified my account
                               </Button>
-                              <Button
+                              {/* <Button
                                 onClick={() => handleResendVeriEmail()}
                                 className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
                               >
                                 Resend Verification Email
-                              </Button>
+                              </Button> */}
                             </div>
                           </div>
                         )}
