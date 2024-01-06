@@ -8,22 +8,22 @@ const tipsAndTricks = [
       {
         title: "Results and Quality",
         detail:
-          "We guarantee print quality 173% higher than industry minimums, achieving a minimum of 260 DPI (dots per inch).",
+          "The best quality prints are achieved with a DPI of 300, anything more does not improve the quality of the print. We guarantee print quality 173% higher than industry minimums, achieving a minimum of 270 DPI (dots per inch), with an average of 290 DPI.",
       },
       {
         title: "Basic Usage",
         detail:
-          "Select a product, upload a design, and generate a mockup. We upscale the image before generating the mockup and save both to your account.",
+          "Select a product, upload a design, and generate a mockup. The mockup will be saved to your account to view and/or purchase later. Premium users will have the upscaled image saved to their account as well.",
       },
       {
         title: "Ai-Assist",
         detail:
-          "Ai-Assist, automatically positioning and scaling your design, is enabled by default. You can disable it for full control over placement and dimensions, although manual adjustment is not recommended.",
+          "Ai-Assist, automatically positioning and scaling your design, is enabled by default. You can disable it for full control over placement and dimensions, although manual adjustment is not recommended. With an average of 290 DPI (dots per inch), Ai-Assist ensures optimal print quality. We recommend keeping Ai-Assist enabled for the best results.",
       },
       {
         title: "Limitation Overview",
         detail:
-          "We have implemented restrictions on storage, upscaling, and the rate of mockup creation. Efforts to expand these capacities are ongoing.",
+          "There are currently limitations placed on mockup generation rate limits and image upscaling daily usage limits. We are working to expand these limits as we grow.",
       },
     ],
   },
@@ -39,12 +39,12 @@ const tipsAndTricks = [
       {
         title: "Customizing Your Design",
         detail:
-          "For optimal results, keep 'Ai-Assist' enabled. This feature automatically optimizes your design's placement and dimensions for the product's print area. You may disable it for greater control over these aspects.",
+          "For optimal results, keep 'Ai-Assist' enabled. This feature automatically optimizes your design's placement and dimensions for the product's print area. This means you can select an image and generate a mockup without any additional adjustments.",
       },
       {
         title: "Familiarizing Yourself",
         detail:
-          "With 'Ai-Assist' enabled, your design is positioned automatically. Be mindful of template areas that might be affected during printing, such as the camera hole or template edges.",
+          "Through the extension you can import images straight from the ChatGPT interface or you can use the built-in AI Image Generator. This will require either a premium account or an OpenAI API key or you can upload you own images.",
       },
     ],
   },
@@ -55,17 +55,17 @@ const tipsAndTricks = [
       {
         title: "Advanced AI Upscaling",
         detail:
-          "Our AI technology precisely upscales your images to enhance resolution without sacrificing quality. Select an image, choose 'Generate Mockup', and we will save both the upscaled image and the mockup to your account. This feature is currently available for free during early access.",
+          "With best-in-class trained LLM's we upscale your images to enhance resolution without sacrificing quality. We do this to achieve a minimum print quality 173% higher than industry standards.",
       },
       {
         title: "Daily Upscaling Cap",
         detail:
-          "Early access users can upscale up to 10 images per day. We recommend focusing on designs that you are most eager to see brought to life. Post-launch, this feature may transition to a premium offering.",
+          "Early access users can upscale up to 10 images per day. We recommend focusing on designs that you are most eager to see brought to life.",
       },
       {
         title: "Maximizing Upscaling Quality",
         detail:
-          "Opt for a transparent background whenever possible, unless it is an integral part of your design. Our upscaling process aims to achieve a minimum print quality 173% higher than industry standards.",
+          "Opt for a transparent background whenever possible, unless it is an integral part of your design. ",
       },
     ],
   },
@@ -121,7 +121,7 @@ const tipsAndTricks = [
       {
         title: "Prompt Tips for Beginners",
         detail:
-          "Begin by identifying the product shape and specifying your desired orientation. Request 'no borders' for a cleaner appearance and consider a 'transparent background' for seamless product integration. Let your creativity flourish in your designs!",
+          "Begin by identifying the product shape and specifying your desired orientation (portrait producing the best results for all phone case sizes). We've found borders to be harder to work with, so we recommend explicitly avoiding them.",
       },
     ],
   },

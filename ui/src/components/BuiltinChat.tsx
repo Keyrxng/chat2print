@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { __Prod, __Variant } from "@/types/all";
 import { formatTextToHTML } from "@/utils/formatToHtml";
@@ -13,6 +13,13 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/lib/database.types";
+import { useToast } from "./ui/use-toast";
+import { test_data } from "./data";
+
+const supabase = createClientComponentClient<Database>();
 
 const DescAndGen = ({
   selectedProduct,
@@ -33,7 +40,9 @@ const DescAndGen = ({
   const [quality, setQuality] = useState("Standard");
   const [dimension, setDimension] = useState("Portrait");
   const [style, setStyle] = useState("Vivid");
-  const [showInfo, setShowInfo] = useState(false);
+  const [showInfo, setShowInfo] = useState(true);
+  const [keyToUse, setKeyToUse] = useState("");
+  const [userId, setUserId] = useState<string | undefined>("");
 
   const handleSubmitPrompt = async () => {
     if (!prompt.trim()) return;
@@ -42,29 +51,25 @@ const DescAndGen = ({
     setSuccessMessage("");
 
     try {
-      const { response } = await fetch("/api/openai/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: prompt,
-          quality: quality,
-          dimension: dimension,
-          style: style,
-        }),
-      }).then((res) => res.json());
-
-      console.log("response: ", response.data);
-
-      const b64 = response.data[0].b64_json;
-
+      const b64 = test_data;
       const imageUrl = `data:image/png;base64,${b64}`;
+
+      const image = new Image();
+      image.src = imageUrl;
+
+      const img = await fetch(imageUrl);
+
+      const blob = await img.blob();
+
+      const { data: uploadData, error } = await supabase.storage
+        .from("user_uploads")
+        .upload(`${userId}/${Date.now()}.png`, blob);
+
+      console.log(`data: `, uploadData);
+      console.log(`or error: `, error);
 
       setImageUrl(imageUrl);
       setSelectedImage(imageUrl);
-
-      setPrompt(response.data[0].revised_prompt);
 
       setSuccessMessage("Image generated successfully!");
     } catch (error) {
@@ -132,18 +137,164 @@ const DescAndGen = ({
       value: "Natural",
     },
   ];
+  const [blurred, setBlurred] = useState(true);
 
   const BlurOverlay = () => {
+    const [sks, sSkS] = useState(false);
+    const [apiKey, setApiKey] = useState("");
+    const [showOpts, setShowOpts] = useState(false);
+    const { toast } = useToast();
+
+    const handleSubmit = async () => {
+      const reg = /^sk-[A-Za-z0-9]{48}$/;
+      const valid = reg.test(apiKey.trim());
+
+      if (!valid) {
+        toast({
+          title: "Invalid API Key",
+          description: "Please enter a valid API key.",
+          duration: 5000,
+        });
+        return;
+      }
+
+      const key = apiKey.trim();
+      const { error } = await supabase.from("uak").insert({ ak: key });
+
+      if (error?.code === "23505") {
+        const { data, error } = await supabase.from("uak").upsert({ ak: key });
+      } else {
+        console.log("error: ", error);
+      }
+      setBlurred(false);
+    };
+
+    const handleShowOpts = () => {
+      if (!userId) {
+        toast({
+          title: "Not Logged In",
+          description: "Please log in to continue.",
+          duration: 5000,
+        });
+        return;
+      }
+
+      setShowOpts(!showOpts);
+      sSkS(false);
+    };
+
+    const handleSks = () => {
+      if (!userId) {
+        toast({
+          title: "Not Logged In",
+          description: "Please log in to continue.",
+          duration: 5000,
+        });
+        return;
+      }
+
+      sSkS(!sks);
+    };
+
+    useEffect(() => {
+      async function check() {
+        const { data } = await supabase.auth.getSession();
+
+        if (data.session?.user?.id) {
+          const { data: uak, error } = await supabase
+            .from("uak")
+            .select("*")
+            .eq("user_id", data.session.user.id)
+            .single();
+
+          setUserId(() => data.session.user.id);
+
+          if (uak?.ak && !error) {
+            setKeyToUse(() => uak.ak);
+            setBlurred(false);
+          }
+        }
+      }
+      check();
+    }, []);
+
     return (
-      <div className="absolute w-1/2 max-w-lg h-1/2 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
-        <div className="text-white">
-          <Lock className="h-12 w-12 mx-auto" />
-          <p className="text-center mt-2">Premium Feature</p>
-        </div>
+      <div className="absolute w-2/5 z-10 max-w-lg h-4/5 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+        {sks && (
+          <div className="text-accent justify-between gap-2">
+            <Lock className="h-12 w-12 mx-auto" />
+            <p className="text-center mt-2">Enter your OpenAi API key</p>
+
+            <div className="flex items-center gap-4">
+              <input
+                className="border w-auto text-sm border-accent bg-background rounded-lg p-2 mt-2"
+                placeholder="API Key"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+              />
+
+              <Button
+                onClick={handleSubmit}
+                className="mt-2 hover:bg-accent hover:text-background"
+              >
+                Submit
+              </Button>
+            </div>
+          </div>
+        )}
+        {!sks && !showOpts && (
+          <div className="text-accent">
+            <Lock className="h-12 w-12 mx-auto" />
+            <p className="text-center mt-2">Premium Feature</p>
+            <Button
+              onClick={handleShowOpts}
+              className="mt-2 hover:bg-accent hover:text-background"
+            >
+              Get Premium
+            </Button>
+            <Button
+              onClick={handleSks}
+              className="mt-2 hover:bg-accent hover:text-background"
+            >
+              I have an OpenAi API key
+            </Button>
+          </div>
+        )}
+        {showOpts && (
+          <div className="fixed bg-background max-h-[500px] overflow-y-auto rounded-lg shadow-2xl p-6 flex-col flex ">
+            <div>
+              <button
+                onClick={() => setShowOpts(false)}
+                className="relative text-gray-600 hover:text-gray-900 top-0 right-4 text-2xl"
+              >
+                &times;
+              </button>
+
+              <h2 className="text-4xl font-bold text-center mb-6">
+                Upgrade Once for Lifetime Benefits
+              </h2>
+
+              <div className="flex flex-col p-2  rounded-lg justify-between items-center">
+                <script
+                  async
+                  src="https://js.stripe.com/v3/pricing-table.js"
+                ></script>
+                {/* @ts-ignore */}
+                <stripe-pricing-table
+                  style={{
+                    padding: "2px",
+                    margin: "2px",
+                  }}
+                  pricing-table-id="prctbl_1ORxi8J8INwD5VucpA1IVbuN"
+                  publishable-key="pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
-  const [blurred, setBlurred] = useState(true);
 
   return (
     <div className="flex flex-col text-center items-center mt-1 gap-14">
@@ -263,11 +414,6 @@ const DescAndGen = ({
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
-              <div className="grid text-sm grid-cols-3 gap-2 px-2 justify-between bg-gray-700 rounded-full p-1 items-center">
-                <p>Layout: {dimension}</p>
-                <p>Style: {style}</p>
-                <p>Quality: {quality}</p>
-              </div>
 
               <motion.button
                 className="px-6 py-2 bg-primary border border-accent m-2 rounded-lg text-white font-bold shadow-lg"

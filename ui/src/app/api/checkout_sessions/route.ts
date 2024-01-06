@@ -1,10 +1,8 @@
-import PODHandler from "@/classes/PODHandler";
 import { Stripe } from "stripe";
 
 const key = process.env.STRIPE_KEY;
 if (!key) throw new Error("Missing Stripe Key");
 const stripe = new Stripe(key);
-const podHandler = new PODHandler();
 
 export async function POST(req: Request, res: any) {
   const args = await req.json();
@@ -13,8 +11,8 @@ export async function POST(req: Request, res: any) {
   const price = Math.round(Number(args.itemPrice));
   const quantity = args.quantity.toString();
   const stock = args.stock;
+  const userDetails = args.userDetails;
 
-  console.log("args: ", args);
   const eu = [
     "AL",
     "AD",
@@ -101,10 +99,13 @@ export async function POST(req: Request, res: any) {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       payment_method_types: ["card"],
-      billing_address_collection: "required",
+      billing_address_collection: userDetails.billing_address
+        ? "required"
+        : "auto",
       phone_number_collection: {
         enabled: true,
       },
+      customer_email: userDetails.email,
       shipping_address_collection: {
         allowed_countries: inStockRegion,
       },

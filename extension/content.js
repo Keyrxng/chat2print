@@ -1,6 +1,5 @@
 const token = "sb-ywaeexoevxxjquwlhfjx-auth-token";
 const chat2printUrl = "https://chat2print.xyz";
-const localhostUrl = "http://localhost:3000/";
 const currentUrl = window.location.hostname;
 
 document.body.addEventListener("click", function (event) {
@@ -78,6 +77,11 @@ async function fetchAndConvertImage(imageUrl, exportButton) {
       } else if (response.data === "The resource already exists") {
         exportButton.innerText = "Image already exported 😉";
         exportButton.style.color = "#4caf50";
+      } else if (
+        response.data === "The object exceeded the maximum allowed size"
+      ) {
+        exportButton.innerText = "Image size too large 😞";
+        exportButton.style.color = "#f44336";
       } else {
         exportButton.innerText = "Image Exported Successfully ✅";
         exportButton.style.color = "#4caf50";

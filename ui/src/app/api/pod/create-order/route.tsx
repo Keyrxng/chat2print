@@ -18,8 +18,14 @@ export async function POST(req: NextRequest, res: NextRequest) {
   console.log(args);
   const response = await podHandler.createOrder(args);
 
+  const data = {
+    status: response.result.status,
+    dpi: response.result.items[0].files[0].dpi,
+    print_status: response.result.items[0].files[0].status,
+  };
+
   try {
-    return new Response(JSON.stringify(response), {
+    return new Response(JSON.stringify(data), {
       headers: { "content-type": "application/json" },
     });
   } catch (err) {

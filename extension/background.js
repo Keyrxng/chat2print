@@ -31,9 +31,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "create") {
     const image64 = request?.image64;
 
-    createImage(image64).then((response) => {
-      sendResponse({ data: response });
-    });
+    createImage(image64)
+      .then((response) => {
+        sendResponse({ data: response });
+      })
+      .catch((error) => {
+        console.log("background.js: error", error);
+        sendResponse({ data: error.message });
+      });
     return true;
   }
 });
@@ -59,11 +64,12 @@ async function createImage(image64, sendResponse) {
   const { data, error } = await supabase.storage
     .from("user_uploads")
     .upload(`${user.session.user.id}/${imageName}.webp`, blobbish, {
-      cacheControl: "608600",
+      cacheControl: "60860000",
       upsert: false,
     });
 
   if (error) {
+    console.log("upload error", error);
     return error.message;
   }
 
@@ -74,6 +80,7 @@ async function createImage(image64, sendResponse) {
   });
 
   if (actionError) {
+    console.log("action error", actionError);
     return actionError.message;
   }
 

@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "Chat2Print",
-    "version": "1.0",
-    "description": "From chat to print in seconds",
+    "version": "0.0.1",
+    "description": "Export your ChatGPT generated art to your Chat2Print account for the highest quality custom phone cases!",
     "permissions": [
         "activeTab",
         "storage",
@@ -22,8 +22,7 @@
         {
             "matches": [
                 "https://chat.openai.com/*",
-                "https://chat2print.xyz/*",
-                "http://localhost:3000/*"
+                "https://chat2print.xyz/*"
             ],
             "js": [
                 "content.bundle.js"
@@ -34,7 +33,6 @@
         "service_worker": "background.bundle.js"
     },
     "host_permissions": [
-        "http://localhost:3000/*",
         "https://chat2print.xyz/*"
     ],
     "web_accessible_resources": [
@@ -45,8 +43,7 @@
             ],
             "matches": [
                 "https://chat.openai.com/*",
-                "https://chat2print.xyz/*",
-                "http://localhost:3000/*"
+                "https://chat2print.xyz/*"
             ],
             "use_dynamic_url": true
         }

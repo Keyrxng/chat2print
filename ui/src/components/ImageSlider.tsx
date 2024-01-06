@@ -156,17 +156,17 @@ export const ImageSlider = ({
   };
 
   return (
-    <>
+    <div className="mx-4 py-4 mb-12 h-min">
       {showUpgradeModal && <UpgradeModal />}
-      <div className="justify-center">
+      <div className="justify-center mx-2 h-min border border-transparent ">
         <div className="shadow-lg rounded-lg bg-background">
           <p className="font-bold text-sm text-center text-accent -mb-56 mt-2">
             {viewingUpscaled ? "Viewing Enhanced" : "Viewing Originals"}
           </p>
         </div>
       </div>
-      <div className="flex flex-row justify-center items-center max-w-6xl">
-        <div className="relative hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
+      <div className="flex flex-row justify-center h-min   items-center max-w-6xl">
+        <div className="hover:translate-y-2.5 transition duration-300 ease-in-out transform hover:scale">
           <div className="bg-background rounded-full h-24 w-24 flex items-center justify-center">
             <Button
               onClick={() => handleViewUpscaled()}
@@ -265,6 +265,6 @@ export const ImageSlider = ({
           </label>
         </div>
       </div>
-    </>
+    </div>
   );
 };

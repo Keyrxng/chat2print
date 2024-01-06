@@ -3,13 +3,28 @@ import { cookies } from "next/headers";
 
 import type { Database } from "@/lib/database.types";
 
+const layouts = [
+  {
+    name: "Portrait",
+    size: "1024x1792",
+  },
+  {
+    name: "Landscape",
+    size: "1792x1024",
+  },
+  {
+    name: "Square",
+    size: "1024x1024",
+  },
+];
+
 export async function POST(req, res) {
   const cookieStore = cookies();
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
   });
 
-  const { data, error } = await supabase.auth.getSession();
+  const { data: session, error } = await supabase.auth.getSession();
 
   if (error) {
     return new Response(JSON.stringify(error), {
@@ -20,42 +35,65 @@ export async function POST(req, res) {
     });
   }
 
-  if (!data.session?.user?.id) throw new Error("No user ID");
+  if (!session.session?.user?.id) throw new Error("No user ID");
+  const { prompt, quality, dimension, style, keyToUse } = await req.json();
 
   const apiUrl = "https://api.openai.com/v1/images/generations";
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  const { prompt, quality, dimension, style } = await req.json();
 
   console.log("prompt: ", prompt);
   console.log("quality: ", quality);
   console.log("dimension: ", dimension);
-
-  // 1024x1024, 1024x1792 or 1792x1024 pixels.
-  const layouts = [
-    {
-      name: "Portrait",
-      size: "1024x1792",
-    },
-    {
-      name: "Landscape",
-      size: "1792x1024",
-    },
-    {
-      name: "Square",
-      size: "1024x1024",
-    },
-  ];
+  console.log("style: ", style);
+  console.log("keyToUse: ", keyToUse);
 
   const layout = layouts.find((layout) => layout.name === dimension);
   let respo;
+  let token = "";
+
+  if (!keyToUse) {
+    const { data: user } = await supabase
+      .from("users")
+      .select("tier")
+      .eq("id", session.session?.user.id)
+      .single();
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+    }
+
+    if (user.tier === "free") {
+      return new Response(
+        JSON.stringify({
+          error:
+            "You are on the free tier. Please upgrade to use this feature.",
+        }),
+        {
+          status: 403,
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
+    }
+
+    if (user.tier === "premium" || user.tier === "pro") {
+      token = process.env.OPENAI_API_KEY;
+    }
+  } else {
+    token = keyToUse;
+  }
 
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         model: "dall-e-3",
@@ -96,28 +134,4 @@ export async function POST(req, res) {
       "content-type": "application/json",
     },
   });
-
-  //   const response = await fetch(apiUrl, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${apiKey}`,
-  //     },
-  //     body: JSON.stringify({
-  //       prompt: prompt,
-  //     }),
-  //   });
-
-  //   const imgData = await response.json();
-
-  //   console.log("image gen imgData: ", imgData);
-
-  //   return new Response(JSON.stringify({ imgData }), {
-  //     status: 200,
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //   });
 }
-
-export async function GET() {}

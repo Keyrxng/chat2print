@@ -38,6 +38,15 @@ import { ChevronsUpDown, Send, ToggleLeftIcon, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/router";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -515,7 +524,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const handleEnhanceUpscale = async () => {
     setEnhancing(true);
     if (!userImage) {
-      alert("Please choose an image first");
+      toast({
+        title: "Oops!",
+        description: `Please upload an image before generating a mockup.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
       setEnhancing(false);
       return;
     }
@@ -582,8 +596,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const [quantity, setQuantity] = useState<number>(1);
     const [mockImg, setMockImg] = useState<string>("");
     const [itemPrice, setItemPrice] = useState<number>(0);
-    console.log("activeMock: ", activeMock);
-    console.log(`itemPrice: ${itemPrice} quantity: ${quantity}`);
+    const [printDetails, setPrintDetails] = useState<any>(null);
 
     const handleSet = (mock: any) => {
       setActiveMock(mock);
@@ -670,6 +683,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         if (res && typeof res === "string") {
           return;
         } else if (res) {
+          setPrintDetails(res);
           setCheckout(true);
         }
       });
@@ -750,7 +764,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     return (
-      <div className="h-full">
+      <div className="m-4 p-4 h-full">
         <motion.h1
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
@@ -762,26 +776,40 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
         {!activeMock ? (
           <>
-            <div className="grid grid-cols-3 gap-3 mx-4 justify-center items-center">
-              {mocks.map((mock, index) => (
-                <button
-                  key={mock.task_key}
-                  className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
-                  onClick={() => handleSet(mock)}
-                >
-                  <h1 className="text-accent text-sm m-1">{mock.product}</h1>
-                  <Image
-                    priority={true}
-                    src={mock.mockups?.[0].mockup_url}
-                    width={500}
-                    height={500}
-                    alt={`Custom ${mock.product}`}
-                    className="rounded-lg"
-                  />
-                </button>
-              ))}
+            <div className="grid grid-cols-1 mx-4 justify-center items-center">
+              <Carousel className="mt-5">
+                <CarouselContent className="-ml-1">
+                  {mocks.map((mock, index) => (
+                    <>
+                      <CarouselItem key={index} className="pl-1 basis-1/2">
+                        <div className="p-1">
+                          <button
+                            key={mock.task_key}
+                            className="flex flex-col w-full h-full justify-center items-center border-2 border-accent rounded-lg p-2 m-2 hover:bg-accent hover:text-background transition-all duration-300"
+                            onClick={() => handleSet(mock)}
+                          >
+                            <h1 className="text-accent text-sm m-1">
+                              {mock.product}
+                            </h1>
+                            <Image
+                              priority={true}
+                              src={mock.mockups?.[0].mockup_url}
+                              width={500}
+                              height={500}
+                              alt={`Custom ${mock.product}`}
+                              className="rounded-lg"
+                            />
+                          </button>
+                        </div>
+                      </CarouselItem>
+                    </>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
             </div>
-            <div className="flex w-full mb-6 text-accent items-center bottom-0 space-x-4 px-2 py-4 hover:bg-background hover:text-accent rounded-lg">
+            <div className="flex w-full mb-6 text-accent items-center bottom-0 space-x-4 px-2 py-4 rounded-lg">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -922,6 +950,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     />
                     <h1 className="text-xl font-bold">{activeMock.product}</h1>
                     <h2 id="delivery-date" className="text-xl"></h2>
+                    <h2 className="text-xl font-bold">
+                      Print Quality: <strong>{printDetails.dpi}/ 300</strong>
+                    </h2>
                   </div>
                   <HandleSale
                     mockup={activeMock}
@@ -1260,7 +1291,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
-
     useEffect(() => {
       fetch("/api/checkout_sessions", {
         method: "POST",
@@ -1273,6 +1303,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           itemPrice,
           regions: selectedVariant?.availability_regions,
           stock: selectedVariant?.availability_status,
+          userDetails: userDetails,
         }),
       })
         .then((res) => res.json())
@@ -1330,17 +1361,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           body: JSON.stringify(data),
         });
 
-        const { result } = await response.json();
+        const result = await response.json();
         console.log("est order: ", result);
 
-        const orderData = {
-          shipping: result.costs?.shipping,
-          subtotal: result.costs?.subtotal,
-          vat: result.costs?.vat,
-          total: result.costs?.total,
-        };
-
-        return orderData;
+        return result;
       };
 
       const shippingCost = async () => {
@@ -1393,8 +1417,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       async function load() {
         const estOrderCost = await orderCost();
         const estShippingCost = await shippingCost();
-        console.log(`estOrderCost: `, estOrderCost);
-        console.log(`estShippingCost: `, estShippingCost);
 
         const data = {
           ...estOrderCost,
@@ -1427,34 +1449,31 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
       const data = await loadShippingInfos();
 
-      console.log("posting to supa data: ", data);
-      const { data: uploadData, error: uploadError } = await supabase
-        .from("orders")
-        .insert({
-          task_key: mockup.task_key,
-          id: id,
-          user_id: userDetails.id,
-          product: mockup.product,
-          items: [
-            {
-              variant_id: mockup.variant_id,
-              quantity,
-              files: [
-                {
-                  url: mockup.printFiles[0].url,
-                },
-              ],
-            },
-          ],
-          retail_costs: {
-            curreny: "GBP",
-            subtotal: itemPrice * quantity,
-            discount: userDetails.discount,
-            shipping: "0",
-            tax: "0",
+      const { error: uploadError } = await supabase.from("orders").insert({
+        task_key: mockup.task_key,
+        id: id,
+        user_id: userDetails.id,
+        product: mockup.product,
+        items: [
+          {
+            variant_id: mockup.variant_id,
+            quantity,
+            files: [
+              {
+                url: mockup.printFiles[0].url,
+              },
+            ],
           },
-          final: data,
-        });
+        ],
+        retail_costs: {
+          curreny: "GBP",
+          subtotal: itemPrice * quantity,
+          discount: userDetails.discount,
+          shipping: "0",
+          tax: "0",
+        },
+        final: data,
+      });
 
       if (uploadError?.code === "23505") {
         // dupe draft in db
@@ -1472,7 +1491,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     return (
       <>
-        <div id="checkout">
+        <div id="checkout" className="max-h-[850px] overflow-y-auto">
           {clientSecret && (
             <EmbeddedCheckoutProvider
               stripe={stripePromise}
@@ -1548,6 +1567,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         if (res.error) {
           alert(res.error);
         }
+
+        if (res.user) {
+          window.location.reload();
+        }
       });
     };
 
@@ -1618,7 +1641,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             Already have an account?{" "}
             <button
               onClick={() => setIsRegistering(false)}
-              className="underline"
+              className="underline text-accent"
             >
               Sign in
             </button>
@@ -1759,8 +1782,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   /////// CTRLS \\\\\\\
 
   return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
+    <div className={`${viewingMocks ? "h-screen" : ""} mb-4`}>
+      <Suspense>
         <>
           {enhancing && (
             <div className="fixed z-50 inset-0 overflow-y-auto">
@@ -1846,7 +1869,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             <Mockup />
           ) : (
             <>
-              <div className="flex justify-center w-full h-min max-w-full">
+              <div className="flex justify-center w-full h-min">
                 <TransformWrapper
                   initialScale={position.scale}
                   initialPositionX={-position.x}
@@ -1924,7 +1947,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                   height: "15%",
                                 }}
                               >
-                                <p className="text-black text-md text-bold">
+                                <p className="text-black text-md font-bold">
                                   Upload an image
                                 </p>
                               </div>
@@ -1975,10 +1998,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     </div>
                   )}
                 </TransformWrapper>
-                {/* values */}
               </div>
               <div className="grid grid-cols-1">
-                <div className="flex mx-8 mt-4 justify-between">
+                <div className="flex justify-between">
                   <div className="flex text-accent items-center space-x-4 px-2 py-1  rounded-lg">
                     <TooltipProvider>
                       <Tooltip>
@@ -2072,7 +2094,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           )}
         </>
       </Suspense>
-    </>
+    </div>
   );
 };
 

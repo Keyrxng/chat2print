@@ -12,9 +12,7 @@ import {
   __Template,
 } from "@/types/all";
 import ImagePlacementEditor from "./TemplateEditor";
-import { formatTextToHTML } from "@/utils/formatToHtml";
 import Image from "next/image";
-import BuiltinChat from "@/components/BuiltinChat";
 import DescAndGen from "@/components/BuiltinChat";
 interface PFILE {
   printfile_id: number;
@@ -69,7 +67,7 @@ export default function Page(params: { [x: string]: never }) {
   };
 
   return (
-    <div className="flex mb-10 flex-row max-[1780px]:flex-col min-w-max text-center">
+    <div className="flex mb-10 h-auto flex-row max-[1780px]:flex-col min-w-max text-center">
       <Suspense fallback={<div>Loading...</div>}>
         <div className="gradientBG rounded-md flex flex-col min-h-screen h-max max-w-7xl">
           <div className="text-accent mx-auto p-4">
