@@ -18,7 +18,6 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@radix-ui/react-tooltip";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Input } from "@/components/ui/input";
 import React from "react";
 import {
@@ -45,6 +44,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+const supabase = createClientComponentClient<Database>();
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -77,6 +78,7 @@ interface ImagePlacementEditorProps {
   setViewingMock: (viewing: boolean) => void;
   setSelectedImage: (image: string) => void;
   setSelectedVariant: (variant: __Variant) => void;
+  userDetails: any;
 }
 
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
@@ -89,6 +91,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   selectedProduct,
   setSelectedVariant,
   setViewingMock,
+  userDetails,
 }) => {
   const { toast } = useToast();
   const editorRef = useRef<HTMLDivElement>(null);
@@ -103,7 +106,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [needAccount, setNeedAccount] = useState<boolean>(false);
   const [userImages, setUserImages] = useState<string[]>([]);
   const [upscaledImages, setUpscaledImages] = useState<string[]>([]);
-  const [userDetails, setUserDetails] = useState<any>(null);
   const [viewingUpscaled, setViewingUpscaled] = useState<boolean>(false);
   const [dataStatic, setDataStatic] = useState<boolean>(false);
   const [pollForMockups, setPollForMockups] = useState<boolean>(false);
@@ -118,35 +120,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     positionY: 0,
   });
 
-  const supabase = createClientComponentClient<Database>();
-
   useEffect(() => {
-    async function getUser() {
-      const { data } = await supabase.auth.getSession();
-      const uID = data.session?.user.id;
-
-      if (!uID) {
-        toast({
-          title: "Haven't signed up yet?",
-          description: `Click "View Mockups" to get a feel for what's possible. If you like what you see, click "Profile" to sign up and start creating your own.`,
-          duration: 10000,
-        });
-      }
-
-      const { data: user } = await supabase.from("users").select("*").match({
-        id: uID,
-      });
-
-      const usr = {
-        id: user?.[0].id,
-        full_name: user?.[0].full_name,
-        email: data.session?.user.email,
-        billing_address: user?.[0].billing_address,
-        tier: user?.[0].tier,
-      };
-
-      setUserDetails((prev: any) => usr);
-    }
     async function set() {
       if (!userDetails?.id) return;
       try {
@@ -171,22 +145,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         console.log(err);
       }
     }
-
-    getUser();
     set();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase, userDetails?.id]);
-
-  useEffect(() => {
-    // @ts-ignore
-    if (supabase.changedAccessToken === undefined) {
-      setUserImages([]);
-      setUserDetails((prev: null) => (prev = null));
-      return;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    //@ts-ignore
-  }, [supabase.changedAccessToken]);
 
   useEffect(() => {
     const intitalPosition = {
@@ -228,7 +189,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       gety();
       await processMockRequest(pendingReqs);
     }
-
     async function gety() {
       const { data: processingReq, error: processError } = await supabase
         .from("mockup_requests")
@@ -506,6 +466,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   const handleEnhanceUpscale = async () => {
     setEnhancing(true);
+
+    console.log("userImage: ", userImage);
+
+    const uri = userImage.split("blob:")[1];
+
     if (!userImage) {
       toast({
         title: "Oops!",
@@ -520,7 +485,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       const res = await fetch("/api/upscale", {
         method: "POST",
         body: JSON.stringify({
-          url: userImage,
+          url: uri,
         }),
       });
 
@@ -529,7 +494,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         console.log("error: ", data.error);
         toast({
           title: "Something went wrong.",
-          description: `It's likely that your image is too large, please try again with smaller dimensions (suggested: 260x380).`,
+          description: `It's likely that your image is too large, please try again with smaller dimensions .`,
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
@@ -1141,28 +1106,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     setIsMockingUp(false);
   };
 
-  const setUserDeets = async () => {
-    const { data } = await supabase.auth.getSession();
-    const uID = data.session?.user.id;
-    const { data: user } = await supabase.from("users").select("*").match({
-      id: uID,
-    });
-
-    const usr = {
-      id: user?.[0].id,
-      full_name: user?.[0].full_name,
-      email: data.session?.user.email,
-      billing_address: user?.[0].billing_address,
-      tier: user?.[0].tier,
-    };
-
-    setUserDetails((prev: any) => usr);
-    return usr;
-  };
-
   const fetchMockups = async () => {
-    const usr = await setUserDeets();
-    const userID = usr?.id;
+    const userID = userDetails?.id;
     if (!userID) {
       setDataStatic(true);
       return staticMocks;
@@ -1910,7 +1855,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                                 }}
                               >
                                 <p className="text-black text-md font-bold">
-                                  Upload an image
+                                  Create a new design
                                 </p>
                               </div>
                             )}
@@ -2043,14 +1988,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     </TooltipProvider>
                   </div>
                 </div>
-                <ImageSlider
-                  userDetails={userDetails}
-                  userImages={userImages}
-                  upscaledImages={upscaledImages}
-                  setSelectedImage={setSelectedImage}
-                  setViewingUpscaled={setViewingUpscaled}
-                  viewingUpscaled={viewingUpscaled}
-                />
+                {userDetails?.tier && userDetails.tier !== "free" && (
+                  <ImageSlider
+                    userDetails={userDetails}
+                    userImages={userImages}
+                    upscaledImages={upscaledImages}
+                    setSelectedImage={setSelectedImage}
+                    setViewingUpscaled={setViewingUpscaled}
+                    viewingUpscaled={viewingUpscaled}
+                  />
+                )}
               </div>
             </>
           )}

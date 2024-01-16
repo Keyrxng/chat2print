@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { __Prod, __Variant } from "@/types/all";
 import { formatTextToHTML } from "@/utils/formatToHtml";
-import { Info, Lock } from "lucide-react";
+import { Info, Lock, MoveRight } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -14,35 +14,107 @@ import {
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { toast, useToast } from "./ui/use-toast";
 import { Database } from "@/lib/database.types";
-import { useToast } from "./ui/use-toast";
-import { test_data } from "./data";
-
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const supabase = createClientComponentClient<Database>();
+
+const premiumHowTo = [
+  {
+    title: "Quality",
+    description:
+      "You can choose between standard and HD quality. HD quality is available for Premium and Pro users.",
+  },
+  {
+    title: "Dimensions",
+    description:
+      "You can choose between square, portrait and landscape dimensions.",
+  },
+  {
+    title: "Prompt",
+    description:
+      "Be as creative and as intentional as possible with your prompt. For safety reasons, your prompt is rewritten and optimized to help to provide a better final result so don't worry if it doesn't quite make sense or is too short.",
+  },
+];
+
+const freeHowTo = [
+  {
+    title: "Quality",
+    description: "Output quality is dependent on the prompt you provide.",
+  },
+  {
+    title: "Dimensions",
+    description:
+      "You can choose between square, portrait and landscape dimensions.",
+  },
+  {
+    title: "Prompt",
+    description:
+      "Unlike DALLE-3, your prompt will not be optimized or 'beefed' up. This gives you a lot more granular control of the output but also means that you need to be more intentional and specific with your prompt to acheive a result similar to DALLE-3.",
+  },
+];
+
+const qualityOpts = [
+  {
+    name: "Standard",
+    value: "Standard",
+    disabled: false,
+  },
+  {
+    name: "HD",
+    value: "HD",
+    disabled: true,
+  },
+];
+
+const dimensionOpts = [
+  {
+    name: "Portrait",
+    value: "Portrait",
+  },
+  {
+    name: "Landscape",
+    value: "Landscape",
+  },
+  {
+    name: "Square",
+    value: "Square",
+  },
+];
+
+const styles = [
+  {
+    name: "Vivid",
+    value: "Vivid",
+  },
+  {
+    name: "Natural",
+    value: "Natural",
+  },
+];
 
 const DescAndGen = ({
   selectedProduct,
   selectedVariant,
-  selectedImage,
   setSelectedImage,
+  userDetails,
 }: {
   selectedProduct: __Prod | undefined;
   selectedVariant: __Variant | undefined;
-  selectedImage: string;
   setSelectedImage: (arg0: string) => void;
+  userDetails: any;
 }) => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [showGen, setShowGen] = useState(false);
   const [quality, setQuality] = useState("Standard");
   const [dimension, setDimension] = useState("Portrait");
   const [style, setStyle] = useState("Vivid");
   const [showInfo, setShowInfo] = useState(true);
-  const [keyToUse, setKeyToUse] = useState("");
-  const [userId, setUserId] = useState<string | undefined>("");
+  const [freeGen, setFreeGen] = useState(true);
+  const [showGen, setShowGen] = useState(false);
+  const [hover, setHover] = useState(false);
+  const [blurred, setBlurred] = useState(true);
 
   const handleSubmitPrompt = async () => {
     if (!prompt.trim()) return;
@@ -51,7 +123,30 @@ const DescAndGen = ({
     setSuccessMessage("");
 
     try {
-      const b64 = test_data;
+      const { response } = await fetch("/api/openai/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+          quality: quality,
+          dimension: dimension,
+          style: style,
+        }),
+      }).then((res) => res.json());
+
+      if (response.error) {
+        setSuccessMessage(response.error.message);
+        toast({
+          title: "Error",
+          description: response.error.message,
+          duration: 5000,
+        });
+        return;
+      }
+
+      const b64 = response.data[0].b64_json;
       const imageUrl = `data:image/png;base64,${b64}`;
 
       const image = new Image();
@@ -61,18 +156,29 @@ const DescAndGen = ({
 
       const blob = await img.blob();
 
-      const { data: uploadData, error } = await supabase.storage
-        .from("user_uploads")
-        .upload(`${userId}/${Date.now()}.png`, blob);
+      if (userDetails.tier === "Pro") {
+        const { data: uploadData, error } = await supabase.storage
+          .from("user_uploads")
+          .upload(`${userDetails.id}/${Date.now()}.png`, blob);
 
-      console.log(`data: `, uploadData);
-      console.log(`or error: `, error);
+        if (error) {
+          toast({
+            title: "Error Saving Image",
+            description: error.message,
+            duration: 5000,
+          });
+        } else {
+          toast({
+            title: "Image Saved",
+            description: "Your image has been saved to your account.",
+            duration: 5000,
+          });
+        }
+      }
 
-      setImageUrl(imageUrl);
       setSelectedImage(imageUrl);
-
       setSuccessMessage("Image generated successfully!");
-    } catch (error) {
+    } catch (error: any) {
       setSuccessMessage(
         "An error occurred while generating the image. " + error.message
       );
@@ -81,63 +187,36 @@ const DescAndGen = ({
     }
   };
 
-  const howTo = [
-    {
-      title: "Quality",
-      description:
-        "You can choose between standard and HD quality. HD quality is available for Premium and Pro users.",
-    },
-    {
-      title: "Dimensions",
-      description:
-        "You can choose between square, portrait and landscape dimensions.",
-    },
-    {
-      title: "Prompt",
-      description:
-        "Be as creative and as intentional as possible with your prompt. For safety reasons, your prompt is rewritten and optimized as to help to provide a better final result so don't worry if it doesn't quite make sense or is too short.",
-    },
-  ];
+  const handleFreePrompt = async () => {
+    if (!prompt.trim()) return;
 
-  const qualityOpts = [
-    {
-      name: "Standard",
-      value: "Standard",
-      disabled: false,
-    },
-    {
-      name: "HD",
-      value: "HD",
-      disabled: true,
-    },
-  ];
+    setIsLoading(true);
+    setSuccessMessage("");
 
-  const dimensionOpts = [
-    {
-      name: "Portrait",
-      value: "Portrait",
-    },
-    {
-      name: "Landscape",
-      value: "Landscape",
-    },
-    {
-      name: "Square",
-      value: "Square",
-    },
-  ];
+    const imageVars = `Style: ${style}\n Dimensions: ${dimension}\n`.trim();
+    const imagePrompt =
+      `Ensure that the image meets the following criteria:\n\n${imageVars}\n\n${prompt}`.trim();
 
-  const styles = [
-    {
-      name: "Vivid",
-      value: "Vivid",
-    },
-    {
-      name: "Natural",
-      value: "Natural",
-    },
-  ];
-  const [blurred, setBlurred] = useState(true);
+    try {
+      const resp = await fetch("/api/freeGen", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: imagePrompt,
+        }),
+      });
+
+      const blob = await resp.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      setSelectedImage(imageUrl);
+      setSuccessMessage("Image generated successfully!");
+    } catch (error: any) {
+      setSuccessMessage(
+        "An error occurred while generating the image. " + error.message
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const BlurOverlay = () => {
     const [sks, sSkS] = useState(false);
@@ -166,11 +245,10 @@ const DescAndGen = ({
       } else {
         console.log("error: ", error);
       }
-      setBlurred(false);
     };
 
     const handleShowOpts = () => {
-      if (!userId) {
+      if (!userDetails.id) {
         toast({
           title: "Not Logged In",
           description: "Please log in to continue.",
@@ -184,7 +262,7 @@ const DescAndGen = ({
     };
 
     const handleSks = () => {
-      if (!userId) {
+      if (!userDetails.id) {
         toast({
           title: "Not Logged In",
           description: "Please log in to continue.",
@@ -204,13 +282,11 @@ const DescAndGen = ({
           const { data: uak, error } = await supabase
             .from("uak")
             .select("*")
-            .eq("user_id", data.session.user.id)
-            .single();
+            .eq("user_id", data.session.user.id);
 
-          setUserId(() => data.session.user.id);
-
-          if (uak?.ak && !error) {
-            setKeyToUse(() => uak.ak);
+          if (!uak?.length && error) {
+            setBlurred(true);
+          } else if (uak?.length > 0 && !error) {
             setBlurred(false);
           }
         }
@@ -295,37 +371,6 @@ const DescAndGen = ({
       </div>
     );
   };
-  const [freeGen, setFreeGen] = useState(true);
-
-  const handleFreePrompt = async () => {
-    if (!prompt.trim()) return;
-
-    setIsLoading(true);
-    setSuccessMessage("");
-
-    try {
-      const resp = await fetch("/api/freeGen", {
-        method: "POST",
-        body: JSON.stringify({
-          prompt: prompt,
-        }),
-      });
-
-      const blob = await resp.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      console.log(`imageUrl: `, imageUrl);
-      setImageUrl(imageUrl);
-      setSelectedImage(imageUrl);
-
-      setSuccessMessage("Image generated successfully!");
-    } catch (error) {
-      setSuccessMessage(
-        "An error occurred while generating the image. " + error.message
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="flex flex-col text-center items-center mt-1 gap-14">
@@ -337,26 +382,52 @@ const DescAndGen = ({
         <div className="flex flex-row justify-between items-center">
           <button
             className="px-6 py-2 bg-primary rounded-lg text-center align-middle items-center w-fit text-white font-bold shadow-lg"
-            onClick={() => setShowGen((prev) => !prev)}
+            onClick={() => {
+              if (showGen || freeGen) {
+                setShowGen(false);
+                setFreeGen(false);
+              } else {
+                setFreeGen(true);
+                setShowGen(false);
+              }
+            }}
           >
-            {showGen ? "View Product Description" : "Open AI Image Generator"}
+            {showGen || freeGen
+              ? "View Product Description"
+              : "Open AI Image Generator"}
           </button>
         </div>
       </div>
       <div className="flex flex-row max-w-lg self-center mb-4 max-[1780px]:max-w-4xl items-center rounded-lg bg-background text-accent">
-        {freeGen && showGen && (
-          <div className="flex gradientBG flex-col items-center justify-center p-4 w-full max-w-2xl mx-auto rounded-lg shadow-md">
-            <span>
+        {freeGen && !showGen && (
+          <div className="flex gradientBG flex-col items-center justify-center p-4 w-full max-w-2xl mx-auto rounded-lg shadow-md ">
+            <div className="w-full flex justify-between align-middle ">
+              <Button
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                className="px-4 py-2 bg-primary border flex justify-between border-accent m-2 rounded-lg text-white shadow-lg"
+                onClick={() => {
+                  setFreeGen(false);
+                  setShowGen(true);
+                }}
+              >
+                <p>DALLE-3</p>
+                {"  "}
+                <MoveRight
+                  className={`w-4 h-4 ml-4 ${
+                    hover ? "animate-nudge-right" : ""
+                  }`}
+                />{" "}
+              </Button>
               <Info
                 className="h-6 w-6 text-accent cursor-pointer"
                 onClick={() => setShowInfo(!showInfo)}
               />
-            </span>
-
+            </div>
             {showInfo && (
               <div className="bg-background p-4 max-w-md rounded-md text-accent shadow-lg mt-2">
                 <ul>
-                  {howTo.map((item) => (
+                  {freeHowTo.map((item) => (
                     <li key={item.title} className="mb-2">
                       <h2 className="text-lg font-bold">{item.title}</h2>
                       <p className="text-sm">{item.description}</p>
@@ -439,6 +510,7 @@ const DescAndGen = ({
             <motion.button
               className="px-6 py-2 bg-primary border border-accent m-2 rounded-lg text-white font-bold shadow-lg"
               onClick={handleFreePrompt}
+              disabled={isLoading}
             >
               {isLoading ? "Generating..." : "Generate Design"}
             </motion.button>
@@ -446,21 +518,38 @@ const DescAndGen = ({
             <p className="text-sm">{successMessage}</p>
           </div>
         )}
-        {/* {showGen && (
+
+        {showGen && !freeGen && (
           <>
-            {blurred && <BlurOverlay />}
             <div className="flex gradientBG flex-col items-center justify-center p-4 w-full max-w-2xl mx-auto rounded-lg shadow-md">
-              <span>
+              {blurred && <BlurOverlay />}
+              <div className="w-full flex justify-between align-middle">
+                <Button
+                  onMouseEnter={() => setHover(true)}
+                  onMouseLeave={() => setHover(false)}
+                  className="px-4 py-2 bg-primary z-10 border flex justify-between border-accent m-2 rounded-lg text-white shadow-lg"
+                  onClick={() => {
+                    setFreeGen(true);
+                    setShowGen(false);
+                  }}
+                >
+                  <p>Stable Diffusion</p>
+                  {"  "}
+                  <MoveRight
+                    className={`w-4 h-4 ml-4 ${
+                      hover ? "animate-nudge-right" : ""
+                    }`}
+                  />{" "}
+                </Button>
                 <Info
                   className="h-6 w-6 text-accent cursor-pointer"
                   onClick={() => setShowInfo(!showInfo)}
                 />
-              </span>
-
+              </div>
               {showInfo && (
                 <div className="bg-background p-4 max-w-md rounded-md text-accent shadow-lg mt-2">
                   <ul>
-                    {howTo.map((item) => (
+                    {premiumHowTo.map((item) => (
                       <li key={item.title} className="mb-2">
                         <h2 className="text-lg font-bold">{item.title}</h2>
                         <p className="text-sm">{item.description}</p>
@@ -474,7 +563,6 @@ const DescAndGen = ({
                 <Select
                   defaultValue="Portrait"
                   onValueChange={(e) => setDimension(e)}
-                  disabled={blurred}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="layout" />
@@ -491,11 +579,7 @@ const DescAndGen = ({
                   </SelectContent>
                 </Select>
 
-                <Select
-                  disabled={blurred}
-                  defaultValue="Vivid"
-                  onValueChange={(e) => setStyle(e)}
-                >
+                <Select defaultValue="Vivid" onValueChange={(e) => setStyle(e)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Style" />
                   </SelectTrigger>
@@ -517,7 +601,6 @@ const DescAndGen = ({
                 <Select
                   defaultValue="Standard"
                   onValueChange={(e) => setQuality(e)}
-                  disabled={blurred}
                 >
                   <SelectTrigger className="">
                     <SelectValue placeholder="Quality" />
@@ -543,7 +626,6 @@ const DescAndGen = ({
               <Textarea
                 className="w-full h-44 p-2 bg-background rounded-lg mb-2 text-accent"
                 placeholder="Enter your prompt here..."
-                disabled={blurred || isLoading}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
@@ -551,7 +633,6 @@ const DescAndGen = ({
               <motion.button
                 className="px-6 py-2 bg-primary border border-accent m-2 rounded-lg text-white font-bold shadow-lg"
                 onClick={handleSubmitPrompt}
-                disabled={blurred || isLoading}
               >
                 {isLoading ? "Generating..." : "Generate Design"}
               </motion.button>
@@ -559,9 +640,9 @@ const DescAndGen = ({
               <p className="text-sm">{successMessage}</p>
             </div>
           </>
-        )} */}
+        )}
 
-        {!showGen && (
+        {!showGen && !freeGen && (
           <div>
             <div className="flex flex-row my-2 gap-4 justify-between items-center">
               <h2 className="text-2xl font-bold ">{selectedVariant?.name}</h2>

@@ -16,7 +16,7 @@ export default function Page() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const tierr = urlParams.get("tier");
-    const id = urlParams.get("id");
+    const id = urlParams.get("session_id");
 
     if (!id || !tierr) {
       setStatus("creds");
@@ -31,9 +31,10 @@ export default function Page() {
     async function load() {
       const { data, error } = await supabase.auth.getUser();
       const { error: insertError } = await supabase.from("upgrades").insert({
-        id: id,
+        // @ts-ignore
+        id,
         tier: tierr,
-        user_id: data.user!.id,
+        user_id: data.user?.id,
       });
 
       if (error) {
@@ -138,6 +139,7 @@ export default function Page() {
   }
 
   if (status === "success") {
+    // @ts-ignore
     const selectedTier = tiers[tier];
     return (
       <div className="flex flex-col gradientBG m-4 p-4 items-center justify-center">

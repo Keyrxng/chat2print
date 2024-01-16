@@ -34,10 +34,10 @@ export async function POST(request: Request) {
     .eq("id", data.user.id)
     .single();
 
-  if (upgradeTier !== user?.tier) {
+  if (upgradeTier?.tier !== user?.tier) {
     await supabase
       .from("users")
-      .update({ tier: upgradeTier })
+      .update({ tier: upgradeTier?.tier })
       .eq("id", data.user.id);
   }
 

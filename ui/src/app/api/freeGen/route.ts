@@ -1,6 +1,6 @@
-export async function POST(req, res) {
+export async function POST(req: any, res: any) {
   const prompt = await req.json();
-
+  console.log("prompt: ", prompt);
   const apiUrl = "https://worker-patient-hill-2054.keyrxng7749.workers.dev/";
 
   try {
@@ -13,17 +13,29 @@ export async function POST(req, res) {
     });
 
     // we receive content-type: image/png
-    const image = await response.blob();
 
-    console.log(image);
+    const contentType = response.headers.get("content-type");
 
-    // we send content-type: image/png
-    return new Response(image, {
-      status: 200,
-      headers: {
-        "content-type": "image/png",
-      },
-    });
+    if (contentType && contentType.includes("image/png")) {
+      const image = await response.blob();
+
+      // we send content-type: image/png
+      return new Response(image, {
+        status: 200,
+        headers: {
+          "content-type": "image/png",
+        },
+      });
+    } else {
+      const text = await response.text();
+
+      return new Response(text, {
+        status: 500,
+        headers: {
+          "content-type": "text/plain",
+        },
+      });
+    }
   } catch (err) {
     return new Response(JSON.stringify({ error: err }), {
       status: 500,

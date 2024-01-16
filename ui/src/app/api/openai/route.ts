@@ -18,7 +18,7 @@ const layouts = [
   },
 ];
 
-export async function POST(req, res) {
+export async function POST(req: any, res: any) {
   const cookieStore = cookies();
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
@@ -36,7 +36,22 @@ export async function POST(req, res) {
   }
 
   if (!session.session?.user?.id) throw new Error("No user ID");
-  const { prompt, quality, dimension, style, keyToUse } = await req.json();
+
+  let keyToUse = "";
+
+  if (session.session?.user?.id) {
+    const { data: uak, error } = await supabase
+      .from("uak")
+      .select("*")
+      .eq("user_id", session.session.user.id)
+      .single();
+
+    if (uak?.ak && !error) {
+      keyToUse = uak.ak;
+    }
+  }
+
+  const { prompt, quality, dimension, style } = await req.json();
 
   const apiUrl = "https://api.openai.com/v1/images/generations";
 
@@ -48,7 +63,7 @@ export async function POST(req, res) {
 
   const layout = layouts.find((layout) => layout.name === dimension);
   let respo;
-  let token = "";
+  let token: string | undefined = undefined;
 
   if (!keyToUse) {
     const { data: user } = await supabase
@@ -88,6 +103,20 @@ export async function POST(req, res) {
     token = keyToUse;
   }
 
+  if (!token) {
+    return new Response(
+      JSON.stringify({
+        error: "You are on the free tier. Please upgrade to use this feature.",
+      }),
+      {
+        status: 403,
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+  }
+
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -107,7 +136,7 @@ export async function POST(req, res) {
     });
 
     respo = await response.json();
-  } catch (err) {
+  } catch (err: any) {
     if (err.response) {
       console.log("err.response: ", err.response.status);
       console.log("err.response: ", err.response.data);

@@ -101,10 +101,11 @@ export async function GET() {
       if (design.name === "temp.png") return;
       if (design.name === "upscaled") return;
       if (design.name === null || design.name === undefined) return;
-      // @ts-ignore
       if (
-        design.metadata.mimetype !== "image/webp" ||
-        design.metadata.mimetype !== "image/png"
+        // @ts-ignore
+        design.metadata?.mimetype !== "image/webp" ||
+        // @ts-ignore
+        design.metadata?.mimetype !== "image/png"
       )
         return;
       const url = `${process.env.SUPABASE_URL}/storage/v1/object/public/user_uploads/${design.name}`;
