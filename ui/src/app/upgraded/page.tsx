@@ -30,6 +30,20 @@ export default function Page() {
 
     async function load() {
       const { data, error } = await supabase.auth.getUser();
+
+      const resp = await fetch(`/api/checkout_sessions?session_id=${id}`);
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        setStatus(err.error);
+        return;
+      }
+      const session = await resp.json();
+
+      if (session) {
+        console.log("session: ", session);
+      }
+
       const { error: insertError } = await supabase.from("upgrades").insert({
         // @ts-ignore
         id,
@@ -136,9 +150,7 @@ export default function Page() {
         <h2 className="text-2xl font-bold">Loading...</h2>
       </motion.div>
     );
-  }
-
-  if (status === "success") {
+  } else if (status === "success") {
     // @ts-ignore
     const selectedTier = tiers[tier];
     return (
@@ -165,9 +177,7 @@ export default function Page() {
         </Button>
       </div>
     );
-  }
-
-  if (status === "creds") {
+  } else if (status === "creds") {
     return (
       <div className="flex flex-col gradientBG m-4 p-4 max-w-2xl items-center justify-center">
         <h2 className="text-2xl font-bold text-accent">
@@ -186,9 +196,7 @@ export default function Page() {
         <p className="text-gray-500 mt-4 text-center text-sm">Error Code: C0</p>
       </div>
     );
-  }
-
-  if (status === "wrong-tier") {
+  } else if (status === "wrong-tier") {
     return (
       <div className="flex flex-col gradientBG m-4 p-4 max-w-2xl items-center justify-center">
         <h2 className="text-2xl font-bold text-accent">
@@ -207,7 +215,28 @@ export default function Page() {
         <p className="text-gray-500 mt-4 text-center text-sm">Error Code: T0</p>
       </div>
     );
-  }
+  } else {
+    return (
+      <div className="flex flex-col gradientBG m-4 p-4 max-w-2xl items-center justify-center">
+        <h2 className="text-2xl font-bold text-accent">
+          There was an error processing your payment.
+        </h2>
+        <p className="text-accent mt-4 max-w-sm text-center text-wrap overflow-hidden">
+          {status}
+        </p>
 
-  return window.location.replace("/studio");
+        <p className="text-accent mt-4 text-center">
+          Please contact us at{" "}
+          <a
+            className="text-accent underline"
+            href="mailto:support@chat2print.xyz"
+          >
+            support@chat2print.xyz
+          </a>{" "}
+          to ensure your payment was processed correctly.
+        </p>
+        <p className="text-gray-500 mt-4 text-center text-sm">Error Code: S0</p>
+      </div>
+    );
+  }
 }

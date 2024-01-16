@@ -11,7 +11,7 @@ async function runUpscale(request: Request, imageUrl: string) {
       input: {
         image: imageUrl,
       },
-      webhook: `https://4c79-86-27-41-90.ngrok-free.app/api/upscale/callback`,
+      webhook: `${request.url}/api/upscale/callback`,
       webhook_events_filter: ["completed"],
     }
   );
@@ -21,9 +21,6 @@ async function runUpscale(request: Request, imageUrl: string) {
 export async function POST(request: Request) {
   const { url } = await request.json();
   console.log("🪝 Outgoing upscale request!", url);
-
-  const blob = await (await fetch(url)).blob();
-  const file = new File([blob], "image.png", { type: "image/png" });
 
   try {
     const output = await runUpscale(request, url);

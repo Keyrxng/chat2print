@@ -147,14 +147,16 @@ export async function GET(req: Request, res: any) {
   try {
     const searchParams = new URL(req.url).searchParams;
     const session_id = searchParams.get("session_id");
-
     const session = await stripe.checkout.sessions.retrieve(
       session_id as string
     );
+    console.log("session:", session);
 
     return new Response(JSON.stringify(session));
   } catch (err: any) {
     console.log("Error retrieving checkout session:", err.message);
-    return new Response(err.message, { status: err.statusCode || 500 });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: err.statusCode || 500,
+    });
   }
 }

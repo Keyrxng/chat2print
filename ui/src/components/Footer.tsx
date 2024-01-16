@@ -32,7 +32,6 @@ export default function Footer() {
         <div className="sticky text-sm text-right">
           <span>Built with 💛 by Keyrxng</span>
         </div>
-        {/* <Chatbox /> */}
       </div>
     </footer>
   );

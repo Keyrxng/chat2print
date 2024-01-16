@@ -52,7 +52,6 @@ export default function Page(params: { [x: string]: never }) {
       });
 
       const json = await data.json();
-      console.log("json: ", json);
 
       setSelectedProduct(json.product);
       setSelectedVariant(json.variant);
@@ -88,8 +87,6 @@ export default function Page(params: { [x: string]: never }) {
         billing_address: user?.[0].billing_address,
         tier: user?.[0].tier,
       };
-
-      console.log("usr: ", usr);
 
       setUserDetails((prev: any) => usr);
     }
