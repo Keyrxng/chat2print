@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 export async function POST(req: any, res: any) {
   const prompt = await req.json();
   console.log("prompt: ", prompt);

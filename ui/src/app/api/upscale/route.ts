@@ -3,6 +3,7 @@ import Replicate from "replicate";
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
+export const runtime = "edge";
 
 async function runUpscale(request: Request, imageUrl: string) {
   const output = await replicate.run(
