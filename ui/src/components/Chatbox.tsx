@@ -1,42 +1,42 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useChat } from "ai/react";
+import { useCompletion, useChat } from "ai/react";
 import { SpeechIcon, X } from "lucide-react";
+import { Input } from "./ui/input";
 
 const Chatbox = () => {
   const [isOpen, setIsOpen] = useState(false);
-  let {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    setMessages,
-    reload,
-  } = useChat();
-  const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    // @ts-ignore
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/chat",
+    onResponse: (response) => {
+      console.log(response);
+    },
+  });
+
+  const messagesEndRef = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleKeyDown = async (event: any) => {
+    if (event.key === "Enter") {
+      c_handleSubmit(event);
+    }
+  };
+
+  const c_handleSubmit = async (event: any) => {
+    event.preventDefault();
+    try {
+      handleSubmit(event);
+    } catch (e) {
+      return alert(e);
+    }
   };
 
   useEffect(() => {
-    if (isOpen) {
-      scrollToBottom();
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollIntoView({ behavior: "smooth" });
     }
-
-    const latestmsg = messages[messages.length - 1];
-    const isBot = latestmsg?.role === "assistant";
-
-    if (isBot) {
-      const content = latestmsg?.content;
-      const parsed = JSON.parse(content);
-      const msg = parsed?.content;
-
-      messages[messages.length - 1].content = msg;
-
-      setMessages(messages);
-    }
-  }, [messages, isOpen, setMessages]);
+  }, [messages]);
 
   const toggleChatbox = () => {
     setIsOpen(!isOpen);
@@ -51,9 +51,63 @@ const Chatbox = () => {
               className="overflow-y-auto space-y-2 p-2 h-full"
               style={{ maxHeight: "80%" }}
             >
-              {messages?.map((message, index) => (
+              <div>
+                <div>
+                  <div>
+                    {/* conversation */}
+                    <div>
+                      {messages ? (
+                        <>
+                          {messages.map((m, index) => (
+                            <div
+                              key={index}
+                              className=" justify-start bg-[#1A0B11]  w-full "
+                              ref={ref}
+                            >
+                              {m.role === "user" ? (
+                                <div className="w-full leading-relaxed text-sm max-w-fit overflow-auto text-white whitespace-normal">
+                                  <p className="ml-8">{m.content}</p>
+                                </div>
+                              ) : (
+                                <div className=" w-full  leading-relaxed text-sm  font-medium">
+                                  <div
+                                    className=" ml-8  text-white whitespace-normal"
+                                    ref={chatContainerRef}
+                                  >
+                                    hhi
+                                    {m.content}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <>Loading Messages...</>
+                      )}
+                    </div>
+
+                    <div>
+                      <form onSubmit={c_handleSubmit} className="w-full">
+                        <Input
+                          type="text"
+                          className="w-full p-2 bg-gray-700 text-white border-none rounded-md focus:ring focus:ring-blue-300"
+                          placeholder="Type your message..."
+                          value={input}
+                          onKeyDown={handleKeyDown}
+                          onChange={handleInputChange}
+                        />
+                        <p>Character Length : {input.length}</p>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* {messages?.map((message, index) => (
                 <div
                   key={index}
+                  // ref={chatContainerRef}
                   className={`flex flex-col ${
                     message.role === "user" ? "items-end" : "items-start"
                   }`}
@@ -68,22 +122,23 @@ const Chatbox = () => {
                     {message.content}
                   </div>
                 </div>
-              ))}
-              <div ref={messagesEndRef} />
+              ))} */}
             </div>
-            <form className="mt-2 bottom-0 " onSubmit={handleSubmit}>
+            {/* <form className="mt-2 bottom-0 " onSubmit={c_handleSubmit}>
               <label className="text-muted-foreground">
                 Chat2Print Assistance Bot
-                <input
+                <Input
                   type="text"
                   className="w-full p-2 bg-gray-700 text-white border-none rounded-md focus:ring focus:ring-blue-300"
                   placeholder="Type your message..."
                   value={input}
+                  onKeyDown={handleKeyDown}
                   onChange={handleInputChange}
                 />
               </label>
-            </form>
+            </form> */}
           </div>
+
           <button
             onClick={toggleChatbox}
             className="text-accent bg-gradient-to-r from-background to-blue-600 p-2 rounded-full focus:outline-none hover:bg-blue-600 mt-2"
@@ -92,6 +147,7 @@ const Chatbox = () => {
           </button>
         </div>
       )}
+
       {!isOpen && (
         <button
           onClick={toggleChatbox}

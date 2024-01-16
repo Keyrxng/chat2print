@@ -34,15 +34,14 @@ export default function Page() {
             >
               <article>
                 <p className="text-lg mb-4">
-                  Founded in the last quarter of 2023, Chat2Print is an
-                  innovative AI art print-on-demand service, we specialize in
-                  materializing ChatGPT-generated art into tangible products.
-                  Our convenient browser extension simplifies the process,
-                  allowing direct uploads from the ChatGPT interface to product
-                  customization and printing on diverse items. Chat2Print
-                  emerged from the desire to bring digital art into the physical
-                  realm, making it a part of daily life beyond digital screens
-                  and X threads.
+                  Founded in December of 2023, Chat2Print is an innovative AI
+                  art print-on-demand service, we specialize in materializing
+                  ChatGPT-generated art into tangible products. Our convenient
+                  browser extension simplifies the process, allowing direct
+                  uploads from the ChatGPT interface to product customization
+                  and printing on diverse items. Chat2Print emerged from the
+                  desire to bring digital art into the physical realm, making it
+                  a part of daily life beyond digital screens and X threads.
                 </p>
 
                 <p className="text-lg mb-4">

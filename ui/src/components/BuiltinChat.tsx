@@ -295,6 +295,37 @@ const DescAndGen = ({
       </div>
     );
   };
+  const [freeGen, setFreeGen] = useState(true);
+
+  const handleFreePrompt = async () => {
+    if (!prompt.trim()) return;
+
+    setIsLoading(true);
+    setSuccessMessage("");
+
+    try {
+      const resp = await fetch("/api/freeGen", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: prompt,
+        }),
+      });
+
+      const blob = await resp.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      console.log(`imageUrl: `, imageUrl);
+      setImageUrl(imageUrl);
+      setSelectedImage(imageUrl);
+
+      setSuccessMessage("Image generated successfully!");
+    } catch (error) {
+      setSuccessMessage(
+        "An error occurred while generating the image. " + error.message
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col text-center items-center mt-1 gap-14">
@@ -313,7 +344,109 @@ const DescAndGen = ({
         </div>
       </div>
       <div className="flex flex-row max-w-lg self-center mb-4 max-[1780px]:max-w-4xl items-center rounded-lg bg-background text-accent">
-        {showGen && (
+        {freeGen && showGen && (
+          <div className="flex gradientBG flex-col items-center justify-center p-4 w-full max-w-2xl mx-auto rounded-lg shadow-md">
+            <span>
+              <Info
+                className="h-6 w-6 text-accent cursor-pointer"
+                onClick={() => setShowInfo(!showInfo)}
+              />
+            </span>
+
+            {showInfo && (
+              <div className="bg-background p-4 max-w-md rounded-md text-accent shadow-lg mt-2">
+                <ul>
+                  {howTo.map((item) => (
+                    <li key={item.title} className="mb-2">
+                      <h2 className="text-lg font-bold">{item.title}</h2>
+                      <p className="text-sm">{item.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="flex justify-between m-4 gap-4">
+              <Select
+                defaultValue="Portrait"
+                onValueChange={(e) => setDimension(e)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="layout" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Layouts</SelectLabel>
+                    {dimensionOpts.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <Select defaultValue="Vivid" onValueChange={(e) => setStyle(e)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Style" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Style</SelectLabel>
+                    {styles.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        onClick={() => setStyle(option.value)}
+                        value={option.value}
+                      >
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <Select
+                defaultValue="Standard"
+                onValueChange={(e) => setQuality(e)}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Quality" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Quality</SelectLabel>
+                    {qualityOpts.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        onClick={() => setQuality(option.value)}
+                        value={option.value}
+                      >
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Textarea
+              className="w-full h-44 p-2 bg-background rounded-lg mb-2 text-accent"
+              placeholder="Enter your prompt here..."
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+
+            <motion.button
+              className="px-6 py-2 bg-primary border border-accent m-2 rounded-lg text-white font-bold shadow-lg"
+              onClick={handleFreePrompt}
+            >
+              {isLoading ? "Generating..." : "Generate Design"}
+            </motion.button>
+
+            <p className="text-sm">{successMessage}</p>
+          </div>
+        )}
+        {/* {showGen && (
           <>
             {blurred && <BlurOverlay />}
             <div className="flex gradientBG flex-col items-center justify-center p-4 w-full max-w-2xl mx-auto rounded-lg shadow-md">
@@ -426,7 +559,7 @@ const DescAndGen = ({
               <p className="text-sm">{successMessage}</p>
             </div>
           </>
-        )}
+        )} */}
 
         {!showGen && (
           <div>

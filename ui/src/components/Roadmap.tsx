@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 const milestones = [
   {
-    title: "2023: Quarter 4",
+    title: "2023: December",
     content: `<ul class="list-disc list-inside">
     <li>Chat2Print is founded.</li>
     <li>Early Access is Released.</li>

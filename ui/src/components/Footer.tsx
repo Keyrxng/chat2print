@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="gradientBG text-accent py-6 px-4 fixed bottom-0 left-0 w-full">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        <div className="flex flex-wrap justify-center gap-4 mb-4 md:mb-0">
+        <div className="flex flex-wrap text-sm justify-center gap-4 mb-4 md:mb-0">
           <a href="/support/#about" className="hover:underline">
             About Us
           </a>
@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="sticky text-sm text-right">
           <span>Built with 💛 by Keyrxng</span>
         </div>
-        <Chatbox />
+        {/* <Chatbox /> */}
       </div>
     </footer>
   );

@@ -1,10 +1,10 @@
-// import { Message, StreamingTextResponse } from "ai";
-// import { all } from "axios";
+import { Message, OpenAIStream, StreamingTextResponse } from "ai";
 
 export const runtime = "edge";
 
 export async function POST(req: Request) {
   console.log("FIRED");
+
   const data = await req.json();
 
   const resp = await fetch(
@@ -20,30 +20,10 @@ export async function POST(req: Request) {
     }
   );
 
-  const chat = await resp.json();
-
-  const messages = chat[0].inputs.messages;
-  const response = chat[0].response;
-
-  messages.push({
-    role: "assistant",
-    content: response.response,
-  });
-
-  const msg = {
-    role: "assistant",
-    content: response.response,
-  };
-
-  return new Response(JSON.stringify({ ...msg }), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return resp;
 }
 
 export async function GET(req: Request) {
-  console.log("FIRED");
   const data = await req.json();
 
   const resp = await fetch(
@@ -60,6 +40,8 @@ export async function GET(req: Request) {
   );
 
   const chat = await resp.json();
+
+  console.log("chat", chat);
 
   const messages = chat[0].inputs.messages;
   const response = chat[0].response;

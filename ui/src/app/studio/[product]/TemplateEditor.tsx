@@ -38,7 +38,6 @@ import { ChevronsUpDown, Send, ToggleLeftIcon, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { useRouter } from "next/router";
 import {
   Carousel,
   CarouselContent,
@@ -46,7 +45,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 
 const stripePromise = loadStripe(
   "pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
@@ -147,9 +145,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         tier: user?.[0].tier,
       };
 
-      console.log("usr: ", usr);
-      console.log(`user: `, user);
-
       setUserDetails((prev: any) => usr);
     }
     async function set() {
@@ -157,7 +152,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       try {
         let imgs;
         let data;
-        console.log("fired");
 
         if (userDetails.id) {
           imgs = await fetch("/api/designs/fetch");
@@ -222,7 +216,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .from("mockup_requests")
         .select("*")
         .match({ user_id: userDetails.id, status: "pending" });
-      console.log("pendingReqs: ", pendingReqs);
 
       if (error) {
         toast({
@@ -241,7 +234,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         .from("mockup_requests")
         .select("*")
         .match({ user_id: userDetails?.id, status: "processing" });
-      console.log("processingReq: ", processingReq);
       if (processError) {
         toast({
           title: "Something went wrong.",
@@ -306,8 +298,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (error) {
       console.log("error: ", error);
     }
-
-    console.log("increaseData: ", increaseData);
   };
 
   const handleUsage = async (action: string) => {
@@ -329,9 +319,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const dataSize = usage?.reduce((acc, curr) => {
       return acc + curr.data_size!;
     }, 0);
-
-    console.log("enhancements: ", enhancements);
-    console.log("dataSize: ", dataSize);
 
     const { data: tierData, error: tierError } = await supabase
       .from("usage_tiers")
@@ -399,7 +386,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       });
       allowed = false;
     }
-    console.log(`mockups: ${mockups} activeTier.mockups: `, activeTier);
 
     if (mockups! >= activeTier.mockups && action === "mockup") {
       toast({
@@ -503,7 +489,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   const handleGeneration = async () => {
     if (!userDetails?.id) {
-      console.log("no user");
       setNeedAccount(true);
       return;
     }
@@ -512,11 +497,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     if (viewingUpscaled) {
       // allowed = await handleUsage("mockup");
-      console.log(`Mockup allowed: ${allowed}`);
       if (allowed) await handleCreateMockup(userImage);
     } else if (!viewingUpscaled) {
       // allowed = await handleUsage("enhancement");
-      console.log(`Enhancement allowed: ${allowed}`);
       if (allowed) await handleEnhanceUpscale();
     }
   };
@@ -600,7 +583,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const handleSet = (mock: any) => {
       setActiveMock(mock);
-      console.log("mockkkkk: ", mock);
       setItemPrice(mock.price);
       setMockImg(mock.mockups?.[0].mockup_url);
     };
@@ -1019,8 +1001,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
       }
 
-      console.log("processMockRequest r: ", r);
-
       while (count < limit) {
         let data;
         if (aiAssist) {
@@ -1051,15 +1031,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
         const res = await response.json();
 
-        console.log("processMockRequest res: ", res);
-
         if (res.error) {
           console.log("processMockRequest error: ", res.error);
         }
 
         if (res.result?.task_key) {
-          console.log("task key: ", res.result.task_key);
-
           await updateRequestStatus(r.id, "processing", res.result.task_key);
           count++;
 
@@ -1067,12 +1043,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }
 
         if (res.status === 429) {
-          console.log("waiting for 60 seconds or status 429");
           await wait(60 * 1000);
         }
 
         if (!res.result?.task_key) {
-          console.log("no task key");
           return;
         }
       }
@@ -1091,11 +1065,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const { product_id: prodID, id: variantID, name, price } = selectedVariant;
 
-    console.log(
-      `prodID: ${prodID} variantID: ${variantID}: Price: ${price}: Retail Price: ${Math.round(
-        Number(price) * 2
-      )}`
-    );
     if (!prodID || !variantID) {
       console.error("No product or variant IDs found");
       return;
@@ -1186,9 +1155,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       billing_address: user?.[0].billing_address,
       tier: user?.[0].tier,
     };
-
-    console.log("usr: ", usr);
-    console.log(`user: `, user);
 
     setUserDetails((prev: any) => usr);
     return usr;
@@ -1362,7 +1328,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
 
         const result = await response.json();
-        console.log("est order: ", result);
 
         return result;
       };
@@ -1399,8 +1364,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         });
 
         const { result } = await response.json();
-
-        console.log("est shipping: ", result);
 
         const shippingData = {
           id: result[0].id,
@@ -1563,7 +1526,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         body: fd,
       }).then(async (data) => {
         const res = await data.json();
-        console.log(res);
         if (res.error) {
           alert(res.error);
         }
