@@ -12,16 +12,17 @@ async function runUpscale(request: Request, imageUrl: string) {
       input: {
         image: imageUrl,
       },
-      webhook: `${request.url}/api/upscale/callback`,
+      webhook: `https://95ed-86-27-41-90.ngrok-free.app/api/upscale/callback`,
       webhook_events_filter: ["completed"],
     }
   );
   return output;
 }
 
+// A gigantic mechanoid warrior infront of a interstellar background with planets, stars and rings around moons. Beautiful striking detail, HD, photo-realism
+
 export async function POST(request: Request) {
   const { url } = await request.json();
-  console.log("🪝 Outgoing upscale request!", url);
 
   try {
     const output = await runUpscale(request, url);
@@ -31,7 +32,6 @@ export async function POST(request: Request) {
       },
     });
   } catch (err) {
-    console.log(err);
     return new Response(JSON.stringify({ error: err }), {
       headers: {
         "content-type": "application/json",

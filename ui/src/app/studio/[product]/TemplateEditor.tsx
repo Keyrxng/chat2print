@@ -79,6 +79,7 @@ interface ImagePlacementEditorProps {
   setSelectedImage: (image: string) => void;
   setSelectedVariant: (variant: __Variant) => void;
   userDetails: any;
+  imageUrl: string;
 }
 
 const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
@@ -92,6 +93,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   setSelectedVariant,
   setViewingMock,
   userDetails,
+  imageUrl,
 }) => {
   const { toast } = useToast();
   const editorRef = useRef<HTMLDivElement>(null);
@@ -113,6 +115,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [mounted, setMounted] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [aiAssist, setAiAssist] = useState(true);
+
+  console.log("datastatic: ", dataStatic);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -168,7 +172,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     load();
     setMounted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTemplate, setSelectedImage, supabase]);
+  }, [selectedTemplate, setSelectedImage, supabase, userDetails]);
 
   useEffect(() => {
     async function load() {
@@ -246,9 +250,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pollForMockups, userDetails?.id, supabase]);
 
-  /////// STATS \\\\\\\
-  /////// STATS \\\\\\\
-
   const increaseUsage = async (action: string) => {
     // @ts-ignore
     const { data: increaseData, error } = await supabase
@@ -271,12 +272,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
       );
 
-    const mockups = usage?.filter((u) => u.action_type === "mockup").length;
-    const enhancements = usage?.filter(
-      (u) => u.action_type === "enhancement"
+    const mockups = usage?.filter(
+      (u: any) => u.action_type === "mockup"
     ).length;
-    const imports = usage?.filter((u) => u.action_type === "import").length;
-    const dataSize = usage?.reduce((acc, curr) => {
+    const enhancements = usage?.filter(
+      (u: any) => u.action_type === "enhancement"
+    ).length;
+    const imports = usage?.filter(
+      (u: any) => u.action_type === "import"
+    ).length;
+    const dataSize = usage?.reduce((acc: any, curr: any) => {
       return acc + curr.data_size!;
     }, 0);
 
@@ -290,14 +295,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const user_tier = userDetails?.tier;
 
-    const ttn =
-      user_tier === "free"
-        ? 0
-        : user_tier === "crafter"
-        ? 1
-        : user_tier === "designer"
-        ? 2
-        : 3;
+    const ttn = user_tier === "free" ? 0 : user_tier === "premium" ? 1 : 2;
 
     const accTier = tierData?.[ttn];
     // @ts-ignore
@@ -314,9 +312,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     }
 
     if (
-      (dataSize! >= activeTier.data_size * (1024 * 1024) &&
-        action === "mockup") ||
-      action === "enhancement"
+      action === "mockup" ||
+      (action === "enhancement" &&
+        dataSize! >= activeTier.data_size * (1024 * 1024))
     ) {
       toast({
         title: "Oops!",
@@ -327,7 +325,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (imports! >= activeTier.imports && action === "import") {
+    if (action === "import" && imports! >= activeTier.imports) {
       toast({
         title: "Oops!",
         description: `You've used up your free imports for the day, please try again tomorrow.`,
@@ -337,7 +335,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (enhancements! >= activeTier.enhancements && action === "enhancement") {
+    if (action === "enhancement" && enhancements! >= activeTier.enhancements) {
       toast({
         title: "Oops!",
         description: `You've used up your free enhancements for the day, please try again tomorrow.`,
@@ -347,7 +345,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       allowed = false;
     }
 
-    if (mockups! >= activeTier.mockups && action === "mockup") {
+    if (action === "mockup" && mockups! >= activeTier.mockups) {
       toast({
         title: "Oops!",
         description: `You've used up your free mockups for the day, please try again tomorrow.`,
@@ -397,49 +395,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
       return allowed;
     }
-
     return allowed;
   };
 
-  const updateActionCount = async (action: string) => {
-    // @ts-ignore
-    const { error } = await supabase.from("user_actions").insert({
-      user_id: userDetails.id,
-      action_type: action,
-    });
-
-    if (error) {
-      console.log("error: ", error);
-    }
-  };
-
-  const updateRequestStatus = async (
-    requestId: number,
-    status: Status,
-    taskKey = null
-  ) => {
-    const updateData: { status: Status; task_key?: string } = { status };
-    if (taskKey) updateData.task_key = taskKey;
-
-    const { error } = await supabase
-      .from("mockup_requests")
-      .update(updateData)
-      .eq("id", requestId);
-
-    if (status === "completed") {
-      toast({
-        title: "Your mockup is ready!",
-        description: `Your mockup is ready! You can view it in the mockup section.`,
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-    }
-    if (error) {
-      console.error(`Error updating status for request ${requestId}:`, error);
-    } else {
-      await fetchMockups();
-    }
-  };
+  /////// STATS \\\\\\\
+  /////// STATS \\\\\\\
 
   /////// STATS \\\\\\\
   /////// STATS \\\\\\\
@@ -455,32 +415,33 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     let allowed = true;
 
+    let uri = null;
+
+    if (imageUrl && imageUrl !== "") {
+      uri = imageUrl;
+    } else if (userImage && userImage !== "" && userImage.startsWith("blob:")) {
+      uri = userImage.split("blob:")[1];
+    } else {
+      uri = userImage;
+    }
+
+    if (userDetails.tier === "free") {
+      allowed = await handleUsage("mockup");
+      if (allowed) await handleCreateMockup(uri);
+    }
+
     if (viewingUpscaled) {
-      // allowed = await handleUsage("mockup");
-      if (allowed) await handleCreateMockup(userImage);
+      allowed = await handleUsage("mockup");
+      if (allowed) await handleCreateMockup(uri);
     } else if (!viewingUpscaled) {
-      // allowed = await handleUsage("enhancement");
-      if (allowed) await handleEnhanceUpscale();
+      allowed = await handleUsage("enhancement");
+      if (allowed) await handleEnhanceUpscale(uri);
     }
   };
 
-  const handleEnhanceUpscale = async () => {
+  const handleEnhanceUpscale = async (uri) => {
     setEnhancing(true);
 
-    console.log("userImage: ", userImage);
-
-    const uri = userImage.split("blob:")[1];
-
-    if (!userImage) {
-      toast({
-        title: "Oops!",
-        description: `Please upload an image before generating a mockup.`,
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-      setEnhancing(false);
-      return;
-    }
     try {
       const res = await fetch("/api/upscale", {
         method: "POST",
@@ -494,7 +455,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         console.log("error: ", data.error);
         toast({
           title: "Something went wrong.",
-          description: `It's likely that your image is too large, please try again with smaller dimensions .`,
+          description: `It's likely that your image is too large, please try again with smaller dimensions (suggested: 260x380).`,
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
@@ -502,7 +463,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         setEnhancing(false);
         return;
       }
-      updateActionCount("enhancement");
       await handleCreateMockup(data);
     } catch (err) {
       console.log(err);
@@ -537,7 +497,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   /////// MOCKS \\\\\\\
   /////// MOCKS \\\\\\\
-
   const Mockup = () => {
     const [activeMock, setActiveMock] = useState<any>(null);
     const [checkout, setCheckout] = useState<boolean>(false);
@@ -627,6 +586,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
 
       postDraftToPrintful().then((res) => {
+        console.log("res: ", res);
         if (res && typeof res === "string") {
           return;
         } else if (res) {
@@ -929,6 +889,34 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
+  const updateRequestStatus = async (
+    requestId: number,
+    status: Status,
+    taskKey = null
+  ) => {
+    const updateData: { status: Status; task_key?: string } = { status };
+    if (taskKey) updateData.task_key = taskKey;
+
+    const { error } = await supabase
+      .from("mockup_requests")
+      .update(updateData)
+      .eq("id", requestId);
+
+    if (status === "completed") {
+      toast({
+        title: "Your mockup is ready!",
+        description: `Your mockup is ready! You can view it in the mockup section.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+    }
+    if (error) {
+      console.error(`Error updating status for request ${requestId}:`, error);
+    } else {
+      await fetchMockups();
+    }
+  };
+
   const processMockRequest = async (
     req:
       | {
@@ -1040,6 +1028,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     ) as HTMLImageElement;
 
     const { naturalWidth, naturalHeight } = ele;
+    console.log("naturalWidth: ", naturalWidth);
+
     const desiredDpi = 300;
 
     const printFileWidthPixels = printFiles!.width;
@@ -1050,6 +1040,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     let scaled_width;
     let scaled_height;
+    const scaledWidth = selectedTemplate.print_area_width * transform.scale;
+    const scaledHeight = selectedTemplate.print_area_height * transform.scale;
 
     if (
       naturalWidth / naturalHeight >
@@ -1069,10 +1061,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         product_id: prodID,
         variant_id: variantID,
         image_data: imageData,
-        scaled_width: scaled_width,
-        scaled_height: scaled_height,
-        offset_x: 0,
-        offset_y: 0,
+        scaled_width: aiAssist ? scaled_width : scaledWidth,
+        scaled_height: aiAssist ? scaled_height : scaledHeight,
+        offset_x: aiAssist ? 0 : transform.positionX,
+        offset_y: aiAssist ? 0 : transform.positionY,
         user_id: userDetails.id,
         status: "pending",
         product: name,
@@ -1101,19 +1093,14 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       className: "bg-background text-accent border-accent",
     });
 
-    updateActionCount("mockup");
     setPollForMockups(true);
     setIsMockingUp(false);
   };
 
   const fetchMockups = async () => {
-    const userID = userDetails?.id;
-    if (!userID) {
-      setDataStatic(true);
-      return staticMocks;
-    } else {
-      setDataStatic(false);
-    }
+    if (!userDetails?.id) return;
+
+    const userID = userDetails.id;
 
     const { data: mockups, error } = await supabase
       .from("mockups")

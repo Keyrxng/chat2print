@@ -16,6 +16,7 @@ import Image from "next/image";
 import DescAndGen from "@/components/BuiltinChat";
 import { Database } from "@/lib/database.types";
 import { useToast } from "@/components/ui/use-toast";
+
 interface PFILE {
   printfile_id: number;
   width: number;
@@ -24,11 +25,13 @@ interface PFILE {
   fill_mode: string;
   can_rotate: boolean;
 }
+
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const supabase = createClientComponentClient<Database>();
 
 export default function Page(params: { [x: string]: never }) {
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<__Prod>();
   const [selectedVariant, setSelectedVariant] = useState<__Variant>();
   const [template, setTemplate] = useState<__Template>();
@@ -143,6 +146,7 @@ export default function Page(params: { [x: string]: never }) {
                 setViewingMock={setViewingMock}
                 printFiles={printFiles}
                 userDetails={userDetails}
+                imageUrl={imageUrl}
               />
             )}
           </div>
@@ -154,6 +158,7 @@ export default function Page(params: { [x: string]: never }) {
             selectedVariant={selectedVariant}
             setSelectedImage={setSelectedImage}
             userDetails={userDetails}
+            setImageUrl={setImageUrl}
           />
         )}
       </Suspense>

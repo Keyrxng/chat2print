@@ -49,65 +49,37 @@ export async function POST(req: any, res: any) {
 
     if (uak?.ak && !error) {
       keyToUse = uak.ak;
+    } else {
+      const { data: tier, error } = await supabase
+        .from("users")
+        .select("tier")
+        .eq("id", session.session.user.id)
+        .single();
+
+      if (tier?.tier === "free") {
+        return new Response(
+          JSON.stringify({
+            error:
+              "You are on the free tier. Please upgrade to use this feature.",
+          }),
+          {
+            status: 403,
+            headers: {
+              "content-type": "application/json",
+            },
+          }
+        );
+      } else {
+        keyToUse = process.env.OPENAI_API_KEY;
+      }
     }
   }
-
-  const { prompt, quality, dimension, style } = await req.json();
-
-  const apiUrl = "https://api.openai.com/v1/images/generations";
-
-  console.log("prompt: ", prompt);
-  console.log("quality: ", quality);
-  console.log("dimension: ", dimension);
-  console.log("style: ", style);
-  console.log("keyToUse: ", keyToUse);
-
-  const layout = layouts.find((layout) => layout.name === dimension);
-  let respo;
-  let token: string | undefined = undefined;
 
   if (!keyToUse) {
-    const { data: user } = await supabase
-      .from("users")
-      .select("tier")
-      .eq("id", session.session?.user.id)
-      .single();
-
-    if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        status: 404,
-        headers: {
-          "content-type": "application/json",
-        },
-      });
-    }
-
-    if (user.tier === "free") {
-      return new Response(
-        JSON.stringify({
-          error:
-            "You are on the free tier. Please upgrade to use this feature.",
-        }),
-        {
-          status: 403,
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
-    }
-
-    if (user.tier === "premium" || user.tier === "pro") {
-      token = process.env.OPENAI_API_KEY;
-    }
-  } else {
-    token = keyToUse;
-  }
-
-  if (!token) {
     return new Response(
       JSON.stringify({
-        error: "You are on the free tier. Please upgrade to use this feature.",
+        error:
+          "An error occurred obtaining an access key. Please try again later or report this problem, it's much appreciated.",
       }),
       {
         status: 403,
@@ -117,6 +89,14 @@ export async function POST(req: any, res: any) {
       }
     );
   }
+
+  const { prompt, quality, dimension, style } = await req.json();
+
+  const apiUrl = "https://api.openai.com/v1/images/generations";
+
+  const layout = layouts.find((layout) => layout.name === dimension);
+  let respo;
+  let token = keyToUse;
 
   try {
     const response = await fetch(apiUrl, {

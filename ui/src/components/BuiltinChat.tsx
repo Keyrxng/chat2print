@@ -45,7 +45,7 @@ const freeHowTo = [
   {
     title: "Dimensions",
     description:
-      "You can choose between square, portrait and landscape dimensions.",
+      "The only dimension available is square, which is not optimal for phone case designs. Landscape and portrait dimensions are available for Premium and Pro users.",
   },
   {
     title: "Prompt",
@@ -98,11 +98,13 @@ const DescAndGen = ({
   selectedVariant,
   setSelectedImage,
   userDetails,
+  setImageUrl,
 }: {
   selectedProduct: __Prod | undefined;
   selectedVariant: __Variant | undefined;
   setSelectedImage: (arg0: string) => void;
   userDetails: any;
+  setImageUrl: (arg0: string) => void;
 }) => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -116,9 +118,115 @@ const DescAndGen = ({
   const [hover, setHover] = useState(false);
   const [blurred, setBlurred] = useState(true);
 
+  const increaseUsage = async (action: string) => {
+    // @ts-ignore
+    const { data: increaseData, error } = await supabase
+      .from("user_actions")
+      .insert({ user_id: userDetails.id, action_type: action });
+
+    if (error) {
+      console.log("error: ", error);
+      toast({
+        title: "Oops!",
+        description: `There was an error updating your usage, please report this issue.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+    }
+  };
+
+  const handleUsage = async (action: string) => {
+    let allowed = true;
+    const { data: usage, error } = await supabase
+      .from("user_actions")
+      .select("*")
+      .match({ user_id: userDetails.id })
+      .gt(
+        "timestamp",
+        new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      );
+
+    const generations = usage?.filter(
+      (u: any) => u.action_type === "generate"
+    ).length;
+
+    const { data: tierData, error: tierError } = await supabase
+      .from("usage_tiers")
+      .select("*");
+
+    if (tierError) {
+      console.log("error: ", tierError);
+    }
+
+    const user_tier = userDetails?.tier;
+
+    const ttn = user_tier === "free" ? 0 : user_tier === "premium" ? 1 : 2;
+
+    const accTier = tierData?.[ttn];
+    // @ts-ignore
+    const activeTier = accTier[user_tier];
+
+    if (!activeTier) {
+      toast({
+        title: "Oops!",
+        description: `There was an error fetching your account information, please try again shortly.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      return false;
+    }
+
+    if (generations! >= activeTier.generations && action === "generate") {
+      toast({
+        title: "Oops!",
+        description: `You've used up your free generations for the day, come back again tomorrow.`,
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
+      allowed = false;
+    }
+
+    if (allowed) {
+      switch (action) {
+        case "generate":
+          const moreThan80PercentData =
+            (generations! / activeTier.data_size) * 100 > 80;
+          if (moreThan80PercentData) {
+            toast({
+              title: "Head's up!",
+              description: `You have used ${generations} of your ${activeTier.data_size} free data for the day. You can increase your limit by upgrading your account.`,
+            });
+          }
+          increaseUsage(action);
+          break;
+        default:
+          break;
+      }
+      return allowed;
+    }
+    return allowed;
+  };
+
   const handleSubmitPrompt = async () => {
     if (!prompt.trim()) return;
-
+    if (!userDetails.id) {
+      toast({
+        title: "Not Logged In",
+        description: "Please log in to continue.",
+        duration: 5000,
+      });
+      return;
+    }
+    if (userDetails.tier === "free") {
+      toast({
+        title: "Premium Feature",
+        description:
+          "Please upgrade your account to use DALL-E-3 to generate images.",
+        duration: 5000,
+      });
+      return;
+    }
+    await handleUsage("generate");
     setIsLoading(true);
     setSuccessMessage("");
 
@@ -189,6 +297,14 @@ const DescAndGen = ({
 
   const handleFreePrompt = async () => {
     if (!prompt.trim()) return;
+    if (!userDetails.id) {
+      toast({
+        title: "Not Logged In",
+        description: "Please log in to continue.",
+        duration: 5000,
+      });
+      return;
+    }
 
     setIsLoading(true);
     setSuccessMessage("");
@@ -206,7 +322,35 @@ const DescAndGen = ({
       });
 
       const blob = await resp.blob();
+
+      const { data: uploadData, error } = await supabase.storage
+        .from("freegen")
+        .upload(`${userDetails?.id}/${Date.now()}.png`, blob);
+
+      const publicUrl = await supabase.storage
+        .from("freegen")
+        .getPublicUrl(uploadData?.path ?? "");
+
+      if (error) {
+        toast({
+          title: "Error Saving Image",
+          description: error.message,
+          duration: 5000,
+        });
+      } else {
+        toast({
+          title: "Image Saved",
+          description: "Your image has been saved to your account.",
+          duration: 5000,
+        });
+      }
+
       const imageUrl = URL.createObjectURL(blob);
+
+      const image = new Image();
+      image.src = imageUrl;
+
+      setImageUrl(publicUrl.data.publicUrl);
       setSelectedImage(imageUrl);
       setSuccessMessage("Image generated successfully!");
     } catch (error: any) {
@@ -277,6 +421,8 @@ const DescAndGen = ({
     useEffect(() => {
       async function check() {
         const { data } = await supabase.auth.getSession();
+
+        if (userDetails.tier !== "free") return setBlurred(false);
 
         if (data.session?.user?.id) {
           const { data: uak, error } = await supabase
@@ -436,69 +582,6 @@ const DescAndGen = ({
                 </ul>
               </div>
             )}
-
-            <div className="flex justify-between m-4 gap-4">
-              <Select
-                defaultValue="Portrait"
-                onValueChange={(e) => setDimension(e)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="layout" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Layouts</SelectLabel>
-                    {dimensionOpts.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-              <Select defaultValue="Vivid" onValueChange={(e) => setStyle(e)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Style" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Style</SelectLabel>
-                    {styles.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        onClick={() => setStyle(option.value)}
-                        value={option.value}
-                      >
-                        {option.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select
-                defaultValue="Standard"
-                onValueChange={(e) => setQuality(e)}
-              >
-                <SelectTrigger className="">
-                  <SelectValue placeholder="Quality" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Quality</SelectLabel>
-                    {qualityOpts.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        onClick={() => setQuality(option.value)}
-                        value={option.value}
-                      >
-                        {option.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
 
             <Textarea
               className="w-full h-44 p-2 bg-background rounded-lg mb-2 text-accent"
