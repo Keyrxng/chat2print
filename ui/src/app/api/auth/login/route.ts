@@ -22,38 +22,6 @@ export async function POST(request: Request) {
       status: 401,
     });
 
-  const { data: upgradeTier } = await supabase
-    .from("upgrades")
-    .select("*")
-    .eq("user_id", data.user.id)
-    .single();
-
-  const { data: user, error: userError } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", data.user.id)
-    .single();
-
-  if (upgradeTier?.tier !== user?.tier) {
-    await supabase
-      .from("users")
-      .update({ tier: upgradeTier?.tier })
-      .eq("id", data.user.id);
-  }
-
-  const doesUserHaveStorageFolder = await supabase.storage
-    .from("user_uploads")
-    .list(`${data.user?.id}/`);
-
-  if (doesUserHaveStorageFolder.data?.length === 0) {
-    const { error: folderError } = await supabase.storage
-      .from("user_uploads")
-      .upload(`${data.user?.id}/temp.png`, "temp");
-
-    if (folderError)
-      return new Response(JSON.stringify(folderError), { status: 420 });
-  }
-
   if (error) {
     return new Response(JSON.stringify(error), {
       status: 500,

@@ -2,7 +2,6 @@ export const runtime = "edge";
 
 export async function POST(req: any, res: any) {
   const prompt = await req.json();
-  console.log("prompt: ", prompt);
   const apiUrl = "https://worker-patient-hill-2054.keyrxng7749.workers.dev/";
 
   try {

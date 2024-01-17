@@ -102,7 +102,7 @@ export default function Page() {
             <article>
               <p className="text-muted text-sm">
                 {" "}
-                <em>Last updated on October, 2023</em>
+                <em>Last updated on January, 2024</em>
               </p>
               <p className="text-muted text-sm">
                 {" "}
@@ -110,20 +110,18 @@ export default function Page() {
                 submitted within 30 days after the product has been received.
                 For packages lost in transit, all claims must be submitted no
                 later than 30 days after the estimated delivery date. Claims
-                deemed an error on our part are covered at our expense.
-              </p>
-              <p className="text-muted text-sm">
-                {" "}
-                If you notice an issue on the products or anything else on the
-                order, please submit a problem report to{" "}
+                deemed an error on our part are covered at our expense. If you
+                notice an issue on the products or anything else on the order,
+                please submit a problem report to{" "}
                 <a className="text-accent" href="mailto:support@chat2print.xyz">
                   {" "}
                   support@chat2print.xyz
                 </a>
               </p>
+              <p className="text-muted text-sm"> </p>
               <p className="text-muted text-sm my-2">
                 {" "}
-                The return address is set by default to the Printful facility.
+                The return address is set by default to our Print Distributor.
                 When we receive a returned shipment, an automated email
                 notification will be sent to you. Unclaimed returns get donated
                 to charity after 30 days.
@@ -186,6 +184,29 @@ export default function Page() {
                 This Policy shall be governed and interpreted in accordance with
                 the English language, regardless of any translations made for
                 any purpose whatsoever.
+              </p>
+
+              <p className="text-muted text-sm my-2">
+                {" "}
+                <strong>Product Refund Guarantee -</strong>
+                For users who are on the Pro plan, we offer a product refund
+                guarantee. If you are not satisfied with your purchase in any
+                way, you can request a refund within 7 days after the order has
+                been delivered to you. To request a refund, please contact us at{" "}
+                <a className="text-accent" href="mailto:support@chat2print.xyz">
+                  support@chat2print.xyz
+                </a>
+                . You can request a refund for any reason, including if you
+                don&apos;t like the product received, or if it is damaged. We
+                will process your refund request within 7 business days after
+                receiving all the information required for processing the
+                refund. Refunds are made to the original payment method used to
+                make the purchase. Please note that Chat2Print is not
+                responsible for any fees charged to process the payment (e.g.
+                overdraft fees). A maximum of 6 refunds per year can be
+                processed per user. The product refund guarantee is only
+                available for users on the Pro plan. The product refund
+                guarantee does not apply to shipping costs.
               </p>
             </article>
           </section>

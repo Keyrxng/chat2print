@@ -5,8 +5,6 @@ const podHandler = new PODHandler();
 export async function POST(req: NextRequest, res: NextRequest) {
   const args = JSON.parse(await req.text());
 
-  console.log("body", args);
-
   try {
     const response = await podHandler.estimateShipping(args);
 

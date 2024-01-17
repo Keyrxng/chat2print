@@ -2,8 +2,6 @@ import Supabase from "@/classes/supabase";
 const supabase = new Supabase();
 
 export async function POST(req: Request, res: any) {
-  console.log("🪝 incoming webhook!");
-
   const data = await req.json();
   const prediction = data;
 
@@ -39,7 +37,6 @@ async function processWebhookData(prediction: {
   urls: { cancel: any; get: any };
   metrics: { predict_time: any };
 }) {
-  console.log("processWebhookData", prediction);
   if (prediction.status === "succeeded") {
     try {
       const userIdFromInput = prediction.input.image.split("/")[8];
@@ -48,8 +45,6 @@ async function processWebhookData(prediction: {
       const blob = await image.blob();
 
       const dataSize = blob.size / 1024 / 1024;
-
-      console.log("data size in MB: ", dataSize);
 
       const { error: usageError } = await supabase.supabase
         .from("user_actions")
@@ -75,8 +70,6 @@ async function processWebhookData(prediction: {
         throw new Error("Error uploading blob to db: " + uploadError.message);
       }
 
-      console.log(`Image ${prediction.id} saved to ${uploadData.path}.`);
-
       const finalizedJson = {
         input: prediction.input,
         output: prediction.output,
@@ -101,9 +94,6 @@ async function processWebhookData(prediction: {
         throw new Error("Error uploading to table: " + error.message);
       }
 
-      console.log(
-        `Upscale ${prediction.id} saved to database for user ${userIdFromInput}`
-      );
       return new Response("", { status: 201 });
     } catch (error) {
       console.error(error);

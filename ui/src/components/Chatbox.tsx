@@ -8,9 +8,6 @@ const Chatbox = () => {
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
-    onResponse: (response) => {
-      console.log(response);
-    },
   });
 
   const messagesEndRef = useRef(null);

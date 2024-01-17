@@ -32,7 +32,6 @@ export default function Header() {
   const [accountModalIsOpen, setAccountModalIsOpen] = useState(false);
   const [securityModalIsOpen, setSecurityModalIsOpen] = useState(false);
   const [addressModalIsOpen, setAddressModalIsOpen] = useState(false);
-  const [waitingForConfirm, setWaitingForConfirm] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
   const { toast } = useToast();
@@ -150,49 +149,36 @@ export default function Header() {
 
       const target = event.target.action;
 
-      if (isRegistering) {
-        setIsRegistering(false);
-        setWaitingForConfirm((prev) => true);
-      }
-
       fetch(target, {
         method: "POST",
         body: fd,
       })
         .then(async (data) => {
           const { user } = await data.json();
-          if (user) {
-            if (user.session === null) {
-              console.log("waiting for confirm");
-              setUser(user);
-              return;
-            } else if (user.session) {
-              console.log("not waiting for confirm");
-              const { data: userdata } = await supabase
-                .from("users")
-                .select("*")
-                .match({ id: user.id })
-                .single();
 
-              if (!waitingForConfirm) {
-                console.log("not waiting for confirm");
-                setUser({
-                  id: user.id,
-                  firstName: userdata?.full_name?.split(" ")[0],
-                });
+          if (user?.email_confirmed_at !== null) {
+            const { data: userdata } = await supabase
+              .from("users")
+              .select("*")
+              .match({ id: user.id })
+              .single();
 
-                console.log("user", user);
-                setIsConnected(true);
-                setAccountModalIsOpen(false);
-                toast({
-                  title: "Success!",
-                  description: "You are now signed in, refresh to see changes.",
-                  duration: 4000,
-                  variant: "default",
-                });
-              } else {
-              }
+            if (userdata?.id) {
+              window.location.reload();
             }
+
+            setIsConnected(true);
+            setAccountModalIsOpen(false);
+          } else {
+            supabase.auth.signOut();
+            setIsConnected(false);
+            setAccountModalIsOpen(true);
+            toast({
+              title: "Uh-Oh!",
+              description: "Please verify your email to sign in.",
+              duration: 4000,
+              variant: "default",
+            });
           }
         })
         .catch((err) => {
@@ -207,40 +193,39 @@ export default function Header() {
 
     return (
       <>
-        {!waitingForConfirm && (
-          <form
-            method="POST"
-            action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
-            className="space-y-4"
-            onSubmit={handleSubmit}
-            id="login"
+        <form
+          method="POST"
+          action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
+          className="space-y-4"
+          onSubmit={handleSubmit}
+          id="login"
+        >
+          <Input
+            type="username"
+            name="username"
+            placeholder="Email"
+            className="text-accent"
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="text-accent"
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          />
+          <Button
+            className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+            type="submit"
           >
-            <Input
-              type="username"
-              name="username"
-              placeholder="Email"
-              className="text-accent"
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
-            <Input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="text-accent"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
-            <Button
-              className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-              type="submit"
-            >
-              {!isRegistering ? "Sign In" : "Register"}
-            </Button>
-          </form>
-        )}
+            {!isRegistering ? "Sign In" : "Register"}
+          </Button>
+        </form>
+
         {/* provider login google etc */}
 
         {/* <div className="flex flex-col space-y-4">
@@ -716,56 +701,54 @@ export default function Header() {
                     <DialogContent className="border-accent text-accent">
                       <DialogHeader>
                         <DialogTitle className="text-center justify-center text-white mb-2"></DialogTitle>
-                        {!waitingForConfirm ? (
-                          <Login />
-                        ) : (
-                          <div className="z-50 inset-0 overflow-y-auto">
-                            <div className="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                              <div
-                                className="inset-0 transition-opacity"
-                                aria-hidden="true"
-                              ></div>
-                              <span
-                                className="hidden sm:inline-block sm:align-middle"
-                                aria-hidden="true"
-                              >
-                                &#8203;
-                              </span>
+                        <Login />
 
-                              <div
-                                className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-                                role="dialog"
-                                aria-modal="true"
-                                aria-labelledby="modal-headline"
-                              >
-                                <div className="flex flex-col justify-center items-center p-6">
-                                  <div className="flex flex-col justify-center items-center">
-                                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
-                                    <p className="text-accent text-2xl mt-4">
-                                      You are almost there!
-                                    </p>
-                                    <p className="text-accent text-center text-sm mt-2">
-                                      Please check your inbox and click the link
-                                      to verify your account then sign in.
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                              <Button
-                                onClick={() => handleIsVerified()}
-                                className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                              >
-                                I&apos;ve verified my account
-                              </Button>
-                              {/* <Button
-                                onClick={() => handleResendVeriEmail()}
-                                className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-                              >
-                                Resend Verification Email
-                              </Button> */}
-                            </div>
-                          </div>
-                        )}
+                        {/* // <div className="z-50 inset-0 overflow-y-auto">
+                          //   <div className="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                          //     <div
+                          //       className="inset-0 transition-opacity"
+                          //       aria-hidden="true"
+                          //     ></div>
+                          //     <span
+                          //       className="hidden sm:inline-block sm:align-middle"
+                          //       aria-hidden="true"
+                          //     >
+                          //       &#8203;
+                          //     </span>
+
+                          //     <div
+                          //       className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                          //       role="dialog"
+                          //       aria-modal="true"
+                          //       aria-labelledby="modal-headline"
+                          //     >
+                          //       <div className="flex flex-col justify-center items-center p-6">
+                          //         <div className="flex flex-col justify-center items-center">
+                          //           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+                          //           <p className="text-accent text-2xl mt-4">
+                          //             You are almost there!
+                          //           </p>
+                          //           <p className="text-accent text-center text-sm mt-2">
+                          //             Please check your inbox and click the link
+                          //             to verify your account then sign in.
+                          //           </p>
+                          //         </div>
+                          //       </div>
+                          //     </div>
+                          //     <Button
+                          //       onClick={() => handleIsVerified()}
+                          //       className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                          //     >
+                          //       I&apos;ve verified my account
+                          //     </Button>
+                          //     {/* <Button
+                          //       onClick={() => handleResendVeriEmail()}
+                          //       className="text-accent hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+                          //     >
+                          //       Resend Verification Email
+                          //     </Button> 
+                          //   </div>
+                          // </div> */}
 
                         <DialogDescription className="text-center justify-center"></DialogDescription>
                       </DialogHeader>

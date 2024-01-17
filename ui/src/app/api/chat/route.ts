@@ -3,8 +3,6 @@ import { Message, OpenAIStream, StreamingTextResponse } from "ai";
 export const runtime = "edge";
 
 export async function POST(req: Request) {
-  console.log("FIRED");
-
   const data = await req.json();
 
   const resp = await fetch(
@@ -40,8 +38,6 @@ export async function GET(req: Request) {
   );
 
   const chat = await resp.json();
-
-  console.log("chat", chat);
 
   const messages = chat[0].inputs.messages;
   const response = chat[0].response;

@@ -38,11 +38,6 @@ export default function Page() {
         setStatus(err.error);
         return;
       }
-      const session = await resp.json();
-
-      if (session) {
-        console.log("session: ", session);
-      }
 
       const { error: insertError } = await supabase.from("upgrades").insert({
         // @ts-ignore
@@ -51,13 +46,6 @@ export default function Page() {
         user_id: data.user?.id,
       });
 
-      if (error) {
-        console.log("fetching user Error: ", error);
-      }
-
-      if (insertError) {
-        console.log("inserting upgrade Error: ", insertError);
-      }
       setStatus("success");
     }
     load();

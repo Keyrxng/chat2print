@@ -15,7 +15,6 @@ actually fulfills the order, paying for it from funds in the Printful account
 export async function POST(req: NextRequest, res: NextRequest) {
   const args = JSON.parse(await req.text());
 
-  console.log(args);
   const response = await podHandler.estimateCosts(args);
 
   delete response.result.costs.subtotal;

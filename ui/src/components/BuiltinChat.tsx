@@ -15,8 +15,9 @@ import {
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { toast, useToast } from "./ui/use-toast";
-import { Database } from "@/lib/database.types";
+import { Database, Json } from "@/lib/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { ToastActionElement } from "./ui/toast";
 const supabase = createClientComponentClient<Database>();
 
 const premiumHowTo = [
@@ -125,7 +126,6 @@ const DescAndGen = ({
       .insert({ user_id: userDetails.id, action_type: action });
 
     if (error) {
-      console.log("error: ", error);
       toast({
         title: "Oops!",
         description: `There was an error updating your usage, please report this issue.`,
@@ -154,17 +154,23 @@ const DescAndGen = ({
       .from("usage_tiers")
       .select("*");
 
-    if (tierError) {
-      console.log("error: ", tierError);
-    }
-
     const user_tier = userDetails?.tier;
 
-    const ttn = user_tier === "free" ? 0 : user_tier === "premium" ? 1 : 2;
+    const free = tierData?.[0]?.free;
+    const premium = tierData?.[0]?.premium;
+    const pro = tierData?.[0]?.pro;
 
-    const accTier = tierData?.[ttn];
-    // @ts-ignore
-    const activeTier = accTier[user_tier];
+    interface Tier {
+      discount: number;
+      enhancements: number;
+      generations: number;
+      imports: number;
+      mockups: number;
+      storage: number; // in GB per month, 0.1 = 100 MB, 1 = 1 GB
+    }
+
+    const activeTier =
+      user_tier === "free" ? free : user_tier === "premium" ? premium : pro;
 
     if (!activeTier) {
       toast({
@@ -176,10 +182,10 @@ const DescAndGen = ({
       return false;
     }
 
-    if (generations! >= activeTier.generations && action === "generate") {
+    if (action === "generate" && generations! >= activeTier.generations) {
       toast({
-        title: "Oops!",
-        description: `You've used up your free generations for the day, come back again tomorrow.`,
+        title: "Head's up!",
+        description: `You've reached your daily cap for generating designs, come back again tomorrow.`,
         variant: "destructive",
         className: "bg-background text-accent border-accent",
       });
@@ -190,11 +196,12 @@ const DescAndGen = ({
       switch (action) {
         case "generate":
           const moreThan80PercentData =
-            (generations! / activeTier.data_size) * 100 > 80;
+            (generations! / activeTier.generations) * 100 > 80;
+
           if (moreThan80PercentData) {
             toast({
               title: "Head's up!",
-              description: `You have used ${generations} of your ${activeTier.data_size} free data for the day. You can increase your limit by upgrading your account.`,
+              description: `You have used ${generations} of your ${activeTier.generations} daily GPT-4 uses for the day. You can increase your limit by upgrading your account.`,
             });
           }
           increaseUsage(action);
@@ -230,69 +237,69 @@ const DescAndGen = ({
     setIsLoading(true);
     setSuccessMessage("");
 
-    try {
-      const { response } = await fetch("/api/openai/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: prompt,
-          quality: quality,
-          dimension: dimension,
-          style: style,
-        }),
-      }).then((res) => res.json());
+    // try {
+    //   const { response } = await fetch("/api/openai/", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       prompt: prompt,
+    //       quality: quality,
+    //       dimension: dimension,
+    //       style: style,
+    //     }),
+    //   }).then((res) => res.json());
 
-      if (response.error) {
-        setSuccessMessage(response.error.message);
-        toast({
-          title: "Error",
-          description: response.error.message,
-          duration: 5000,
-        });
-        return;
-      }
+    //   if (response.error) {
+    //     setSuccessMessage(response.error.message);
+    //     toast({
+    //       title: "Error",
+    //       description: response.error.message,
+    //       duration: 5000,
+    //     });
+    //     return;
+    //   }
 
-      const b64 = response.data[0].b64_json;
-      const imageUrl = `data:image/png;base64,${b64}`;
+    //   const b64 = response.data[0].b64_json;
+    //   const imageUrl = `data:image/png;base64,${b64}`;
 
-      const image = new Image();
-      image.src = imageUrl;
+    //   const image = new Image();
+    //   image.src = imageUrl;
 
-      const img = await fetch(imageUrl);
+    //   const img = await fetch(imageUrl);
 
-      const blob = await img.blob();
+    //   const blob = await img.blob();
 
-      if (userDetails.tier === "Pro") {
-        const { data: uploadData, error } = await supabase.storage
-          .from("user_uploads")
-          .upload(`${userDetails.id}/${Date.now()}.png`, blob);
+    //   if (userDetails.tier === "Pro") {
+    //     const { data: uploadData, error } = await supabase.storage
+    //       .from("user_uploads")
+    //       .upload(`${userDetails.id}/${Date.now()}.png`, blob);
 
-        if (error) {
-          toast({
-            title: "Error Saving Image",
-            description: error.message,
-            duration: 5000,
-          });
-        } else {
-          toast({
-            title: "Image Saved",
-            description: "Your image has been saved to your account.",
-            duration: 5000,
-          });
-        }
-      }
+    //     if (error) {
+    //       toast({
+    //         title: "Error Saving Image",
+    //         description: error.message,
+    //         duration: 5000,
+    //       });
+    //     } else {
+    //       toast({
+    //         title: "Image Saved",
+    //         description: "Your image has been saved to your account.",
+    //         duration: 5000,
+    //       });
+    //     }
+    //   }
 
-      setSelectedImage(imageUrl);
-      setSuccessMessage("Image generated successfully!");
-    } catch (error: any) {
-      setSuccessMessage(
-        "An error occurred while generating the image. " + error.message
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    //   setSelectedImage(imageUrl);
+    //   setSuccessMessage("Image generated successfully!");
+    // } catch (error: any) {
+    //   setSuccessMessage(
+    //     "An error occurred while generating the image. " + error.message
+    //   );
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const handleFreePrompt = async () => {
@@ -309,15 +316,11 @@ const DescAndGen = ({
     setIsLoading(true);
     setSuccessMessage("");
 
-    const imageVars = `Style: ${style}\n Dimensions: ${dimension}\n`.trim();
-    const imagePrompt =
-      `Ensure that the image meets the following criteria:\n\n${imageVars}\n\n${prompt}`.trim();
-
     try {
       const resp = await fetch("/api/freeGen", {
         method: "POST",
         body: JSON.stringify({
-          prompt: imagePrompt,
+          prompt: prompt.trim(),
         }),
       });
 
@@ -387,7 +390,6 @@ const DescAndGen = ({
       if (error?.code === "23505") {
         const { data, error } = await supabase.from("uak").upsert({ ak: key });
       } else {
-        console.log("error: ", error);
       }
     };
 
@@ -421,7 +423,6 @@ const DescAndGen = ({
     useEffect(() => {
       async function check() {
         const { data } = await supabase.auth.getSession();
-
         if (userDetails.tier !== "free") return setBlurred(false);
 
         if (data.session?.user?.id) {
@@ -441,7 +442,7 @@ const DescAndGen = ({
     }, []);
 
     return (
-      <div className="absolute w-2/5 z-10 max-w-lg h-4/5 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
+      <div className="absolute w-2/5 z-9 max-w-lg h-4/5 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
         {sks && (
           <div className="text-accent justify-between gap-2">
             <Lock className="h-12 w-12 mx-auto" />
@@ -492,10 +493,6 @@ const DescAndGen = ({
                 &times;
               </button>
 
-              <h2 className="text-4xl font-bold text-center mb-6">
-                Upgrade Once for Lifetime Benefits
-              </h2>
-
               <div className="flex flex-col p-2  rounded-lg justify-between items-center">
                 <script
                   async
@@ -507,7 +504,7 @@ const DescAndGen = ({
                     padding: "2px",
                     margin: "2px",
                   }}
-                  pricing-table-id="prctbl_1ORxi8J8INwD5VucpA1IVbuN"
+                  pricing-table-id="prctbl_1OZXVmJ8INwD5VucGC60357c"
                   publishable-key="pk_test_51OIcuCJ8INwD5VucXOT3hww245XJiYrEpbnw3jHf0jboTJhrMix1TH4jf3oqGR4uChV4TyoH2iSL284KOFbAxTJJ00MDub5FdJ"
                 />
               </div>
@@ -522,7 +519,7 @@ const DescAndGen = ({
     <div className="flex flex-col text-center items-center mt-1 gap-14">
       <div
         className={`m-4 w-fit border ${
-          !showGen ? "animate-pulse" : ""
+          !showGen || !freeGen ? "animate-pulse" : ""
         } border-accent rounded-2xl items-center`}
       >
         <div className="flex flex-row justify-between items-center">
@@ -540,7 +537,7 @@ const DescAndGen = ({
           >
             {showGen || freeGen
               ? "View Product Description"
-              : "Open AI Image Generator"}
+              : "AI Image Generator"}
           </button>
         </div>
       </div>

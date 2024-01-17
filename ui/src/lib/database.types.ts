@@ -375,25 +375,22 @@ export interface Database {
       };
       usage_tiers: {
         Row: {
-          crafter: Json | null;
-          designer: Json | null;
           free: Json | null;
           id: number;
-          manufacturer: Json | null;
+          premium: Json | null;
+          pro: Json | null;
         };
         Insert: {
-          crafter?: Json | null;
-          designer?: Json | null;
           free?: Json | null;
           id?: number;
-          manufacturer?: Json | null;
+          premium?: Json | null;
+          pro?: Json | null;
         };
         Update: {
-          crafter?: Json | null;
-          designer?: Json | null;
           free?: Json | null;
           id?: number;
-          manufacturer?: Json | null;
+          premium?: Json | null;
+          pro?: Json | null;
         };
         Relationships: [];
       };
@@ -496,7 +493,7 @@ export interface Database {
       };
     };
     Enums: {
-      actions: "enhancement" | "mockup" | "import";
+      actions: "enhancement" | "mockup" | "import" | "generate";
       mockup_status: "pending" | "processing" | "completed" | "failed";
       pricing_plan_interval: "day" | "week" | "month" | "year";
       pricing_type: "one_time" | "recurring";

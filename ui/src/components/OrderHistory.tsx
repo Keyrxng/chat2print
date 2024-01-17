@@ -1,19 +1,15 @@
 "use client";
 import {
   Calendar,
-  DollarSign,
   LucidePackageOpen,
-  LucideTrainTrack,
   PoundSterling,
-  Spline,
   Truck,
-  Vegan,
 } from "lucide-react";
 import OrderDetail from "./OrderDetails";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database, Json } from "@/lib/database.types";
+import { Database } from "@/lib/database.types";
 
 const supabase = createClientComponentClient<Database>();
 
@@ -47,17 +43,16 @@ export default function OrderHistory() {
         .select("*")
         .eq("user_id", user.user!.id);
       if (!orders) return console.error(fetchError);
-      console.log("orders", orders);
       // @ts-ignore
       setOrders(orders);
       return orders;
     }
 
-    const orderz = fetchOrders();
+    fetchOrders();
   }, []);
 
   const handleClick = (order: any) => {
-    setActiveOrder(order);
+    setActiveOrder((prev) => order);
     setViewingOrder(true);
     console.log("order", order);
   };
@@ -120,7 +115,7 @@ export default function OrderHistory() {
       )}
       {viewingOrder && (
         <>
-          <OrderDetail orderId={Number(activeOrder?.task_key.slice(3))} />
+          <OrderDetail order={activeOrder} />
           <Button
             onClick={() => setViewingOrder(false)}
             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"

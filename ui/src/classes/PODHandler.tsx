@@ -169,8 +169,6 @@ class PODHandler {
         optionGroups,
       };
 
-      console.log("Creating mockup task: ", mockupData);
-
       const response = await this.client.post(
         `/mockup-generator/create-task/${productID}`,
         mockupData
@@ -195,7 +193,6 @@ class PODHandler {
 
   async estimateCosts(orderData: any) {
     try {
-      console.log("Estimating costs: ", orderData);
       const response = await this.client.post(
         "/orders/estimate-costs",
         orderData
@@ -256,7 +253,6 @@ class PODHandler {
         apiKey: this.apiKey,
       });
       const token = authResponse.data.result;
-      console.log("uploading design");
       const uploadResponse = await this.client.post(
         "/files",
         {
@@ -302,7 +298,6 @@ class PODHandler {
   }
 
   private handleError(error: any) {
-    console.log("FUCKING ERRORS? ", error);
     return error.response;
   }
 }

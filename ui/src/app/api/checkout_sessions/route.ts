@@ -150,7 +150,6 @@ export async function GET(req: Request, res: any) {
     const session = await stripe.checkout.sessions.retrieve(
       session_id as string
     );
-    console.log("session:", session);
 
     return new Response(JSON.stringify(session));
   } catch (err: any) {

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -21,7 +20,6 @@ export default function Page() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data);
         setStatus(data.status);
 
         async function getDB() {
@@ -42,32 +40,17 @@ export default function Page() {
 
         async function setDB() {
           const user = await getDB();
-          console.log("user", user);
           const { data: insertData, error } = await supabase
             .from("sales")
             .insert({
               id: data.id,
               sale_info: dbData,
               user_id: user?.id,
-            })
-            .single();
-
-          console.log(
-            "setdb sales data: ",
-            insertData,
-            "setdb sales error: ",
-            error
-          );
+            });
         }
         setDB();
       });
   }, []);
-
-  // need to update their order as fully complete in the database
-
-  // if (status === "open") {
-  //   return redirect("/");
-  // }
 
   if (status === "complete") {
     return (
@@ -92,18 +75,8 @@ export default function Page() {
           </p>
           <div className="flex flex-col space-y-4">
             <button
-              className="bg-accent hover:bg-opacity-90 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
-              onClick={() =>
-                window.location.replace(
-                  `mailto:support@chat2print.xyz?subject=Feedback&body=Hi, I just purchased a product from chat2print and wanted to share my experience with you.`
-                )
-              }
-            >
-              Share Feedback
-            </button>
-            <button
               className="text-accent bg-transparent hover:bg-accent hover:text-background font-bold py-2 px-4 rounded transition duration-300 ease-in-out border border-accent"
-              onClick={() => window.location.replace("/")}
+              onClick={() => window.location.replace("/studio")}
             >
               Return to the Studio
             </button>

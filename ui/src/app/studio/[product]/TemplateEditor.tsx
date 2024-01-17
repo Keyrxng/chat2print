@@ -33,7 +33,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/lib/database.types";
 import { staticMocks } from "@/data/statics";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronsUpDown, Send, ToggleLeftIcon, X } from "lucide-react";
+import { ChevronsUpDown, X } from "lucide-react";
 import { TipsAndTricksModal } from "@/components/TipsAndTricks";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
@@ -45,6 +45,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { stat } from "fs";
 const supabase = createClientComponentClient<Database>();
 
 const stripePromise = loadStripe(
@@ -115,8 +116,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   const [mounted, setMounted] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [aiAssist, setAiAssist] = useState(true);
-
-  console.log("datastatic: ", dataStatic);
 
   const [transform, setTransform] = useState({
     scale: 1,
@@ -295,11 +294,25 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const user_tier = userDetails?.tier;
 
-    const ttn = user_tier === "free" ? 0 : user_tier === "premium" ? 1 : 2;
+    const free = tierData?.[0]?.free;
+    const premium = tierData?.[0]?.premium;
+    const pro = tierData?.[0]?.pro;
 
-    const accTier = tierData?.[ttn];
-    // @ts-ignore
-    const activeTier = accTier[user_tier];
+    interface Tier {
+      discount: number;
+      enhancements: number;
+      generations: number;
+      imports: number;
+      mockups: number;
+      storage: number; // in GB per month, 0.1 = 100 MB, 1 = 1 GB
+    }
+
+    const activeTier =
+      user_tier === "free" ? free : user_tier === "premium" ? premium : pro;
+
+    const storageToBytes = (storage: number) => {
+      return storage * (1024 * 1024 * 1024);
+    };
 
     if (!activeTier) {
       toast({
@@ -309,20 +322,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         className: "bg-background text-accent border-accent",
       });
       return false;
-    }
-
-    if (
-      action === "mockup" ||
-      (action === "enhancement" &&
-        dataSize! >= activeTier.data_size * (1024 * 1024))
-    ) {
-      toast({
-        title: "Oops!",
-        description: `You've used up your free storage for the day, please try again tomorrow.`,
-        variant: "destructive",
-        className: "bg-background text-accent border-accent",
-      });
-      allowed = false;
     }
 
     if (action === "import" && imports! >= activeTier.imports) {
@@ -586,7 +585,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       }
 
       postDraftToPrintful().then((res) => {
-        console.log("res: ", res);
         if (res && typeof res === "string") {
           return;
         } else if (res) {
@@ -671,7 +669,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     };
 
     return (
-      <div className="m-4 p-4 h-full">
+      <div className="m-4 p-4 h-full overflow-hidden">
         <motion.h1
           initial={{ opacity: 0, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
@@ -686,7 +684,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             <div className="grid grid-cols-1 mx-4 justify-center items-center">
               <Carousel className="mt-5">
                 <CarouselContent className="-ml-1">
-                  {mocks.map((mock, index) => (
+                  {mocks?.map((mock, index) => (
                     <>
                       <CarouselItem key={index} className="pl-1 basis-1/2">
                         <div className="p-1">
@@ -1028,7 +1026,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     ) as HTMLImageElement;
 
     const { naturalWidth, naturalHeight } = ele;
-    console.log("naturalWidth: ", naturalWidth);
 
     const desiredDpi = 300;
 
@@ -1098,7 +1095,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   };
 
   const fetchMockups = async () => {
-    if (!userDetails?.id) return;
+    if (!userDetails?.id) {
+      setDataStatic(true);
+      return staticMocks;
+    }
 
     const userID = userDetails.id;
 
@@ -1116,6 +1116,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         className: "bg-background text-accent border-accent",
       });
       return [];
+    }
+
+    if (mockups?.length === 0) {
+      setMocks(staticMocks);
+      return staticMocks;
     }
 
     setMocks(mockups);
@@ -1339,7 +1344,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
     const postDraftToSupa = async (id: string) => {
       if (!id) {
-        console.log("no sesh id");
         return;
       }
       const data = await loadShippingInfos();
@@ -1676,7 +1680,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
   /////// CTRLS \\\\\\\
 
   return (
-    <div className={`${viewingMocks ? "h-screen" : ""} mb-4`}>
+    <div className={`${viewingMocks ? "h-screen" : ""}`}>
       <Suspense>
         <>
           {enhancing && (
@@ -1763,7 +1767,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             <Mockup />
           ) : (
             <>
-              <div className="flex justify-center w-full h-min">
+              <div className="flex justify-center w-full h-content">
                 <TransformWrapper
                   initialScale={position.scale}
                   initialPositionX={-position.x}
@@ -1959,7 +1963,10 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
-                            onClick={() => handleSetViewingMocks()}
+                            onClick={() => {
+                              handleSetViewingMocks();
+                              fetchMockups();
+                            }}
                             className="relative w-full text-accent bg-background border-2 hover:bg-accent hover:text-background"
                           >
                             View Mockups
@@ -1975,7 +1982,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     </TooltipProvider>
                   </div>
                 </div>
-                {userDetails?.tier && userDetails.tier !== "free" && (
+                {userDetails && (
                   <ImageSlider
                     userDetails={userDetails}
                     userImages={userImages}
