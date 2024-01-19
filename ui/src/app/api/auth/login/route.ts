@@ -17,10 +17,16 @@ export async function POST(request: Request) {
     password,
   });
 
-  if (!data?.user?.id)
-    return new Response(JSON.stringify({ error: "Invalid credentials" }), {
-      status: 401,
-    });
+  if (!data?.user)
+    return new Response(
+      JSON.stringify({
+        error:
+          "Please ensure you have verified your email and your details are correct.",
+      }),
+      {
+        status: 401,
+      }
+    );
 
   if (error) {
     return new Response(JSON.stringify(error), {

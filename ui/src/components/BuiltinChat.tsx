@@ -51,7 +51,7 @@ const freeHowTo = [
   {
     title: "Prompt",
     description:
-      "Unlike DALLE-3, your prompt will not be optimized or 'beefed' up. This gives you a lot more granular control of the output but also means that you need to be more intentional and specific with your prompt to acheive a result similar to DALLE-3.",
+      "Unlike DALLE-3, your prompt will not be optimized or 'beefed' up. This gives you a lot more granular control of the output but also means that you need to be more intentional and specific with your prompt to achieve a result similar to DALLE-3.",
   },
 ];
 
@@ -182,6 +182,7 @@ const DescAndGen = ({
       return false;
     }
 
+    // @ts-ignore
     if (action === "generate" && generations! >= activeTier.generations) {
       toast({
         title: "Head's up!",
@@ -196,11 +197,13 @@ const DescAndGen = ({
       switch (action) {
         case "generate":
           const moreThan80PercentData =
+            // @ts-ignore
             (generations! / activeTier.generations) * 100 > 80;
 
           if (moreThan80PercentData) {
             toast({
               title: "Head's up!",
+              // @ts-ignore
               description: `You have used ${generations} of your ${activeTier.generations} daily GPT-4 uses for the day. You can increase your limit by upgrading your account.`,
             });
           }
@@ -216,7 +219,7 @@ const DescAndGen = ({
 
   const handleSubmitPrompt = async () => {
     if (!prompt.trim()) return;
-    if (!userDetails.id) {
+    if (!userDetails?.id) {
       toast({
         title: "Not Logged In",
         description: "Please log in to continue.",
@@ -304,7 +307,7 @@ const DescAndGen = ({
 
   const handleFreePrompt = async () => {
     if (!prompt.trim()) return;
-    if (!userDetails.id) {
+    if (!userDetails?.id) {
       toast({
         title: "Not Logged In",
         description: "Please log in to continue.",
@@ -338,12 +341,6 @@ const DescAndGen = ({
         toast({
           title: "Error Saving Image",
           description: error.message,
-          duration: 5000,
-        });
-      } else {
-        toast({
-          title: "Image Saved",
-          description: "Your image has been saved to your account.",
           duration: 5000,
         });
       }
@@ -394,7 +391,7 @@ const DescAndGen = ({
     };
 
     const handleShowOpts = () => {
-      if (!userDetails.id) {
+      if (!userDetails?.id) {
         toast({
           title: "Not Logged In",
           description: "Please log in to continue.",
@@ -408,7 +405,7 @@ const DescAndGen = ({
     };
 
     const handleSks = () => {
-      if (!userDetails.id) {
+      if (!userDetails?.id) {
         toast({
           title: "Not Logged In",
           description: "Please log in to continue.",

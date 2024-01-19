@@ -144,7 +144,7 @@ export const ImageSlider = ({
   return (
     <>
       {userDetails && (
-        <div className="mx-4 py-4 h-min flex items-center justify-center">
+        <div className="mx-4 py-4 h-min flex flex-col gap-8 items-center justify-center">
           {showUpgradeModal && <UpgradeModal />}
           {userDetails?.tier && userDetails?.tier === "free" && (
             <div className="flex flex-row justify-center h-min  items-center max-w-6xl">

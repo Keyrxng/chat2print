@@ -45,7 +45,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { stat } from "fs";
 const supabase = createClientComponentClient<Database>();
 
 const stripePromise = loadStripe(
@@ -298,15 +297,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     const premium = tierData?.[0]?.premium;
     const pro = tierData?.[0]?.pro;
 
-    interface Tier {
-      discount: number;
-      enhancements: number;
-      generations: number;
-      imports: number;
-      mockups: number;
-      storage: number; // in GB per month, 0.1 = 100 MB, 1 = 1 GB
-    }
-
     const activeTier =
       user_tier === "free" ? free : user_tier === "premium" ? premium : pro;
 
@@ -324,6 +314,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       return false;
     }
 
+    // @ts-ignore
     if (action === "import" && imports! >= activeTier.imports) {
       toast({
         title: "Oops!",
@@ -332,9 +323,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         className: "bg-background text-accent border-accent",
       });
       allowed = false;
-    }
-
-    if (action === "enhancement" && enhancements! >= activeTier.enhancements) {
+    } else if (
+      action === "enhancement" &&
+      // @ts-ignore
+      enhancements! >= activeTier.enhancements
+    ) {
       toast({
         title: "Oops!",
         description: `You've used up your free enhancements for the day, please try again tomorrow.`,
@@ -342,9 +335,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         className: "bg-background text-accent border-accent",
       });
       allowed = false;
-    }
-
-    if (action === "mockup" && mockups! >= activeTier.mockups) {
+      // @ts-ignore
+    } else if (action === "mockup" && mockups! >= activeTier.mockups) {
       toast({
         title: "Oops!",
         description: `You've used up your free mockups for the day, please try again tomorrow.`,
@@ -357,10 +349,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (allowed) {
       switch (action) {
         case "mockup":
+          // @ts-ignore
           const moreThan80Percent = (mockups! / activeTier.mockups) * 100 > 80;
           if (moreThan80Percent) {
             toast({
               title: "Head's up!",
+              // @ts-ignore
               description: `You have used ${mockups} of your ${activeTier.mockups} free mockups for the day. You can increase your limit by upgrading your account.`,
             });
           }
@@ -368,10 +362,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           break;
         case "enhancement":
           const moreThan80PercentEnhancements =
+            // @ts-ignore
             (enhancements! / activeTier.enhancements) * 100 > 80;
           if (moreThan80PercentEnhancements) {
             toast({
               title: "Head's up!",
+              // @ts-ignore
               description: `You have used ${enhancements} of your ${activeTier.enhancements} free enhancements for the day. You can increase your limit by upgrading your account.`,
             });
           }
@@ -380,10 +376,12 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           break;
         case "import":
           const moreThan80PercentImports =
+            // @ts-ignore
             (imports! / activeTier.imports) * 100 > 80;
           if (moreThan80PercentImports) {
             toast({
               title: "Head's up!",
+              // @ts-ignore
               description: `You have used ${imports} of your ${activeTier.imports} free imports for the day. You can increase your limit by upgrading your account.`,
             });
           }
@@ -408,7 +406,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
 
   const handleGeneration = async () => {
     if (!userDetails?.id) {
-      setNeedAccount(true);
+      toast({
+        title: "Before you continue",
+        description:
+          "Please sign up for an account by clicking the 'Profile' button.",
+        variant: "destructive",
+        className: "bg-background text-accent border-accent",
+      });
       return;
     }
 
@@ -427,18 +431,29 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (userDetails.tier === "free") {
       allowed = await handleUsage("mockup");
       if (allowed) await handleCreateMockup(uri);
+      return;
     }
 
     if (viewingUpscaled) {
       allowed = await handleUsage("mockup");
       if (allowed) await handleCreateMockup(uri);
     } else if (!viewingUpscaled) {
+      if (userDetails.tier === "free") {
+        toast({
+          title: "Premium Feature",
+          description: `This feature is only available to premium and pro users, please upgrade your account to use it.`,
+          variant: "destructive",
+          className: "bg-background text-accent border-accent",
+        });
+        return;
+      }
+
       allowed = await handleUsage("enhancement");
       if (allowed) await handleEnhanceUpscale(uri);
     }
   };
 
-  const handleEnhanceUpscale = async (uri) => {
+  const handleEnhanceUpscale = async (uri: string) => {
     setEnhancing(true);
 
     try {
@@ -547,6 +562,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         }),
       });
       const data = await response.json();
+      console.log("data: ", data);
 
       if (typeof data == "string") {
         toast({
@@ -555,12 +571,13 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
           variant: "destructive",
           className: "bg-background text-accent border-accent",
         });
+        return;
       }
 
       return data;
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
       if (!userDetails?.id) {
         toast({
           title: "Before you continue",
@@ -584,14 +601,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         return;
       }
 
-      postDraftToPrintful().then((res) => {
-        if (res && typeof res === "string") {
-          return;
-        } else if (res) {
-          setPrintDetails(res);
-          setCheckout(true);
-        }
-      });
+      const res = await postDraftToPrintful();
+      setPrintDetails((prev: any) => res);
+      setCheckout(true);
     };
 
     const handleDelete = async (mock: any) => {
@@ -667,6 +679,8 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
       setPage([page + newDirection, newDirection]);
       setActiveMock(mocks[page + newDirection]);
     };
+
+    const [imgDPI, setImgDPI] = useState<number>(0);
 
     return (
       <div className="m-4 p-4 h-full overflow-hidden">
@@ -775,8 +789,16 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                               {activeMock.product}
                             </p>
                             <button
-                              className="flex-end right-0 w-full text-lg hover:bg-accent border border-accent hover:text-background text-accent font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+                              className={`
+                              
+                              ${
+                                dataStatic
+                                  ? "opacity-50 hover:bg-background hover:text-accent "
+                                  : "hover:bg-accent hover:text-background text-accent"
+                              }
+                              flex-end right-0 w-full text-lg  border border-accent  font-bold py-2 px-4 rounded transition duration-300 ease-in-out`}
                               onClick={() => handleCheckout()}
+                              disabled={dataStatic}
                             >
                               Buy Now
                             </button>
@@ -840,7 +862,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
               </>
             )}
 
-            {checkout && (
+            {checkout && printDetails && printDetails.dpi && (
               <>
                 <div className="flex">
                   <div className="relative justify-center w-[900px] h-[900px]">
@@ -856,7 +878,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
                     <h1 className="text-xl font-bold">{activeMock.product}</h1>
                     <h2 id="delivery-date" className="text-xl"></h2>
                     <h2 className="text-xl font-bold">
-                      Print Quality: <strong>{printDetails.dpi}/ 300</strong>
+                      <span>{printDetails.dpi}/300 DPI</span>
                     </h2>
                   </div>
                   <HandleSale
@@ -1121,11 +1143,11 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     if (mockups?.length === 0) {
       setMocks(staticMocks);
       return staticMocks;
+    } else {
+      setMocks(mockups);
+      setDataStatic(false);
+      return mockups;
     }
-
-    setMocks(mockups);
-
-    return mockups;
   };
 
   const handleSetViewingMocks = () => {
@@ -1194,6 +1216,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     itemPrice: number;
   }) => {
     const [clientSecret, setClientSecret] = useState<string>("");
+
     useEffect(() => {
       fetch("/api/checkout_sessions", {
         method: "POST",
@@ -1228,7 +1251,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             state_code: userDetails.billing_address.state_code,
             country_code: userDetails.billing_address.country_code,
             zip: userDetails.billing_address.zip,
-            phone: "07485441905",
           },
           items: [
             {
@@ -1278,7 +1300,6 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             state_code: userDetails.billing_address.state_code,
             country_code: userDetails.billing_address.country_code,
             zip: userDetails.billing_address.zip,
-            phone: "07485441905",
           },
           items: [
             {
@@ -1332,7 +1353,9 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
         return data;
       }
 
-      return await load();
+      const data = await load();
+
+      return data;
     }, [
       itemPrice,
       mockup.printFiles,
@@ -1404,188 +1427,188 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
     );
   };
 
-  const Login = () => {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [isRegistering, setIsRegistering] = React.useState(true);
+  // const Login = () => {
+  //   const [email, setEmail] = React.useState("");
+  //   const [password, setPassword] = React.useState("");
+  //   const [isRegistering, setIsRegistering] = React.useState(true);
 
-    const signinValidation = () => {
-      if (email === "") {
-        alert("Please enter your email address");
-        return false;
-      }
-      if (password === "") {
-        alert("Please enter your password");
-        return false;
-      }
-      if (!email.includes("@")) {
-        alert("Please enter a valid email");
-        return false;
-      }
-      if (password.length < 6) {
-        alert("Password must be at least 6 characters");
-        return false;
-      }
-      if (password.length >= 255) {
-        alert("Password must be less than 255 characters");
-        return false;
-      }
+  //   const signinValidation = () => {
+  //     if (email === "") {
+  //       alert("Please enter your email address");
+  //       return false;
+  //     }
+  //     if (password === "") {
+  //       alert("Please enter your password");
+  //       return false;
+  //     }
+  //     if (!email.includes("@")) {
+  //       alert("Please enter a valid email");
+  //       return false;
+  //     }
+  //     if (password.length < 6) {
+  //       alert("Password must be at least 6 characters");
+  //       return false;
+  //     }
+  //     if (password.length >= 255) {
+  //       alert("Password must be less than 255 characters");
+  //       return false;
+  //     }
 
-      if (email.length >= 255) {
-        alert("Email must be less than 255 characters");
-        return false;
-      }
+  //     if (email.length >= 255) {
+  //       alert("Email must be less than 255 characters");
+  //       return false;
+  //     }
 
-      if (email.length < 6) {
-        alert("Email must be at least 6 characters");
-        return false;
-      }
+  //     if (email.length < 6) {
+  //       alert("Email must be at least 6 characters");
+  //       return false;
+  //     }
 
-      return true;
-    };
+  //     return true;
+  //   };
 
-    const handleSubmit = (event: any) => {
-      event.preventDefault();
+  //   const handleSubmit = (event: any) => {
+  //     event.preventDefault();
 
-      if (!signinValidation()) {
-        return;
-      }
+  //     if (!signinValidation()) {
+  //       return;
+  //     }
 
-      const fd = new FormData();
-      fd.append("email", email);
-      fd.append("password", password);
+  //     const fd = new FormData();
+  //     fd.append("email", email);
+  //     fd.append("password", password);
 
-      const target = event.target.action;
+  //     const target = event.target.action;
 
-      fetch(target, {
-        method: "POST",
-        body: fd,
-      }).then(async (data) => {
-        const res = await data.json();
-        if (res.error) {
-          alert(res.error);
-        }
+  //     fetch(target, {
+  //       method: "POST",
+  //       body: fd,
+  //     }).then(async (data) => {
+  //       const res = await data.json();
+  //       if (res.error) {
+  //         alert(res.error);
+  //       }
 
-        if (res.user) {
-          window.location.reload();
-        }
-      });
-    };
+  //       if (res.user) {
+  //         window.location.reload();
+  //       }
+  //     });
+  //   };
 
-    return (
-      <>
-        <form
-          method="POST"
-          action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
-          className="space-y-4"
-          onSubmit={handleSubmit}
-          id="login"
-        >
-          <Input
-            type="username"
-            name="username"
-            placeholder="Email"
-            className="text-accent"
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
-          />
-          <Input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="text-accent"
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button
-            className="text-accent hover:bg-accent hover:text-background transition duration-300 border border-accent"
-            type="submit"
-          >
-            {!isRegistering ? "Sign In" : "Register"}
-          </Button>
-        </form>
-        {/* provider login google etc */}
+  //   return (
+  //     <>
+  //       <form
+  //         method="POST"
+  //         action={!isRegistering ? `/api/auth/login` : `/api/auth/signup`}
+  //         className="space-y-4"
+  //         onSubmit={handleSubmit}
+  //         id="login"
+  //       >
+  //         <Input
+  //           type="username"
+  //           name="username"
+  //           placeholder="Email"
+  //           className="text-accent"
+  //           onChange={(event) => {
+  //             setEmail(event.target.value);
+  //           }}
+  //         />
+  //         <Input
+  //           type="password"
+  //           name="password"
+  //           placeholder="Password"
+  //           className="text-accent"
+  //           onChange={(event) => {
+  //             setPassword(event.target.value);
+  //           }}
+  //         />
+  //         <Button
+  //           className="text-accent hover:bg-accent hover:text-background transition duration-300 border border-accent"
+  //           type="submit"
+  //         >
+  //           {!isRegistering ? "Sign In" : "Register"}
+  //         </Button>
+  //       </form>
+  //       {/* provider login google etc */}
 
-        {/* <div className="flex flex-col space-y-4">
-            <Button
-              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-              onClick={() => handleLoginWithProvider("google")}
-            >
-              Sign in with Google
-            </Button>
-            <Button
-              className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
-              onClick={() => handleLoginWithProvider("github")}
-            >
-              Sign in with Github
-            </Button>
-          </div> */}
+  //       {/* <div className="flex flex-col space-y-4">
+  //           <Button
+  //             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+  //             onClick={() => handleLoginWithProvider("google")}
+  //           >
+  //             Sign in with Google
+  //           </Button>
+  //           <Button
+  //             className="text-accent w-full hover:bg-accent hover:text-background transition duration-300 border  border-accent"
+  //             onClick={() => handleLoginWithProvider("github")}
+  //           >
+  //             Sign in with Github
+  //           </Button>
+  //         </div> */}
 
-        {!isRegistering && (
-          <p className="text-center text-sm m-2 text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <button
-              onClick={() => setIsRegistering(true)}
-              className="underline"
-            >
-              Sign up
-            </button>
-          </p>
-        )}
-        {isRegistering && (
-          <p className="text-center text-sm m-2 text-muted-foreground">
-            Already have an account?{" "}
-            <button
-              onClick={() => setIsRegistering(false)}
-              className="underline text-accent"
-            >
-              Sign in
-            </button>
-          </p>
-        )}
-      </>
-    );
-  };
+  //       {!isRegistering && (
+  //         <p className="text-center text-sm m-2 text-muted-foreground">
+  //           Don&apos;t have an account?{" "}
+  //           <button
+  //             onClick={() => setIsRegistering(true)}
+  //             className="underline"
+  //           >
+  //             Sign up
+  //           </button>
+  //         </p>
+  //       )}
+  //       {isRegistering && (
+  //         <p className="text-center text-sm m-2 text-muted-foreground">
+  //           Already have an account?{" "}
+  //           <button
+  //             onClick={() => setIsRegistering(false)}
+  //             className="underline text-accent"
+  //           >
+  //             Sign in
+  //           </button>
+  //         </p>
+  //       )}
+  //     </>
+  //   );
+  // };
 
-  const NeedAccountLoader = () => (
-    <div className="fixed z-50 inset-0 overflow-y-auto">
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-        >
-          &#8203;
-        </span>
+  // const NeedAccountLoader = () => (
+  //   <div className="fixed z-50 inset-0 overflow-y-auto">
+  //     <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+  //       <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+  //         <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+  //       </div>
+  //       <span
+  //         className="hidden sm:inline-block sm:align-middle sm:h-screen"
+  //         aria-hidden="true"
+  //       >
+  //         &#8203;
+  //       </span>
 
-        <div
-          className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-headline"
-        >
-          <div className="flex flex-col justify-center items-center p-6">
-            <button
-              onClick={() => setNeedAccount(false)}
-              className="absolute top-0 right-0 m-4 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
-            >
-              <X className="h-4 w-4 text-accent" />
-            </button>
-            <div className="flex flex-col justify-center items-center">
-              <h1 className="text-accent text-lg m-4">
-                Sign in or create an account to continue
-              </h1>
-              <Login />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  //       <div
+  //         className="inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+  //         role="dialog"
+  //         aria-modal="true"
+  //         aria-labelledby="modal-headline"
+  //       >
+  //         <div className="flex flex-col justify-center items-center p-6">
+  //           <button
+  //             onClick={() => setNeedAccount(false)}
+  //             className="absolute top-0 right-0 m-4 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+  //           >
+  //             <X className="h-4 w-4 text-accent" />
+  //           </button>
+  //           <div className="flex flex-col justify-center items-center">
+  //             <h1 className="text-accent text-lg m-4">
+  //               Sign in or create an account to continue
+  //             </h1>
+  //             <Login />
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 
   /////// ACCT \\\\\\\
   /////// ACCT \\\\\\\
@@ -1729,7 +1752,7 @@ const ImagePlacementEditor: React.FC<ImagePlacementEditorProps> = ({
             />
           )}
 
-          {needAccount && <NeedAccountLoader />}
+          {/* {needAccount && <NeedAccountLoader />} */}
 
           {!viewingMocks && (
             <>

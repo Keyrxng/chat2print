@@ -95,6 +95,15 @@ export async function POST(req: Request, res: any) {
     inStockRegion.push("GB");
   }
 
+  const discount =
+    userDetails.tier === "premium"
+      ? 0.15
+      : userDetails.tier === "pro"
+      ? 0.25
+      : 0;
+
+  const discountPrice = price - price * discount;
+
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",

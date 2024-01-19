@@ -15,6 +15,7 @@ export async function POST(req: NextRequest, res: NextRequest) {
       args.offsetX,
       args.offsetY
     );
+
     return new Response(JSON.stringify(response), {
       headers: { "content-type": "application/json" },
     });

@@ -155,12 +155,24 @@ export default function Header() {
       })
         .then(async (data) => {
           const { user } = await data.json();
+          console.log("user: ", data);
+
+          if (isRegistering || !user || user?.email_confirmed_at === null) {
+            toast({
+              title: "",
+              description:
+                "Please ensure you have verified your email and your details are correct before signing in.",
+              duration: 4000,
+              variant: "default",
+            });
+            return;
+          }
 
           if (user?.email_confirmed_at !== null) {
             const { data: userdata } = await supabase
               .from("users")
               .select("*")
-              .match({ id: user.id })
+              .match({ id: user?.id })
               .single();
 
             if (userdata?.id) {
@@ -184,7 +196,7 @@ export default function Header() {
         .catch((err) => {
           toast({
             title: "Error!",
-            description: err,
+            description: typeof err === "string" ? err : err.message,
             duration: 4000,
             variant: "default",
           });
@@ -486,10 +498,6 @@ export default function Header() {
      );
    };
    */
-
-  const handleIsVerified = async () => {
-    return window.location.reload();
-  };
 
   // const handleResendVeriEmail = async () => {
   //   const { data, error } = await supabase.auth.resend({

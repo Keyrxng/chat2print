@@ -13,20 +13,55 @@ import { Database } from "@/lib/database.types";
 
 const supabase = createClientComponentClient<Database>();
 
-interface Order {
-  created_at: string;
-  items: {
-    files: {
-      quantity: number;
-    };
-  };
+// interface Order {
+//   created_at: string;
+//   items: {
+//     files: {
+//       quantity: number;
+//     };
+//   };
 
+//   retail_costs: {
+//     subtotal: number;
+//   };
+
+//   task_key: string;
+//   user_id: string | null;
+// }
+
+interface Order {
+  user_id: string | null;
+  items: [
+    {
+      files: [
+        {
+          url: number;
+        }
+      ];
+      quantity: number;
+      variant_id: number;
+    }
+  ];
   retail_costs: {
     subtotal: number;
   };
-
+  created_at: string;
   task_key: string;
-  user_id: string | null;
+  completed: boolean;
+  final: {
+    id: string;
+    vat: number;
+    name: string;
+    rate: string;
+    total: number;
+    shipping: number;
+    subtotal: number;
+    maxDeliveryDate: string;
+    maxDeliveryDays: number;
+    minDeliveryDays: number;
+  };
+  product: string;
+  paid: null;
 }
 
 export default function OrderHistory() {
@@ -91,7 +126,7 @@ export default function OrderHistory() {
                           <p className="flex items-center text-gray-500">
                             <Truck className="mr-1" />
                             {/* // @ts-ignore */}
-                            {order.items?.files?.quantity}
+                            {order.final?.maxDeliveryDays} days
                           </p>
                           <p className="flex items-center text-gray-500">
                             <PoundSterling />

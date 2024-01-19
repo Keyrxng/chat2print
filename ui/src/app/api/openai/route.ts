@@ -70,7 +70,7 @@ export async function POST(req: any, res: any) {
           }
         );
       } else {
-        keyToUse = process.env.OPENAI_API_KEY;
+        keyToUse = process.env.OPENAI_API_KEY!;
       }
     }
   }
